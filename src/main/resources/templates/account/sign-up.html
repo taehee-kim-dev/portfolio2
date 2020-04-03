@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>ShareMind</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .navbar-brand{
+            margin-left: 10px;
+        }
+        .form-inline{
+            margin-right: 0;
+            width: 402px;
+        }
+        #login-button{
+            margin-left: 40px;
+        }
+        .container{
+            max-width: 100%;
+            padding: 0;
+        }
+        #title{
+            font-size: 35px;
+            margin-top: 87px;
+            margin-bottom: 25px;
+        }
+        form{
+            margin: auto;
+            width: 350px;
+        }
+        .form-group{
+            margin-bottom: 20px;
+        }
+        #password-input-div{
+            margin-bottom: 40px;
+        }
+        footer {
+            color: #999;
+            text-align: center;
+            margin-top: 47px;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
+        <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
+        <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
+        <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
+        <a class="navbar-brand" href="/" th:href="@{/}">ShareMind</a>
+
+        <form th:action="@{/search}" class="form-inline my-2 my-lg-0" method="get">
+            <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+            <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
+          </form>
+    </nav>
+    <div>
+        <p id="title" class="text-center">계정 만들기</p>
+    </div>
+    <form class="needs-validation" action="#"
+          th:action="@{/signup}" th:object="${signUpForm}" method="post" novalidate>
+        <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
+                   placeholder="your nickname" aria-describedby="nicknameHelp" required minlength="3" maxlength="15">
+            <small id="nicknameHelp" class="form-text text-muted">
+                공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+            </small>
+            <small class="invalid-feedback">닉네임을 조건에 맞게 입력해 주세요.</small>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+        </div>
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input id="email" type="email" th:field="*{email}" class="form-control"
+                   placeholder="your@email.com" aria-describedby="emailHelp" required>
+            <small id="emailHelp" class="form-text text-muted">
+                이메일은 계정 확인용으로만 사용되고, 외부에 노출되지 않습니다.
+            </small>
+            <small class="invalid-feedback">유효한 형식의 이메일을 입력해 주세요.</small>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+        </div>
+
+        <div id="password-input-div" class="form-group">
+            <label for="password">비밀번호</label>
+            <input id="password" type="password" th:field="*{password}" class="form-control"
+                   aria-describedby="passwordHelp" required minlength="8" maxlength="30">
+            <small id="passwordHelp" class="form-text text-muted">
+                8자 이상 30자 이내로 입력해 주세요. <br>영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+            </small>
+            <small class="invalid-feedback">비밀번호를 조건에 맞게 입력해 주세요.</small>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit"
+                    aria-describedby="submitHelp">가입하기</button>
+            <small id="submitHelp" class="form-text text-muted">
+                <a href="#">약관</a>에 동의하시면 가입하기 버튼을 눌러주세요.
+            </small>
+        </div>
+    </form>
+
+    <footer th:fragment="footer">
+        © 2020 Copyright : taehee.kim.dev@gmail.com
+    </footer>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="application/javascript">
+    (function () {
+        'use strict';
+
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        }, false)
+    }())
+</script>
+</body>
+</html>
