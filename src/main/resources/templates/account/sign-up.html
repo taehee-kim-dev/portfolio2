@@ -44,26 +44,26 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
+    <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
+    <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
+    <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
+    <a class="navbar-brand" href="/" th:href="@{/}">ShareMind</a>
+
+    <form th:action="@{/search}" class="form-inline my-2 my-lg-0" method="get">
+        <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+        <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
+    </form>
+</nav>
 
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
-        <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
-        <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
-        <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
-        <a class="navbar-brand" href="/" th:href="@{/}">ShareMind</a>
-
-        <form th:action="@{/search}" class="form-inline my-2 my-lg-0" method="get">
-            <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-            <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
-          </form>
-    </nav>
     <div>
         <p id="title" class="text-center">계정 만들기</p>
     </div>
     <form class="needs-validation" action="#"
-          th:action="@{/signup}" th:object="${signUpForm}" method="post" novalidate>
+          th:action="@{/sign-up}" th:object="${signUpRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
             <label for="nickname">닉네임</label>
@@ -80,7 +80,7 @@
             <input id="email" type="email" th:field="*{email}" class="form-control"
                    placeholder="your@email.com" aria-describedby="emailHelp" required>
             <small id="emailHelp" class="form-text text-muted">
-                이메일은 계정 확인용으로만 사용되고, 외부에 노출되지 않습니다.
+                이메일은 계정 확인용으로만 사용되며, 외부에 노출되지 않습니다.
             </small>
             <small class="invalid-feedback">유효한 형식의 이메일을 입력해 주세요.</small>
             <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
@@ -91,7 +91,7 @@
             <input id="password" type="password" th:field="*{password}" class="form-control"
                    aria-describedby="passwordHelp" required minlength="8" maxlength="30">
             <small id="passwordHelp" class="form-text text-muted">
-                8자 이상 30자 이내로 입력해 주세요. <br>영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+                8자 이상 30자 이내로 입력해 주세요. <br>영문자, 숫자, 특수문자를 사용할 수 있으며 공백은 사용할 수 없습니다.
             </small>
             <small class="invalid-feedback">비밀번호를 조건에 맞게 입력해 주세요.</small>
             <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
