@@ -17,6 +17,7 @@ import portfolio2.web.dto.SignUpRequestDto;
 import javax.validation.Valid;
 import java.util.List;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -25,19 +26,20 @@ public class AccountService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+
     public Account processNewAccount(SignUpRequestDto signUpRequestDto) {
         Account newAccount = saveNewAccount(signUpRequestDto);
-        newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
 
     private Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
         Account account = Account.builder()
+                .userId(signUpRequestDto.getUserId())
                 .email(signUpRequestDto.getEmail())
                 .nickname(signUpRequestDto.getNickname())
                 .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
+                .sendCheckEmailCount(0)
                 .notificationByEmail(true)
                 .notificationByWeb(true)
                 .build();
@@ -45,21 +47,27 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("ShareMind, 회원가입 인증");
+        mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
         mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
         javaMailSender.send(mailMessage);
+        newAccount.generateEmailCheckToken();
     }
 
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                account.getNickname(),
+                account.getUserId(),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }

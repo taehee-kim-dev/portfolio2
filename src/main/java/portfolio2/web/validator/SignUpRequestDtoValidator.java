@@ -22,6 +22,10 @@ public class SignUpRequestDtoValidator implements Validator {
     public void validate(Object o, Errors errors) {
 
         SignUpRequestDto signUpRequestDto = (SignUpRequestDto)o;
+
+        if(accountRepository.existsByEmail(signUpRequestDto.getEmail())){
+            errors.rejectValue("userId", "invalid.userId", new Object[]{signUpRequestDto.getEmail()}, "이미 사용중인 아이디 입니다.");
+        }
         
         if(accountRepository.existsByEmail(signUpRequestDto.getEmail())){
             errors.rejectValue("email", "invalid.email", new Object[]{signUpRequestDto.getEmail()}, "이미 사용중인 이메일 입니다.");

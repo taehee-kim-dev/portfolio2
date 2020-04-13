@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 인증 없이 POST, GET 요청 허용
-                .mvcMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                .mvcMatchers("/", "/login", "/sign-up", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link").permitAll()
                 // GET 요청만 허용
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()

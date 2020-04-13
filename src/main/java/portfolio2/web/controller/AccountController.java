@@ -5,12 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.domain.account.CurrentUser;
 import portfolio2.service.AccountService;
 import portfolio2.web.dto.SignUpRequestDto;
 import portfolio2.web.validator.SignUpRequestDtoValidator;
@@ -73,10 +71,39 @@ public class AccountController {
             return view;
         }
 
-        account.completeSignUp();
-        accountService.login(account);
+        accountService.completeSignUp(account);
 
         model.addAttribute("nickname", account.getNickname());
         return view;
+    }
+
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentUser Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-confirm-email")
+    public String resendConfirmEmail(@CurrentUser Account account, Model model) {
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
+            model.addAttribute("email", account.getEmail());
+            return "account/check-email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
+    }
+
+    @GetMapping("/profile/{userId}")
+    public String viewProfile(@PathVariable String userId, Model model, @CurrentUser Account account){
+        Account byUserId = accountRepository.findByUserId(userId);
+        if(userId == null){
+            throw new IllegalArgumentException(userId + "에 해당하는 사용자가 없습니다.");
+        }
+        // 객체 타입의 camel case를 이름으로 준다.
+        model.addAttribute(byUserId);
+        model.addAttribute("isOwner", byUserId.equals(account));
+        return "account/profile";
     }
 }

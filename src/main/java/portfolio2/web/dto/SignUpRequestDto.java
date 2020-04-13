@@ -17,6 +17,11 @@ import javax.validation.constraints.Pattern;
 public class SignUpRequestDto {
 
     @NotBlank
+    @Length(min = 5, max = 20)
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{5,20}$")
+    private String userId;
+
+    @NotBlank
     @Length(min = 3, max = 15)
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{3,15}$")
     private String nickname;
