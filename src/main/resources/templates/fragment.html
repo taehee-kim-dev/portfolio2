@@ -1,0 +1,78 @@
+<!doctype html>
+<html land="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<th:block th:fragment="commonHead">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/library/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="/library/fontawesome/fontawesome.min.css" />
+    <style>
+        .container{
+            max-width: 100%;
+        }
+        #nav-form{
+            display: block;
+            width: 100%;
+            text-align: right;
+        }
+        #login-button{
+            margin-right: 11px;
+            margin-left: 24px;
+        }
+    </style>
+
+    <title>ShareMind</title>
+</th:block>
+
+<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
+    <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
+    <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
+    <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
+    <a id="navBar-brand-name" class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">ShareMind</a>
+
+    <form th:action="@{/search}" id="nav-form" class="form-inline my-2 my-lg-0" >
+        <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+        <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
+    </form>
+
+</nav>
+
+<footer th:fragment="commonFooter" style="text-align: center; color: #6c757d; margin-top: 40px">
+    © 2020 Copyright : taehee.kim.dev@gmail.com
+</footer>
+
+<th:block th:fragment="commonJavaScript">
+    <script src="/library/jquery/jquery-3.5.0.min.js"></script>
+    <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
+</th:block>
+
+<script type="application/javascript" th:fragment="formValidationJavaScript">
+    (function () {
+        'use strict';
+
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        }, false)
+    }())
+</script>

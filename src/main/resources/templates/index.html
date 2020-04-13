@@ -1,10 +1,17 @@
-<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      data-layout-decorate="~{layout/defaultLayout}">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-    <title>Title</title>
+    <title>Home</title>
 </head>
 <body>
-Home
+
+<th:block layout:fragment="content">
+
+    <div>Home</div>
+
+</th:block>
+
 </body>
 </html>
