@@ -16,26 +16,17 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class SignUpRequestDto {
 
-    @NotBlank
-    @Length(min = 5, max = 20)
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{5,20}$")
     private String userId;
 
-    @NotBlank
-    @Length(min = 3, max = 15)
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{3,15}$")
     private String nickname;
 
-    @Email
-    @NotBlank
     private String email;
 
-    @NotBlank
-    @Length(min = 8, max = 30)
     private String password;
 
     @Builder
-    public SignUpRequestDto(String nickname, String email, String password) {
+    public SignUpRequestDto(String userId, String nickname, String email, String password) {
+        this.userId = userId;
         this.nickname = nickname;
         this.email = email;
         this.password = password;

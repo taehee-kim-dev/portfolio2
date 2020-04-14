@@ -21,7 +21,7 @@
             width: 100%;
             text-align: right;
         }
-        #login-button{
+        #nav-login-button{
             margin-right: 11px;
             margin-left: 24px;
         }
@@ -40,7 +40,7 @@
     <form th:action="@{/search}" id="nav-form" class="form-inline my-2 my-lg-0" >
         <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-        <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
+        <button id="nav-login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
     </form>
 
 </nav>
@@ -54,25 +54,3 @@
     <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
 </th:block>
-
-<script type="application/javascript" th:fragment="formValidationJavaScript">
-    (function () {
-        'use strict';
-
-        window.addEventListener('load', function () {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-
-            // Loop over them and prevent submission
-            Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        }, false)
-    }())
-</script>
