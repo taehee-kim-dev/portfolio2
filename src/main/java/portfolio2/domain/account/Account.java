@@ -102,7 +102,7 @@ public class Account {
     }
 
     public boolean canSendConfirmEmail() {
-        // 인증 이메일을 5번 보냈는가?
+        // 인증 이메일을 5번 초과로 보냈는가?
         if(this.sendCheckEmailCount == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
             return this.emailCheckTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));

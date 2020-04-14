@@ -61,6 +61,18 @@ public class AccountService implements UserDetailsService {
         javaMailSender.send(mailMessage);
     }
 
+    public void resendSignUpConfirmEmail(Account sessionAccount) {
+
+        Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
+        existingAccount.generateEmailCheckToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(existingAccount.getEmail());
+        mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
+        mailMessage.setText("/check-email-token?token=" + existingAccount.getEmailCheckToken() +
+                "&email=" + existingAccount.getEmail());
+        javaMailSender.send(mailMessage);
+    }
+
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
@@ -73,6 +85,7 @@ public class AccountService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+
         Account account = accountRepository.findByUserId(userId);
 
         if (account == null) {
@@ -83,7 +96,8 @@ public class AccountService implements UserDetailsService {
     }
 
     public void completeSignUp(Account account) {
-        account.completeSignUp();
-        login(account);
+        Account existingAccount = accountRepository.findByUserId(account.getUserId());
+        existingAccount.completeSignUp();
+        login(existingAccount);
     }
 }

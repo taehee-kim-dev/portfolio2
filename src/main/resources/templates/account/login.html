@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        .form-group{
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container justify-content-center">
+
+    <div>
+        <h2 id="title" class="text-center" style="margin-top: 85px;margin-bottom: 15px">로그인</h2>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+        <p>아이디 또는 패스워드가 올바르지 않습니다.</p>
+        <p style="margin-bottom: 0px;">
+            확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용해 주세요.
+        </p>
+    </div>
+
+    <form id="login-form" style="width: 350px; margin: auto; margin-top: 10px; " action="#"
+          th:action="@{/login}" method="post" novalidate>
+        <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
+        <div class="form-group">
+            <label for="username">아이디</label>
+            <input id="username" name="username" type="text" class="form-control"
+                   placeholder="ID" aria-describedby="usernameHelp" autofocus required>
+        </div>
+
+        <div id="password-input-div" class="form-group" style="margin-bottom: 35px">
+            <label for="password">비밀번호</label>
+            <input id="password" name="password" type="password" class="form-control"
+                   aria-describedby="passwordHelp" placeholder="Password" required>
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" checked>
+            <label class="form-check-label" for="rememberMe" aria-describedby="rememberMeHelp">로그인 유지</label>
+        </div>
+
+        <div class="form-group" >
+            <button class="btn btn-primary btn-block" type="submit"
+                    aria-describedby="submitHelp">로그인</button>
+            <small id="submitHelp" class="form-text text-muted">
+                아직 계정이 없으시다면, <a href="#" th:href="@{/signup}">회원가입</a>을 해주세요!
+            </small>
+        </div>
+    </form>
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

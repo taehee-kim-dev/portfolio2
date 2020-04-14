@@ -85,13 +85,13 @@ public class AccountController {
 
     @GetMapping("/resend-confirm-email")
     public String resendConfirmEmail(@CurrentUser Account account, Model model) {
-        if (!account.canSendConfirmEmail()) {
+        if (!accountRepository.findByUserId(account.getUserId()).canSendConfirmEmail()) {
             model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
             model.addAttribute("email", account.getEmail());
             return "account/check-email";
         }
 
-        accountService.sendSignUpConfirmEmail(account);
+        accountService.resendSignUpConfirmEmail(account);
         return "redirect:/";
     }
 

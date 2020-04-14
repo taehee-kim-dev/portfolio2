@@ -8,20 +8,18 @@
 <nav th:replace="fragment.html :: commonNav"></nav>
 
 <div class="container">
-    <div class="py-5 text-center" th:if="${error != null}">
-        <p class="lead">ShareMind 가입</p>
+    <div class="text-center" th:if="${error != null}" style="margin-top: 100px; margin-bottom: 60px">
         <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
-        <p class="lead" th:text="${email}">your@email.com</p>
     </div>
 
-    <div class="py-5 text-center" th:if="${error == null}">
-        <p class="lead">ShareMind 가입</p>
+    <div class="text-center" th:if="${error == null}">
 
-        <h2>ShareMind 서비스를 사용하려면 이메일 인증을 해 주세요.</h2>
+        <h3 style="margin-top: 100px">ShareMind 서비스를 사용하려면 이메일 인증을 해 주세요.</h3>
 
         <div>
-            <p class="lead" th:text="${email}">your@email.com</p>
-            <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">인증 이메일 다시 보내기</a>
+            <p style="margin-top: 40px; margin-bottom: 10px;">회원님의 이메일 : </p>
+            <p class="lead" th:text="${email}" style="margin-bottom: 31px;">your@email.com</p>
+            <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}" style="margin-bottom: 0px;">인증 이메일 다시 보내기</a>
         </div>
 
 
