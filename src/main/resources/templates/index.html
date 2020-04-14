@@ -1,17 +1,25 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      data-layout-decorate="~{layout/defaultLayout}">
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home</title>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
 </head>
 <body>
 
-<th:block layout:fragment="content">
+<nav th:replace="fragment.html :: commonNav"></nav>
 
-    <div>Home</div>
+<div class="container">
 
-</th:block>
+    <div class="alert alert-warning text-center" role="alert" th:if="${account != null && !account.emailVerified}">
+        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    </div>
+    <div class="container">
+        <div class="py-5 text-center" style="margin-top: 30px">
+            <h2>ShareMind</h2>
+        </div>
+    </div>
 
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
 </body>
 </html>

@@ -11,37 +11,73 @@
 
     <!-- Common CSS -->
     <link rel="stylesheet" href="/library/bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="/library/fontawesome/fontawesome.min.css" />
+    <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
     <style>
         .container{
             max-width: 100%;
-        }
-        #nav-form{
-            display: block;
-            width: 100%;
-            text-align: right;
-        }
-        #nav-login-button{
-            margin-right: 11px;
-            margin-left: 24px;
+            padding: 0;
         }
     </style>
 
     <title>ShareMind</title>
 </th:block>
 
-<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light" style="height: 60px">
     <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
     <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
     <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
     <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
-    <a id="navBar-brand-name" class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">ShareMind</a>
+    <a class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">ShareMind</a>
+    <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+        <ul class="navbar-nav justify-content-end">
+            <li class="nav-item" sec:authorize="!isAuthenticated()" style="margin-left: 14px">
+                <a class="nav-link" th:href="@{/login}">로그인</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/sign-up}">가입</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/notifications}">
+                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 4px">
+                <a class="nav-link" th:href="@{/postNewPost}">
+                    <i class="fas fa-plus"></i> 게시글 등록
+                </a>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 8px;">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <svg data-jdenticon-value="user127" th:data-jdenticon-value="${#authentication.name}"
+                         width="30" height="30" class="rounded border bg-light"></svg>
+                </a>
+                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+                    <h6 class="dropdown-header">
+                        <span sec:authentication="name">Username</span>
+                    </h6>
+                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
+                    <a class="dropdown-item" >내 게시글</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" th:href="@{/settings/profile}">설정</a>
+                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                        <button class="dropdown-item" type="submit">로그아웃</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
 
-    <form th:action="@{/search}" id="nav-form" class="form-inline my-2 my-lg-0" >
-        <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-        <button id="nav-login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
-    </form>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <form th:action="@{/search/study}" class="form-inline" method="get">
+                    <input class="form-control mr-sm-2" name="keyword" type="search" aria-label="Search" style="width: 170px;"/>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+                </form>
+            </li>
+        </ul>
+
+
+    </div>
 
 </nav>
 

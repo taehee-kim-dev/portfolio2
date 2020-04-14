@@ -1,47 +1,11 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-    <title>ShareMind</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
-        .navbar-brand{
-            margin-left: 10px;
-        }
-        .form-inline{
-            margin-right: 0;
-            width: 402px;
-        }
-        #login-button{
-            margin-left: 40px;
-        }
-        .container{
-            max-width: 100%;
-            padding: 0;
-        }
-        footer {
-            color: #999;
-            text-align: center;
-            margin-top: 47px;
-            margin-bottom: 50px;
-        }
-    </style>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
-    <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
-    <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
-    <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
-    <a class="navbar-brand" href="/" th:href="@{/}">ShareMind</a>
-
-    <form th:action="@{/search}" class="form-inline my-2 my-lg-0" method="get">
-        <input class="form-control mr-sm-2" type="search" placeholder="검색할 내용" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-        <button id="login-button" type="button" class="btn btn-outline-info my-2 my-sm-0">로그인</button>
-    </form>
-</nav>
+<nav th:replace="fragment.html :: commonNav"></nav>
 
 <div class="container">
     <div class="notification py-5 text-center" th:if="${error}">
@@ -54,19 +18,13 @@
     <div class="notification py-5 text-center" th:if="${error == null}">
         <p class="lead">SharMind 이메일 확인</p>
         <h2>
-            <span th:text="${nickname}">nickname</span>님 가입을 축하합니다.
+            <span th:text="${nickname}">nickname</span>님 가입을 환영합니다!
         </h2>
-        <small class="text-info">이제부터 이메일 또는 닉네임과 비밀번호로 로그인 할 수 있습니다.</small>
+        <small class="text-info">이제부터 ShareMind의 다양한 서비스를 이용하실 수 있습니다.</small>
     </div>
 
-    <footer th:fragment="footer">
-        © 2020 Copyright : taehee.kim.dev@gmail.com
-    </footer>
-
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
 </body>
 </html>

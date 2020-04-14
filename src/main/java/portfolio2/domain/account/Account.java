@@ -77,7 +77,7 @@ public class Account {
         // 앞에서 재전송 허가받은 상태이므로,
         // 무조건 토큰값 생성.
         this.emailCheckToken = UUID.randomUUID().toString();
-        if(sendCheckEmailCount == 0 || sendCheckEmailCount > 5){
+        if(sendCheckEmailCount == 0 || sendCheckEmailCount == 5){
             // 이미 앞에서 이메일 재전송 허가받은 상태.
             // 현재 가입 후 첫번째 또는 6번째 이메일 전송이라면,
             // 새로운 첫 번째 이메일 전송이 되는 것이므로,
@@ -102,8 +102,8 @@ public class Account {
     }
 
     public boolean canSendConfirmEmail() {
-        // 인증 이메일을 5번 초과해서 보냈는가?
-        if(this.sendCheckEmailCount > 5){
+        // 인증 이메일을 5번 보냈는가?
+        if(this.sendCheckEmailCount == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
             return this.emailCheckTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
         }
