@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <div class="alert alert-warning text-center" role="alert" th:if="${account != null && !account.emailVerified}">
+        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    </div>
+
+    <div class="container">
+
+        <div id="profile-container" class="col-7" style="margin-left: auto;margin-right: auto;text-align: center">
+            테스트
+        </div>
+
+    </div>
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

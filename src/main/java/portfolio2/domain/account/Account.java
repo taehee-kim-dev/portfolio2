@@ -47,6 +47,12 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
+    private String bio;
+
+    private String occupation;
+
+    private String location;
+
     /*
         @Lob :
         기본적으로 String은 varchr(255)로 매핑됨.

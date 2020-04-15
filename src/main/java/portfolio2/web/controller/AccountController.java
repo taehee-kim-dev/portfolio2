@@ -96,12 +96,13 @@ public class AccountController {
     }
 
     @GetMapping("/profile/{userId}")
-    public String viewProfile(@PathVariable String userId, Model model, @CurrentUser Account account){
+    public String viewProfile(@PathVariable String userId, @CurrentUser Account account, Model model){
         Account byUserId = accountRepository.findByUserId(userId);
         if(userId == null){
             throw new IllegalArgumentException(userId + "에 해당하는 사용자가 없습니다.");
         }
         // 객체 타입의 camel case를 이름으로 준다.
+        // mode.addAttribute("account", byUserId)와 같음.
         model.addAttribute(byUserId);
         model.addAttribute("isOwner", byUserId.equals(account));
         return "account/profile";
