@@ -42,8 +42,8 @@
                         </tr>
                         <tr style="height: 35px;" th:if="${isOwner}">
                             <td>한 줄 소개 : </td>
-                            <td th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</td>
-                            <td th:if="${#strings.isEmpty(account.bio)}">한 줄 소개를 추가해 보세요!</td>
+                            <td th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}" style="width: 264px">bio</td>
+                            <td th:if="${#strings.isEmpty(account.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>
                         </tr>
                     </tbody>
                 </table>
