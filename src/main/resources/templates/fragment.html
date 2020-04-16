@@ -36,21 +36,24 @@
             <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
             </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 1px;margin-right: 7px;">
+                <a class="nav-link btn btn-outline-info" type="button" th:href="@{/createNewPost}"
+                   style="padding-top: 6px;padding-bottom: 6px;margin-left: 17px;margin-right: 3px;">
+                    <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 등록
+                </a>
+            </li>
+
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/notifications}">
-                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    <i class="fas fa-bell fa-lg"></i>
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 4px">
-                <a class="nav-link" th:href="@{/postNewPost}">
-                    <i class="fas fa-plus"></i> 게시글 등록
-                </a>
-            </li>
+
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 8px;">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+                   aria-haspopup="true" aria-expanded="false" style="padding: 0px;">
                     <svg data-jdenticon-value="user127" th:data-jdenticon-value="${#authentication.name}"
-                         width="30" height="30" class="rounded border bg-light"></svg>
+                         width="39" height="39" class="rounded border bg-light"></svg>
                 </a>
                 <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
                     <h6 class="dropdown-header">

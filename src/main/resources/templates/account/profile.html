@@ -2,6 +2,16 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        .list-group-item{
+            width: 160px;
+            padding: 7px;
+        }
+        .profile-list-content{
+            font-size: 20px;
+            padding-left: 40px;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +25,7 @@
 
     <div class="container">
 
-        <div id="profile-container" class="col-7" style="margin: auto; margin-top: 70px; text-align: center">
+        <div id="profile-top-container" class="col-7" style="margin: auto; margin-top: 70px; text-align: center">
 
             <div class="row justify-content-center">
 
@@ -50,6 +60,41 @@
 
             </div>
 
+        </div>
+
+
+        <div class="row" style="margin-top: 60px">
+            <div class="col-2" style="margin-left: auto">
+                <div class="list-group" id="list-tab" role="tablist" style="text-align: center">
+                    <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">소개</a>
+                    <a class="list-group-item list-group-item-action" id="list-post-list" data-toggle="list" href="#list-post" role="tab" aria-controls="post">게시글</a>
+                </div>
+            </div>
+            <div class="col-5" style="margin-right: auto; text-align: center">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                        <table style="margin: auto; width: 250px">
+                            <tbody>
+                                <tr th:if="${isOwner}">
+                                    <td><i class="far fa-envelope fa-lg"></i></td>
+                                    <td th:text="${account.email}" class="profile-list-content">email</td>
+                                </tr>
+                                <tr th:if="${!#strings.isEmpty(account.occupation)}">
+                                    <td><i class="fas fa-suitcase fa-lg"></i></td>
+                                    <td th:text="${account.occupation}" class="profile-list-content">occupation</td>
+                                </tr>
+                                <tr th:if="${!#strings.isEmpty(account.location)}">
+                                    <td><i class="far fa-compass fa-lg"></i></td>
+                                    <td th:text="${account.location}" class="profile-list-content">location</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a th:if="${isOwner}" class="btn btn-outline-primary" href="#" th:href="@{/setting/profile}"
+                        style="margin-top: 50px">프로필 수정</a>
+                    </div>
+                    <div class="tab-pane fad" id="list-post" role="tabpanel" aria-labelledby="list-post-list">게시글 부분</div>
+                </div>
+            </div>
         </div>
 
     </div>
