@@ -23,6 +23,12 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
+    private void setSessionAccount(@CurrentUser Account sessionAccount, Model model) {
+        if (sessionAccount != null) {
+            model.addAttribute("sessionAccount", sessionAccount);
+        }
+    }
+
     @InitBinder("signUpRequestDto")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpRequestDtoValidator);
@@ -50,61 +56,66 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        Account account = accountService.processNewAccount(signUpRequestDto);
-        accountService.login(account);
+        accountService.processNewAccount(signUpRequestDto);
 
         // 홈 페이지로 리다이렉트
         return "redirect:/";
     }
 
     @GetMapping("/check-email-token")
-    public String checkEmailToken(String token, String email, Model model){
-        Account account = accountRepository.findByEmail(email);
+    public String checkEmailToken(@CurrentUser Account sessionAccount, String token, String email, Model model){
+
+        setSessionAccount(sessionAccount, model);
+
+        Account accountInDB = accountRepository.findByEmail(email);
         String view = "account/checked-email";
-        if(account == null){
+        if(accountInDB == null){
             model.addAttribute("error", "wrong.email");
             return view;
         }
 
-        if(!account.isValidToken(token)){
+        if(!accountInDB.isValidToken(token)){
             model.addAttribute("error", "wrong.token");
             return view;
         }
 
-        accountService.completeSignUp(account);
+        accountService.completeSignUp(accountInDB);
 
-        model.addAttribute("nickname", account.getNickname());
+        model.addAttribute("nickname", accountInDB.getNickname());
         return view;
     }
 
     @GetMapping("/check-email")
-    public String checkEmail(@CurrentUser Account account, Model model) {
-        model.addAttribute("email", account.getEmail());
+    public String checkEmail(@CurrentUser Account sessionAccount, Model model) {
+        setSessionAccount(sessionAccount, model);
+        model.addAttribute("email", sessionAccount.getEmail());
         return "account/check-email";
     }
 
     @GetMapping("/resend-confirm-email")
-    public String resendConfirmEmail(@CurrentUser Account account, Model model) {
-        if (!accountRepository.findByUserId(account.getUserId()).canSendConfirmEmail()) {
+    public String resendConfirmEmail(@CurrentUser Account sessionAccount, Model model) {
+        setSessionAccount(sessionAccount, model);
+        if (!accountRepository.findByUserId(sessionAccount.getUserId()).canSendConfirmEmail()) {
             model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
-            model.addAttribute("email", account.getEmail());
+            model.addAttribute("email", sessionAccount.getEmail());
             return "account/check-email";
         }
 
-        accountService.resendSignUpConfirmEmail(account);
+        accountService.resendSignUpConfirmEmail(sessionAccount);
         return "redirect:/";
     }
 
-    @GetMapping("account//profile/{userId}")
-    public String viewProfile(@PathVariable String userId, @CurrentUser Account account, Model model){
-        Account byUserId = accountRepository.findByUserId(userId);
-        if(userId == null){
+    @GetMapping("account/profile/{userId}")
+    public String viewProfile(@PathVariable String userId, @CurrentUser Account sessionAccount, Model model){
+        setSessionAccount(sessionAccount, model);
+        Account accountInDB = accountRepository.findByUserId(userId);
+        if(accountInDB == null){
             throw new IllegalArgumentException(userId + "에 해당하는 사용자가 없습니다.");
         }
         // 객체 타입의 camel case를 이름으로 준다.
         // mode.addAttribute("account", byUserId)와 같음.
-        model.addAttribute(byUserId);
-        model.addAttribute("isOwner", byUserId.equals(account));
+        model.addAttribute("accountInDB", accountInDB);
+        model.addAttribute("isOwner", accountInDB.equals(sessionAccount));
         return "account/profile";
     }
 }

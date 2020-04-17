@@ -20,7 +20,7 @@
 
 <div class="container">
 
-    <div class="alert alert-warning text-center" role="alert" th:if="${account != null && !account.emailVerified}">
+    <div class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && !sessionAccount.emailVerified}">
         ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
     </div>
 
@@ -35,8 +35,8 @@
 
             <div>
                 <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
-                    style="margin-bottom: 33px; padding-top: 8px; padding-bottom: 8px">
-                    <span th:text="${message}">메시지</span>
+                    style="margin-bottom: 33px; padding: 8px 46px 8px 23px;">
+                    <span th:text="${message}">프로필 수정 완료 메시지</span>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"
                         style="padding-top: 5px;padding-bottom: 0px;">
                         <span aria-hidden="true">&times;</span>
@@ -82,6 +82,10 @@
                     </div>
 
                     <div class="form-group">
+                        <input id="profileImage" name="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"
                                 aria-describedby="submitHelp">수정하기</button>
                     </div>
@@ -93,10 +97,10 @@
                     </div>
                     <div id="current-profile-image" class="mt-3">
                         <svg th:if="${#strings.isEmpty(profileUpdateRequestDto.profileImage)}" class="rounded"
-                             th:data-jdenticon-value="${account.userId}" width="125" height="125"></svg>
+                             th:data-jdenticon-value="${sessionAccount.userId}" width="125" height="125"></svg>
                         <img th:if="${!#strings.isEmpty(profileUpdateRequestDto.profileImage)}" class="rounded"
                              th:src="${profileUpdateRequestDto.profileImage}"
-                             width="125" height="125" alt="name" th:alt="${account.nickname}"/>
+                             width="125" height="125" alt="name" th:alt="${sessionAccount.userId}"/>
                     </div>
                     <div id="new-profile-image" class="mt-3"></div>
                     <div class="card-body">

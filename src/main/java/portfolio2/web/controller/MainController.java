@@ -11,9 +11,9 @@ import portfolio2.domain.account.CurrentUser;
 public class MainController {
 
     @GetMapping("/")
-    public String home(@CurrentUser Account account, Model model){
-        if(account != null){
-            model.addAttribute(account);
+    public String home(@CurrentUser Account sessionAccount, Model model){
+        if(sessionAccount != null){
+            model.addAttribute("sessionAccount", sessionAccount);
         }
 
         return "index";

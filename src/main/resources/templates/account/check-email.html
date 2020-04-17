@@ -9,7 +9,7 @@
 
 <div class="container">
     <div class="text-center" th:if="${error != null}" style="margin-top: 100px; margin-bottom: 60px">
-        <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
+        <div  class="alert alert-danger" role="alert" th:text="${error}">인증 이메일은 12시간동안...에러 메세지</div>
     </div>
 
     <div class="text-center" th:if="${error == null}">

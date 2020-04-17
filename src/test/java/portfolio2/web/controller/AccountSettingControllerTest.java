@@ -35,13 +35,13 @@ class AccountSettingControllerTest {
     }
 
     @WithAccount("testUserId")
-    @DisplayName("프로필 수정하기 - 입력값 정상")
+    @DisplayName("프로필 수정하기 폼 보여주기")
     @Test
     void showProfileUpdateForm() throws Exception{
         mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
                 .andExpect(status().isOk())
                 .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
-                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"));
     }
 
@@ -75,7 +75,7 @@ class AccountSettingControllerTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/setting/profile"))
-                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
                 .andExpect(model().hasErrors());
 

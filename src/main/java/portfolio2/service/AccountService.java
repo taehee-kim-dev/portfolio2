@@ -4,7 +4,9 @@ package portfolio2.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,10 +34,10 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public Account processNewAccount(SignUpRequestDto signUpRequestDto) {
+    public void processNewAccount(SignUpRequestDto signUpRequestDto) {
         Account newAccount = saveNewAccount(signUpRequestDto);
         sendSignUpConfirmEmail(newAccount);
-        return newAccount;
+        this.login(newAccount);
     }
 
     private Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
@@ -64,23 +66,25 @@ public class AccountService implements UserDetailsService {
 
     public void resendSignUpConfirmEmail(Account sessionAccount) {
 
-        Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
-        existingAccount.generateEmailCheckToken();
+        Account accountInDB = accountRepository.findByUserId(sessionAccount.getUserId());
+        accountInDB.generateEmailCheckToken();
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(existingAccount.getEmail());
+        mailMessage.setTo(accountInDB.getEmail());
         mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
-        mailMessage.setText("/check-email-token?token=" + existingAccount.getEmailCheckToken() +
-                "&email=" + existingAccount.getEmail());
+        mailMessage.setText("/check-email-token?token=" + accountInDB.getEmailCheckToken() +
+                "&email=" + accountInDB.getEmail());
         javaMailSender.send(mailMessage);
     }
 
 
-    public void login(Account account) {
+    public void login(Account accountInDB) {
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
-                account.getPassword(),
+                new UserAccount(accountInDB),
+                accountInDB.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
+
     }
 
     @Transactional(readOnly = true)
@@ -97,15 +101,17 @@ public class AccountService implements UserDetailsService {
     }
 
     public void completeSignUp(Account account) {
-        Account existingAccount = accountRepository.findByUserId(account.getUserId());
-        existingAccount.completeSignUp();
-        login(existingAccount);
+        Account accountInDB = accountRepository.findByUserId(account.getUserId());
+        accountInDB.completeSignUp();
+        login(accountInDB);
     }
 
-    public void updateProfile(Account account, ProfileUpdateRequestDto profileUpdateRequestDto) {
-        account.setBio(profileUpdateRequestDto.getBio());
-        account.setOccupation(profileUpdateRequestDto.getOccupation());
-        account.setLocation(profileUpdateRequestDto.getLocation());
-        accountRepository.save(account);
+    public void updateProfile(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
+        sessionAccount.setBio(profileUpdateRequestDto.getBio());
+        sessionAccount.setOccupation(profileUpdateRequestDto.getOccupation());
+        sessionAccount.setLocation(profileUpdateRequestDto.getLocation());
+        sessionAccount.setProfileImage(profileUpdateRequestDto.getProfileImage());
+        accountRepository.save(sessionAccount);
+        this.login(sessionAccount);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
+import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CurrentUser;
 import portfolio2.service.AccountService;
 import portfolio2.web.dto.ProfileDto;
@@ -28,6 +29,7 @@ public class AccountSettingController {
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     @InitBinder("profileUpdateRequestDto")
     public void initBinder(WebDataBinder webDataBinder){
@@ -35,27 +37,26 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String profileUpdateForm(@CurrentUser Account account, Model model){
-
-        model.addAttribute(account);
-        model.addAttribute(new ProfileUpdateRequestDto(account));
+    public String profileUpdateForm(@CurrentUser Account sessionAccount, Model model){
+        model.addAttribute("sessionAccount", sessionAccount);
+        model.addAttribute(new ProfileUpdateRequestDto(sessionAccount));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
     }
 
     @PostMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String updateProfile(@CurrentUser Account account,
+    public String updateProfile(@CurrentUser Account sessionAccount,
                                 @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
                                 Errors errors, Model model,
                                 RedirectAttributes attributes){
         if(errors.hasErrors()){
-            model.addAttribute(account);
+            model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(profileUpdateRequestDto);
 
             return "account/setting/profile";
         }
 
-        accountService.updateProfile(account, profileUpdateRequestDto);
+        accountService.updateProfile(sessionAccount, profileUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         attributes.addFlashAttribute("message", "프로필 수정이 완료되었습니다.");
