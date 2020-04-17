@@ -22,15 +22,20 @@
     <title>ShareMind</title>
 </th:block>
 
-<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light" style="height: 60px">
+<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light">
     <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
     <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
     <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
     <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
     <a class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">ShareMind</a>
-    <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">
         <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()" style="margin-left: 14px">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/login}">로그인</a>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()">
@@ -70,10 +75,10 @@
             </li>
         </ul>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="margin-right: 14px">
             <li class="nav-item">
                 <form th:action="@{/search/study}" class="form-inline" method="get">
-                    <input class="form-control mr-sm-2" name="keyword" type="search" aria-label="Search" style="width: 170px;"/>
+                    <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 14px"/>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
                 </form>
             </li>
@@ -89,7 +94,7 @@
 </footer>
 
 <th:block th:fragment="commonJavaScript">
-    <script src="/library/jquery/jquery-3.5.0.min.js"></script>
+    <script src="/library/jquery/jquery-3.4.1.min.js"></script>
     <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
 </th:block>
