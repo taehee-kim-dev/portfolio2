@@ -15,9 +15,12 @@ public class ProfileUpdateRequestDto {
 
     private String location;
 
+    private String profileImage;
+
     public ProfileUpdateRequestDto(Account account){
         this.bio = account.getBio();
         this.occupation = account.getOccupation();
         this.location = account.getLocation();
+        this.profileImage = account.getProfileImage();
     }
 }
