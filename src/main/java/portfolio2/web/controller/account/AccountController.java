@@ -1,4 +1,4 @@
-package portfolio2.web.controller;
+package portfolio2.web.controller.account;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -95,7 +95,7 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/profile/{userId}")
+    @GetMapping("account//profile/{userId}")
     public String viewProfile(@PathVariable String userId, @CurrentUser Account account, Model model){
         Account byUserId = accountRepository.findByUserId(userId);
         if(userId == null){

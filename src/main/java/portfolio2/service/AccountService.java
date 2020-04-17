@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
+import portfolio2.web.dto.ProfileUpdateRequestDto;
 import portfolio2.web.dto.SignUpRequestDto;
 
 import javax.validation.Valid;
@@ -99,5 +100,12 @@ public class AccountService implements UserDetailsService {
         Account existingAccount = accountRepository.findByUserId(account.getUserId());
         existingAccount.completeSignUp();
         login(existingAccount);
+    }
+
+    public void updateProfile(Account account, ProfileUpdateRequestDto profileUpdateRequestDto) {
+        account.setBio(profileUpdateRequestDto.getBio());
+        account.setOccupation(profileUpdateRequestDto.getOccupation());
+        account.setLocation(profileUpdateRequestDto.getLocation());
+        accountRepository.save(account);
     }
 }

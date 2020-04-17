@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        .list-group-item{
+            width: 160px;
+            padding: 7px;
+        }
+        .profile-list-content{
+            font-size: 20px;
+            padding-left: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <div class="alert alert-warning text-center" role="alert" th:if="${account != null && !account.emailVerified}">
+        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    </div>
+
+    <div class="container">
+
+        <div class="row justify-content-center" style="margin-top: 130px">
+
+            <div class="col-2">
+                <div th:replace="fragment.html :: setting-menu(currentMenu='profile')"></div>
+            </div>
+
+            <div class="col-7">
+                <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
+                    style="margin-bottom: 33px; padding-top: 8px; padding-bottom: 8px">
+                    <span th:text="${message}">메시지</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        style="padding-top: 5px;padding-bottom: 0px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="col-6" action="#"
+                      th:action="@{/account/setting/profile}" th:object="${profileUpdateRequestDto}" method="post" novalidate>
+                    <div class="form-group" style="margin-bottom: 27px">
+                        <label for="bio">한 줄 소개</label>
+                        <input id="bio" type="text" th:field="*{bio}" class="form-control"
+                               placeholder="35자 이내의 간략한 소개를 해주세요!" aria-describedby="bioHelp" required>
+                        <small id="bioHelp" class="form-text text-muted">
+                            35자 이내로 입력해 주세요.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">
+                            bio error
+                        </small>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 27px">
+                        <label for="location">거주 지역</label>
+                        <input id="location" type="text" th:field="*{location}" class="form-control"
+                               placeholder="서울특별시 강남구"
+                               aria-describedby="locationdHelp" required>
+                        <small id="locationHelp" class="form-text text-muted">
+                            20자 이내로 입력해 주세요.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">
+                            location error
+                        </small>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 39px">
+                        <label for="occupation">직업</label>
+                        <input id="occupation" type="text" th:field="*{occupation}" class="form-control"
+                               placeholder="대학생" aria-describedby="occupationHelp" required>
+                        <small id="occupationHelp" class="form-text text-muted">
+                            20자 이내로 입력해 주세요.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">
+                            occupation error
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit"
+                                aria-describedby="submitHelp">수정하기</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

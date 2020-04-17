@@ -31,7 +31,7 @@ public class SignUpRequestDtoValidator implements Validator {
         if(signUpRequestDto.getUserId().length() < 5){
             errors.rejectValue("userId", "invalidUserId", new Object[]{signUpRequestDto.getUserId()}, "아이디는 5자 이상이어야 합니다.");
         }else if(signUpRequestDto.getUserId().length() > 20){
-            errors.rejectValue("userId", "invalidUserId", new Object[]{signUpRequestDto.getUserId()}, "아이디는 20자 이하이어야 합니다.");
+            errors.rejectValue("userId", "invalidUserId", new Object[]{signUpRequestDto.getUserId()}, "아이디는 20자 이내여야 합니다.");
         }else if(!(signUpRequestDto.getUserId().matches(userIdPattern))){
             errors.rejectValue("userId", "invalidUserId", new Object[]{signUpRequestDto.getUserId()}, "형식에 맞지 않는 아이디 입니다.");
         }
@@ -39,7 +39,7 @@ public class SignUpRequestDtoValidator implements Validator {
         if(signUpRequestDto.getNickname().length() < 3){
             errors.rejectValue("nickname", "invalidNickname", new Object[]{signUpRequestDto.getNickname()}, "닉네임은 3자 이상이어야 합니다.");
         }else if(signUpRequestDto.getNickname().length() >15){
-            errors.rejectValue("nickname", "invalidNickname", new Object[]{signUpRequestDto.getNickname()}, "닉네임은 15자 이하이어야 합니다.");
+            errors.rejectValue("nickname", "invalidNickname", new Object[]{signUpRequestDto.getNickname()}, "닉네임은 15자 이내여야 합니다.");
         }else if(!(signUpRequestDto.getNickname().matches(nicknamePattern))){
             errors.rejectValue("nickname", "invalidNickname", new Object[]{signUpRequestDto.getNickname()}, "형식에 맞지 않는 닉네임 입니다.");
         }
@@ -51,7 +51,7 @@ public class SignUpRequestDtoValidator implements Validator {
         if(signUpRequestDto.getPassword().length() < 8){
             errors.rejectValue("password", "invalidPassword", new Object[]{signUpRequestDto.getPassword()}, "비밀번호는 8자 이상이어야 합니다.");
         }else if(signUpRequestDto.getPassword().length() >30){
-            errors.rejectValue("password", "invalidPassword", new Object[]{signUpRequestDto.getPassword()}, "비밀번호는 30자 이하이어야 합니다.");
+            errors.rejectValue("password", "invalidPassword", new Object[]{signUpRequestDto.getPassword()}, "비밀번호는 30자 이내여야 합니다.");
         }else if((signUpRequestDto.getPassword().contains(" "))){
             errors.rejectValue("password", "invalidPassword", new Object[]{signUpRequestDto.getPassword()}, "비밀번호에 공백은 포함될 수 없습니다.");
         }
