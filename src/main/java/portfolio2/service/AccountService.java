@@ -112,6 +112,5 @@ public class AccountService implements UserDetailsService {
         sessionAccount.setLocation(profileUpdateRequestDto.getLocation());
         sessionAccount.setProfileImage(profileUpdateRequestDto.getProfileImage());
         accountRepository.save(sessionAccount);
-        this.login(sessionAccount);
     }
 }
