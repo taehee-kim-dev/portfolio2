@@ -4,9 +4,7 @@ package portfolio2.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +35,7 @@ public class AccountService implements UserDetailsService {
     public void processNewAccount(SignUpRequestDto signUpRequestDto) {
         Account newAccount = saveNewAccount(signUpRequestDto);
         sendSignUpConfirmEmail(newAccount);
-        this.login(newAccount);
+        this.loginOrUpdateSessionAccount(newAccount);
     }
 
     private Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
@@ -66,22 +64,22 @@ public class AccountService implements UserDetailsService {
 
     public void resendSignUpConfirmEmail(Account sessionAccount) {
 
-        Account accountInDB = accountRepository.findByUserId(sessionAccount.getUserId());
-        accountInDB.generateEmailCheckToken();
+        Account accountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
+        accountInDb.generateEmailCheckToken();
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(accountInDB.getEmail());
+        mailMessage.setTo(accountInDb.getEmail());
         mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
-        mailMessage.setText("/check-email-token?token=" + accountInDB.getEmailCheckToken() +
-                "&email=" + accountInDB.getEmail());
+        mailMessage.setText("/check-email-token?token=" + accountInDb.getEmailCheckToken() +
+                "&email=" + accountInDb.getEmail());
         javaMailSender.send(mailMessage);
     }
 
 
-    public void login(Account accountInDB) {
+    public void loginOrUpdateSessionAccount(Account account) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(accountInDB),
-                accountInDB.getPassword(),
+                new UserAccount(account),
+                account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
 
@@ -101,9 +99,9 @@ public class AccountService implements UserDetailsService {
     }
 
     public void completeSignUp(Account account) {
-        Account accountInDB = accountRepository.findByUserId(account.getUserId());
-        accountInDB.completeSignUp();
-        login(accountInDB);
+        Account accountInDb = accountRepository.findByUserId(account.getUserId());
+        accountInDb.completeSignUp();
+        loginOrUpdateSessionAccount(accountInDb);
     }
 
     public void updateProfile(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {

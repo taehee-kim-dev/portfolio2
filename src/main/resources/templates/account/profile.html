@@ -22,7 +22,7 @@
 
 <div class="container">
 
-    <div class="alert alert-warning text-center" role="alert" th:if="${accountInDB != null && !accountInDB.emailVerified}">
+    <div class="alert alert-warning text-center" role="alert" th:if="${accountInDb != null && !accountInDb.emailVerified}">
         ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
     </div>
 
@@ -36,29 +36,29 @@
 
                 <div style="text-align: center; margin-left: 0; width: 190px">
                     <!-- Avatar -->
-                    <svg th:if="${#strings.isEmpty(accountInDB.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                         th:data-jdenticon-value="${accountInDB.userId}" width="131" height="131" ></svg>
-                    <img th:if="${!#strings.isEmpty(accountInDB.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                         th:src="${accountInDB.profileImage}"
+                    <svg th:if="${#strings.isEmpty(accountInDb.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                         th:data-jdenticon-value="${accountInDb.userId}" width="131" height="131" ></svg>
+                    <img th:if="${!#strings.isEmpty(accountInDb.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                         th:src="${accountInDb.profileImage}"
                          width="131" height="131"/>
                 </div>
 
                 <table style="text-align: center">
                     <tbody>
                         <tr>
-                            <td>닉네임 : </td><td th:text="${accountInDB.nickname}" style="font-size: 27px">nickname</td>
+                            <td>닉네임 : </td><td th:text="${accountInDb.nickname}" style="font-size: 27px">nickname</td>
                         </tr>
                         <tr style="height: 56px;">
-                            <td>아이디 : </td><td th:text="${accountInDB.userId}"></td>
+                            <td>아이디 : </td><td th:text="${accountInDb.userId}"></td>
                         </tr>
-                        <tr style="height: 35px;" th:if="${!isOwner && !#strings.isEmpty(accountInDB.bio)}">
+                        <tr style="height: 35px;" th:if="${!isOwner && !#strings.isEmpty(accountInDb.bio)}">
                             <td>한 줄 소개 : </td>
-                            <td th:text="${accountInDB.bio}">bio</td>
+                            <td th:text="${accountInDb.bio}">bio</td>
                         </tr>
                         <tr style="height: 35px;" th:if="${isOwner}">
                             <td>한 줄 소개 : </td>
-                            <td th:if="${!#strings.isEmpty(accountInDB.bio)}" th:text="${accountInDB.bio}" style="width: 264px">bio</td>
-                            <td th:if="${#strings.isEmpty(accountInDB.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>
+                            <td th:if="${!#strings.isEmpty(accountInDb.bio)}" th:text="${accountInDb.bio}" style="width: 264px">bio</td>
+                            <td th:if="${#strings.isEmpty(accountInDb.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>
                         </tr>
                     </tbody>
                 </table>
@@ -82,15 +82,15 @@
                             <tbody>
                                 <tr th:if="${isOwner}">
                                     <td><i class="far fa-envelope fa-lg"></i></td>
-                                    <td th:text="${accountInDB.email}" class="profile-list-content">email</td>
+                                    <td th:text="${accountInDb.email}" class="profile-list-content">email</td>
                                 </tr>
-                                <tr th:if="${!#strings.isEmpty(accountInDB.occupation)}">
+                                <tr th:if="${!#strings.isEmpty(accountInDb.occupation)}">
                                     <td><i class="fas fa-suitcase fa-lg"></i></td>
-                                    <td th:text="${accountInDB.occupation}" class="profile-list-content">occupation</td>
+                                    <td th:text="${accountInDb.occupation}" class="profile-list-content">occupation</td>
                                 </tr>
-                                <tr th:if="${!#strings.isEmpty(accountInDB.location)}">
+                                <tr th:if="${!#strings.isEmpty(accountInDb.location)}">
                                     <td><i class="far fa-compass fa-lg"></i></td>
-                                    <td th:text="${accountInDB.location}" class="profile-list-content">location</td>
+                                    <td th:text="${accountInDb.location}" class="profile-list-content">location</td>
                                 </tr>
                             </tbody>
                         </table>

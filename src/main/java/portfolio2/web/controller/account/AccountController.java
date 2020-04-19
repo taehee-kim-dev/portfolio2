@@ -67,21 +67,21 @@ public class AccountController {
 
         setSessionAccount(sessionAccount, model);
 
-        Account accountInDB = accountRepository.findByEmail(email);
+        Account accountInDb = accountRepository.findByEmail(email);
         String view = "account/checked-email";
-        if(accountInDB == null){
+        if(accountInDb == null){
             model.addAttribute("error", "wrong.email");
             return view;
         }
 
-        if(!accountInDB.isValidToken(token)){
+        if(!accountInDb.isValidToken(token)){
             model.addAttribute("error", "wrong.token");
             return view;
         }
 
-        accountService.completeSignUp(accountInDB);
+        accountService.completeSignUp(accountInDb);
 
-        model.addAttribute("nickname", accountInDB.getNickname());
+        model.addAttribute("nickname", accountInDb.getNickname());
         return view;
     }
 
@@ -108,14 +108,14 @@ public class AccountController {
     @GetMapping("account/profile/{userId}")
     public String viewProfile(@PathVariable String userId, @CurrentUser Account sessionAccount, Model model){
         setSessionAccount(sessionAccount, model);
-        Account accountInDB = accountRepository.findByUserId(userId);
-        if(accountInDB == null){
+        Account accountInDb = accountRepository.findByUserId(userId);
+        if(accountInDb == null){
             throw new IllegalArgumentException(userId + "에 해당하는 사용자가 없습니다.");
         }
         // 객체 타입의 camel case를 이름으로 준다.
         // mode.addAttribute("account", byUserId)와 같음.
-        model.addAttribute("accountInDB", accountInDB);
-        model.addAttribute("isOwner", accountInDB.equals(sessionAccount));
+        model.addAttribute("accountInDb", accountInDb);
+        model.addAttribute("isOwner", accountInDb.equals(sessionAccount));
         return "account/profile";
     }
 }
