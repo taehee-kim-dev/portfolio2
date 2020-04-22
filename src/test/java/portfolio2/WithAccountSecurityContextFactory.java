@@ -29,7 +29,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
 
         accountService.processNewAccount(signUpRequestDto);
 
-        // Authentication 만들고 SecurityuContext에 넣어주기
+        // Authentication 만들고 SecurityContext에 넣어주기
         UserDetails principal = accountService.loadUserByUsername(userId);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();

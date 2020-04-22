@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
+import portfolio2.web.dto.PasswordUpdateRequestDto;
 import portfolio2.web.dto.ProfileUpdateRequestDto;
 import portfolio2.web.dto.SignUpRequestDto;
 
@@ -111,5 +112,20 @@ public class AccountService implements UserDetailsService {
         sessionAccount.setProfileImage(profileUpdateRequestDto.getProfileImage());
         accountRepository.save(sessionAccount);
         loginOrUpdateSessionAccount(sessionAccount);
+    }
+
+    public void updatePassword(Account sessionAccount, PasswordUpdateRequestDto passwordUpdateRequestDto) {
+        sessionAccount.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getNewPassword()));
+        accountRepository.save(sessionAccount);
+        loginOrUpdateSessionAccount(sessionAccount);
+        this.sendPasswordChangeNotificationEmail(sessionAccount);
+    }
+
+    public void sendPasswordChangeNotificationEmail(Account sessionAccount) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(sessionAccount.getEmail());
+        mailMessage.setSubject("ShareMind 비밀번호 변경 알림");
+        mailMessage.setText(sessionAccount.getUserId() + "의 비밀번호가 변경되었습니다.");
+        javaMailSender.send(mailMessage);
     }
 }

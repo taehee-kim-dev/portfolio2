@@ -1,7 +1,5 @@
-package portfolio2.web.controller;
+package portfolio2.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
@@ -18,7 +15,6 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.service.AccountService;
 import portfolio2.web.dto.SignUpRequestDto;
 
-import javax.validation.constraints.AssertTrue;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;

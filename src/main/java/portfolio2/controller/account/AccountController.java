@@ -1,4 +1,4 @@
-package portfolio2.web.controller.account;
+package portfolio2.controller.account;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package portfolio2.web.controller;
+package portfolio2.controller;
 
 
 import org.springframework.stereotype.Controller;
