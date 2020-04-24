@@ -41,7 +41,7 @@
 
 
                         <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{/account/myPost}">내 게시글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
+                            <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
@@ -56,7 +56,7 @@
 
 
                         <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{/account/myReply}">내 댓글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
+                            <strong>누군가 <a href="#" th:href="@{'/account/reply/' + ${sessionAccount.userId}}">내 댓글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
@@ -71,7 +71,7 @@
 
 
                         <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{/account/myPost}">내 게시글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
+                            <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
@@ -86,7 +86,7 @@
 
 
                         <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{/account/myReply}">내 댓글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
+                            <strong>누군가 <a href="#" th:href="@{'/account/reply/' + ${sessionAccount.userId}}">내 댓글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
