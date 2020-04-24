@@ -24,14 +24,23 @@ import javax.validation.Valid;
 @Controller
 public class AccountSettingController {
 
+
+
     public static final String ACCOUNT_SETTING_PROFILE_URL = "/account/setting/profile";
     public static final String ACCOUNT_SETTING_PROFILE_VIEW_NAME = "account/setting/profile";
 
     public static final String ACCOUNT_SETTING_PASSWORD_URL = "/account/setting/password";
     public static final String ACCOUNT_SETTING_PASSWORD_VIEW_NAME = "account/setting/password";
 
+    public static final String ACCOUNT_SETTING_NOTIFICATION_URL = "/account/setting/notification";
+    public static final String ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME = "account/setting/notification";
+
+
+
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
+
+
 
     private final AccountService accountService;
 
@@ -104,4 +113,32 @@ public class AccountSettingController {
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
         return "redirect:" + ACCOUNT_SETTING_PASSWORD_URL;
     }
+
+
+    @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
+    public String getNotificationUpdate(@CurrentUser Account sessionAccount, Model model){
+        model.addAttribute("sessionAccount", sessionAccount);
+        model.addAttribute(new PasswordUpdateRequestDto());
+
+        return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+    }
+
+//    @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
+//    public String postPasswordUpdate(@CurrentUser Account sessionAccount,
+//                                     @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
+//                                     Errors errors, Model model,
+//                                     RedirectAttributes redirectAttributes){
+//        if(errors.hasErrors()){
+//            model.addAttribute("sessionAccount", sessionAccount);
+//            model.addAttribute(passwordUpdateRequestDto);
+//
+//            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+//        }
+//
+//        accountService.updatePassword(sessionAccount, passwordUpdateRequestDto);
+//        // 한번 쓰고 사라지는 메시지
+//        // 모델에 포함돼서 전달됨
+//        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+//        return "redirect:" + ACCOUNT_SETTING_NOTIFICATION_URL;
+//    }
 }

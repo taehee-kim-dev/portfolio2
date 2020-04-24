@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        .list-group-item{
+            width: 160px;
+            padding: 7px;
+        }
+        .profile-list-content{
+            font-size: 20px;
+            padding-left: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="/library/cropper/cropperjs-master/dist/cropper.min.css">
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <div class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && !sessionAccount.emailVerified}">
+        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    </div>
+
+        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 47px">알림 설정</h2>
+        <div class="row justify-content-center">
+
+            <div style="margin-right: 75px">
+                <div th:replace="fragment.html :: setting-menu(currentMenu='notification')"></div>
+            </div>
+
+            <div>
+
+                <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
+                    style="margin-bottom: 33px; padding: 10px 46px 8px 21px;">
+                    <span th:text="${message}">알림설정 저장 완료 메시지</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        style="padding-top: 5px;padding-bottom: 0px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="row mt-3" th:fragment="profile-form">
+                    <form class="col-12" action="#" th:action="@{/settings/notifications}" th:object="${notifications}" method="post" novalidate>
+                        <div class="alert alert-light" role="alert">
+                            <strong><a href="#" th:href="@{/settings/locations}">주요 활동 지역</a>에
+                                <a href="#" th:href="@{/settings/keywords}">관심있는 주제</a>의 스터디가 만들어졌을 때</strong> 알림을 받을 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyCreatedByEmail}" class="custom-control-input" id="studyCreatedByEmail">
+                                <label class="custom-control-label" for="studyCreatedByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyCreatedByWeb}" class="custom-control-input" id="studyCreatedByWeb">
+                                <label class="custom-control-label" for="studyCreatedByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+                        <div class="alert alert-light" role="alert">
+                            <strong>스터디 모임 참가 신청</strong> 결과 알림을 받을 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyEnrollmentResultByEmail}" class="custom-control-input" id="studyEnrollmentResultByEmil">
+                                <label class="custom-control-label" for="studyEnrollmentResultByEmil">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyEnrollmentResultByWeb}" class="custom-control-input" id="studyEnrollmentResultByWeb">
+                                <label class="custom-control-label" for="studyEnrollmentResultByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+                        <div class="alert alert-light" role="alert">
+                            <strong>참여중인 스터디</strong>에 대한 알림을 받을 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyUpdatedByEmail}" class="custom-control-input" id="studyWatchByEmail">
+                                <label class="custom-control-label" for="studyWatchByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{studyUpdatedByWeb}" class="custom-control-input" id="studyWatchByWeb">
+                                <label class="custom-control-label" for="studyWatchByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">저장하기</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

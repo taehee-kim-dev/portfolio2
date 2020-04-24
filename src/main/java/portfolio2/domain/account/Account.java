@@ -75,9 +75,17 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean notificationByEmail;
+    private boolean likeNotificationByEmail;
 
-    private boolean notificationByWeb;
+    private boolean likeNotificationByWeb;
+
+    private boolean replyNotificationByEmail;
+
+    private boolean replyNotificationByWeb;
+
+    private boolean tagNotificationByEmail;
+
+    private boolean tagNotificationByWeb;
 
     public void generateEmailCheckToken() {
         // 앞에서 재전송 허가받은 상태이므로,

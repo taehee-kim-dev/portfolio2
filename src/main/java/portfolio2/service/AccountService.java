@@ -46,8 +46,12 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpRequestDto.getNickname())
                 .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
                 .sendCheckEmailCount(0)
-                .notificationByEmail(true)
-                .notificationByWeb(true)
+                .likeNotificationByEmail(false)
+                .replyNotificationByEmail(false)
+                .tagNotificationByEmail(false)
+                .likeNotificationByWeb(true)
+                .replyNotificationByWeb(true)
+                .tagNotificationByWeb(true)
                 .build();
 
         return accountRepository.save(account);
