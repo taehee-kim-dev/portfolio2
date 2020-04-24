@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import portfolio2.domain.account.Account;
 
 
-@NoArgsConstructor
 @Data
 public class NotificationUpdateDto {
 
@@ -28,17 +27,4 @@ public class NotificationUpdateDto {
     private boolean notificationNewPostWithMyTagByEmail;
 
     private boolean notificationNewPostWithMyTagByWeb;
-
-    public NotificationUpdateDto(Account account) {
-        this.notificationLikeOnMyPostByEmail = account.isNotificationLikeOnMyPostByEmail();
-        this.notificationLikeOnMyPostByWeb = account.isNotificationLikeOnMyPostByWeb();
-        this.notificationLikeOnMyReplyByEmail = account.isNotificationLikeOnMyReplyByEmail();
-        this.notificationLikeOnMyReplyByWeb = account.isNotificationLikeOnMyReplyByWeb();
-        this.notificationReplyOnMyPostByEmail = account.isNotificationReplyOnMyPostByEmail();
-        this.notificationReplyOnMyPostByWeb = account.isNotificationReplyOnMyPostByWeb();
-        this.notificationReplyOnMyReplyByEmail = account.isNotificationReplyOnMyReplyByEmail();
-        this.notificationReplyOnMyReplyByWeb = account.isNotificationReplyOnMyReplyByWeb();
-        this.notificationNewPostWithMyTagByEmail = account.isNotificationNewPostWithMyTagByEmail();
-        this.notificationNewPostWithMyTagByWeb = account.isNotificationNewPostWithMyTagByWeb();
-    }
 }

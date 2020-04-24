@@ -1,6 +1,7 @@
 package portfolio2.controller.account;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -25,8 +26,6 @@ import javax.validation.Valid;
 @Controller
 public class AccountSettingController {
 
-
-
     public static final String ACCOUNT_SETTING_PROFILE_URL = "/account/setting/profile";
     public static final String ACCOUNT_SETTING_PROFILE_VIEW_NAME = "account/setting/profile";
 
@@ -37,13 +36,13 @@ public class AccountSettingController {
     public static final String ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME = "account/setting/notification";
 
 
-
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
 
 
-
     private final AccountService accountService;
+
+    private final ModelMapper modelMapper;
 
 
 
@@ -62,7 +61,7 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
     public String getProfileUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(new ProfileUpdateRequestDto(sessionAccount));
+        model.addAttribute(modelMapper.map(sessionAccount, ProfileUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
     }
@@ -119,7 +118,7 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String getNotificationUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(new NotificationUpdateDto(sessionAccount));
+        model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
     }
@@ -136,7 +135,7 @@ public class AccountSettingController {
             return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
         }
 
-        //accountService.updateNotification(sessionAccount, notificationUpdateDto);
+        accountService.updateNotification(sessionAccount, notificationUpdateDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");

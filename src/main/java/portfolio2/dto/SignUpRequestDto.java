@@ -18,12 +18,4 @@ public class SignUpRequestDto {
     private String email;
 
     private String password;
-
-    @Builder
-    public SignUpRequestDto(String userId, String nickname, String email, String password) {
-        this.userId = userId;
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-    }
 }

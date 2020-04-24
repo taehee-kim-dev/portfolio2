@@ -2,6 +2,7 @@ package portfolio2.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
+import portfolio2.dto.NotificationUpdateDto;
 import portfolio2.dto.PasswordUpdateRequestDto;
 import portfolio2.dto.ProfileUpdateRequestDto;
 import portfolio2.dto.SignUpRequestDto;
@@ -31,6 +33,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
 
     public void processNewAccount(SignUpRequestDto signUpRequestDto) {
@@ -96,12 +99,16 @@ public class AccountService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userIdOrEmail) throws UsernameNotFoundException {
 
-        Account account = accountRepository.findByUserId(userId);
+        Account account = accountRepository.findByUserId(userIdOrEmail);
 
         if (account == null) {
-            throw new UsernameNotFoundException(userId);
+            account = accountRepository.findByEmail(userIdOrEmail);
+        }
+
+        if (account == null) {
+            throw new UsernameNotFoundException(userIdOrEmail);
         }
 
         return new UserAccount(account);
@@ -114,10 +121,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
-        sessionAccount.setBio(profileUpdateRequestDto.getBio());
-        sessionAccount.setOccupation(profileUpdateRequestDto.getOccupation());
-        sessionAccount.setLocation(profileUpdateRequestDto.getLocation());
-        sessionAccount.setProfileImage(profileUpdateRequestDto.getProfileImage());
+        modelMapper.map(profileUpdateRequestDto, sessionAccount);
         accountRepository.save(sessionAccount);
         loginOrUpdateSessionAccount(sessionAccount);
     }
@@ -135,5 +139,11 @@ public class AccountService implements UserDetailsService {
         mailMessage.setSubject("ShareMind 비밀번호 변경 알림");
         mailMessage.setText(sessionAccount.getUserId() + "의 비밀번호가 변경되었습니다.");
         javaMailSender.send(mailMessage);
+    }
+
+    public void updateNotification(Account sessionAccount, NotificationUpdateDto notificationUpdateDto) {
+        modelMapper.map(notificationUpdateDto, sessionAccount);
+        accountRepository.save(sessionAccount);
+        loginOrUpdateSessionAccount(sessionAccount);
     }
 }
