@@ -1,8 +1,7 @@
-package portfolio2.web.dto;
+package portfolio2.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import portfolio2.domain.account.Account;
 
 @NoArgsConstructor
 @Data

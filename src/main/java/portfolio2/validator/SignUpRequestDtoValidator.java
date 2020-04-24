@@ -1,11 +1,11 @@
-package portfolio2.web.validator;
+package portfolio2.validator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.web.dto.SignUpRequestDto;
+import portfolio2.dto.SignUpRequestDto;
 
 @Component
 @RequiredArgsConstructor

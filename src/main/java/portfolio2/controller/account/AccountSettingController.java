@@ -13,10 +13,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.CurrentUser;
 import portfolio2.service.AccountService;
-import portfolio2.web.dto.PasswordUpdateRequestDto;
-import portfolio2.web.dto.ProfileUpdateRequestDto;
-import portfolio2.web.validator.PasswordUpdateRequestDtoValidator;
-import portfolio2.web.validator.ProfileUpdateRequestDtoValidator;
+import portfolio2.dto.NotificationUpdateDto;
+import portfolio2.dto.PasswordUpdateRequestDto;
+import portfolio2.dto.ProfileUpdateRequestDto;
+import portfolio2.validator.PasswordUpdateRequestDtoValidator;
+import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
 
@@ -118,27 +119,27 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String getNotificationUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(new PasswordUpdateRequestDto());
-
+        model.addAttribute(new NotificationUpdateDto(sessionAccount));
+        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
     }
 
-//    @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-//    public String postPasswordUpdate(@CurrentUser Account sessionAccount,
-//                                     @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
-//                                     Errors errors, Model model,
-//                                     RedirectAttributes redirectAttributes){
+//    @PostMapping(ACCOUNT_SETTING_PROFILE_URL)
+//    public String postProfileUpdate(@CurrentUser Account sessionAccount,
+//                                    @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
+//                                    Errors errors, Model model,
+//                                    RedirectAttributes redirectAttributes){
 //        if(errors.hasErrors()){
 //            model.addAttribute("sessionAccount", sessionAccount);
-//            model.addAttribute(passwordUpdateRequestDto);
+//            model.addAttribute(profileUpdateRequestDto);
 //
-//            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+//            return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
 //        }
 //
-//        accountService.updatePassword(sessionAccount, passwordUpdateRequestDto);
+//        accountService.updateProfile(sessionAccount, profileUpdateRequestDto);
 //        // 한번 쓰고 사라지는 메시지
 //        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
-//        return "redirect:" + ACCOUNT_SETTING_NOTIFICATION_URL;
+//        redirectAttributes.addFlashAttribute("message", "프로필 수정이 완료되었습니다.");
+//        return "redirect:" + ACCOUNT_SETTING_PROFILE_URL;
 //    }
 }

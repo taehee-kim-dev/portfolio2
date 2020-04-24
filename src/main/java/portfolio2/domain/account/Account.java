@@ -75,17 +75,26 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean likeNotificationByEmail;
+    private boolean notificationLikeOnMyPostByEmail;
 
-    private boolean likeNotificationByWeb;
+    private boolean notificationLikeOnMyPostByWeb;
 
-    private boolean replyNotificationByEmail;
+    private boolean notificationLikeOnMyReplyByEmail;
 
-    private boolean replyNotificationByWeb;
+    private boolean notificationLikeOnMyReplyByWeb;
 
-    private boolean tagNotificationByEmail;
+    private boolean notificationReplyOnMyPostByEmail;
 
-    private boolean tagNotificationByWeb;
+    private boolean notificationReplyOnMyPostByWeb;
+
+    private boolean notificationReplyOnMyReplyByEmail;
+
+    private boolean notificationReplyOnMyReplyByWeb;
+
+    private boolean notificationNewPostWithMyTagByEmail;
+
+    private boolean notificationNewPostWithMyTagByWeb;
+
 
     public void generateEmailCheckToken() {
         // 앞에서 재전송 허가받은 상태이므로,

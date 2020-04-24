@@ -1,11 +1,6 @@
-package portfolio2.web.dto;
+package portfolio2.dto;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 
 /*

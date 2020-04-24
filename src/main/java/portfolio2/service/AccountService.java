@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
-import portfolio2.web.dto.PasswordUpdateRequestDto;
-import portfolio2.web.dto.ProfileUpdateRequestDto;
-import portfolio2.web.dto.SignUpRequestDto;
+import portfolio2.dto.PasswordUpdateRequestDto;
+import portfolio2.dto.ProfileUpdateRequestDto;
+import portfolio2.dto.SignUpRequestDto;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -46,12 +46,16 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpRequestDto.getNickname())
                 .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
                 .sendCheckEmailCount(0)
-                .likeNotificationByEmail(false)
-                .replyNotificationByEmail(false)
-                .tagNotificationByEmail(false)
-                .likeNotificationByWeb(true)
-                .replyNotificationByWeb(true)
-                .tagNotificationByWeb(true)
+                .notificationLikeOnMyPostByWeb(true)
+                .notificationLikeOnMyReplyByWeb(true)
+                .notificationReplyOnMyPostByWeb(true)
+                .notificationReplyOnMyReplyByWeb(true)
+                .notificationNewPostWithMyTagByWeb(true)
+                .notificationLikeOnMyPostByEmail(false)
+                .notificationLikeOnMyReplyByEmail(false)
+                .notificationReplyOnMyPostByEmail(false)
+                .notificationReplyOnMyReplyByEmail(false)
+                .notificationNewPostWithMyTagByEmail(false)
                 .build();
 
         return accountRepository.save(account);

@@ -10,8 +10,8 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CurrentUser;
 import portfolio2.service.AccountService;
-import portfolio2.web.dto.SignUpRequestDto;
-import portfolio2.web.validator.SignUpRequestDtoValidator;
+import portfolio2.dto.SignUpRequestDto;
+import portfolio2.validator.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 
