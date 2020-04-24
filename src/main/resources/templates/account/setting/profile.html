@@ -3,14 +3,6 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .list-group-item{
-            width: 160px;
-            padding: 7px;
-        }
-        .profile-list-content{
-            font-size: 20px;
-            padding-left: 40px;
-        }
     </style>
     <link rel="stylesheet" href="/library/cropper/cropperjs-master/dist/cropper.min.css">
 </head>
@@ -27,7 +19,7 @@
         <h2 style="text-align: center; margin-top: 75px; margin-bottom: 47px">프로필 수정</h2>
         <div class="row justify-content-center">
 
-            <div style="margin-right: 75px">
+            <div>
                 <div th:replace="fragment.html :: setting-menu(currentMenu='profile')"></div>
             </div>
 

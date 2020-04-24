@@ -124,22 +124,22 @@ public class AccountSettingController {
         return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
     }
 
-//    @PostMapping(ACCOUNT_SETTING_PROFILE_URL)
-//    public String postProfileUpdate(@CurrentUser Account sessionAccount,
-//                                    @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
-//                                    Errors errors, Model model,
-//                                    RedirectAttributes redirectAttributes){
-//        if(errors.hasErrors()){
-//            model.addAttribute("sessionAccount", sessionAccount);
-//            model.addAttribute(profileUpdateRequestDto);
-//
-//            return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
-//        }
-//
-//        accountService.updateProfile(sessionAccount, profileUpdateRequestDto);
-//        // 한번 쓰고 사라지는 메시지
-//        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "프로필 수정이 완료되었습니다.");
-//        return "redirect:" + ACCOUNT_SETTING_PROFILE_URL;
-//    }
+    @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
+    public String postNotificationUpdate(@CurrentUser Account sessionAccount,
+                                    @Valid @ModelAttribute NotificationUpdateDto notificationUpdateDto,
+                                    Errors errors, Model model,
+                                    RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute("sessionAccount", sessionAccount);
+            model.addAttribute(notificationUpdateDto);
+
+            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+        }
+
+        //accountService.updateNotification(sessionAccount, notificationUpdateDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");
+        return "redirect:" + ACCOUNT_SETTING_NOTIFICATION_URL;
+    }
 }

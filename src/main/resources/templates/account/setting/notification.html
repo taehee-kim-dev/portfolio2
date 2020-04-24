@@ -3,13 +3,8 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .list-group-item{
-            width: 160px;
-            padding: 7px;
-        }
-        .profile-list-content{
-            font-size: 20px;
-            padding-left: 40px;
+        .notification-description{
+            padding-left: 0;
         }
     </style>
     <link rel="stylesheet" href="/library/cropper/cropperjs-master/dist/cropper.min.css">
@@ -24,10 +19,10 @@
         ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
     </div>
 
-        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 47px">알림 설정</h2>
+        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 37px">알림 설정</h2>
         <div class="row justify-content-center">
 
-            <div style="margin-right: 75px">
+            <div>
                 <div th:replace="fragment.html :: setting-menu(currentMenu='notification')"></div>
             </div>
 
@@ -42,62 +37,89 @@
                     </button>
                 </div>
 
-
-
-                <div class="row" th:fragment="profile-form">
                     <form th:action="@{/account/setting/notification}" th:object="${notificationUpdateDto}" method="post" novalidate>
 
-                        <div class="alert alert-light" role="alert">
-                            <strong>관심 주제에
-                                <a href="#" th:href="@{/setting/tag}">관심있는 주제</a>의 게시물이 게시되었을 때</strong> 알림을 받을 방법을 설정하세요.
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong>누군가 <a href="#" th:href="@{/account/myPost}">내 게시글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByEmail}" class="custom-control-input" id="tagNotificationByEmail">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}" class="custom-control-input" id="notificationLikeOnMyPostByEmail">
+                                <label class="custom-control-label" for="notificationLikeOnMyPostByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByWeb}" class="custom-control-input" id="notificationLikeOnMyPostByWeb">
+                                <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong>누군가 <a href="#" th:href="@{/account/myReply}">내 댓글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyReplyByEmail}" class="custom-control-input" id="notificationLikeOnMyReplyByEmail">
+                                <label class="custom-control-label" for="notificationLikeOnMyReplyByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyReplyByWeb}" class="custom-control-input" id="notificationLikeOnMyReplyByWeb">
+                                <label class="custom-control-label" for="notificationLikeOnMyReplyByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong>누군가 <a href="#" th:href="@{/account/myPost}">내 게시글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyPostByEmail}" class="custom-control-input" id="notificationReplyOnMyPostByEmail">
+                                <label class="custom-control-label" for="notificationReplyOnMyPostByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyPostByWeb}" class="custom-control-input" id="notificationReplyOnMyPostByWeb">
+                                <label class="custom-control-label" for="notificationReplyOnMyPostByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong>누군가 <a href="#" th:href="@{/account/myReply}">내 댓글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyReplyByEmail}" class="custom-control-input" id="notificationReplyOnMyReplyByEmail">
+                                <label class="custom-control-label" for="notificationReplyOnMyReplyByEmail">이메일로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyReplyByWeb}" class="custom-control-input" id="notificationReplyOnMyReplyByWeb">
+                                <label class="custom-control-label" for="notificationReplyOnMyReplyByWeb">웹으로 받기</label>
+                            </div>
+                        </div>
+
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>의 게시물이 게시되었을 때</strong> 알림을 수신할 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationNewPostWithMyTagByEmail}" class="custom-control-input" id="tagNotificationByEmail">
                                 <label class="custom-control-label" for="tagNotificationByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByWeb}" class="custom-control-input" id="tagNotificationByWeb">
+                                <input type="checkbox" th:field="*{notificationNewPostWithMyTagByWeb}" class="custom-control-input" id="tagNotificationByWeb">
                                 <label class="custom-control-label" for="tagNotificationByWeb">웹으로 받기</label>
                             </div>
                         </div>
 
-                        <div class="alert alert-light" role="alert">
-                            <strong><a href="#" th:href="@{/account/setting/tag}">관심 주제</a>에
-                                <a href="#" th:href="@{/setting/tag}">관심있는 주제</a>의 게시물이 게시되었을 때</strong> 알림을 받을 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByEmail}" class="custom-control-input" id="tagNotificationByEmail">
-                                <label class="custom-control-label" for="tagNotificationByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByWeb}" class="custom-control-input" id="tagNotificationByWeb">
-                                <label class="custom-control-label" for="tagNotificationByWeb">웹으로 받기</label>
-                            </div>
-                        </div>
 
 
-                        <div class="alert alert-light" role="alert">
-                            <strong><a href="#" th:href="@{/account/setting/tag}">관심 주제</a>에
-                                <a href="#" th:href="@{/setting/tag}">관심있는 주제</a>의 게시물이 게시되었을 때</strong> 알림을 받을 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByEmail}" class="custom-control-input" id="tagNotificationByEmail">
-                                <label class="custom-control-label" for="tagNotificationByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{tagNotificationByWeb}" class="custom-control-input" id="tagNotificationByWeb">
-                                <label class="custom-control-label" for="tagNotificationByWeb">웹으로 받기</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 50px">
                             <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">저장하기</button>
                         </div>
                     </form>
-                </div>
 
 
             </div>
