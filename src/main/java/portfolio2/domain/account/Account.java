@@ -1,7 +1,7 @@
 package portfolio2.domain.account;
 
 import lombok.*;
-import portfolio2.domain.Tag;
+import portfolio2.domain.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -103,7 +103,7 @@ public class Account {
 
     private boolean notificationNewPostWithMyTagByWeb;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tag;
 
 

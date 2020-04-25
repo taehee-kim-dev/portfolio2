@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import portfolio2.domain.Tag;
+import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
@@ -23,6 +23,7 @@ import portfolio2.dto.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Service
@@ -167,5 +168,10 @@ public class AccountService implements UserDetailsService {
     public void addTag(Account sessionAccount, Tag tag) {
         Optional<Account> existingAccount = accountRepository.findById(sessionAccount.getId());
         existingAccount.ifPresent(a -> a.getTag().add(tag));
+    }
+
+    public Set<Tag> getTag(Account sessionAccount) {
+        Optional<Account> existingAccount = accountRepository.findById(sessionAccount.getId());
+        return existingAccount.orElseThrow().getTag();
     }
 }

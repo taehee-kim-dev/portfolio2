@@ -4,6 +4,10 @@
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
+        .tagify__input{
+            margin: 0;
+            margin-bottom: 10px;
+        }
         .tagify-outside{
             border: none;
         }
@@ -43,8 +47,7 @@
                     <br>태그를 입력하고 콤마(,) 또는 엔터를 입력하세요.
                 </div>
 
-                <div id="whitelist" th:text="${whitelist}" hidden></div>
-                <input id="tag" type="text" name="tag"
+                <input id="tag" type="text" name="tag" th:value="${#strings.listJoin(tag, ',')}"
                        class="tagify-outside" aria-describedby="tagHelp"/>
 
             </div>

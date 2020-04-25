@@ -1,8 +1,7 @@
-package portfolio2.tag;
+package portfolio2.domain.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
-import portfolio2.domain.Tag;
 
 import java.util.Optional;
 

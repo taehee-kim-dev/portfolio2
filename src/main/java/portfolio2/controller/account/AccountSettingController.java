@@ -1,6 +1,5 @@
 package portfolio2.controller.account;
 
-import com.sun.mail.iap.Response;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -10,18 +9,19 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import portfolio2.domain.Tag;
+import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.CurrentUser;
 import portfolio2.dto.*;
 import portfolio2.service.AccountService;
-import portfolio2.tag.TagRepository;
+import portfolio2.domain.tag.TagRepository;
 import portfolio2.validator.AccountUpdateRequestDtoValidator;
 import portfolio2.validator.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -184,6 +184,8 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
     public String getTagUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
+        Set<Tag> tag = accountService.getTag(sessionAccount);
+        model.addAttribute("tag", tag.stream().map(Tag::getTitle).collect(Collectors.toList()));
         return ACCOUNT_SETTING_TAG_VIEW_NAME;
     }
 
