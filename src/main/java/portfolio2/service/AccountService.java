@@ -157,7 +157,7 @@ public class AccountService implements UserDetailsService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(accountInDb.getEmail());
         mailMessage.setSubject("ShareMind 이메일로 로그인하기 링크");
-        mailMessage.setText("/email-login-token?token=" + accountInDb.getEmailLoginToken() +
+        mailMessage.setText("/login-by-email?token=" + accountInDb.getEmailLoginToken() +
                 "&email=" + accountInDb.getEmail());
         javaMailSender.send(mailMessage);
     }

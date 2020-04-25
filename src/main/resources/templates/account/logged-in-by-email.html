@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <h2 style="margin-top: 80px; margin-bottom: 35px; text-align: center">이메일로 로그인하기</h2>
+
+    <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+        <p style="margin-bottom: 0" th:text="${error}">에러 메세지</p>
+    </div>
+
+    <div class="py-4 text-center" th:if="${error == null}">
+        <h3>이메일로 로그인 되었습니다. <a th:href="@{/account/setting/password}">비밀번호를 변경</a>하세요.</h3>
+    </div>
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

@@ -144,7 +144,7 @@ public class Account {
     public void generateLoginEmailToken() {
         // 앞에서 재전송 허가받은 상태이므로,
         // 무조건 토큰값 생성.
-        this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailLoginToken = UUID.randomUUID().toString();
         if(sendLoginEmailCount == 0 || sendLoginEmailCount == 3){
             // 이미 앞에서 이메일 재전송 허가받은 상태.
             // 현재 가입 후 첫번째 또는 4번째 이메일 전송이라면,
