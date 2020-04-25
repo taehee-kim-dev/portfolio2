@@ -105,7 +105,7 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("account/profile/{userId}")
+    @GetMapping("/account/profile/{userId}")
     public String viewProfile(@PathVariable String userId, @CurrentUser Account sessionAccount, Model model){
         setSessionAccount(sessionAccount, model);
         Account accountInDb = accountRepository.findByUserId(userId);
@@ -117,5 +117,10 @@ public class AccountController {
         model.addAttribute("accountInDb", accountInDb);
         model.addAttribute("isOwner", accountInDb.equals(sessionAccount));
         return "account/profile";
+    }
+    
+    @GetMapping("/email-login")
+    public String getEmailLogin(Model model){
+        return "account/email-login";
     }
 }
