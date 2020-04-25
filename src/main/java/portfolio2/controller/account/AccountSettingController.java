@@ -1,5 +1,7 @@
 package portfolio2.controller.account;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -51,6 +54,8 @@ public class AccountSettingController {
     private final AccountService accountService;
 
     private final ModelMapper modelMapper;
+
+    private final ObjectMapper objectMapper;
 
 
 
@@ -181,10 +186,14 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
-    public String getTagUpdate(@CurrentUser Account sessionAccount, Model model){
+    public String getTagUpdate(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
         model.addAttribute("sessionAccount", sessionAccount);
         List<String> tag = accountService.getTag(sessionAccount);
         model.addAttribute("tag", tag);
+
+        List<String> allExistingTag = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allExistingTag));
+
         return ACCOUNT_SETTING_TAG_VIEW_NAME;
     }
 
