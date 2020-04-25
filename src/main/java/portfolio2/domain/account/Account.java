@@ -1,9 +1,11 @@
 package portfolio2.domain.account;
 
 import lombok.*;
+import portfolio2.domain.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -100,6 +102,9 @@ public class Account {
     private boolean notificationNewPostWithMyTagByEmail;
 
     private boolean notificationNewPostWithMyTagByWeb;
+
+    @ManyToMany
+    private Set<Tag> tag;
 
 
     public void generateEmailCheckToken() {
