@@ -103,7 +103,7 @@ public class Account {
 
     private boolean notificationNewPostWithMyTagByWeb;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Tag> tag;
 
 

@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -170,8 +171,10 @@ public class AccountService implements UserDetailsService {
         existingAccount.ifPresent(a -> a.getTag().add(tag));
     }
 
-    public Set<Tag> getTag(Account sessionAccount) {
-        Optional<Account> existingAccount = accountRepository.findById(sessionAccount.getId());
-        return existingAccount.orElseThrow().getTag();
+    public List<String> getTag(Account sessionAccount) {
+        Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
+        Set<Tag> tagOfExistingAccount = existingAccount.getTag();
+        List<String> tagListOfExistingAccount = tagOfExistingAccount.stream().map(Tag::getTitle).collect(Collectors.toList());
+        return tagListOfExistingAccount;
     }
 }

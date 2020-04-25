@@ -20,6 +20,7 @@ import portfolio2.validator.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -184,8 +185,8 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
     public String getTagUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        Set<Tag> tag = accountService.getTag(sessionAccount);
-        model.addAttribute("tag", tag.stream().map(Tag::getTitle).collect(Collectors.toList()));
+        List<String> tag = accountService.getTag(sessionAccount);
+        model.addAttribute("tag", tag);
         return ACCOUNT_SETTING_TAG_VIEW_NAME;
     }
 
