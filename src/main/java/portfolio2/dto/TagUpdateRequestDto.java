@@ -3,7 +3,7 @@ package portfolio2.dto;
 import lombok.Data;
 
 @Data
-public class AddTagRequestDto {
+public class TagUpdateRequestDto {
 
     private String tagTitle;
 }

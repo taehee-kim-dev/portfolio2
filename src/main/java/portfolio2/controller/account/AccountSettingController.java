@@ -21,8 +21,6 @@ import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -192,15 +190,32 @@ public class AccountSettingController {
 
     @ResponseBody
     @PostMapping("/account/setting/tag/add")
-    public ResponseEntity addTag(@CurrentUser Account sessionAccount, Model model, @RequestBody AddTagRequestDto addTagRequestDto){
-        String newTagTitle = addTagRequestDto.getTagTitle();
+    public ResponseEntity addTag(@CurrentUser Account sessionAccount, Model model, @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+        String newTagTitle = tagUpdateRequestDto.getTagTitle();
 
-        Tag tag = tagRepository.findByTitle(newTagTitle)
-                .orElseGet(() -> tagRepository.save(Tag.builder()
-                .title(newTagTitle)
-                .build()));
+        Tag existingTag = tagRepository.findByTitle(newTagTitle);
 
-        accountService.addTag(sessionAccount, tag);
+        if(existingTag == null){
+            existingTag = tagRepository.save(Tag.builder().title(newTagTitle).build());
+        }
+
+        accountService.addTag(sessionAccount, existingTag);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @PostMapping("/account/setting/tag/remove")
+    public ResponseEntity removeTag(@CurrentUser Account sessionAccount, Model model, @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+        String tagTitleToRemove = tagUpdateRequestDto.getTagTitle();
+
+        Tag existingTag = tagRepository.findByTitle(tagTitleToRemove);
+
+        if(existingTag == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeTag(sessionAccount, existingTag);
 
         return ResponseEntity.ok().build();
     }

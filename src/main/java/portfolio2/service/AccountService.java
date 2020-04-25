@@ -166,9 +166,11 @@ public class AccountService implements UserDetailsService {
         javaMailSender.send(mailMessage);
     }
 
-    public void addTag(Account sessionAccount, Tag tag) {
-        Optional<Account> existingAccount = accountRepository.findById(sessionAccount.getId());
-        existingAccount.ifPresent(a -> a.getTag().add(tag));
+    public void addTag(Account sessionAccount, Tag newTag) {
+        Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
+        if(existingAccount != null){
+            existingAccount.getTag().add(newTag);
+        }
     }
 
     public List<String> getTag(Account sessionAccount) {
@@ -176,5 +178,12 @@ public class AccountService implements UserDetailsService {
         Set<Tag> tagOfExistingAccount = existingAccount.getTag();
         List<String> tagListOfExistingAccount = tagOfExistingAccount.stream().map(Tag::getTitle).collect(Collectors.toList());
         return tagListOfExistingAccount;
+    }
+
+    public void removeTag(Account sessionAccount, Tag tagToRemove) {
+        Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
+        if(existingAccount != null){
+            existingAccount.getTag().remove(tagToRemove);
+        }
     }
 }
