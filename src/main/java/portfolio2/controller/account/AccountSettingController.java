@@ -1,28 +1,27 @@
 package portfolio2.controller.account;
 
+import com.sun.mail.iap.Response;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import portfolio2.domain.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.CurrentUser;
-import portfolio2.dto.AccountUpdateRequestDto;
+import portfolio2.dto.*;
 import portfolio2.service.AccountService;
-import portfolio2.dto.NotificationUpdateRequestDto;
-import portfolio2.dto.PasswordUpdateRequestDto;
-import portfolio2.dto.ProfileUpdateRequestDto;
+import portfolio2.tag.TagRepository;
 import portfolio2.validator.AccountUpdateRequestDtoValidator;
 import portfolio2.validator.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,11 +39,15 @@ public class AccountSettingController {
     public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
     public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
 
+    public static final String ACCOUNT_SETTING_TAG_URL = "/account/setting/tag";
+    public static final String ACCOUNT_SETTING_TAG_VIEW_NAME = "account/setting/tag";
+
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
     private final AccountUpdateRequestDtoValidator accountUpdateRequestDtoValidator;
 
+    private final TagRepository tagRepository;
 
     private final AccountService accountService;
 
@@ -176,5 +179,26 @@ public class AccountSettingController {
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "계정 설정 변경이 완료되었습니다.");
         return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
+    }
+
+    @GetMapping(ACCOUNT_SETTING_TAG_URL)
+    public String getTagUpdate(@CurrentUser Account sessionAccount, Model model){
+        model.addAttribute("sessionAccount", sessionAccount);
+        return ACCOUNT_SETTING_TAG_VIEW_NAME;
+    }
+
+    @ResponseBody
+    @PostMapping("/account/setting/tag/add")
+    public ResponseEntity addTag(@CurrentUser Account sessionAccount, Model model, @RequestBody AddTagRequestDto addTagRequestDto){
+        String newTagTitle = addTagRequestDto.getTagTitle();
+
+        Tag tag = tagRepository.findByTitle(newTagTitle)
+                .orElseGet(() -> tagRepository.save(Tag.builder()
+                .title(newTagTitle)
+                .build()));
+
+        accountService.addTag(sessionAccount, tag);
+
+        return ResponseEntity.ok().build();
     }
 }

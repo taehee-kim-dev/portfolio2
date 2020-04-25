@@ -109,6 +109,16 @@
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
 </th:block>
 
+<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
+
 <div th:fragment="setting-menu (currentMenu)" class="list-group" style="text-align: center; width: 160px; margin-right: 75px">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/account/setting/profile}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/account/setting/password}">패스워드</a>
