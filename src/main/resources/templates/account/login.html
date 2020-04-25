@@ -2,11 +2,6 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
-    <style>
-        .form-group{
-            margin-bottom: 30px;
-        }
-    </style>
 </head>
 <body>
 
@@ -15,31 +10,31 @@
 <div class="container justify-content-center">
 
     <div>
-        <h2 id="title" class="text-center" style="margin-top: 90px;margin-bottom: 35px">로그인</h2>
+        <h2 id="title" class="text-center" style="margin-top: 90px;margin-bottom: 23px">로그인</h2>
     </div>
 
-    <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+    <div th:if="${param.error}" class="alert alert-danger text-center" role="alert" st>
         <p>아이디/이메일 또는 패스워드가 올바르지 않습니다.</p>
         <p style="margin-bottom: 0px;">
-            확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">비밀번호 찾기</a>를 이용해 주세요.
+            확인 후 다시 입력하시거나, <a href="#" th:href="@{/email-login}">이메일로 로그인하기</a>를 이용해 주세요.
         </p>
     </div>
 
-    <form id="login-form" style="width: 350px; margin: auto; margin-top: 10px; " action="#"
+    <form id="login-form" style="width: 350px; margin: auto; margin-top: 22px; " action="#"
           th:action="@{/login}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 20px">
             <label for="username">아이디 또는 이메일</label>
             <input id="username" name="username" type="text" class="form-control"
                    placeholder="ID or Email" aria-describedby="usernameHelp" autofocus required>
         </div>
 
-        <div id="password-input-div" class="form-group" style="margin-bottom: 35px">
+        <div id="password-input-div" class="form-group">
             <label for="password">비밀번호</label>
             <input id="password" name="password" type="password" class="form-control"
                    aria-describedby="passwordHelp" placeholder="Password" required>
             <small id="passwordHelp" class="form-text text-muted" style="margin-top: 10px">
-                비밀번호가 기억나지 않는다면, <a href="#" th:href="@{/email-login}">비밀번호 없이 로그인하기</a>
+                비밀번호가 기억나지 않는다면, <a href="#" th:href="@{/email-login}">이메일로 로그인하기</a>
             </small>
         </div>
 

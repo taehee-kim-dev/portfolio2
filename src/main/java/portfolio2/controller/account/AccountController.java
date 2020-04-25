@@ -6,11 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CurrentUser;
+import portfolio2.dto.SendEmailLoginLinkRequestDto;
 import portfolio2.service.AccountService;
 import portfolio2.dto.SignUpRequestDto;
+import portfolio2.validator.SendEmailLoginLinkRequestDtoValidator;
 import portfolio2.validator.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
@@ -20,6 +23,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
+    private final SendEmailLoginLinkRequestDtoValidator sendEmailLoginLinkRequestDtoValidator;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
@@ -30,8 +34,13 @@ public class AccountController {
     }
 
     @InitBinder("signUpRequestDto")
-    public void initBinder(WebDataBinder webDataBinder){
+    public void initBinderForSignUpRequestDtoValidator(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpRequestDtoValidator);
+    }
+
+    @InitBinder("sendEmailLoginLinkRequestDto")
+    public void initBinderForSendEmailLoginLinkRequestDtoValidator(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(sendEmailLoginLinkRequestDtoValidator);
     }
 
     @GetMapping("/sign-up")
@@ -74,7 +83,7 @@ public class AccountController {
             return view;
         }
 
-        if(!accountInDb.isValidToken(token)){
+        if(!accountInDb.isValidTokenForEmailCheck(token)){
             model.addAttribute("error", "wrong.token");
             return view;
         }
@@ -121,6 +130,51 @@ public class AccountController {
     
     @GetMapping("/email-login")
     public String getEmailLogin(Model model){
+
+        model.addAttribute(new SendEmailLoginLinkRequestDto());
+
         return "account/email-login";
     }
+
+    @PostMapping("/email-login")
+    public String sendEmailLoginLink(
+            @Valid @ModelAttribute SendEmailLoginLinkRequestDto sendEmailLoginLinkRequestDto,
+            Errors errors, Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if(errors.hasErrors()){
+            model.addAttribute(sendEmailLoginLinkRequestDto);
+
+            return "account/email-login";
+        }
+
+        Account accountInDb = accountRepository.findByEmail(sendEmailLoginLinkRequestDto.getEmail());
+
+        if (accountInDb == null) {
+            model.addAttribute("emailError", "가입되지 않은 이메일 입니다.");
+            return "account/email-login";
+        }
+
+        if (!accountInDb.canSendLoginEmail()) {
+            model.addAttribute("emailCannotSendError", "로그인 링크 이메일은 12시간동안 3번만 보낼 수 있습니다.");
+            return "account/email-login";
+        }
+
+        accountService.sendLoginEmail(accountInDb);
+        redirectAttributes.addFlashAttribute("message", "로그인 링크를 이메일로 발송했습니다.");
+        return "redirect:/email-login";
+    }
+
+//    @GetMapping("/login-by-email")
+//    public String loginByEmail(String token, String email, Model model) {
+//        Account account = accountRepository.findByEmail(email);
+//        String view = "account/logged-in-by-email";
+//        if (account == null || !account.isValidEmailLoginToken(token)) {
+//            model.addAttribute("error", "로그인할 수 없습니다.");
+//            return view;
+//        }
+//
+//        accountService.login(account);
+//        return view;
+//    }
 }

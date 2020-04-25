@@ -45,6 +45,12 @@ public class Account {
 
     private int sendCheckEmailCount;
 
+    private String emailLoginToken;
+
+    private LocalDateTime emailLoginTokenFirstGeneratedAt;
+
+    private int sendLoginEmailCount;
+
     private LocalDateTime joinedAt;
 
     private String bio;
@@ -120,15 +126,49 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
     }
 
-    public boolean isValidToken(String token) {
+    public boolean isValidTokenForEmailCheck(String token) {
         return this.emailCheckToken.equals(token);
     }
 
     public boolean canSendConfirmEmail() {
-        // 인증 이메일을 5번 초과로 보냈는가?
+        // 인증 이메일을 이미 5번 보냈는가?
         if(this.sendCheckEmailCount == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
             return this.emailCheckTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
+        }
+
+        return true;
+    }
+
+
+    public void generateLoginEmailToken() {
+        // 앞에서 재전송 허가받은 상태이므로,
+        // 무조건 토큰값 생성.
+        this.emailCheckToken = UUID.randomUUID().toString();
+        if(sendLoginEmailCount == 0 || sendLoginEmailCount == 3){
+            // 이미 앞에서 이메일 재전송 허가받은 상태.
+            // 현재 가입 후 첫번째 또는 4번째 이메일 전송이라면,
+            // 새로운 첫 번째 이메일 전송이 되는 것이므로,
+            // 이메일 토큰 생성 시간 새로 설정
+            emailLoginTokenFirstGeneratedAt = LocalDateTime.now();
+            // 이메일 전송 카운트 1로 초기화
+            sendLoginEmailCount = 1;
+        }else{
+            // 가입 후 첫 번째나, 4번째가 아니라면
+            // 날짜 재설정 없이 카운트만 증가
+            this.sendLoginEmailCount++;
+        }
+    }
+
+    public boolean isValidTokenForEmailLogin(String token) {
+        return this.emailLoginToken.equals(token);
+    }
+
+    public boolean canSendLoginEmail() {
+        // 인증 이메일을 이미 3번 보냈는가?
+        if(this.sendLoginEmailCount == 3){
+            // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
+            return this.emailLoginTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
         }
 
         return true;

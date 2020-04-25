@@ -8,30 +8,37 @@
 <nav th:replace="fragment.html :: commonNav"></nav>
 
 <div class="container">
-    <div class="text-center" th:if="${error != null}" style="margin-top: 100px; margin-bottom: 60px">
-        <div  class="alert alert-danger" role="alert" th:text="${error}">이메일 로그인은 12시간동안...에러 메세지</div>
-    </div>
 
-    <div th:if="${error == null}">
+        <h2 style="margin-top: 80px; margin-bottom: 23px; text-align: center">이메일로 로그인하기</h2>
 
+        <div th:if="${emailError != null && message == null}" class="alert alert-danger text-center" role="alert">
+            <p style="margin-bottom: 0" th:text="${emailError}">가입되지 않은 이메일 에러 메시지</p>
+        </div>
 
-        <h2 style="margin-top: 100px; margin-bottom: 50px; text-align: center">비밀번호 없이 로그인하기</h2>
+        <div class="text-center" th:if="${emailError == null && message == null && emailCannotSendError != null}" >
+            <div  class="alert alert-danger" role="alert" th:text="${emailCannotSendError}">인증 이메일은 12시간동안...에러 메세지</div>
+        </div>
 
-        <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-            <span th:text="${message}">이메일 전송 완료 메시지</span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
+             style="margin-bottom: 3px; padding: 10px 39px 8px 21px;width: 400px; margin: auto">
+            <span th:text="${message}">이메일 발송 완료 메시지</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    style="padding-top: 5px;padding-bottom: 0px;">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
 
-        <form th:action="@{/email-login}" method="post" novalidate style="width: 350px; margin: auto">
+        <form th:action="@{/email-login}" th:object="${sendEmailLoginLinkRequestDto}" method="post" novalidate style="width: 350px; margin: auto; margin-top: 22px">
+
             <div class="form-group">
                 <label for="email">가입 할 때 사용한 이메일</label>
                 <input id="email" type="email" name="email" class="form-control"
-                       placeholder="your@email.com" aria-describedby="emailHelp" required>
+                       placeholder="your@email.com" aria-describedby="emailHelp" required
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
                 <small id="emailHelp" class="form-text text-muted" style="margin-top: 10px">
                     가입할 때 사용한 이메일을 입력하세요.
                 </small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
             </div>
 
             <div class="form-group" style="margin-top: 35px;">
@@ -42,9 +49,6 @@
                 </small>
             </div>
         </form>
-
-
-    </div>
 
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>

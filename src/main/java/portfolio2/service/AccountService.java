@@ -46,6 +46,7 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpRequestDto.getNickname())
                 .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
                 .sendCheckEmailCount(0)
+                .sendLoginEmailCount(0)
                 .notificationLikeOnMyPostByWeb(true)
                 .notificationLikeOnMyReplyByWeb(true)
                 .notificationReplyOnMyPostByWeb(true)
@@ -148,5 +149,16 @@ public class AccountService implements UserDetailsService {
         modelMapper.map(accountUpdateRequestDto, sessionAccount);
         accountRepository.save(sessionAccount);
         loginOrUpdateSessionAccount(sessionAccount);
+    }
+
+    public void sendLoginEmail(Account account) {
+        Account accountInDb = accountRepository.findByUserId(account.getUserId());
+        accountInDb.generateLoginEmailToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(accountInDb.getEmail());
+        mailMessage.setSubject("ShareMind 이메일로 로그인하기 링크");
+        mailMessage.setText("/email-login-token?token=" + accountInDb.getEmailLoginToken() +
+                "&email=" + accountInDb.getEmail());
+        javaMailSender.send(mailMessage);
     }
 }

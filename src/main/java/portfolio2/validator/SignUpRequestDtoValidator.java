@@ -45,7 +45,7 @@ public class SignUpRequestDtoValidator implements Validator {
         }
 
         if(!(signUpRequestDto.getEmail().matches(emailPattern))){
-            errors.rejectValue("email", "invalidEmail", new Object[]{signUpRequestDto.getEmail()}, "형식에 맞지 않는 이메일 입니다.");
+            errors.rejectValue("email", "invalidEmail", new Object[]{signUpRequestDto.getEmail()}, "이메일 형식에 맞지 않습니다.");
         }
 
         if(signUpRequestDto.getPassword().length() < 8){
