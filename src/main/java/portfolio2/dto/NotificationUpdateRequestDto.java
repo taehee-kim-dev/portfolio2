@@ -6,7 +6,7 @@ import portfolio2.domain.account.Account;
 
 
 @Data
-public class NotificationUpdateDto {
+public class NotificationUpdateRequestDto {
 
     private boolean notificationLikeOnMyPostByEmail;
 

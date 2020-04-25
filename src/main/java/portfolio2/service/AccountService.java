@@ -17,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
-import portfolio2.dto.NotificationUpdateDto;
-import portfolio2.dto.PasswordUpdateRequestDto;
-import portfolio2.dto.ProfileUpdateRequestDto;
-import portfolio2.dto.SignUpRequestDto;
+import portfolio2.dto.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -141,8 +138,14 @@ public class AccountService implements UserDetailsService {
         javaMailSender.send(mailMessage);
     }
 
-    public void updateNotification(Account sessionAccount, NotificationUpdateDto notificationUpdateDto) {
-        modelMapper.map(notificationUpdateDto, sessionAccount);
+    public void updateNotification(Account sessionAccount, NotificationUpdateRequestDto notificationUpdateRequestDto) {
+        modelMapper.map(notificationUpdateRequestDto, sessionAccount);
+        accountRepository.save(sessionAccount);
+        loginOrUpdateSessionAccount(sessionAccount);
+    }
+
+    public void updateAccount(Account sessionAccount, AccountUpdateRequestDto accountUpdateRequestDto) {
+        modelMapper.map(accountUpdateRequestDto, sessionAccount);
         accountRepository.save(sessionAccount);
         loginOrUpdateSessionAccount(sessionAccount);
     }

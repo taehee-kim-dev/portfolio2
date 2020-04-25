@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+    </style>
+    <link rel="stylesheet" href="/library/cropper/cropperjs-master/dist/cropper.min.css">
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <div class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && !sessionAccount.emailVerified}">
+        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    </div>
+
+        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 47px">닉네임 변경</h2>
+        <div class="row justify-content-center">
+
+            <div>
+                <div th:replace="fragment.html :: setting-menu(currentMenu='account')"></div>
+            </div>
+
+            <div>
+
+                <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
+                    style="margin-bottom: 20px; padding: 10px 46px 8px 21px;">
+                    <span th:text="${message}">닉네임 변경 완료 메시지</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        style="padding-top: 5px;padding-bottom: 0px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+
+                <form style="width: 315px;"
+                      th:action="@{/account/setting/account}" th:object="${accountUpdateRequestDto}" method="post" novalidate>
+
+                    <div class="form-group" style="margin-bottom: 27px">
+                        <label for="nickname">닉네임</label>
+                        <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
+                               placeholder="Nickname" aria-describedby="nicknameHelp"
+                               th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : ''">
+                        <small id="nicknameHelp" class="form-text text-muted">
+                            공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력해 주세요. 이후 변경할 수 있습니다.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+                    </div>
+
+
+                    <div class="form-group" >
+                        <button class="btn btn-primary btn-block" type="submit"
+                                aria-describedby="submitHelp">계정 설정 완료</button>
+                    </div>
+                </form>
+
+                <div class="dropdown-divider" style="margin-top: 40px;margin-bottom: 40px"></div>
+                <p class="text-danger" style="margin-top: 35px">계정 삭제</p>
+                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-bottom: 30px">
+                            이 계정은 삭제할 수 없습니다.
+                </div>
+                <button class="btn btn-outline-danger disabled">계정 삭제</button>
+
+            </div>
+
+        </div>
+
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

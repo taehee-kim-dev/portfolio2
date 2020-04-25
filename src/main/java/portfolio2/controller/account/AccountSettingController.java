@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.CurrentUser;
+import portfolio2.dto.AccountUpdateRequestDto;
 import portfolio2.service.AccountService;
-import portfolio2.dto.NotificationUpdateDto;
+import portfolio2.dto.NotificationUpdateRequestDto;
 import portfolio2.dto.PasswordUpdateRequestDto;
 import portfolio2.dto.ProfileUpdateRequestDto;
+import portfolio2.validator.AccountUpdateRequestDtoValidator;
 import portfolio2.validator.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.ProfileUpdateRequestDtoValidator;
 
@@ -35,9 +37,13 @@ public class AccountSettingController {
     public static final String ACCOUNT_SETTING_NOTIFICATION_URL = "/account/setting/notification";
     public static final String ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME = "account/setting/notification";
 
+    public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
+    public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
+
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
+    private final AccountUpdateRequestDtoValidator accountUpdateRequestDtoValidator;
 
 
     private final AccountService accountService;
@@ -56,7 +62,10 @@ public class AccountSettingController {
         webDataBinder.addValidators(passwordUpdateRequestDtoValidator);
     }
 
-
+    @InitBinder("accountUpdateRequestDto")
+    public void initBinderForAccountUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(accountUpdateRequestDtoValidator);
+    }
 
     @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
     public String getProfileUpdate(@CurrentUser Account sessionAccount, Model model){
@@ -118,27 +127,54 @@ public class AccountSettingController {
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String getNotificationUpdate(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateDto.class));
+        model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
     }
 
     @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String postNotificationUpdate(@CurrentUser Account sessionAccount,
-                                    @Valid @ModelAttribute NotificationUpdateDto notificationUpdateDto,
+                                    @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
                                     Errors errors, Model model,
                                     RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
             model.addAttribute("sessionAccount", sessionAccount);
-            model.addAttribute(notificationUpdateDto);
+            model.addAttribute(notificationUpdateRequestDto);
 
             return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
         }
 
-        accountService.updateNotification(sessionAccount, notificationUpdateDto);
+        accountService.updateNotification(sessionAccount, notificationUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");
         return "redirect:" + ACCOUNT_SETTING_NOTIFICATION_URL;
+    }
+
+    @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
+    public String getAccountUpdate(@CurrentUser Account sessionAccount, Model model){
+        model.addAttribute("sessionAccount", sessionAccount);
+        model.addAttribute(modelMapper.map(sessionAccount, AccountUpdateRequestDto.class));
+        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
+        return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+    }
+
+    @PostMapping(ACCOUNT_SETTING_ACCOUNT_URL)
+    public String postAccountUpdate(@CurrentUser Account sessionAccount,
+                                         @Valid @ModelAttribute AccountUpdateRequestDto accountUpdateRequestDto,
+                                         Errors errors, Model model,
+                                         RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute("sessionAccount", sessionAccount);
+            model.addAttribute(accountUpdateRequestDto);
+
+            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+        }
+
+        accountService.updateAccount(sessionAccount, accountUpdateRequestDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "계정 설정 변경이 완료되었습니다.");
+        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
     }
 }
