@@ -77,12 +77,12 @@ public class AccountController {
         Account accountInDb = accountRepository.findByEmail(email);
         String view = "account/checked-email";
         if(accountInDb == null){
-            model.addAttribute("error", "wrong.email");
+            model.addAttribute("error", "invalidEmail");
             return view;
         }
 
         if(!accountInDb.isValidTokenForEmailCheck(token)){
-            model.addAttribute("error", "wrong.token");
+            model.addAttribute("error", "invalidToken");
             return view;
         }
 
