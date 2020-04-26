@@ -1,4 +1,4 @@
-package portfolio2;
+package portfolio2.signup;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.WithAccount;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
@@ -34,36 +35,25 @@ public class SignUpEmailCheckTest {
         accountRepository.deleteAll();
     }
 
+    private final String TEST_USER_ID = "testUserId";
+
     @DisplayName("회원가입 이메일 인증 - 유효한 링크")
+    @WithAccount(TEST_USER_ID)
     @Test
-    void validEmailCheckToken() throws Exception {
+    void validEmailCheckLink() throws Exception {
 
-        Account newAccountToSignUp = Account.builder()
-                .userId("testUserId")
-                .nickname("testNickname")
-                .email("test@email.com")
-                .password("testPassword")
-                .build();
-
-        mockMvc.perform(post("/sign-up")
-                .param("userId", newAccountToSignUp.getUserId())
-                .param("nickname", newAccountToSignUp.getNickname())
-                .param("email", newAccountToSignUp.getEmail())
-                .param("password", newAccountToSignUp.getPassword())
-                .with(csrf()));
-
-        Account newAccountInDb = accountRepository.findByUserId(newAccountToSignUp.getUserId());
+        Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
 
         mockMvc.perform(get("/check-email-token")
-                .param("token", newAccountInDb.getEmailCheckToken())
-                .param("email", newAccountInDb.getEmail()))
+                .param("token", existingAccount.getEmailCheckToken())
+                .param("email", existingAccount.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(authenticated());
 
-        Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(newAccountToSignUp.getUserId());
+        Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(TEST_USER_ID);
 
         assertTrue(newAccountInDbAfterCompleteSignUp.isEmailVerified());
 

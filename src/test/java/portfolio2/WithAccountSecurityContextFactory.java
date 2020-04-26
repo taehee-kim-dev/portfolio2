@@ -24,7 +24,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
                 .userId(userId)
                 .nickname("testNickname")
                 .email("test@email.com")
-                .password("12345678")
+                .password("testPassword")
                 .build();
 
         accountService.processNewAccount(signUpRequestDto);
