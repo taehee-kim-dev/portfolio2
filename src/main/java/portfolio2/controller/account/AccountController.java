@@ -72,9 +72,7 @@ public class AccountController {
     }
 
     @GetMapping("/check-email-token")
-    public String checkEmailToken(@CurrentUser Account sessionAccount, String token, String email, Model model){
-
-        setSessionAccount(sessionAccount, model);
+    public String checkEmailToken(String token, String email, Model model){
 
         Account accountInDb = accountRepository.findByEmail(email);
         String view = "account/checked-email";
