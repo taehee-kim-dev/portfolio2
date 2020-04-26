@@ -102,7 +102,7 @@ public class ResendEmailCheckEmailTest {
         assertNotNull(beforeAccount.getEmailCheckTokenFirstGeneratedAt());
         assertEquals(beforeAccount.getSendCheckEmailCount(), 1);
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 2; i <= 5; i++){
             mockMvc.perform(get("/resend-confirm-email"))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(redirectedUrl("/"))
@@ -110,10 +110,9 @@ public class ResendEmailCheckEmailTest {
                     .andExpect(model().attributeDoesNotExist("sessionAccount"))
                     .andExpect(model().attributeDoesNotExist("email"))
                     .andExpect(model().attributeDoesNotExist("error"));
+
+            verify(javaMailSender, times(i)).send(any(SimpleMailMessage.class));
         }
-
-
-        verify(javaMailSender, times(5)).send(any(SimpleMailMessage.class));
 
         Account afterAccount = accountRepository.findByUserId(TEST_USER_ID);
 
@@ -147,7 +146,7 @@ public class ResendEmailCheckEmailTest {
         assertNotNull(beforeAccount.getEmailCheckTokenFirstGeneratedAt());
         assertEquals(beforeAccount.getSendCheckEmailCount(), 1);
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 2; i <= 5; i++){
             mockMvc.perform(get("/resend-confirm-email"))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(redirectedUrl("/"))
@@ -155,10 +154,9 @@ public class ResendEmailCheckEmailTest {
                     .andExpect(model().attributeDoesNotExist("sessionAccount"))
                     .andExpect(model().attributeDoesNotExist("email"))
                     .andExpect(model().attributeDoesNotExist("error"));
+
+            verify(javaMailSender, times(i)).send(any(SimpleMailMessage.class));
         }
-
-
-        verify(javaMailSender, times(5)).send(any(SimpleMailMessage.class));
 
         Account afterAccount = accountRepository.findByUserId(TEST_USER_ID);
 
