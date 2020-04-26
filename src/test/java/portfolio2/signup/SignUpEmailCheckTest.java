@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.WithAccount;
 import portfolio2.domain.account.Account;
@@ -37,12 +39,37 @@ public class SignUpEmailCheckTest {
 
     private final String TEST_USER_ID = "testUserId";
 
-    @DisplayName("회원가입 이메일 인증 - 유효한 링크")
+    @DisplayName("회원가입 이메일 인증 - 유효한 링크 - 로그인 상태")
     @WithAccount(TEST_USER_ID)
     @Test
-    void validEmailCheckLink() throws Exception {
+    void validEmailCheckLinkLoggedIn() throws Exception {
 
         Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
+
+        mockMvc.perform(get("/check-email-token")
+                .param("token", existingAccount.getEmailCheckToken())
+                .param("email", existingAccount.getEmail()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(model().attributeExists("nickname"))
+                .andExpect(authenticated());
+
+        Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertTrue(newAccountInDbAfterCompleteSignUp.isEmailVerified());
+
+    }
+
+    @DisplayName("회원가입 이메일 인증 - 유효한 링크 - 비로그인 상태")
+    @WithAccount(TEST_USER_ID)
+    @Test
+    void validEmailCheckLinkNotLoggedIn() throws Exception {
+
+        Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
+
+        // logout
+        SecurityContextHolder.getContext().setAuthentication(null);
 
         mockMvc.perform(get("/check-email-token")
                 .param("token", existingAccount.getEmailCheckToken())
