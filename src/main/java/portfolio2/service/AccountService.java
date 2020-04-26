@@ -44,24 +44,8 @@ public class AccountService implements UserDetailsService {
     }
 
     private Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
-        Account account = Account.builder()
-                .userId(signUpRequestDto.getUserId())
-                .email(signUpRequestDto.getEmail())
-                .nickname(signUpRequestDto.getNickname())
-                .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
-                .sendCheckEmailCount(0)
-                .sendLoginEmailCount(0)
-                .notificationLikeOnMyPostByWeb(true)
-                .notificationLikeOnMyReplyByWeb(true)
-                .notificationReplyOnMyPostByWeb(true)
-                .notificationReplyOnMyReplyByWeb(true)
-                .notificationNewPostWithMyTagByWeb(true)
-                .notificationLikeOnMyPostByEmail(false)
-                .notificationLikeOnMyReplyByEmail(false)
-                .notificationReplyOnMyPostByEmail(false)
-                .notificationReplyOnMyReplyByEmail(false)
-                .notificationNewPostWithMyTagByEmail(false)
-                .build();
+        signUpRequestDto.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        Account account = modelMapper.map(signUpRequestDto, Account.class);
 
         return accountRepository.save(account);
     }

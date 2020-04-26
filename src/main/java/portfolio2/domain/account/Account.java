@@ -5,6 +5,7 @@ import portfolio2.domain.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -45,13 +46,13 @@ public class Account {
 
     private LocalDateTime emailCheckTokenFirstGeneratedAt;
 
-    private int sendCheckEmailCount;
+    private int sendCheckEmailCount = 0;
 
     private String emailLoginToken;
 
     private LocalDateTime emailLoginTokenFirstGeneratedAt;
 
-    private int sendLoginEmailCount;
+    private int sendLoginEmailCount = 0;
 
     private LocalDateTime joinedAt;
 
@@ -83,28 +84,33 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean notificationLikeOnMyPostByEmail;
+    private boolean notificationLikeOnMyPostByEmail = false;
 
-    private boolean notificationLikeOnMyPostByWeb;
+    private boolean notificationLikeOnMyReplyByEmail = false;
 
-    private boolean notificationLikeOnMyReplyByEmail;
+    private boolean notificationReplyOnMyPostByEmail = false;
 
-    private boolean notificationLikeOnMyReplyByWeb;
+    private boolean notificationReplyOnMyReplyByEmail = false;
 
-    private boolean notificationReplyOnMyPostByEmail;
+    private boolean notificationNewPostWithMyTagByEmail = false;
 
-    private boolean notificationReplyOnMyPostByWeb;
 
-    private boolean notificationReplyOnMyReplyByEmail;
 
-    private boolean notificationReplyOnMyReplyByWeb;
+    private boolean notificationLikeOnMyPostByWeb = true;
 
-    private boolean notificationNewPostWithMyTagByEmail;
+    private boolean notificationLikeOnMyReplyByWeb = true;
 
-    private boolean notificationNewPostWithMyTagByWeb;
+    private boolean notificationReplyOnMyPostByWeb = true;
+
+    private boolean notificationReplyOnMyReplyByWeb = true;
+
+    private boolean notificationNewPostWithMyTagByWeb = true;
+
+
+
 
     @ManyToMany
-    private Set<Tag> tag;
+    private Set<Tag> tag = new HashSet<>();
 
 
     public void generateEmailCheckToken() {
