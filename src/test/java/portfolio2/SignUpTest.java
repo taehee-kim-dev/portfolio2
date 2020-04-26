@@ -218,4 +218,51 @@ public class SignUpTest {
     }
 
 
+
+    // email errors.
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 email 에러")
+    @Test
+    void signUpInvalidFormatEmailError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNickname")
+                .param("email", "test@email")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "invalidFormatEmail"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
+    @Test
+    void signUpEmailAlreadyExistsError() throws Exception{
+
+        Account existingAccount = accountRepository.save(Account.builder()
+                .userId("testUserId")
+                .email("test@email.com")
+                .nickname("testNickname")
+                .build());
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId1")
+                .param("nickname", "testNickname")
+                .param("email", existingAccount.getEmail())
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "emailAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
 }
