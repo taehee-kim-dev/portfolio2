@@ -101,8 +101,9 @@ public class AccountController {
 
     @GetMapping("/resend-confirm-email")
     public String resendConfirmEmail(@CurrentUser Account sessionAccount, Model model) {
-        setSessionAccount(sessionAccount, model);
+
         if (!accountRepository.findByUserId(sessionAccount.getUserId()).canSendConfirmEmail()) {
+            setSessionAccount(sessionAccount, model);
             model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
             model.addAttribute("email", sessionAccount.getEmail());
             return "account/check-email";
