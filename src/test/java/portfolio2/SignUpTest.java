@@ -42,7 +42,7 @@ public class SignUpTest {
 
 
     // userId errors.
-    @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 길이 에러")
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 에러")
     @Test
     void signUpTooShortIdError() throws Exception{
 
@@ -62,7 +62,7 @@ public class SignUpTest {
                 .andExpect(view().name("account/sign-up"));
     }
 
-    @DisplayName("회원가입 POST 요청 - 너무 긴 userId 길이 에러")
+    @DisplayName("회원가입 POST 요청 - 너무 긴 userId 에러")
     @Test
     void signUpTooLongIdError() throws Exception{
 
@@ -131,7 +131,7 @@ public class SignUpTest {
 
 
     // nickname errors.
-    @DisplayName("회원가입 POST 요청 - 너무 짧은 nickname 길이 에러")
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 nickname 에러")
     @Test
     void signUpTooShortNicknameError() throws Exception{
 
@@ -151,7 +151,7 @@ public class SignUpTest {
                 .andExpect(view().name("account/sign-up"));
     }
 
-    @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 길이 에러")
+    @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 에러")
     @Test
     void signUpTooLongNicknameError() throws Exception{
 
@@ -240,7 +240,7 @@ public class SignUpTest {
                 .andExpect(view().name("account/sign-up"));
     }
 
-    @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 email 에러")
     @Test
     void signUpEmailAlreadyExistsError() throws Exception{
 
@@ -265,4 +265,68 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name("account/sign-up"));
     }
+
+
+    // password errors.
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 password 에러")
+    @Test
+    void signUpTooShortPasswordError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNickname")
+                .param("email", "test@email.com")
+                .param("password", "1234567")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "tooShortPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 너무 긴 password 에러")
+    @Test
+    void signUpTooLongPasswordError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNickname")
+                .param("email", "test@email.com")
+                .param("password", "12345678123456781234567812345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "tooLongPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
+    @Test
+    void signUpInvalidFormatPasswordError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNickname")
+                .param("email", "test@email.com")
+                .param("password", "1234 5678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "invalidFormatPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+
 }
