@@ -6,12 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.SignUpRequestDto;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -24,6 +33,12 @@ public class SignUpTest {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @MockBean
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @AfterEach
     void afterEach(){
@@ -38,6 +53,43 @@ public class SignUpTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 모든 필드 정상")
+    @Test
+    void allValidFieldsSignUp() throws Exception{
+
+        Account newAccountToSignUp = Account.builder()
+                .userId("testUserId")
+                .nickname("testNickname")
+                .email("test@email.com")
+                .password("testPassword")
+                .build();
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", newAccountToSignUp.getUserId())
+                .param("nickname", newAccountToSignUp.getNickname())
+                .param("email", newAccountToSignUp.getEmail())
+                .param("password", newAccountToSignUp.getPassword())
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated());
+
+        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+
+        Account newAccountInDb = accountRepository.findByUserId(newAccountToSignUp.getUserId());
+
+        assertEquals(newAccountToSignUp.getUserId(), newAccountInDb.getUserId());
+        assertEquals(newAccountToSignUp.getNickname(), newAccountInDb.getNickname());
+        assertEquals(newAccountToSignUp.getEmail(), newAccountInDb.getEmail());
+        assertTrue(passwordEncoder.matches(newAccountToSignUp.getPassword(), newAccountInDb.getPassword()));
+
+        assertEquals(newAccountInDb.isEmailVerified(), false);
+        assertNotNull(newAccountInDb.getEmailCheckToken());
+        assertNotNull(newAccountInDb.getEmailCheckTokenFirstGeneratedAt());
+        assertEquals(newAccountInDb.getSendCheckEmailCount(), 1);
     }
 
 
@@ -59,7 +111,8 @@ public class SignUpTest {
                         "userId",
                         "tooShortUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 userId 에러")
@@ -79,7 +132,8 @@ public class SignUpTest {
                         "userId",
                         "tooLongUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 userId 에러")
@@ -99,7 +153,8 @@ public class SignUpTest {
                         "userId",
                         "invalidFormatUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 userId 에러")
@@ -125,7 +180,8 @@ public class SignUpTest {
                         "userId",
                         "userIdAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
 
@@ -148,7 +204,8 @@ public class SignUpTest {
                         "nickname",
                         "tooShortNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 에러")
@@ -168,7 +225,8 @@ public class SignUpTest {
                         "nickname",
                         "tooLongNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
@@ -188,7 +246,8 @@ public class SignUpTest {
                         "nickname",
                         "invalidFormatNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
@@ -214,7 +273,8 @@ public class SignUpTest {
                         "nickname",
                         "nicknameAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
 
@@ -237,7 +297,8 @@ public class SignUpTest {
                         "email",
                         "invalidFormatEmail"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 email 에러")
@@ -263,7 +324,8 @@ public class SignUpTest {
                         "email",
                         "emailAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
 
@@ -285,7 +347,8 @@ public class SignUpTest {
                         "password",
                         "tooShortPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 password 에러")
@@ -305,7 +368,8 @@ public class SignUpTest {
                         "password",
                         "tooLongPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
@@ -325,7 +389,8 @@ public class SignUpTest {
                         "password",
                         "invalidFormatPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
 

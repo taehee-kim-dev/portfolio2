@@ -40,21 +40,29 @@ public class Account {
 
     private String password;
 
+
+
     private boolean emailVerified;
 
     private String emailCheckToken;
 
-    private LocalDateTime emailCheckTokenFirstGeneratedAt;
+    private LocalDateTime emailCheckTokenFirstGeneratedAt ;
 
     private int sendCheckEmailCount = 0;
 
-    private String emailLoginToken;
+    private LocalDateTime joinedAt;
+
+
+
+    private String emailLoginToken ;
 
     private LocalDateTime emailLoginTokenFirstGeneratedAt;
 
     private int sendLoginEmailCount = 0;
 
-    private LocalDateTime joinedAt;
+
+
+
 
     private String bio;
 
