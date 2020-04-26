@@ -44,7 +44,7 @@ public class AccountController {
     }
 
     @GetMapping("/sign-up")
-    public String signUpGet(Model model) {
+    public String showSignUpPage(Model model) {
         // name값을 생략하면, 객체 이름의 camel 케이스를 이름으로 줌.
         // model.addAttribute("signUpRequestDto", new SignUpRequestDto()); 와 동일.
         model.addAttribute(new SignUpRequestDto());
@@ -58,7 +58,7 @@ public class AccountController {
         생략 가능.
     * */
     @PostMapping("/sign-up")
-    public String signUpPost(@Valid @ModelAttribute SignUpRequestDto signUpRequestDto, Errors errors) {
+    public String signUp(@Valid @ModelAttribute SignUpRequestDto signUpRequestDto, Errors errors) {
         if (errors.hasErrors()) {
             // Validation에서 error가 발생하면,
             // form을 다시 보여준다.
