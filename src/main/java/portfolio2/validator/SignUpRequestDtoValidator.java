@@ -37,23 +37,23 @@ public class SignUpRequestDtoValidator implements Validator {
         }
 
         if(signUpRequestDto.getNickname().length() < 3){
-            errors.rejectValue("nickname", "invalidNickname", "닉네임은 3자 이상이어야 합니다.");
+            errors.rejectValue("nickname", "tooShortNickname", "닉네임은 3자 이상이어야 합니다.");
         }else if(signUpRequestDto.getNickname().length() >15){
-            errors.rejectValue("nickname", "invalidNickname", "닉네임은 15자 이내여야 합니다.");
+            errors.rejectValue("nickname", "tooLongNickname", "닉네임은 15자 이내여야 합니다.");
         }else if(!(signUpRequestDto.getNickname().matches(nicknamePattern))){
-            errors.rejectValue("nickname", "invalidNickname", "형식에 맞지 않는 닉네임 입니다.");
+            errors.rejectValue("nickname", "invalidFormatNickname", "형식에 맞지 않는 닉네임 입니다.");
         }
 
         if(!(signUpRequestDto.getEmail().matches(emailPattern))){
-            errors.rejectValue("email", "invalidEmail", "이메일 형식에 맞지 않습니다.");
+            errors.rejectValue("email", "invalidFormatEmail", "이메일 형식에 맞지 않습니다.");
         }
 
         if(signUpRequestDto.getPassword().length() < 8){
-            errors.rejectValue("password", "invalidPassword", "비밀번호는 8자 이상이어야 합니다.");
+            errors.rejectValue("password", "tooShortPassword", "비밀번호는 8자 이상이어야 합니다.");
         }else if(signUpRequestDto.getPassword().length() >30){
-            errors.rejectValue("password", "invalidPassword", "비밀번호는 30자 이내여야 합니다.");
+            errors.rejectValue("password", "tooLongPassword", "비밀번호는 30자 이내여야 합니다.");
         }else if((signUpRequestDto.getPassword().contains(" "))){
-            errors.rejectValue("password", "invalidPassword","비밀번호에 공백은 포함될 수 없습니다.");
+            errors.rejectValue("password", "invalidFormatPassword","비밀번호에 공백은 포함될 수 없습니다.");
         }
 
         if(accountRepository.existsByUserId(signUpRequestDto.getUserId())){
@@ -65,7 +65,7 @@ public class SignUpRequestDtoValidator implements Validator {
         }
         
         if(accountRepository.existsByEmail(signUpRequestDto.getEmail())){
-            errors.rejectValue("email", "invalidEmail", "이미 사용중인 이메일 입니다.");
+            errors.rejectValue("email", "emailAlreadyExists", "이미 사용중인 이메일 입니다.");
         }
     }
 }

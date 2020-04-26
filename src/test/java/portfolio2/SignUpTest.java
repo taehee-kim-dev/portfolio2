@@ -128,4 +128,94 @@ public class SignUpTest {
                 .andExpect(view().name("account/sign-up"));
     }
 
+
+
+    // nickname errors.
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 nickname 길이 에러")
+    @Test
+    void signUpTooShortNicknameError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "ab")
+                .param("email", "test@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "tooShortNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 길이 에러")
+    @Test
+    void signUpTooLongNicknameError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNicknametestNicknametestNickname")
+                .param("email", "test@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "tooLongNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
+    @Test
+    void signUpInvalidFormatNicknameError() throws Exception{
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId")
+                .param("nickname", "testNi ckname")
+                .param("email", "test@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
+    @Test
+    void signUpNicknameAlreadyExistsError() throws Exception{
+
+        Account existingAccount = accountRepository.save(Account.builder()
+                .userId("testUserId")
+                .email("test@email.com")
+                .nickname("testNickname")
+                .build());
+
+        mockMvc.perform(post("/sign-up")
+                .param("userId", "testUserId1")
+                .param("nickname", existingAccount.getNickname())
+                .param("email", "test1@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "nicknameAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name("account/sign-up"));
+    }
+
+
 }
