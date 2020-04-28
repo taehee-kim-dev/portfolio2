@@ -1,28 +1,20 @@
 package portfolio2.account;
 
 import org.junit.jupiter.api.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.TestAccountInfo;
 import portfolio2.SignUpAndLoggedIn;
-import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.SignUpRequestDto;
-import portfolio2.service.AccountService;
-
-import javax.servlet.http.HttpSession;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -121,5 +113,38 @@ public class LogInAndOutTest {
                 .andExpect(unauthenticated());
     }
 
+    @DisplayName("로그아웃 테스트")
+    @SignUpAndLoggedIn
+    @Test
+    void logout() throws Exception {
+
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("인증 상태 테스트")
+    @SignUpAndLoggedIn
+    @Test
+    void authenticatedTest() throws Exception {
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(authenticated());
+    }
+
+    @DisplayName("비인증 상태 테스트")
+    @SignUpAndLoggedIn
+    @Test
+    void unauthenticatedTest() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(unauthenticated());
+    }
 
 }
