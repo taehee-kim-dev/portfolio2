@@ -11,12 +11,12 @@ import portfolio2.service.AccountService;
 import portfolio2.dto.SignUpRequestDto;
 
 @RequiredArgsConstructor
-public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
+public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedIn> {
 
     private final AccountService accountService;
 
     @Override
-    public SecurityContext createSecurityContext(WithAccount withAccount) {
+    public SecurityContext createSecurityContext(SignUpAndLoggedIn signUpAndLoggedIn) {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId("testUserId")

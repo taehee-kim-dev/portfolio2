@@ -43,7 +43,7 @@ public class AccountService implements UserDetailsService {
         this.loginOrUpdateSessionAccount(newAccount);
     }
 
-    private Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
+    public Account saveNewAccount(@Valid SignUpRequestDto signUpRequestDto) {
         signUpRequestDto.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
         Account account = modelMapper.map(signUpRequestDto, Account.class);
 

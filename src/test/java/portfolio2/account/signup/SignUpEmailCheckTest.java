@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.WithAccount;
+import portfolio2.SignUpAndLoggedIn;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
@@ -39,7 +39,7 @@ public class SignUpEmailCheckTest {
     private final String TEST_USER_ID = "testUserId";
 
     @DisplayName("회원가입 이메일 인증 - 유효한 링크 - 로그인 상태")
-    @WithAccount
+    @SignUpAndLoggedIn
     @Test
     void validEmailCheckLinkLoggedIn() throws Exception {
 
@@ -61,7 +61,7 @@ public class SignUpEmailCheckTest {
     }
 
     @DisplayName("회원가입 이메일 인증 - 유효한 링크 - 비로그인 상태")
-    @WithAccount
+    @SignUpAndLoggedIn
     @Test
     void validEmailCheckLinkNotLoggedIn() throws Exception {
 

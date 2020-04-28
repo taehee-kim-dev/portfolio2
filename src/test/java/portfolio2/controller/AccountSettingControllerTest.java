@@ -7,18 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.WithAccount;
+import portfolio2.SignUpAndLoggedIn;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.controller.account.AccountSettingController;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -47,7 +45,7 @@ class AccountSettingControllerTest {
 
     private final String TEST_USER_ID = "testUserId";
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("프로필 수정하기 폼 보여주기")
     @Test
     void showProfileUpdateForm() throws Exception{
@@ -58,7 +56,7 @@ class AccountSettingControllerTest {
                 .andExpect(model().attributeExists("profileUpdateRequestDto"));
     }
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("프로필 수정하기 - 입력값 정상")
     @Test
     void updateProfile() throws Exception{
@@ -76,7 +74,7 @@ class AccountSettingControllerTest {
         assertEquals(bio, account.getBio());
     }
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("프로필 수정하기 - 입력값 에러")
     @Test
     void updateProfile_with_error_input() throws Exception{
@@ -97,7 +95,7 @@ class AccountSettingControllerTest {
     }
 
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("비밀번호 수정 뷰 보여주기")
     @Test
     void showUpdatePasswordView() throws Exception{
@@ -110,7 +108,7 @@ class AccountSettingControllerTest {
     }
 
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("비밀번호 수정하기 - 입력값 정상")
     @Test
     void updatePassword() throws Exception{
@@ -128,7 +126,7 @@ class AccountSettingControllerTest {
         assertTrue(passwordEncoder.matches(newPassword, accountWithNewPassword.getPassword()));
     }
 
-    @WithAccount
+    @SignUpAndLoggedIn
     @DisplayName("비밀번호 수정하기 - 입력값 오류")
     @Test
     void updatePasswordWithErrorInput1() throws Exception{
