@@ -47,7 +47,7 @@ class AccountSettingControllerTest {
 
     private final String TEST_USER_ID = "testUserId";
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("프로필 수정하기 폼 보여주기")
     @Test
     void showProfileUpdateForm() throws Exception{
@@ -58,7 +58,7 @@ class AccountSettingControllerTest {
                 .andExpect(model().attributeExists("profileUpdateRequestDto"));
     }
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("프로필 수정하기 - 입력값 정상")
     @Test
     void updateProfile() throws Exception{
@@ -76,7 +76,7 @@ class AccountSettingControllerTest {
         assertEquals(bio, account.getBio());
     }
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("프로필 수정하기 - 입력값 에러")
     @Test
     void updateProfile_with_error_input() throws Exception{
@@ -97,7 +97,7 @@ class AccountSettingControllerTest {
     }
 
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("비밀번호 수정 뷰 보여주기")
     @Test
     void showUpdatePasswordView() throws Exception{
@@ -110,7 +110,7 @@ class AccountSettingControllerTest {
     }
 
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("비밀번호 수정하기 - 입력값 정상")
     @Test
     void updatePassword() throws Exception{
@@ -128,7 +128,7 @@ class AccountSettingControllerTest {
         assertTrue(passwordEncoder.matches(newPassword, accountWithNewPassword.getPassword()));
     }
 
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @DisplayName("비밀번호 수정하기 - 입력값 오류")
     @Test
     void updatePasswordWithErrorInput1() throws Exception{

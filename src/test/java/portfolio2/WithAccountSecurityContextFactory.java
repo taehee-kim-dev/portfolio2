@@ -18,10 +18,8 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
     @Override
     public SecurityContext createSecurityContext(WithAccount withAccount) {
 
-        String userId = withAccount.value();
-
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(userId)
+                .userId("testUserId")
                 .nickname("testNickname")
                 .email("test@email.com")
                 .password("testPassword")
@@ -30,7 +28,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
         accountService.processNewAccount(signUpRequestDto);
 
         // Authentication 만들고 SecurityContext에 넣어주기
-        UserDetails principal = accountService.loadUserByUsername(userId);
+        UserDetails principal = accountService.loadUserByUsername("testUserId");
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

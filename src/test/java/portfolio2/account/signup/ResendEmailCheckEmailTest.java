@@ -45,7 +45,7 @@ public class ResendEmailCheckEmailTest {
     private final String TEST_USER_ID = "testUserId";
 
     @DisplayName("이메일 인증 이메일 재전송 화면 보여주기")
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @Test
     void showResendEmailCheckEmailPage() throws Exception {
 
@@ -59,7 +59,7 @@ public class ResendEmailCheckEmailTest {
     }
 
     @DisplayName("이메일 인증 이메일 재전송시 Account에 기록되는지 확인")
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @Test
     void countSendingEmailCheckEmail() throws Exception {
 
@@ -87,7 +87,7 @@ public class ResendEmailCheckEmailTest {
     }
 
     @DisplayName("이메일 인증 이메일 12시간내 5회 초과로 전송 시 오류 발생")
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @Test
     void sendingEmailCheckEmailMoreThanFiveTimesError() throws Exception {
 
@@ -131,7 +131,7 @@ public class ResendEmailCheckEmailTest {
     }
 
     @DisplayName("이메일 인증 이메일 12시간 이후 5회 초과로 전송 시 이메일 재발송")
-    @WithAccount(TEST_USER_ID)
+    @WithAccount
     @Test
     void vaildSendingEmailCheckEmailMoreThanFiveTimes() throws Exception {
 
