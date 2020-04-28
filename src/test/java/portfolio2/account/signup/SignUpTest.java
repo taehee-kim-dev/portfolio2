@@ -1,4 +1,4 @@
-package portfolio2.signup;
+package portfolio2.account.signup;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
