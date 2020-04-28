@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,7 +44,7 @@ public class LogInAndOutTest {
     @DisplayName("올바른 아이디, 비밀번호로 로그인 성공")
     @SignUpAndLoggedIn
     @Test
-    void logInWithCorrectIdAndPassword() throws Exception {
+    void logInSuccessWithCorrectIdAndPassword() throws Exception {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -51,7 +52,6 @@ public class LogInAndOutTest {
                 .param("username", TestAccountInfo.CORRECT_TEST_USER_ID)
                 .param("password", TestAccountInfo.CORRECT_TEST_PASSWORD)
                 .with(csrf()))
-                .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(authenticated().withUsername(TestAccountInfo.CORRECT_TEST_USER_ID));
@@ -60,7 +60,7 @@ public class LogInAndOutTest {
     @DisplayName("올바른 이메일, 비밀번호로 로그인 성공")
     @SignUpAndLoggedIn
     @Test
-    void logInWithCorrectEmailAndPassword() throws Exception {
+    void logInSuccessWithCorrectEmailAndPassword() throws Exception {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -71,6 +71,54 @@ public class LogInAndOutTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(authenticated().withUsername(TestAccountInfo.CORRECT_TEST_USER_ID));
+    }
+
+    @DisplayName("틀린 아이디 또는 이메일, 올바른 비밀번호로 로그인 실패")
+    @SignUpAndLoggedIn
+    @Test
+    void logInFailureWithIncorrectIdOrEmailAndCorrectPassword() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post("/login")
+                .param("username", "IncorrectIdOrEmail")
+                .param("password", TestAccountInfo.CORRECT_TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?error"))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("올바른 아이디, 틀린 비밀번호로 로그인 실패")
+    @SignUpAndLoggedIn
+    @Test
+    void logInFailureWithCorrectIdAndIncorrectPassword() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post("/login")
+                .param("username", TestAccountInfo.CORRECT_TEST_USER_ID)
+                .param("password", "IncorrectPassword")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?error"))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("올바른 이메일, 틀린 비밀번호로 로그인 실패")
+    @SignUpAndLoggedIn
+    @Test
+    void logInFailureWithCorrectEmailAndIncorrectPassword() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post("/login")
+                .param("username", TestAccountInfo.CORRECT_TEST_EMAIL)
+                .param("password", "IncorrectPassword")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?error"))
+                .andExpect(unauthenticated());
     }
 
 
