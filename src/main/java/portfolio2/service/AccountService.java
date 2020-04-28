@@ -18,11 +18,14 @@ import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
-import portfolio2.dto.*;
+import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.account.profileupdate.AccountUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

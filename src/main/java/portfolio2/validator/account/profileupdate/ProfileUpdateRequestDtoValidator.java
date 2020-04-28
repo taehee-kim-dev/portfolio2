@@ -1,10 +1,10 @@
-package portfolio2.validator;
+package portfolio2.validator.account.profileupdate;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import portfolio2.dto.ProfileUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
 
 @Component
 @RequiredArgsConstructor

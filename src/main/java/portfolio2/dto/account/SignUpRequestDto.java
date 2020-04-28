@@ -1,4 +1,4 @@
-package portfolio2.dto;
+package portfolio2.dto.account;
 
 import lombok.*;
 

@@ -11,7 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.service.AccountService;
-import portfolio2.dto.SignUpRequestDto;
+import portfolio2.dto.account.SignUpRequestDto;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;

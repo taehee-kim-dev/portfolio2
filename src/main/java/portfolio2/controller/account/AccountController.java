@@ -10,11 +10,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CurrentUser;
-import portfolio2.dto.SendEmailLoginLinkRequestDto;
+import portfolio2.dto.account.SendEmailLoginLinkRequestDto;
 import portfolio2.service.AccountService;
-import portfolio2.dto.SignUpRequestDto;
-import portfolio2.validator.SendEmailLoginLinkRequestDtoValidator;
-import portfolio2.validator.SignUpRequestDtoValidator;
+import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.validator.account.SendEmailLoginLinkRequestDtoValidator;
+import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 

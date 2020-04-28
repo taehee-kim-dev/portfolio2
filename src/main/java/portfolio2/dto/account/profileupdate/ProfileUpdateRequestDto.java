@@ -1,8 +1,6 @@
-package portfolio2.dto;
+package portfolio2.dto.account.profileupdate;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import portfolio2.domain.account.Account;
 
 @Data
 public class ProfileUpdateRequestDto {
