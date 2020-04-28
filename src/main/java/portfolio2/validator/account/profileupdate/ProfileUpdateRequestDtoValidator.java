@@ -21,15 +21,15 @@ public class ProfileUpdateRequestDtoValidator implements Validator {
         ProfileUpdateRequestDto profileUpdateRequestDto = (ProfileUpdateRequestDto)o;
 
         if(profileUpdateRequestDto.getBio().length() > 35){
-            errors.rejectValue("bio", "invalidBio", new Object[]{profileUpdateRequestDto.getBio()}, "한 줄 소개는 35자 이내여야 합니다.");
+            errors.rejectValue("bio", "tooLongBio", "한 줄 소개는 35자 이내여야 합니다.");
         }
 
         if(profileUpdateRequestDto.getLocation().length() > 20){
-            errors.rejectValue("location", "invalidLocation", new Object[]{profileUpdateRequestDto.getLocation()}, "거주 지역은 20자 이내여야 합니다.");
+            errors.rejectValue("location", "tooLongLocation", "거주 지역은 20자 이내여야 합니다.");
         }
 
         if(profileUpdateRequestDto.getOccupation().length() > 20){
-            errors.rejectValue("occupation", "invalidOccupation", new Object[]{profileUpdateRequestDto.getOccupation()}, "직업은 20자 이내여야 합니다.");
+            errors.rejectValue("occupation", "tooLongOccupation", "직업은 20자 이내여야 합니다.");
         }
         
     }

@@ -23,7 +23,7 @@ public class SendEmailLoginLinkRequestDtoValidator implements Validator {
         String emailPattern = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
         if(!(sendEmailLoginLinkRequestDto.getEmail().matches(emailPattern))){
-            errors.rejectValue("email", "invalidEmail", new Object[]{sendEmailLoginLinkRequestDto.getEmail()}, "이메일 형식에 맞지 않습니다.");
+            errors.rejectValue("email", "invalidFormatEmail","이메일 형식에 맞지 않습니다.");
         }
     }
 }
