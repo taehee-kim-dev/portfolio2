@@ -138,8 +138,7 @@ public class AccountController {
     @PostMapping("/email-login")
     public String sendEmailLoginLink(
             @Valid @ModelAttribute SendEmailLoginLinkRequestDto sendEmailLoginLinkRequestDto,
-            Errors errors, Model model,
-            RedirectAttributes redirectAttributes) {
+            Errors errors, Model model) {
 
         if(errors.hasErrors()){
             model.addAttribute(sendEmailLoginLinkRequestDto);
@@ -160,8 +159,9 @@ public class AccountController {
         }
 
         accountService.sendLoginEmail(accountInDb);
-        redirectAttributes.addFlashAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
-        return "redirect:/email-login";
+        model.addAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
+        model.addAttribute(sendEmailLoginLinkRequestDto);
+        return "account/email-login";
     }
 
     @GetMapping("/login-by-email")

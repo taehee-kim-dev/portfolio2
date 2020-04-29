@@ -32,7 +32,7 @@
 
             <div class="form-group">
                 <label for="email">가입 할 때 사용한 이메일</label>
-                <input id="email" type="email" name="email" class="form-control"
+                <input id="email" type="email" th:field="*{email}" class="form-control"
                        placeholder="your@email.com" aria-describedby="emailHelp" required
                        th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
                 <small id="emailHelp" class="form-text text-muted" style="margin-top: 10px">

@@ -79,10 +79,11 @@ public class EmailLoginTest {
         mockMvc.perform(post("/email-login")
                 .param("email", TestAccountInfo.CORRECT_TEST_EMAIL)
                 .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/email-login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("account/email-login"))
                 .andExpect(model().hasNoErrors())
-                .andExpect(flash().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                .andExpect(model().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                .andExpect(model().attributeExists("sendEmailLoginLinkRequestDto"))
                 .andExpect(unauthenticated());
 
         Account existingAccountAfterSendEmail = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
@@ -120,10 +121,11 @@ public class EmailLoginTest {
             mockMvc.perform(post("/email-login")
                     .param("email", TestAccountInfo.CORRECT_TEST_EMAIL)
                     .with(csrf()))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/email-login"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("account/email-login"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(flash().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                    .andExpect(model().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                    .andExpect(model().attributeExists("sendEmailLoginLinkRequestDto"))
                     .andExpect(unauthenticated());
 
             Account existingAccountAfterSendEmail1 = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
@@ -180,10 +182,11 @@ public class EmailLoginTest {
             mockMvc.perform(post("/email-login")
                     .param("email", TestAccountInfo.CORRECT_TEST_EMAIL)
                     .with(csrf()))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/email-login"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("account/email-login"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(flash().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                    .andExpect(model().attribute("successMessage", "로그인 링크를 이메일로 발송했습니다."))
+                    .andExpect(model().attributeExists("sendEmailLoginLinkRequestDto"))
                     .andExpect(unauthenticated());
 
             Account existingAccountAfterSendEmail2 = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
