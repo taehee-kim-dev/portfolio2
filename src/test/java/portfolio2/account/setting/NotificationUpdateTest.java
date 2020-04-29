@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UpdateNotificationTest {
+public class NotificationUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

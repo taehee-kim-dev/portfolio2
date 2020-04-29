@@ -189,7 +189,7 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
-    public String getTagUpdate(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
+    public String showTagUpdateView(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
         model.addAttribute("sessionAccount", sessionAccount);
         List<String> tag = accountService.getTag(sessionAccount);
         model.addAttribute("tag", tag);
@@ -201,8 +201,10 @@ public class AccountSettingController {
     }
 
     @ResponseBody
-    @PostMapping("/account/setting/tag/add")
-    public ResponseEntity addTag(@CurrentUser Account sessionAccount, Model model, @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
+    public ResponseEntity addTag(@CurrentUser Account sessionAccount,
+                                 @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+
         String newTagTitle = tagUpdateRequestDto.getTagTitle();
 
         Tag existingTag = tagRepository.findByTitle(newTagTitle);
@@ -217,8 +219,10 @@ public class AccountSettingController {
     }
 
     @ResponseBody
-    @PostMapping("/account/setting/tag/remove")
-    public ResponseEntity removeTag(@CurrentUser Account sessionAccount, Model model, @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
+    public ResponseEntity removeTag(@CurrentUser Account sessionAccount,
+                                    @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+
         String tagTitleToRemove = tagUpdateRequestDto.getTagTitle();
 
         Tag existingTag = tagRepository.findByTitle(tagTitleToRemove);
