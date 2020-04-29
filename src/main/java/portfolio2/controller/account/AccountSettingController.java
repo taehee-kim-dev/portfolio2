@@ -135,7 +135,7 @@ public class AccountSettingController {
 
 
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-    public String getNotificationUpdate(@CurrentUser Account sessionAccount, Model model){
+    public String showNotificationUpdateView(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
@@ -143,7 +143,7 @@ public class AccountSettingController {
     }
 
     @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-    public String postNotificationUpdate(@CurrentUser Account sessionAccount,
+    public String notificationUpdate(@CurrentUser Account sessionAccount,
                                     @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
                                     Errors errors, Model model,
                                     RedirectAttributes redirectAttributes){

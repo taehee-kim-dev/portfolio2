@@ -92,16 +92,6 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean notificationLikeOnMyPostByEmail = false;
-
-    private boolean notificationLikeOnMyReplyByEmail = false;
-
-    private boolean notificationReplyOnMyPostByEmail = false;
-
-    private boolean notificationReplyOnMyReplyByEmail = false;
-
-    private boolean notificationNewPostWithMyTagByEmail = false;
-
 
 
     private boolean notificationLikeOnMyPostByWeb = true;
@@ -113,6 +103,18 @@ public class Account {
     private boolean notificationReplyOnMyReplyByWeb = true;
 
     private boolean notificationNewPostWithMyTagByWeb = true;
+
+
+
+    private boolean notificationLikeOnMyPostByEmail = false;
+
+    private boolean notificationLikeOnMyReplyByEmail = false;
+
+    private boolean notificationReplyOnMyPostByEmail = false;
+
+    private boolean notificationReplyOnMyReplyByEmail = false;
+
+    private boolean notificationNewPostWithMyTagByEmail = false;
 
 
 

@@ -15,8 +15,8 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.AccountService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,129 +55,73 @@ public class UpdateNotificationTest {
 
     }
 
-    @DisplayName("닉네임 변경하기 - 정상입력")
+    @DisplayName("알림 설정 - 정상입력")
     @SignUpAndLoggedIn
     @Test
-    void updateNicknameSuccess() throws Exception{
+    void updateNotification() throws Exception{
 
-        String newNickname = "newNickname";
+        Account existingAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-                .param("nickname", newNickname)
+
+        // Notifications by web
+        assertTrue(existingAccount.isNotificationReplyOnMyPostByWeb());
+        assertTrue(existingAccount.isNotificationReplyOnMyReplyByWeb());
+
+        assertTrue(existingAccount.isNotificationLikeOnMyPostByWeb());
+        assertTrue(existingAccount.isNotificationLikeOnMyReplyByWeb());
+
+        assertTrue(existingAccount.isNotificationNewPostWithMyTagByWeb());
+
+
+        // Notifications by email
+        assertFalse(existingAccount.isNotificationReplyOnMyPostByEmail());
+        assertFalse(existingAccount.isNotificationReplyOnMyReplyByEmail());
+
+        assertFalse(existingAccount.isNotificationLikeOnMyPostByEmail());
+        assertFalse(existingAccount.isNotificationLikeOnMyReplyByEmail());
+
+        assertFalse(existingAccount.isNotificationNewPostWithMyTagByEmail());
+
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL)
+                .param("notificationLikeOnMyPostByWeb", "false")
+                .param("notificationLikeOnMyReplyByWeb", "false")
+                .param("notificationReplyOnMyPostByWeb", "false")
+                .param("notificationReplyOnMyReplyByWeb", "false")
+                .param("notificationNewPostWithMyTagByWeb", "false")
+                .param("notificationLikeOnMyPostByEmail", "true")
+                .param("notificationLikeOnMyReplyByEmail", "true")
+                .param("notificationReplyOnMyPostByEmail", "true")
+                .param("notificationReplyOnMyReplyByEmail", "true")
+                .param("notificationNewPostWithMyTagByEmail", "true")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
+                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL))
                 .andExpect(model().hasNoErrors())
-                .andExpect(flash().attribute("message", "닉네임 변경이 완료되었습니다."));
+                .andExpect(flash().attribute("message", "알림설정이 저장되었습니다."));
 
         Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        assertNotEquals(TestAccountInfo.CORRECT_TEST_NICKNAME, updatedAccount.getNickname());
-        assertEquals(newNickname, updatedAccount.getNickname());
+
+        // Notifications by web
+        assertFalse(updatedAccount.isNotificationReplyOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationReplyOnMyReplyByWeb());
+
+        assertFalse(updatedAccount.isNotificationLikeOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationLikeOnMyReplyByWeb());
+
+        assertFalse(updatedAccount.isNotificationNewPostWithMyTagByWeb());
+
+
+        // Notifications by email
+        assertTrue(updatedAccount.isNotificationReplyOnMyPostByEmail());
+        assertTrue(updatedAccount.isNotificationReplyOnMyReplyByEmail());
+
+        assertTrue(updatedAccount.isNotificationLikeOnMyPostByEmail());
+        assertTrue(updatedAccount.isNotificationLikeOnMyReplyByEmail());
+
+        assertTrue(updatedAccount.isNotificationNewPostWithMyTagByEmail());
+
+
     }
 
-    @DisplayName("닉네임 변경하기 - 너무 짧은 길이 에러")
-    @SignUpAndLoggedIn
-    @Test
-    void updateNicknameTooShortError() throws Exception{
-
-        String newNickname = "aa";
-
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-                .param("nickname", newNickname)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrorCode
-                        ("accountNicknameUpdateRequestDto", "nickname", "tooShortNickname"))
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"));
-
-        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
-
-        assertEquals(TestAccountInfo.CORRECT_TEST_NICKNAME, updatedAccount.getNickname());
-        assertNotEquals(newNickname, updatedAccount.getNickname());
-    }
-
-    @DisplayName("닉네임 변경하기 - 너무 긴 길이 에러")
-    @SignUpAndLoggedIn
-    @Test
-    void updateNicknameTooLongError() throws Exception{
-
-        String newNickname = "newNicknamenewNicknamenewNickname";
-
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-                .param("nickname", newNickname)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrorCode
-                        ("accountNicknameUpdateRequestDto", "nickname", "tooLongNickname"))
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"));
-
-        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
-
-        assertEquals(TestAccountInfo.CORRECT_TEST_NICKNAME, updatedAccount.getNickname());
-        assertNotEquals(newNickname, updatedAccount.getNickname());
-    }
-
-    @DisplayName("닉네임 변경하기 - 맞지 않는 형식 에러")
-    @SignUpAndLoggedIn
-    @Test
-    void updateNicknameInvalidFormatError() throws Exception{
-
-        String newNickname = "newNickname!";
-
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-                .param("nickname", newNickname)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrorCode
-                        ("accountNicknameUpdateRequestDto", "nickname", "invalidFormatNickname"))
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"));
-
-        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
-
-        assertEquals(TestAccountInfo.CORRECT_TEST_NICKNAME, updatedAccount.getNickname());
-        assertNotEquals(newNickname, updatedAccount.getNickname());
-    }
-
-    @DisplayName("닉네임 변경하기 - 이미 존재하는 닉네임 에러")
-    @SignUpAndLoggedIn
-    @Test
-    void updateNicknameAlreadyExistsError() throws Exception{
-
-        String existingNickname = "existing";
-
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId("testUserId2")
-                .password("testPassword")
-                .email("test2@email.con")
-                .nickname(existingNickname)
-                .build();
-
-        accountService.saveNewAccount(signUpRequestDto);
-
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-                .param("nickname", existingNickname)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrorCode
-                        ("accountNicknameUpdateRequestDto", "nickname", "nicknameAlreadyExists"))
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"));
-
-        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
-
-        assertEquals(TestAccountInfo.CORRECT_TEST_NICKNAME, updatedAccount.getNickname());
-        assertNotEquals(existingNickname, updatedAccount.getNickname());
-    }
 }

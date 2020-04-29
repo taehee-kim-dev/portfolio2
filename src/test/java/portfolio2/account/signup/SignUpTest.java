@@ -89,6 +89,27 @@ public class SignUpTest {
         assertNotNull(newAccountInDb.getEmailCheckToken());
         assertNotNull(newAccountInDb.getEmailCheckTokenFirstGeneratedAt());
         assertEquals(newAccountInDb.getSendCheckEmailCount(), 1);
+
+
+
+        assertTrue(newAccountInDb.isNotificationReplyOnMyPostByWeb());
+        assertTrue(newAccountInDb.isNotificationReplyOnMyReplyByWeb());
+
+        assertTrue(newAccountInDb.isNotificationLikeOnMyPostByWeb());
+        assertTrue(newAccountInDb.isNotificationLikeOnMyReplyByWeb());
+
+        assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByWeb());
+
+
+
+        assertFalse(newAccountInDb.isNotificationReplyOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
+
+        assertFalse(newAccountInDb.isNotificationLikeOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
+
+        assertFalse(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
+
     }
 
 
