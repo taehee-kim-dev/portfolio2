@@ -1,17 +1,11 @@
 package portfolio2.account;
 
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
 import portfolio2.SignUpAndLoggedIn;
@@ -19,14 +13,8 @@ import portfolio2.TestAccountInfo;
 import portfolio2.controller.account.AccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
-import portfolio2.service.AccountService;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,9 +54,14 @@ public class ProfileUpdateTest {
     @Test
     void showProfileViewWithIncorrectUserId() throws Exception{
 
-        Throwable exception = assertThrows(NestedServletException.class,
-                () -> {mockMvc.perform(get("/account/profile/IncorrectTestUserId"));},
-                "IncorrectTestUserId에 해당하는 사용자가 없습니다.");
+        String incorrectTestUserId = "IncorrectTestUserId";
+
+        try{
+            mockMvc.perform(get("/account/profile/" + incorrectTestUserId));
+        }catch (Exception e){
+            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            assertEquals(incorrectTestUserId + "에 해당하는 사용자가 없습니다.", e.getCause().getMessage());
+        }
     }
 
     @DisplayName("프로필 수정 화면 보여주기")
