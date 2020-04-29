@@ -150,7 +150,7 @@ public class AccountController {
         Account accountInDb = accountRepository.findByEmail(sendEmailLoginLinkRequestDto.getEmail());
 
         if (accountInDb == null) {
-            model.addAttribute("emailError", "가입되지 않은 이메일 입니다.");
+            model.addAttribute("notExistingEmailError", "가입되지 않은 이메일 입니다.");
             return "account/email-login";
         }
 
@@ -160,7 +160,7 @@ public class AccountController {
         }
 
         accountService.sendLoginEmail(accountInDb);
-        redirectAttributes.addFlashAttribute("message", "로그인 링크를 이메일로 발송했습니다.");
+        redirectAttributes.addFlashAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
         return "redirect:/email-login";
     }
 
