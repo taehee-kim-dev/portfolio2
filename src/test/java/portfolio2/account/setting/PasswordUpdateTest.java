@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.util.NestedServletException;
 import portfolio2.SignUpAndLoggedIn;
 import portfolio2.TestAccountInfo;
 import portfolio2.controller.account.AccountSettingController;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProfileUpdateTest {
+public class PasswordUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,190 +31,180 @@ public class ProfileUpdateTest {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
     }
 
-    @DisplayName("프로필 화면 보여주기 - 정상 userId")
+    @DisplayName("비밀번호 변경 화면 보여주기")
     @SignUpAndLoggedIn
     @Test
-    void showProfileView() throws Exception{
+    void showPasswordSettingView() throws Exception{
 
-        mockMvc.perform(get("/account/profile/testUserId"))
+        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
                 .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("accountInDb"))
-                .andExpect(model().attributeExists("isOwner"))
-                .andExpect(view().name("account/profile"));
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"))
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME));
     }
 
-    @DisplayName("프로필 화면 보여주기 - 비정상 userId")
+    @DisplayName("비밀번호 변경하기 - 모두 정상입력")
     @SignUpAndLoggedIn
     @Test
-    void showProfileViewWithIncorrectUserId() throws Exception{
+    void updatePasswordSuccess() throws Exception{
 
-        String incorrectTestUserId = "IncorrectTestUserId";
+        String newPassword = "newPassword";
+        String newPasswordConfirm = "newPassword";
 
-        try{
-            mockMvc.perform(get("/account/profile/" + incorrectTestUserId));
-        }catch (Exception e){
-            assertTrue(e.getCause() instanceof IllegalArgumentException);
-            assertEquals(incorrectTestUserId + "에 해당하는 사용자가 없습니다.", e.getCause().getMessage());
-        }
-    }
-
-    @DisplayName("프로필 수정 화면 보여주기")
-    @SignUpAndLoggedIn
-    @Test
-    void showProfileSettingView() throws Exception{
-
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("profileUpdateRequestDto"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME));
-    }
-
-    @DisplayName("프로필 수정하기 - 모두 정상입력")
-    @SignUpAndLoggedIn
-    @Test
-    void updateProfile() throws Exception{
-
-        String newBio = "updatedBio";
-        String newLocation = "updatedLocation";
-        String newOccupation = "updatedOccupation";
-        String newProfileImage = "updatedProfileImage";
-
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
-                .param("bio", newBio)
-                .param("location", newLocation)
-                .param("occupation", newOccupation)
-                .param("profileImage", newProfileImage)
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
+                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
                 .andExpect(model().hasNoErrors())
-                .andExpect(flash().attribute("message", "프로필 수정이 완료되었습니다."));
+                .andExpect(flash().attribute("message", "비밀번호 변경이 완료되었습니다."));
 
         Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        assertEquals(newBio, updatedAccount.getBio());
-        assertEquals(newLocation, updatedAccount.getLocation());
-        assertEquals(newOccupation, updatedAccount.getOccupation());
-        assertEquals(newProfileImage, updatedAccount.getProfileImage());
+        assertFalse(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertTrue(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
 
     }
 
-    @DisplayName("프로필 한 줄 소개 수정하기 - 길이 초과 에러")
+    @DisplayName("비밀번호 변경하기 - 너무 짧은 길이 에러")
     @SignUpAndLoggedIn
     @Test
-    void updateBioTooLongError() throws Exception{
+    void updatePasswordTooShortError() throws Exception{
 
-        String newBio = "updatedBioupdatedBioupdatedBioupdatedBio";
-        String newLocation = "updatedLocation";
-        String newOccupation = "updatedOccupation";
-        String newProfileImage = "updatedProfileImage";
+        String newPassword = "newPass";
+        String newPasswordConfirm = "newPass";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
-                .param("bio", newBio)
-                .param("location", newLocation)
-                .param("occupation", newOccupation)
-                .param("profileImage", newProfileImage)
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
-                        ("profileUpdateRequestDto", "bio", "tooLongBio"))
+                        ("passwordUpdateRequestDto", "newPassword", "tooShortNewPassword"))
                 .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("profileUpdateRequestDto"));
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"));
 
         Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        assertNotEquals(newBio, updatedAccount.getBio());
-        assertNotEquals(newLocation, updatedAccount.getLocation());
-        assertNotEquals(newOccupation, updatedAccount.getOccupation());
-        assertNotEquals(newProfileImage, updatedAccount.getProfileImage());
-
-        assertNull(updatedAccount.getBio());
-        assertNull(updatedAccount.getLocation());
-        assertNull(updatedAccount.getOccupation());
-        assertNull(updatedAccount.getProfileImage());
+        assertTrue(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertFalse(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
     }
 
-    @DisplayName("프로필 지역 수정하기 - 길이 초과 에러")
+    @DisplayName("비밀번호 변경하기 - 너무 긴 길이 에러")
     @SignUpAndLoggedIn
     @Test
-    void updateLocationTooLongError() throws Exception{
+    void updatePasswordTooLongError() throws Exception{
 
-        String newBio = "updatedBio";
-        String newLocation = "updatedLocationupdatedLocation";
-        String newOccupation = "updatedOccupation";
-        String newProfileImage = "updatedProfileImage";
+        String newPassword = "newPasswordnewPasswordnewPassword";
+        String newPasswordConfirm = "newPasswordnewPasswordnewPassword";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
-                .param("bio", newBio)
-                .param("location", newLocation)
-                .param("occupation", newOccupation)
-                .param("profileImage", newProfileImage)
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
-                        ("profileUpdateRequestDto", "location", "tooLongLocation"))
+                        ("passwordUpdateRequestDto", "newPassword", "tooLongNewPassword"))
                 .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("profileUpdateRequestDto"));
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"));
 
         Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        assertNotEquals(newBio, updatedAccount.getBio());
-        assertNotEquals(newLocation, updatedAccount.getLocation());
-        assertNotEquals(newOccupation, updatedAccount.getOccupation());
-        assertNotEquals(newProfileImage, updatedAccount.getProfileImage());
-
-        assertNull(updatedAccount.getBio());
-        assertNull(updatedAccount.getLocation());
-        assertNull(updatedAccount.getOccupation());
-        assertNull(updatedAccount.getProfileImage());
+        assertTrue(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertFalse(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
     }
 
-    @DisplayName("프로필 직업 수정하기 - 길이 초과 에러")
+    @DisplayName("비밀번호 변경하기 - 공백 포함 에러")
     @SignUpAndLoggedIn
     @Test
-    void updateOccupationTooLongError() throws Exception{
+    void updatePasswordInvalidFormatError() throws Exception{
 
-        String newBio = "updatedBio";
-        String newLocation = "updatedLocation";
-        String newOccupation = "updatedOccupationupdatedOccupation";
-        String newProfileImage = "updatedProfileImage";
+        String newPassword = "new Password";
+        String newPasswordConfirm = "new Password";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
-                .param("bio", newBio)
-                .param("location", newLocation)
-                .param("occupation", newOccupation)
-                .param("profileImage", newProfileImage)
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
-                        ("profileUpdateRequestDto", "occupation", "tooLongOccupation"))
+                        ("passwordUpdateRequestDto", "newPassword", "invalidFormatNewPassword"))
                 .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("profileUpdateRequestDto"));
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"));
 
         Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
 
-        assertNotEquals(newBio, updatedAccount.getBio());
-        assertNotEquals(newLocation, updatedAccount.getLocation());
-        assertNotEquals(newOccupation, updatedAccount.getOccupation());
-        assertNotEquals(newProfileImage, updatedAccount.getProfileImage());
+        assertTrue(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertFalse(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
+    }
 
-        assertNull(updatedAccount.getBio());
-        assertNull(updatedAccount.getLocation());
-        assertNull(updatedAccount.getOccupation());
-        assertNull(updatedAccount.getProfileImage());
+    @DisplayName("비밀번호 변경하기 - 비밀번호 확인 불일치 에러")
+    @SignUpAndLoggedIn
+    @Test
+    void updatePasswordNotSamePasswordError() throws Exception{
 
+        String newPassword = "newPassword";
+        String newPasswordConfirm = "notSameNewPassword";
+
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode
+                        ("passwordUpdateRequestDto", "newPasswordConfirm", "notSamePassword"))
+                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"));
+
+        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
+
+        assertTrue(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertFalse(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
+    }
+
+    @DisplayName("비밀번호 변경하기 - 너무 짧은 길이, 비밀번호 확인 불일치 에러")
+    @SignUpAndLoggedIn
+    @Test
+    void updatePasswordTooShortPasswordAndNotSamePasswordError() throws Exception{
+
+        String newPassword = "newPass";
+        String newPasswordConfirm = "new Pass";
+
+        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", newPassword)
+                .param("newPasswordConfirm", newPasswordConfirm)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode
+                        ("passwordUpdateRequestDto", "newPassword", "tooShortNewPassword"))
+                .andExpect(model().attributeHasFieldErrorCode
+                        ("passwordUpdateRequestDto", "newPasswordConfirm", "notSamePassword"))
+                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"));
+
+        Account updatedAccount = accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID);
+
+        assertTrue(passwordEncoder.matches(TestAccountInfo.CORRECT_TEST_PASSWORD, updatedAccount.getPassword()));
+        assertFalse(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
     }
 }

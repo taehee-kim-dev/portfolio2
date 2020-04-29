@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.SignUpAndLoggedIn;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.service.AccountService;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,6 +35,9 @@ public class ResendEmailCheckEmailTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -57,6 +63,29 @@ public class ResendEmailCheckEmailTest {
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("email"))
                 .andExpect(view().name("account/check-email"));
+
+    }
+
+    @DisplayName("이메일 인증 이메일 재전송 화면 보여주기2 - 인증상태 체크용")
+    @Test
+    void showResendEmailCheckEmailPage2() throws Exception {
+
+        SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()
+                .userId("testUserId2")
+                .nickname("testNickname2")
+                .email("test2@email.com")
+                .password("testPassword2")
+                .build();
+
+        accountService.processNewAccount(signUpRequestDto2);
+
+        mockMvc.perform(get("/check-email"))
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeExists("email"))
+                .andExpect(view().name("account/check-email"))
+                .andExpect(authenticated());
 
     }
 

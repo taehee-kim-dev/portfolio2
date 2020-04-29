@@ -19,7 +19,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.UserAccount;
 import portfolio2.dto.account.SignUpRequestDto;
-import portfolio2.dto.account.profileupdate.AccountUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
@@ -136,8 +136,8 @@ public class AccountService implements UserDetailsService {
         loginOrUpdateSessionAccount(sessionAccount);
     }
 
-    public void updateAccount(Account sessionAccount, AccountUpdateRequestDto accountUpdateRequestDto) {
-        modelMapper.map(accountUpdateRequestDto, sessionAccount);
+    public void updateAccountNickname(Account sessionAccount, AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto) {
+        modelMapper.map(accountNicknameUpdateRequestDto, sessionAccount);
         accountRepository.save(sessionAccount);
         loginOrUpdateSessionAccount(sessionAccount);
     }

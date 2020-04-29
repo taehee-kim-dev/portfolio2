@@ -1,4 +1,4 @@
-package portfolio2.account;
+package portfolio2.account.setting;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

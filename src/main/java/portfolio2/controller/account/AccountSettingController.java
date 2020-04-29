@@ -18,7 +18,7 @@ import portfolio2.dto.account.TagUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.*;
 import portfolio2.service.AccountService;
 import portfolio2.domain.tag.TagRepository;
-import portfolio2.validator.account.profileupdate.AccountUpdateRequestDtoValidator;
+import portfolio2.validator.account.profileupdate.AccountNicknameUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.ProfileUpdateRequestDtoValidator;
 
@@ -42,13 +42,15 @@ public class AccountSettingController {
     public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
     public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
 
+    public static final String ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL = "/account/setting/account/nickname";
+
     public static final String ACCOUNT_SETTING_TAG_URL = "/account/setting/tag";
     public static final String ACCOUNT_SETTING_TAG_VIEW_NAME = "account/setting/tag";
 
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
-    private final AccountUpdateRequestDtoValidator accountUpdateRequestDtoValidator;
+    private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
 
     private final TagRepository tagRepository;
 
@@ -70,9 +72,9 @@ public class AccountSettingController {
         webDataBinder.addValidators(passwordUpdateRequestDtoValidator);
     }
 
-    @InitBinder("accountUpdateRequestDto")
-    public void initBinderForAccountUpdateRequestDto(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(accountUpdateRequestDtoValidator);
+    @InitBinder("accountNicknameUpdateRequestDto")
+    public void initBinderForAccountNicknameUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(accountNicknameUpdateRequestDtoValidator);
     }
 
     @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
@@ -160,30 +162,30 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
-    public String getAccountUpdate(@CurrentUser Account sessionAccount, Model model){
+    public String showAccountSettingAccountView(@CurrentUser Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(modelMapper.map(sessionAccount, AccountUpdateRequestDto.class));
+        model.addAttribute(modelMapper.map(sessionAccount, AccountNicknameUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
         return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
     }
 
-    @PostMapping(ACCOUNT_SETTING_ACCOUNT_URL)
-    public String postAccountUpdate(@CurrentUser Account sessionAccount,
-                                         @Valid @ModelAttribute AccountUpdateRequestDto accountUpdateRequestDto,
+    @PostMapping(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+    public String updateAccountNickname(@CurrentUser Account sessionAccount,
+                                         @Valid @ModelAttribute AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto,
                                          Errors errors, Model model,
                                          RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
             model.addAttribute("sessionAccount", sessionAccount);
-            model.addAttribute(accountUpdateRequestDto);
+            model.addAttribute(accountNicknameUpdateRequestDto);
 
             return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
         }
 
-        accountService.updateAccount(sessionAccount, accountUpdateRequestDto);
+        accountService.updateAccountNickname(sessionAccount, accountNicknameUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
-        redirectAttributes.addFlashAttribute("message", "계정 설정 변경이 완료되었습니다.");
-        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
+        redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
+        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL;
     }
 
     @GetMapping(ACCOUNT_SETTING_TAG_URL)

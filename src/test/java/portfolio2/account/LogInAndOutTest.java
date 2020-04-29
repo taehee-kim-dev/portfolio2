@@ -8,7 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.TestAccountInfo;
 import portfolio2.SignUpAndLoggedIn;
+import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.service.AccountService;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -24,6 +27,9 @@ public class LogInAndOutTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -135,12 +141,30 @@ public class LogInAndOutTest {
                 .andExpect(authenticated());
     }
 
-    @DisplayName("비인증 상태 테스트")
+    @DisplayName("비인증 상태 테스트1")
     @SignUpAndLoggedIn
     @Test
-    void unauthenticatedTest() throws Exception {
+    void unauthenticatedTest1() throws Exception {
 
         SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("비인증 상태 테스트2")
+    @Test
+    void unauthenticatedTest2() throws Exception {
+
+        SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()
+                .userId("testUserId2")
+                .nickname("testNickname2")
+                .email("test2@email.com")
+                .password("testPassword2")
+                .build();
+
+        accountService.saveNewAccount(signUpRequestDto2);
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
