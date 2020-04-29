@@ -66,7 +66,7 @@ public class AccountNicknameSettingTest {
                 .param("nickname", newNickname)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL))
+                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attribute("message", "닉네임 변경이 완료되었습니다."));
 
