@@ -185,7 +185,7 @@ public class AccountSettingController {
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
-        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL;
+        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
     }
 
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
