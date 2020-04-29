@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AccountNicknameSettingTest {
+public class UpdateAccountNicknameTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -157,7 +157,7 @@ public class AccountNicknameSettingTest {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId("testUserId2")
-                .password("testPassword")
+                .password("testPassword2")
                 .email("test2@email.con")
                 .nickname(existingNickname)
                 .build();

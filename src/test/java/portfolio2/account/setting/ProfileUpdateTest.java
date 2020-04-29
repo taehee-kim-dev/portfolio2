@@ -13,6 +13,8 @@ import portfolio2.TestAccountInfo;
 import portfolio2.controller.account.AccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.service.AccountService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -29,6 +31,9 @@ public class ProfileUpdateTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private AccountRepository accountRepository;
 
     @AfterEach
@@ -36,16 +41,38 @@ public class ProfileUpdateTest {
         accountRepository.deleteAll();
     }
 
-    @DisplayName("프로필 화면 보여주기 - 정상 userId")
+    @DisplayName("프로필 화면 보여주기 - 정상 userId, 자기자신의 프로필")
     @SignUpAndLoggedIn
     @Test
-    void showProfileView() throws Exception{
+    void showOwnerProfileView() throws Exception{
 
         mockMvc.perform(get("/account/profile/testUserId"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("accountInDb"))
-                .andExpect(model().attributeExists("isOwner"))
+                .andExpect(model().attribute("isOwner", true))
+                .andExpect(view().name("account/profile"));
+    }
+
+    @DisplayName("프로필 화면 보여주기 - 정상 userId, 타인의 프로필")
+    @SignUpAndLoggedIn
+    @Test
+    void showNotOwnerProfileView() throws Exception{
+
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .userId("testUserId2")
+                .password("testPassword2")
+                .email("test2@email.con")
+                .nickname("testNickname2")
+                .build();
+
+        accountService.saveNewAccount(signUpRequestDto);
+
+        mockMvc.perform(get("/account/profile/testUserId2"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeExists("accountInDb"))
+                .andExpect(model().attribute("isOwner", false))
                 .andExpect(view().name("account/profile"));
     }
 
