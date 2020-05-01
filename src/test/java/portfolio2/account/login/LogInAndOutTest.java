@@ -1,4 +1,4 @@
-package portfolio2.account;
+package portfolio2.account.login;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +6,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.TestAccountInfo;
-import portfolio2.SignUpAndLoggedIn;
-import portfolio2.domain.account.Account;
+import portfolio2.account.testaccountinfo.TestAccountInfo;
+import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.AccountService;

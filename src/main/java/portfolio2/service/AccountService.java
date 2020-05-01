@@ -167,8 +167,6 @@ public class AccountService implements UserDetailsService {
         }
     }
 
-
-
     public void removeTag(Account sessionAccount, Tag tagToRemove) {
         Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
         if(existingAccount != null){

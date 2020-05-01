@@ -1,6 +1,4 @@
-package portfolio2;
-
-import org.springframework.stereotype.Component;
+package portfolio2.account.testaccountinfo;
 
 public class TestAccountInfo {
 

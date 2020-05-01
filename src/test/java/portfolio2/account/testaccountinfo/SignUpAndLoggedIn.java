@@ -1,4 +1,4 @@
-package portfolio2;
+package portfolio2.account.testaccountinfo;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
