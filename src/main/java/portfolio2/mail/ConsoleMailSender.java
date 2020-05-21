@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 // 가짜 객체
 
-@Profile("local")
+@Profile({"local", "dev"})
 @Component
 @Slf4j
 public class ConsoleMailSender implements JavaMailSender {
