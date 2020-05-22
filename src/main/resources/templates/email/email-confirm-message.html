@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>ShareMind 이메일 인증</title>
+</head>
+<body>
+    <div>
+        <p>안녕하세요, <span th:text="${userId}"></span>님</p>
+
+        <h2>이메일을 인증하려면 아래의 링크를 클릭해 주세요!</h2>
+
+        <div>
+            <a th:href="${host + link}">이메일 인증하기</a>
+        </div>
+    </div>
+    <footer>
+        <small>ShareMind&copy; 2020</small>
+    </footer>
+</body>
+</html>
