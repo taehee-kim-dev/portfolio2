@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.mail.EmailMessage;
+import portfolio2.mail.EmailService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +36,7 @@ public class SignUpTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    private JavaMailSender javaMailSender;
+    private EmailService emailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -76,7 +78,7 @@ public class SignUpTest {
                 .andExpect(redirectedUrl("/"))
                 .andExpect(authenticated());
 
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
 
         Account newAccountInDb = accountRepository.findByUserId(newAccountToSignUp.getUserId());
 
@@ -85,7 +87,7 @@ public class SignUpTest {
         assertEquals(newAccountToSignUp.getEmail(), newAccountInDb.getEmail());
         assertTrue(passwordEncoder.matches(newAccountToSignUp.getPassword(), newAccountInDb.getPassword()));
 
-        assertEquals(newAccountInDb.isEmailVerified(), false);
+        assertFalse(newAccountInDb.isEmailVerified());
         assertNotNull(newAccountInDb.getEmailCheckToken());
         assertNotNull(newAccountInDb.getEmailCheckTokenFirstGeneratedAt());
         assertEquals(newAccountInDb.getSendCheckEmailCount(), 1);

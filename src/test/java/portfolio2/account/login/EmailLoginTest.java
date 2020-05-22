@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.mail.EmailMessage;
+import portfolio2.mail.EmailService;
 
 import java.time.LocalDateTime;
 
@@ -39,14 +39,12 @@ public class EmailLoginTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    private JavaMailSender javaMailSender;
+    private EmailService emailService;
 
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
     }
-
-    private final String TEST_USER_ID = "testUserId";
 
     @DisplayName("이메일 로그인 링크 전송 화면 보여주기")
     @Test
@@ -89,7 +87,7 @@ public class EmailLoginTest {
         assertNotNull(existingAccountAfterSendEmail.getEmailLoginToken());
         assertNotNull(existingAccountAfterSendEmail.getEmailLoginTokenFirstGeneratedAt());
 
-        verify(javaMailSender, times(2)).send(any(SimpleMailMessage.class));
+        verify(emailService, times(2)).sendEmail(any(EmailMessage.class));
 
     }
 
@@ -135,7 +133,7 @@ public class EmailLoginTest {
                         beforeEmailLoginTokenFirstGeneratedAt);
             }
 
-            verify(javaMailSender, times(1 + time)).send(any(SimpleMailMessage.class));
+            verify(emailService, times(1 + time)).sendEmail(any(EmailMessage.class));
 
             beforeEmailLoginToken = existingAccountAfterSendEmail1.getEmailLoginToken();
             beforeEmailLoginTokenFirstGeneratedAt = existingAccountAfterSendEmail1.getEmailLoginTokenFirstGeneratedAt();
@@ -163,7 +161,7 @@ public class EmailLoginTest {
                     beforeEmailLoginTokenFirstGeneratedAt);
 
 
-        verify(javaMailSender, times(4)).send(any(SimpleMailMessage.class));
+        verify(emailService, times(4)).sendEmail(any(EmailMessage.class));
 
 
 
@@ -199,7 +197,7 @@ public class EmailLoginTest {
                         beforeEmailLoginTokenFirstGeneratedAt);
             }
 
-            verify(javaMailSender, times(4 + time)).send(any(SimpleMailMessage.class));
+            verify(emailService, times(4 + time)).sendEmail(any(EmailMessage.class));
 
             beforeEmailLoginToken = existingAccountAfterSendEmail2.getEmailLoginToken();
             beforeEmailLoginTokenFirstGeneratedAt = existingAccountAfterSendEmail2.getEmailLoginTokenFirstGeneratedAt();

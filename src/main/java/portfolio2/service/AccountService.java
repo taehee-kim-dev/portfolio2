@@ -2,9 +2,8 @@ package portfolio2.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,19 +22,22 @@ import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
+import portfolio2.mail.EmailMessage;
+import portfolio2.mail.EmailService;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Transactional
 @Service
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
@@ -55,24 +57,28 @@ public class AccountService implements UserDetailsService {
 
     public void sendSignUpConfirmEmail(Account newAccount) {
         newAccount.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
-        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
-                "&email=" + newAccount.getEmail());
-        javaMailSender.send(mailMessage);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("ShareMind 회원가입 이메일 인증")
+                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                        "&email=" + newAccount.getEmail())
+                .build();
+        emailService.sendEmail(emailMessage);
     }
 
     public void resendSignUpConfirmEmail(Account sessionAccount) {
 
         Account accountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
         accountInDb.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(accountInDb.getEmail());
-        mailMessage.setSubject("ShareMind 회원가입 이메일 인증");
-        mailMessage.setText("/check-email-token?token=" + accountInDb.getEmailCheckToken() +
-                "&email=" + accountInDb.getEmail());
-        javaMailSender.send(mailMessage);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(accountInDb.getEmail())
+                .subject("ShareMind 회원가입 이메일 인증")
+                .message("/check-email-token?token=" + accountInDb.getEmailCheckToken() +
+                        "&email=" + accountInDb.getEmail())
+                .build();
+        emailService.sendEmail(emailMessage);
     }
 
 
@@ -123,11 +129,12 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendPasswordChangeNotificationEmail(Account sessionAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(sessionAccount.getEmail());
-        mailMessage.setSubject("ShareMind 비밀번호 변경 알림");
-        mailMessage.setText(sessionAccount.getUserId() + "의 비밀번호가 변경되었습니다.");
-        javaMailSender.send(mailMessage);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(sessionAccount.getEmail())
+                .subject("ShareMind 비밀번호 변경 알림")
+                .message(sessionAccount.getUserId() + "의 비밀번호가 변경되었습니다.")
+                .build();
+        emailService.sendEmail(emailMessage);
     }
 
     public void updateNotification(Account sessionAccount, NotificationUpdateRequestDto notificationUpdateRequestDto) {
@@ -145,19 +152,20 @@ public class AccountService implements UserDetailsService {
     public void sendLoginEmail(Account account) {
         Account accountInDb = accountRepository.findByUserId(account.getUserId());
         accountInDb.generateLoginEmailToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(accountInDb.getEmail());
-        mailMessage.setSubject("ShareMind 이메일로 로그인하기 링크");
-        mailMessage.setText("/login-by-email?token=" + accountInDb.getEmailLoginToken() +
-                "&email=" + accountInDb.getEmail());
-        javaMailSender.send(mailMessage);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(accountInDb.getEmail())
+                .subject("ShareMind 로그인 링크")
+                .message("/check-email-token?token=" + accountInDb.getEmailCheckToken() +
+                        "&email=" + accountInDb.getEmail())
+                .build();
+        emailService.sendEmail(emailMessage);
     }
 
     public List<String> getTag(Account sessionAccount) {
         Account existingAccount = accountRepository.findByUserId(sessionAccount.getUserId());
         Set<Tag> tagOfExistingAccount = existingAccount.getTag();
-        List<String> tagListOfExistingAccount = tagOfExistingAccount.stream().map(Tag::getTitle).collect(Collectors.toList());
-        return tagListOfExistingAccount;
+        return tagOfExistingAccount.stream().map(Tag::getTitle).collect(Collectors.toList());
     }
 
     public void addTag(Account sessionAccount, Tag newTag) {

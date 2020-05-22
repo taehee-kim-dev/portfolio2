@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.mail.EmailMessage;
+import portfolio2.mail.EmailService;
 import portfolio2.service.AccountService;
 
 import java.time.LocalDateTime;
@@ -41,7 +41,7 @@ public class ResendEmailCheckEmailTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    private JavaMailSender javaMailSender;
+    private EmailService emailService;
 
     @AfterEach
     void afterEach(){
@@ -106,7 +106,7 @@ public class ResendEmailCheckEmailTest {
                 .andExpect(model().attributeDoesNotExist("error"));
 
 
-        verify(javaMailSender, times(2)).send(any(SimpleMailMessage.class));
+        verify(emailService, times(2)).sendEmail(any(EmailMessage.class));
 
         Account afterAccount = accountRepository.findByUserId(TEST_USER_ID);
 
@@ -134,7 +134,7 @@ public class ResendEmailCheckEmailTest {
                     .andExpect(model().attributeDoesNotExist("email"))
                     .andExpect(model().attributeDoesNotExist("error"));
 
-            verify(javaMailSender, times(i)).send(any(SimpleMailMessage.class));
+            verify(emailService, times(i)).sendEmail(any(EmailMessage.class));
         }
 
         Account afterAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -178,7 +178,7 @@ public class ResendEmailCheckEmailTest {
                     .andExpect(model().attributeDoesNotExist("email"))
                     .andExpect(model().attributeDoesNotExist("error"));
 
-            verify(javaMailSender, times(i)).send(any(SimpleMailMessage.class));
+            verify(emailService, times(i)).sendEmail(any(EmailMessage.class));
         }
 
         Account afterAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -200,7 +200,7 @@ public class ResendEmailCheckEmailTest {
                 .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(model().attributeDoesNotExist("error"));
 
-        verify(javaMailSender, times(6)).send(any(SimpleMailMessage.class));
+        verify(emailService, times(6)).sendEmail(any(EmailMessage.class));
 
         Account lastAccount = accountRepository.findByUserId(TEST_USER_ID);
 
