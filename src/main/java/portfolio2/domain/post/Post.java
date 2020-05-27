@@ -1,20 +1,24 @@
 package portfolio2.domain.post;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@NamedEntityGraph(name = "Post.withAllRelation", attributeNodes = {
+        @NamedAttributeNode("tag")
+})
 @Entity
 public class Post {
 
@@ -33,7 +37,7 @@ public class Post {
     private String image;
 
     @ManyToMany
-    private Set<Tag> tag;
+    private Set<Tag> tag  = new HashSet<>();
 
     private LocalDateTime firstWrittenTime;
 

@@ -1,6 +1,7 @@
 package portfolio2.domain.account;
 
 import lombok.*;
+import portfolio2.domain.post.Post;
 import portfolio2.domain.tag.Tag;
 
 import javax.persistence.*;
@@ -141,6 +142,9 @@ public class Account {
             this.sendCheckEmailCount++;
         }
     }
+
+    @OneToMany(mappedBy = "author")
+    private Set<Post> post = new HashSet<>();
 
     public void completeSignUp() {
         this.emailVerified = true;

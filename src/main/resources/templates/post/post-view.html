@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        .form-group{
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="fragment.html :: commonNav"></nav>
+
+<div class="container">
+
+    <div id="post-view" style="text-align: center; margin-top: 100px">
+        <table class="table table-bordered" style="margin: auto; width: 750px; margin-bottom: 35px">
+            <tbody>
+            <tr>
+                <td colspan="2" th:text="${post.getTitle()}" style="padding-top: 20px;padding-bottom: 20px;
+                    font-size: 24px; font-weight: bold">글 제목</td>
+            </tr>
+            <tr>
+                <td><span>작성자 : </span></td><td th:text="${post.getAuthor().getUserId()}">글 작성자 아이디</td>
+            </tr>
+            <tr>
+                <td><span>작성일 : </span></td><td th:text="${firstWrittenTime}">글 작성 날짜</td>
+            </tr>
+            <tr>
+                <td colspan="2" th:utext="${post.getContent()}" style="padding-top: 38px;padding-bottom: 22px">글 내용</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{#}"
+           style="width: 300px; margin-right: 50px">게시글  수정</a>
+        <a th:if="${isAuthor}" class="btn btn-danger" href="#" th:href="@{#}"
+              style="width: 300px">게시글 삭제</a>
+
+    </div>
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>
