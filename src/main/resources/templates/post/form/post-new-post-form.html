@@ -3,9 +3,17 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/summernote/summernote-bs4.min.css" />
+    <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
         .form-group{
             margin-bottom: 30px;
+        }
+        .tagify__input{
+            margin: 0;
+            margin-bottom: 10px;
+        }
+        .tagify-outside{
+            border: none;
         }
     </style>
 </head>
@@ -15,7 +23,7 @@
 
 <div class="container">
     <div>
-        <h1 id="pageTitle" class="text-center" style="margin-top: 105px;margin-bottom: 33px">글 작성</h1>
+        <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 작성</h1>
     </div>
     <form id="post-form" class="needs-validation" style="margin: auto; width: 750px" action="#"
           th:action="@{/postNewPost}" th:object="${postNewPostRequestDto}" method="post" novalidate>
@@ -32,16 +40,29 @@
                       th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''"></textarea>
             <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Post content Error</small>
         </div>
+        <div>
+
+            <div class="alert alert-info" role="alert">
+                태그를 입력하고 콤마(,)를 입력하세요.
+                <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
+            </div>
+            <div id="whitelist" th:text="${whitelist}" hidden></div>
+            <input id="tag" type="text" name="tag"
+                   class="tagify-outside" aria-describedby="tagHelp"/>
+
+        </div>
 
         <div class="form-group" >
-            <button class="btn btn-primary btn-block" type="submit" style="margin-top: 35px"
+            <button class="btn btn-primary btn-block" type="submit" style="margin-top: 22px"
                     aria-describedby="submitHelp">글 작성하기</button>
         </div>
     </form>
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
+<script th:replace="fragment.html :: ajax-csrf-header"></script>
 <script src="/library/summernote/summernote-bs4.min.js"></script>
+<script src="/library/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript">
     $(function () {
         $('#post-content').summernote({
@@ -50,6 +71,48 @@
             tabsize: 4,
             height: 300
         });
+
+        function tagRequest(url, tagTitle) {
+            $.ajax({
+                dataType: "json",
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "/account/setting/tag" + url,
+                data: JSON.stringify({'tagTitle': tagTitle})
+            }).done(function (data, status) {
+                console.log("${data} and status is ${status}");
+            });
+        }
+
+        function onAdd(e) {
+            tagRequest("/add", e.detail.data.value);
+        }
+
+        function onRemove(e) {
+            tagRequest("/remove", e.detail.data.value);
+        }
+
+        var tagInput = document.querySelector("#tag");
+
+        var tagify = new Tagify(tagInput, {
+            pattern: /^.{0,20}$/,
+            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+            dropdown : {
+                enabled: 1, // suggest tags after a single character input
+            } // map tags
+        });
+
+        tagify.on("add", onAdd);
+        tagify.on("remove", onRemove);
+
+        // add a class to Tagify's input element
+        tagify.DOM.input.classList.add('form-control');
+        // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+        tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
     });
 </script>
 </body>

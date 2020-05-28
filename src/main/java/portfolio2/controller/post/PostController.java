@@ -1,5 +1,7 @@
 package portfolio2.controller.post;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CurrentUser;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
+import portfolio2.domain.tag.Tag;
+import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.post.PostNewPostRequestDto;
 import portfolio2.service.PostService;
 import portfolio2.validator.post.PostNewPostRequestDtoValidator;
@@ -24,14 +28,19 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
 public class PostController {
     private final PostRepository postRepository;
+    private final TagRepository tagRepository;
 
     private final PostService postService;
+
     private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
 
     private final String POST_NEW_POST_URL = "/postNewPost";
     private final String POST_NEW_POST_VIEW_NAME = "post/form";
@@ -44,9 +53,13 @@ public class PostController {
     }
 
     @GetMapping(POST_NEW_POST_URL)
-    public String getPostNewPost(@CurrentUser Account sessionAccount, Model model) {
+    public String getPostNewPost(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PostNewPostRequestDto());
+
+        List<String> allExistingTag = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allExistingTag));
+
         return POST_NEW_POST_VIEW_NAME + "/post-new-post-form";
     }
 
@@ -72,7 +85,6 @@ public class PostController {
         model.addAttribute("sessionAccount", sessionAccount);
 
         Post foundPost = postRepository.findById(postId).get();
-
 
 
         model.addAttribute(foundPost);
