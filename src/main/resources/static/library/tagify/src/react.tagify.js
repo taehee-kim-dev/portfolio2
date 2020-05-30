@@ -20,6 +20,7 @@ class Tags extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    const nextSettings = nextProps.settings || {}
     const tagify = this.tagify,
           currentValue = this.props.value instanceof Array
             ? this.props.value
@@ -31,11 +32,12 @@ class Tags extends React.Component {
       nextProps.value instanceof Array &&
       nextProps.value.join() !== currentValue.join()
     ) {
-      tagify.loadOriginalValues(nextProps.value)
+      tagify.loadOriginalValues(nextProps.value.join())
       // this.tagify.addTags(nextProps.value, true, true)
     }
 
-    tagify.settings.whitelist = nextProps.settings.whitelist
+    if( nextSettings.whitelist && nextSettings.whitelist.length )
+      tagify.settings.whitelist = nextSettings.whitelist
 
     if ("loading" in nextProps) {
       tagify.loading(nextProps.loading)
@@ -61,9 +63,10 @@ class Tags extends React.Component {
       ref        : this._handleRef,
       name       : this.props.name,
       className  : this.props.className,
-      placeholder: this.props.class,
+      placeholder: this.props.placeholder,
       autoFocus  : this.props.autofocus,
       value      : this.props.children || this.props.value,
+      readOnly   : this.props.readonly,
       onChange   : this.props.onChange || function(){}
     }
 

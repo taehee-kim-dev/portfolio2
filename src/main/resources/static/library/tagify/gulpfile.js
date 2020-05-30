@@ -22,57 +22,6 @@ var uglifyOptions = {
     "screw-ie8" : true
 };
 
-var eslint_settings = {
-    rulePaths: [],
-    rules: {
-        "no-mixed-spaces-and-tabs" : [2, "smart-tabs"],
-        "block-spacing"            : [2, "always"],
-        "comma-style"              : [2, "last"],
-        "no-debugger"              : [1],
-        "no-alert"                 : [1],
-        "indent"                   : [1, 4, {"SwitchCase":1}],
-        'strict'                   : 0,
-        'no-undef'                 : 1
-    },
-    ecmaFeatures : {
-        modules: true,
-        sourceType: "module"
-    },
-    "parserOptions": {
-        "ecmaVersion" : 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": false,
-            "experimentalObjectRestSpread": true
-        }
-    },
-    globals : [
-        'FB',
-        'ga',
-        'jQuery',
-        '$',
-        '_',
-        'd3',
-        'Router',
-        'ttip',
-        'Cookies',
-        'fastdom',
-        'describe',
-        'beforeEach',
-        'it',
-        'expect',
-        'assert',
-        'done',
-        'dataLayer',
-        'validator'
-    ],
-    baseConfig: {
-        //parser: 'babel-eslint',
-    },
-    envs: [
-        'browser', 'es6'
-    ]
-};
 
 var banner = `/**
  * Tagify (v ${pkg.version})- tags input component
@@ -136,7 +85,7 @@ gulp.task('react_wrapper', () => {
 
     const umdConf = {
         exports: function(file) {
-          return null;
+          return 'Tags';
         }
     }
 
@@ -190,11 +139,11 @@ gulp.task('minify', () => {
     //     .pipe($.rename('jQuery.tagify.min.js'))
     //     .pipe(gulp.dest('./dist/'))
 
-    gulp.src('src/tagify.polyfills.js')
-        .pipe($.uglify())
-        .on('error', handleError)
-        .pipe($.rename('tagify.polyfills.min.js'))
-        .pipe(gulp.dest('./dist/'))
+    // gulp.src('src/tagify.polyfills.js')
+    //     .pipe($.uglify())
+    //     .on('error', handleError)
+    //     .pipe($.rename('tagify.polyfills.min.js'))
+    //     .pipe(gulp.dest('./dist/'))
 });
 
 function handleError(err) {
@@ -210,7 +159,7 @@ gulp.task('lint_js', () => {
         // eslint() attaches the lint output to the eslint property
         // of the file object so it can be used by other modules.
         .pipe($.cached('linting'))
-        .pipe($.eslint(eslint_settings))
+        .pipe($.eslint())
         // $.eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
         .pipe($.eslint.format())
@@ -218,7 +167,33 @@ gulp.task('lint_js', () => {
         // lint error, return the stream and pipe to failAfterError last.
         .pipe($.eslint.failAfterError())
         .on('error', $.beepbeep)
-});
+})
+
+
+gulp.task('polyfills', () => {
+  var stream = rollup({
+    entry: 'src/tagify.polyfills.js',
+    outputName: 'tagify.polyfills.min.js'
+  })
+
+  return stream
+})
+
+
+function rollup({entry, outputName, dest}){
+  return $.rollupStream({
+      input:entry,
+      format: 'iife',
+      plugins: []
+    })
+    // give the file the name you want to output with
+    .pipe( $.vinylSourceStream(outputName))
+    .pipe( $.streamify( $.uglify() ) )
+    .on('error', handleError)
+
+    // and output to ./dist/app.js as normal.
+    .pipe(gulp.dest('./dist'));
+}
 
 
 /**
@@ -255,12 +230,12 @@ function inc(importance) {
 gulp.task('watch', () => {
     //gulp.watch('./images/sprite/**/*.png', ['sprite']);
     gulp.watch('./src/*.scss', ['scss']);
-    gulp.watch('./src/tagify.js').on('change', ()=>{ $.runSequence('build_js', 'build_jquery_version', 'minify') });
+    gulp.watch('./src/tagify.js').on('change', ()=>{ $.runSequence('build_js', 'build_jquery_version') });
 });
 
 
 gulp.task('default', ( done ) => {
-    $.runSequence(['build_js', 'scss'], 'build_jquery_version', 'react_wrapper', 'minify', 'watch', done);
+    $.runSequence(['build_js', 'scss'], 'build_jquery_version', 'react_wrapper', 'polyfills', 'watch', done);
 });
 
 
