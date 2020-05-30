@@ -23,6 +23,7 @@ import portfolio2.dto.post.PostNewPostRequestDto;
 import portfolio2.service.PostService;
 import portfolio2.validator.post.PostNewPostRequestDtoValidator;
 
+import javax.validation.Valid;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -53,18 +54,15 @@ public class PostController {
     }
 
     @GetMapping(POST_NEW_POST_URL)
-    public String getPostNewPost(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
+    public String getPostNewPost(@CurrentUser Account sessionAccount, Model model) {
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PostNewPostRequestDto());
-
-        List<String> allExistingTag = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allExistingTag));
 
         return POST_NEW_POST_VIEW_NAME + "/post-new-post-form";
     }
 
     @PostMapping(POST_NEW_POST_URL)
-    public String postPostNewPost(@CurrentUser Account sessionAccount, PostNewPostRequestDto postNewPostRequestDto, Errors errors, Model model) {
+    public String postPostNewPost(@CurrentUser Account sessionAccount, @Valid PostNewPostRequestDto postNewPostRequestDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(postNewPostRequestDto);

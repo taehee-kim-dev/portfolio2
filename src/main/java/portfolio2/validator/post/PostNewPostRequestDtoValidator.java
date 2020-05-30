@@ -20,15 +20,9 @@ public class PostNewPostRequestDtoValidator implements Validator {
         PostNewPostRequestDto postNewPostRequestDto = (PostNewPostRequestDto)target;
 
         if(postNewPostRequestDto.getTitle().length() < 5){
-            errors.rejectValue("title", "tooShortPostTitle","제목은 5자 이상이어야 합니다.");
+            errors.rejectValue("title", "tooShortPostTitle","제목은 5자 이상이어야 합니다. (현재 : " + postNewPostRequestDto.getTitle().length() + "자)");
         }else if(postNewPostRequestDto.getTitle().length() > 50){
-            errors.rejectValue("title", "tooLongPostTitle","제목은 50자 이내여야 합니다.");
-        }
-
-        if(postNewPostRequestDto.getContent().length() < 10){
-            errors.rejectValue("content", "tooShortPostContent","내용은 10자 이상이어야 합니다.");
-        }else if(postNewPostRequestDto.getContent().length() > 1000){
-            errors.rejectValue("content", "tooLongPostContent","내용은 1000자 이내여야 합니다.");
+            errors.rejectValue("title", "tooLongPostTitle","제목은 50자 이내여야 합니다. (현재 : " + postNewPostRequestDto.getTitle().length() + "자)");
         }
     }
 }
