@@ -36,12 +36,9 @@ import java.util.stream.Collectors;
 @Controller
 public class PostController {
     private final PostRepository postRepository;
-    private final TagRepository tagRepository;
-
     private final PostService postService;
 
     private final ModelMapper modelMapper;
-    private final ObjectMapper objectMapper;
 
     private final String POST_NEW_POST_URL = "/postNewPost";
     private final String POST_NEW_POST_VIEW_NAME = "post/form";

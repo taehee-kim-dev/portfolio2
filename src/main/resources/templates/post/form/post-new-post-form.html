@@ -91,7 +91,7 @@
         const input = document.querySelector('input[name=tag]');
 
         // initialize Tagify on the above input node reference
-        let new_tag = new Tagify(input)
+        const new_tag = new Tagify(input)
 
         new_tag.on("add", onAdd);
         new_tag.on("remove", onRemove);
