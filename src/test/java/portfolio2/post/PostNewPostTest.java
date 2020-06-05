@@ -84,6 +84,7 @@ public class PostNewPostTest {
         String[] postedTag = tagOfNewPost.split(",");
         for(String tagTitle : postedTag){
             Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
+            assertNotNull(containedTagInPost);
             assertTrue(newPost.getTag().contains(containedTagInPost));
         }
     }
@@ -117,6 +118,7 @@ public class PostNewPostTest {
         String[] postedTag = tagOfNewPost.split(",");
         for(String tagTitle : postedTag){
             Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
+            assertNotNull(containedTagInPost);
             assertTrue(newPost.getTag().contains(containedTagInPost));
         }
     }
@@ -125,19 +127,6 @@ public class PostNewPostTest {
     @SignUpAndLoggedIn
     @Test
     void postNewPostTooShortTitle() throws Exception{
-
-        List<Post> existingPostInDb = postRepository.findAll();
-        List<Tag> existingTagInDb = tagRepository.findAll();
-        List<Account> existingAccountInDb = accountRepository.findAll();
-
-        assertTrue(existingPostInDb.isEmpty());
-        assertTrue(existingTagInDb.isEmpty());
-        assertFalse(existingAccountInDb.isEmpty());
-        assertNotNull(accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID));
-
-        assertEquals(accountRepository.count(), 1);
-        assertEquals(postRepository.count(), 0);
-        assertEquals(tagRepository.count(), 0);
 
         tagRepository.save(Tag.builder().title("태그 1").build());
         tagRepository.save(Tag.builder().title("태그 2").build());
@@ -169,6 +158,19 @@ public class PostNewPostTest {
     @SignUpAndLoggedIn
     @Test
     void postNewPostTooLongTitle() throws Exception{
+
+        List<Post> existingPostInDb = postRepository.findAll();
+        List<Tag> existingTagInDb = tagRepository.findAll();
+        List<Account> existingAccountInDb = accountRepository.findAll();
+
+        assertTrue(existingPostInDb.isEmpty());
+        assertTrue(existingTagInDb.isEmpty());
+        assertFalse(existingAccountInDb.isEmpty());
+        assertNotNull(accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID));
+
+        assertEquals(accountRepository.count(), 1);
+        assertEquals(postRepository.count(), 0);
+        assertEquals(tagRepository.count(), 0);
 
         tagRepository.save(Tag.builder().title("태그 1").build());
         tagRepository.save(Tag.builder().title("태그 2").build());

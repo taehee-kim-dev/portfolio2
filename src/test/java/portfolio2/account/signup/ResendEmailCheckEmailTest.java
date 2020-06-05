@@ -189,7 +189,7 @@ public class ResendEmailCheckEmailTest {
 
         // 6th times after 12 hours
 
-        afterAccount.setEmailCheckTokenFirstGeneratedAt(LocalDateTime.now().minusHours(12));
+        afterAccount.setEmailCheckTokenFirstGeneratedAt(LocalDateTime.now().minusHours(12).minusMinutes(3));
         accountRepository.save(afterAccount);
 
         mockMvc.perform(get("/resend-confirm-email"))
