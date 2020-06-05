@@ -12,4 +12,6 @@ public class PostNewPostRequestDto {
     private String title;
 
     private String content;
+
+    private String tagTitleOnPost;
 }

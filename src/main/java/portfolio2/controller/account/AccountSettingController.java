@@ -207,13 +207,13 @@ public class AccountSettingController {
 
         String newTagTitle = tagUpdateRequestDto.getTagTitle();
 
-        Tag existingTag = tagRepository.findByTitle(newTagTitle);
+        Tag existingTagInDb = tagRepository.findByTitle(newTagTitle);
 
-        if(existingTag == null){
-            existingTag = tagRepository.save(Tag.builder().title(newTagTitle).build());
+        if(existingTagInDb == null){
+            existingTagInDb = tagRepository.save(Tag.builder().title(newTagTitle).build());
         }
 
-        accountService.addTag(sessionAccount, existingTag);
+        accountService.addTag(sessionAccount, existingTagInDb);
 
         return ResponseEntity.ok().build();
     }
@@ -225,13 +225,13 @@ public class AccountSettingController {
 
         String tagTitleToRemove = tagUpdateRequestDto.getTagTitle();
 
-        Tag existingTag = tagRepository.findByTitle(tagTitleToRemove);
+        Tag existingTagInDb = tagRepository.findByTitle(tagTitleToRemove);
 
-        if(existingTag == null){
+        if(existingTagInDb == null){
             return ResponseEntity.badRequest().build();
         }
 
-        accountService.removeTag(sessionAccount, existingTag);
+        accountService.removeTag(sessionAccount, existingTagInDb);
 
         return ResponseEntity.ok().build();
     }

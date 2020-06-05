@@ -18,7 +18,7 @@
     <div>
         <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 작성</h1>
     </div>
-    <form id="post-form" class="needs-validation" style="margin: auto; width: 750px" action="#"
+    <form id="post-form" class="needs-validation"  style="margin: auto; width: 750px"
           th:action="@{/postNewPost}" th:object="${postNewPostRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
@@ -40,62 +40,53 @@
                 <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
             </div>
             <input id="tag" name="tag" >
-
+            <input type="hidden" id="total_tag_to_submit" name="tagTitleOnPost">
         </div>
 
         <div class="form-group" >
-            <button class="btn btn-primary btn-block" type="submit" style="margin-top: 22px"
+            <button class="btn btn-primary btn-block" type="button" onclick="submit_func()" style="margin-top: 22px"
                     aria-describedby="submitHelp">글 작성하기</button>
         </div>
     </form>
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
-<script th:replace="fragment.html :: ajax-csrf-header"></script>
 <script src="/library/summernote/summernote-bs4.min.js"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript">
     $(function () {
         $('#post-content').summernote({
             fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-            placeholder: '내용 (1000자 이내로 작성해 주세요)',
             tabsize: 4,
             height: 300
         });
-
-        function tagRequest(url, tagTitle) {
-            $.ajax({
-                dataType: "json",
-                autocomplete: {
-                    enabled: true,
-                    rightKey: true,
-                },
-                contentType: "application/json; charset=utf-8",
-                method: "POST",
-                url: "/account/setting/tag" + url,
-                data: JSON.stringify({'tagTitle': tagTitle})
-            }).done(function (data, status) {
-                console.log("${data} and status is ${status}");
-            });
-        }
-
-        function onAdd(e) {
-            tagRequest("/add", e.detail.data.value);
-        }
-
-        function onRemove(e) {
-            tagRequest("/remove", e.detail.data.value);
-        }
-
-        // The DOM element you wish to replace with Tagify
-        const input = document.querySelector('input[name=tag]');
-
-        // initialize Tagify on the above input node reference
-        const new_tag = new Tagify(input)
-
-        new_tag.on("add", onAdd);
-        new_tag.on("remove", onRemove);
     });
+
+    const total_tag = []
+
+    function onAdd(e) {
+        // 태그 추가 시
+        total_tag.push(e.detail.data.value)
+    }
+
+    function onRemove(e) {
+        // 태그 삭제 시
+        total_tag.splice(total_tag.indexOf(e.detail.data.value), 1)
+    }
+
+    // The DOM element you wish to replace with Tagify
+    const input = document.querySelector('input[name=tag]');
+
+    // initialize Tagify on the above input node reference
+    const new_tag = new Tagify(input)
+
+    new_tag.on("add", onAdd);
+    new_tag.on("remove", onRemove);
+
+    function submit_func(){
+        document.getElementById('total_tag_to_submit').value = total_tag.join();
+        document.getElementById('post-form').submit();
+    }
 </script>
 </body>
 </html>

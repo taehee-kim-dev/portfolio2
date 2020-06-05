@@ -39,6 +39,9 @@ public class Post {
     @ManyToMany
     private Set<Tag> tag  = new HashSet<>();
 
+    @Column(unique = true)
+    private String path;
+
     private LocalDateTime firstWrittenTime;
 
     private LocalDateTime lastModifiedTime;

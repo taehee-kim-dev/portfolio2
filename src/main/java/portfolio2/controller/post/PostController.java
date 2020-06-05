@@ -41,7 +41,7 @@ public class PostController {
     private final ModelMapper modelMapper;
 
     private final String POST_NEW_POST_URL = "/postNewPost";
-    private final String POST_NEW_POST_VIEW_NAME = "post/form";
+    private final String POST_NEW_POST_VIEW_FOLDER = "post/form";
 
     private final PostNewPostRequestDtoValidator postNewPostRequestDtoValidator;
 
@@ -55,7 +55,7 @@ public class PostController {
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PostNewPostRequestDto());
 
-        return POST_NEW_POST_VIEW_NAME + "/post-new-post-form";
+        return POST_NEW_POST_VIEW_FOLDER + "/post-new-post-form";
     }
 
     @PostMapping(POST_NEW_POST_URL)
@@ -64,10 +64,10 @@ public class PostController {
             model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(postNewPostRequestDto);
 
-            return POST_NEW_POST_VIEW_NAME + "/post-new-post-form";
+            return POST_NEW_POST_VIEW_FOLDER + "/post-new-post-form";
         }
 
-        Post newPostInDb = postService.saveNewPost(modelMapper.map(postNewPostRequestDto, Post.class), sessionAccount);
+        Post newPostInDb = postService.saveNewPostWithTag(postNewPostRequestDto, sessionAccount);
 
         return "redirect:/post/" + newPostInDb.getId();
     }
@@ -78,13 +78,14 @@ public class PostController {
                            Model model) {
 
         model.addAttribute("sessionAccount", sessionAccount);
+        Post foundPost = postRepository.findById(postId).orElseThrow(NullPointerException::new);
 
-        Post foundPost = postRepository.findById(postId).get();
 
 
         model.addAttribute(foundPost);
         model.addAttribute("firstWrittenTime", foundPost.getFirstWrittenTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         model.addAttribute("isAuthor", sessionAccount.getUserId().equals(foundPost.getAuthor().getUserId()));
+        model.addAttribute("tagOnPost", foundPost.getTag().stream().map(Tag::getTitle).collect(Collectors.toList()));
 
         return "post/post-view";
     }

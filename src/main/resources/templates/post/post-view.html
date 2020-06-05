@@ -2,11 +2,7 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
-    <style>
-        .form-group{
-            margin-bottom: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
 </head>
 <body>
 
@@ -22,10 +18,14 @@
                     font-size: 24px; font-weight: bold">글 제목</td>
             </tr>
             <tr>
-                <td><span>작성자 : </span></td><td th:text="${post.getAuthor().getUserId()}">글 작성자 아이디</td>
+                <td style="min-width:100px"><span>작성자 : </span></td><td style="vertical-align: middle" th:text="${post.getAuthor().getUserId()}">글 작성자 아이디</td>
             </tr>
             <tr>
-                <td><span>작성일 : </span></td><td th:text="${firstWrittenTime}">글 작성 날짜</td>
+                <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" th:text="${firstWrittenTime}">글 작성 날짜</td>
+            </tr>
+            <tr>
+                <td style="min-width:100px;vertical-align: middle"><span>태그 : </span></td>
+                <td style="vertical-align: middle"><input name="tag" readonly th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
                 <td colspan="2" th:utext="${post.getContent()}" style="padding-top: 38px;padding-bottom: 22px">글 내용</td>
@@ -43,5 +43,10 @@
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
+<script src="/library/tagify/dist/tagify.min.js"></script>
+<script type="application/javascript">
+    const input = document.querySelector('input[name=tag]');
+    tagify = new Tagify(input);
+</script>
 </body>
 </html>
