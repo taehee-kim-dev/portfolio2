@@ -15,6 +15,9 @@ import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -122,6 +125,19 @@ public class PostNewPostTest {
     @SignUpAndLoggedIn
     @Test
     void postNewPostTooShortTitle() throws Exception{
+
+        List<Post> existingPostInDb = postRepository.findAll();
+        List<Tag> existingTagInDb = tagRepository.findAll();
+        List<Account> existingAccountInDb = accountRepository.findAll();
+
+        assertTrue(existingPostInDb.isEmpty());
+        assertTrue(existingTagInDb.isEmpty());
+        assertFalse(existingAccountInDb.isEmpty());
+        assertNotNull(accountRepository.findByUserId(TestAccountInfo.CORRECT_TEST_USER_ID));
+
+        assertEquals(accountRepository.count(), 1);
+        assertEquals(postRepository.count(), 0);
+        assertEquals(tagRepository.count(), 0);
 
         tagRepository.save(Tag.builder().title("태그 1").build());
         tagRepository.save(Tag.builder().title("태그 2").build());
