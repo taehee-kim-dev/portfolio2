@@ -9,26 +9,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 import portfolio2.service.account.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.service.account.SignUpService;
 
 @RequiredArgsConstructor
 public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedIn> {
 
+    private final SignUpService signUpService;
     private final AccountService accountService;
 
     @Override
     public SecurityContext createSecurityContext(SignUpAndLoggedIn signUpAndLoggedIn) {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId("testUserId")
-                .nickname("testNickname")
-                .email("test@email.com")
-                .password("testPassword")
+                .userId(TestAccountInfo.TEST_USER_ID)
+                .nickname(TestAccountInfo.TEST_NICKNAME)
+                .email(TestAccountInfo.TEST_EMAIL)
+                .password(TestAccountInfo.TEST_PASSWORD)
                 .build();
 
-        accountService.processNewAccount(signUpRequestDto);
+        signUpService.signUp(signUpRequestDto);
 
         // Authentication 만들고 SecurityContext에 넣어주기
-        UserDetails principal = accountService.loadUserByUsername("testUserId");
+        UserDetails principal = accountService.loadUserByUsername(TestAccountInfo.TEST_USER_ID);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

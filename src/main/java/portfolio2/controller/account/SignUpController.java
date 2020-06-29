@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.SessionAccount;
 import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.service.account.SignUpService;
 import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
@@ -50,8 +51,8 @@ public class SignUpController {
     @PostMapping(SIGN_UP_URL)
     public String signUp(@SessionAccount Account sessionAccount,
                          @Valid @ModelAttribute SignUpRequestDto signUpRequestDto,
-                         Model model,
-                         Errors errors) {
+                         Errors errors,
+                         Model model) {
 
         if(sessionAccount != null){
             return "redirect:/";
@@ -61,12 +62,13 @@ public class SignUpController {
             // Validation에서 error가 발생하면,
             // form을 다시 보여준다.
             model.addAttribute(signUpRequestDto);
-            return "account/sign-up";
+            return SIGN_UP_VIEW_NAME;
         }
 
-        signUpService.signUpNewAccount(signUpRequestDto);
+        signUpService.signUp(signUpRequestDto);
 
-        // 홈 페이지로 리다이렉트
-        return "redirect:/";
+        model.addAttribute("email", signUpRequestDto.getEmail());
+
+        return "account/email-verification-request";
     }
 }

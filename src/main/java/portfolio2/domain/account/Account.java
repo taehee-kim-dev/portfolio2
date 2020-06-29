@@ -21,8 +21,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Account {
 
@@ -34,7 +32,7 @@ public class Account {
     private String userId;
 
     @Column(unique = true)
-    private String email;
+    private String verifiedEmail;
 
     @Column(unique = true)
     private String nickname;
@@ -42,24 +40,25 @@ public class Account {
     private String password;
 
 
+    private String emailWaitingToBeVerified;
 
-    private boolean emailVerified;
+    private boolean isEmailVerified;
 
-    private String emailCheckToken;
+    private String emailVerificationToken;
 
-    private LocalDateTime emailCheckTokenFirstGeneratedAt ;
+    private LocalDateTime emailVerificationTokenFirstGeneratedAt;
 
-    private int sendCheckEmailCount = 0;
+    private int countOfSendingEmailVerificationEmail = 0;
 
     private LocalDateTime joinedAt;
 
 
 
-    private String emailLoginToken ;
+    private String findPasswordToken;
 
-    private LocalDateTime emailLoginTokenFirstGeneratedAt;
+    private LocalDateTime findPasswordTokenFirstGeneratedAt;
 
-    private int sendLoginEmailCount = 0;
+    private int countOfSendingFindPasswordEmail = 0;
 
 
 
@@ -119,47 +118,46 @@ public class Account {
 
 
 
-
     @ManyToMany
     private Set<Tag> tag = new HashSet<>();
+
+    @OneToMany(mappedBy = "author")
+    private Set<Post> post = new HashSet<>();
 
 
     public void generateEmailCheckToken() {
         // 앞에서 재전송 허가받은 상태이므로,
         // 무조건 토큰값 생성.
-        this.emailCheckToken = UUID.randomUUID().toString();
-        if(sendCheckEmailCount == 0 || sendCheckEmailCount == 5){
+        this.emailVerificationToken = UUID.randomUUID().toString();
+        if(countOfSendingEmailVerificationEmail == 0 || countOfSendingEmailVerificationEmail == 5){
             // 이미 앞에서 이메일 재전송 허가받은 상태.
             // 현재 가입 후 첫번째 또는 6번째 이메일 전송이라면,
             // 새로운 첫 번째 이메일 전송이 되는 것이므로,
             // 이메일 토큰 생성 시간 새로 설정
-            emailCheckTokenFirstGeneratedAt = LocalDateTime.now();
+            emailVerificationTokenFirstGeneratedAt = LocalDateTime.now();
             // 이메일 전송 카운트 1로 초기화
-            sendCheckEmailCount = 1;
+            countOfSendingEmailVerificationEmail = 1;
         }else{
             // 가입 후 첫 번째나, 6번째가 아니라면
             // 날짜 재설정 없이 카운트만 증가
-            this.sendCheckEmailCount++;
+            this.countOfSendingEmailVerificationEmail++;
         }
     }
 
-    @OneToMany(mappedBy = "author")
-    private Set<Post> post = new HashSet<>();
-
     public void completeSignUp() {
-        this.emailVerified = true;
+        this.isEmailVerified = true;
         this.joinedAt = LocalDateTime.now();
     }
 
     public boolean isValidTokenForEmailCheck(String token) {
-        return this.emailCheckToken.equals(token);
+        return this.emailVerificationToken.equals(token);
     }
 
     public boolean canSendConfirmEmail() {
         // 인증 이메일을 이미 5번 보냈는가?
-        if(this.sendCheckEmailCount == 5){
+        if(this.countOfSendingEmailVerificationEmail == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
-            return this.emailCheckTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
+            return this.emailVerificationTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
         }
 
         return true;
@@ -169,31 +167,31 @@ public class Account {
     public void generateLoginEmailToken() {
         // 앞에서 재전송 허가받은 상태이므로,
         // 무조건 토큰값 생성.
-        this.emailLoginToken = UUID.randomUUID().toString();
-        if(sendLoginEmailCount == 0 || sendLoginEmailCount == 3){
+        this.findPasswordToken = UUID.randomUUID().toString();
+        if(countOfSendingFindPasswordEmail == 0 || countOfSendingFindPasswordEmail == 3){
             // 이미 앞에서 이메일 재전송 허가받은 상태.
             // 현재 가입 후 첫번째 또는 4번째 이메일 전송이라면,
             // 새로운 첫 번째 이메일 전송이 되는 것이므로,
             // 이메일 토큰 생성 시간 새로 설정
-            emailLoginTokenFirstGeneratedAt = LocalDateTime.now();
+            findPasswordTokenFirstGeneratedAt = LocalDateTime.now();
             // 이메일 전송 카운트 1로 초기화
-            sendLoginEmailCount = 1;
+            countOfSendingFindPasswordEmail = 1;
         }else{
             // 가입 후 첫 번째나, 4번째가 아니라면
             // 날짜 재설정 없이 카운트만 증가
-            this.sendLoginEmailCount++;
+            this.countOfSendingFindPasswordEmail++;
         }
     }
 
     public boolean isValidTokenForEmailLogin(String token) {
-        return this.emailLoginToken.equals(token);
+        return this.findPasswordToken.equals(token);
     }
 
     public boolean canSendLoginEmail() {
         // 인증 이메일을 이미 3번 보냈는가?
-        if(this.sendLoginEmailCount == 3){
+        if(this.countOfSendingFindPasswordEmail == 3){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
-            return this.emailLoginTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
+            return this.findPasswordTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
         }
 
         return true;

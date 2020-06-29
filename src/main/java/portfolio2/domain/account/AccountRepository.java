@@ -7,13 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     boolean existsByUserId(String email);
 
-    boolean existsByNickname(String nickname);
-
-    boolean existsByEmail(String email);
-
-    Account findByEmail(String email);
-
     Account findByUserId(String userId);
 
+    boolean existsByNickname(String nickname);
+
     boolean existsByVerifiedEmail(String email);
+
+    Account findByVerifiedEmail(String email);
 }

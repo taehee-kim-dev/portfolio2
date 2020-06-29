@@ -26,7 +26,7 @@ public class AccountService implements UserDetailsService {
         Account accountInDb = accountRepository.findByUserId(userIdOrEmail);
 
         if (accountInDb == null) {
-            accountInDb = accountRepository.findByEmail(userIdOrEmail);
+            accountInDb = accountRepository.findByVerifiedEmail(userIdOrEmail);
         }
 
         if (accountInDb == null) {
