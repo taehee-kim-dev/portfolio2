@@ -16,10 +16,7 @@ import portfolio2.domain.account.SessionAccount;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.account.TagUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.*;
 import portfolio2.service.AccountService;
 import portfolio2.validator.account.profileupdate.AccountEmailUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.AccountNicknameUpdateRequestDtoValidator;
@@ -72,36 +69,10 @@ public class AccountSettingController {
     public void initBinderForAccountEmailUpdateRequestDto(WebDataBinder webDataBinder){
         webDataBinder.addValidators(accountEmailUpdateRequestDtoValidator);
     }
-
-    @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
-    public String showPasswordUpdatePage(@SessionAccount Account sessionAccount, Model model){
-
-        model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(new PasswordUpdateRequestDto());
-
-        return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
-    }
-
-    @PostMapping(ACCOUNT_SETTING_PASSWORD_URL)
-    public String postPasswordUpdate(@SessionAccount Account sessionAccount,
-                                    @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
-                                    Errors errors, Model model,
-                                    RedirectAttributes redirectAttributes){
-        if(errors.hasErrors()){
-            model.addAttribute("sessionAccount", sessionAccount);
-            model.addAttribute(passwordUpdateRequestDto);
-
-            return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
-        }
-
-        accountService.updatePassword(sessionAccount, passwordUpdateRequestDto);
-        // 한번 쓰고 사라지는 메시지
-        // 모델에 포함돼서 전달됨
-        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
-        return "redirect:" + ACCOUNT_SETTING_PASSWORD_URL;
-    }
-
-
+    
+    
+    // 알림 설정
+    
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String showNotificationUpdateView(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
@@ -112,22 +83,86 @@ public class AccountSettingController {
 
     @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
     public String notificationUpdate(@SessionAccount Account sessionAccount,
-                                    @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
-                                    Errors errors, Model model,
-                                    RedirectAttributes redirectAttributes){
+                                     @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
+                                     Errors errors, Model model,
+                                     RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
             model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(notificationUpdateRequestDto);
-
             return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
         }
 
-        accountService.updateNotification(sessionAccount, notificationUpdateRequestDto);
+        accountSettingService.updateNotification(sessionAccount, notificationUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");
         return "redirect:" + ACCOUNT_SETTING_NOTIFICATION_URL;
     }
+    
+    
+    // 관심 태그 설정
+
+    @GetMapping(ACCOUNT_SETTING_TAG_URL)
+    public String showTagUpdateView(@SessionAccount Account sessionAccount, Model model) throws JsonProcessingException {
+        model.addAttribute("sessionAccount", sessionAccount);
+        List<String> tag = accountSettingService.getTagOfAccount(sessionAccount);
+        model.addAttribute("tag", tag);
+        return ACCOUNT_SETTING_TAG_VIEW_NAME;
+    }
+
+    @ResponseBody
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
+    public ResponseEntity<String> addTag(@SessionAccount Account sessionAccount,
+                                 @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+        accountSettingService.addTagToAccount(sessionAccount, tagUpdateRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
+    public ResponseEntity<String> removeTag(@SessionAccount Account sessionAccount,
+                                    @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+
+        boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);
+
+        if(!result){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+    
+    // 비밀번호 변경
+
+    @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
+    public String showPasswordUpdatePage(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute("sessionAccount", sessionAccount);
+        model.addAttribute(new PasswordUpdateRequestDto());
+        return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
+    }
+    
+    @PostMapping(ACCOUNT_SETTING_PASSWORD_URL)
+    public String postPasswordUpdate(@SessionAccount Account sessionAccount,
+                                    @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
+                                    Errors errors, Model model,
+                                    RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute("sessionAccount", sessionAccount);
+            model.addAttribute(passwordUpdateRequestDto);
+            return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
+        }
+
+        accountSettingService.updatePassword(sessionAccount, passwordUpdateRequestDto);
+
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+        return "redirect:" + ACCOUNT_SETTING_PASSWORD_URL;
+    }
+
+    // 계정 정보 변경
+
+    // 닉네임 변경
 
     @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
     public String showAccountSettingAccountView(@SessionAccount Account sessionAccount, Model model){
@@ -145,62 +180,33 @@ public class AccountSettingController {
         if(errors.hasErrors()){
             model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(accountNicknameUpdateRequestDto);
-
             return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
         }
 
-        accountService.updateAccountNickname(sessionAccount, accountNicknameUpdateRequestDto);
+        accountSettingService.updateAccountNickname(sessionAccount, accountNicknameUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
         return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
     }
 
-    @GetMapping(ACCOUNT_SETTING_TAG_URL)
-    public String showTagUpdateView(@SessionAccount Account sessionAccount, Model model) throws JsonProcessingException {
-        model.addAttribute("sessionAccount", sessionAccount);
-        List<String> tag = accountService.getTag(sessionAccount);
-        model.addAttribute("tag", tag);
+    // 이메일 변경
 
-        List<String> allExistingTag = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allExistingTag));
-
-        return ACCOUNT_SETTING_TAG_VIEW_NAME;
-    }
-
-    @ResponseBody
-    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
-    public ResponseEntity addTag(@SessionAccount Account sessionAccount,
-                                 @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
-
-        String newTagTitle = tagUpdateRequestDto.getTagTitle();
-
-        Tag existingTagInDb = tagRepository.findByTitle(newTagTitle);
-
-        if(existingTagInDb == null){
-            existingTagInDb = tagRepository.save(Tag.builder().title(newTagTitle).build());
+    @PostMapping(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
+    public String updateAccountNickname(@SessionAccount Account sessionAccount,
+                                        @Valid @ModelAttribute AccountEmailUpdateRequestDto accountEmailUpdateRequestDto,
+                                        Errors errors, Model model,
+                                        RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute("sessionAccount", sessionAccount);
+            model.addAttribute(accountEmailUpdateRequestDto);
+            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
         }
 
-        accountService.addTag(sessionAccount, existingTagInDb);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @ResponseBody
-    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
-    public ResponseEntity removeTag(@SessionAccount Account sessionAccount,
-                                    @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
-
-        String tagTitleToRemove = tagUpdateRequestDto.getTagTitle();
-
-        Tag existingTagInDb = tagRepository.findByTitle(tagTitleToRemove);
-
-        if(existingTagInDb == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        accountService.removeTag(sessionAccount, existingTagInDb);
-
-        return ResponseEntity.ok().build();
+        accountSettingService.updateAccountEmail(sessionAccount, accountEmailUpdateRequestDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "인증 이메일을 발송했습니다.");
+        return "redirect:" + ACCOUNT_SETTING_ACCOUNT_URL;
     }
 }

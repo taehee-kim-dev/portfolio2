@@ -34,7 +34,8 @@ public class FindPasswordController {
     public void initBinderForFindPasswordRequestDtoValidator(WebDataBinder webDataBinder){
         webDataBinder.addValidators(findPasswordRequestDtoValidator);
     }
-    
+
+    // 로그인 되어있으면 안됨.
     @GetMapping(FIND_PASSWORD_URL)
     public String showFindPasswordPage(@SessionAccount Account sessionAccount, Model model){
 
@@ -47,6 +48,7 @@ public class FindPasswordController {
         return FIND_PASSWORD_VIEW_NAME;
     }
 
+    // 로그인 되어있으면 안됨.
     @PostMapping(FIND_PASSWORD_URL)
     public String sendFindPasswordEmail(@SessionAccount Account sessionAccount,
                                         @Valid @ModelAttribute FindPasswordRequestDto findPasswordRequestDto,
@@ -78,13 +80,10 @@ public class FindPasswordController {
         return FIND_PASSWORD_VIEW_NAME;
     }
 
+    // 로그인 되어있는 상태면, 현재 인증 링크에 해당하는 계정으로 재로그인
     @GetMapping("/check-find-password-link")
     public String checkFindPasswordLink(@SessionAccount Account sessionAccount,
                                          String email, String token, Model model) {
-
-        if(sessionAccount != null){
-            return "redirect:/";
-        }
 
         boolean isValid = findPasswordService.isValidLink(email, token);
 

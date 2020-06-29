@@ -23,6 +23,7 @@ public class EmailVerificationController {
 
     private final EmailVerificationService emailVerificationService;
 
+    // 로그인 되어있는 상태면, 현재 인증 링크에 해당하는 계정으로 재로그인
     @GetMapping("/check-email-verification-link")
     public String checkEmailVerificationLink(String email, String token, Model model){
 
@@ -38,12 +39,16 @@ public class EmailVerificationController {
             return view;
         }
 
+        Account accountInDb = emailVerificationService.emailVerifyAndLogIn(email);
+
+        model.addAttribute("sessionAccount", accountInDb);
         model.addAttribute("nickname", resultHashMap.get("nickname"));
         model.addAttribute("userId", resultHashMap.get("userId"));
         model.addAttribute("email", resultHashMap.get("email"));
 
         return view;
     }
+
 
     @GetMapping("/send-email-verification-link")
     public String sendEmailVerificationLink(@SessionAccount Account sessionAccount,

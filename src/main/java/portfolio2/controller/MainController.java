@@ -19,6 +19,7 @@ public class MainController {
         return "index";
     }
 
+    // 로그인 되어있으면 안됨.
     @GetMapping("/login")
     public String login(@SessionAccount Account sessionAccount){
         if(sessionAccount != null){
