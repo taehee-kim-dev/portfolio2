@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.CurrentUser;
+import portfolio2.domain.account.SessionAccount;
 
 @Controller
 public class MainController {
 
     @GetMapping("/")
-    public String home(@CurrentUser Account sessionAccount, Model model){
+    public String home(@SessionAccount Account sessionAccount, Model model){
         if(sessionAccount != null){
             model.addAttribute("sessionAccount", sessionAccount);
         }

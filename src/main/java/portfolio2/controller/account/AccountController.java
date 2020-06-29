@@ -6,10 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.CurrentUser;
+import portfolio2.domain.account.SessionAccount;
 import portfolio2.dto.account.SendEmailLoginLinkRequestDto;
 import portfolio2.service.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
@@ -27,7 +26,7 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    private void setSessionAccount(@CurrentUser Account sessionAccount, Model model) {
+    private void setSessionAccount(@SessionAccount Account sessionAccount, Model model) {
         if (sessionAccount != null) {
             model.addAttribute("sessionAccount", sessionAccount);
         }
@@ -89,18 +88,21 @@ public class AccountController {
         accountService.completeSignUp(accountInDb);
 
         model.addAttribute("nickname", accountInDb.getNickname());
+        model.addAttribute("userId", accountInDb.getUserId());
+        model.addAttribute("email", accountInDb.getEmail());
+
         return view;
     }
 
     @GetMapping("/check-email")
-    public String checkEmail(@CurrentUser Account sessionAccount, Model model) {
+    public String checkEmail(@SessionAccount Account sessionAccount, Model model) {
         setSessionAccount(sessionAccount, model);
         model.addAttribute("email", sessionAccount.getEmail());
         return "account/check-email";
     }
 
     @GetMapping("/resend-confirm-email")
-    public String resendConfirmEmail(@CurrentUser Account sessionAccount, Model model) {
+    public String resendConfirmEmail(@SessionAccount Account sessionAccount, Model model) {
 
         if (!accountRepository.findByUserId(sessionAccount.getUserId()).canSendConfirmEmail()) {
             setSessionAccount(sessionAccount, model);
@@ -114,7 +116,7 @@ public class AccountController {
     }
 
     @GetMapping("/account/profile/{userId}")
-    public String viewProfile(@PathVariable String userId, @CurrentUser Account sessionAccount, Model model){
+    public String viewProfile(@PathVariable String userId, @SessionAccount Account sessionAccount, Model model){
         setSessionAccount(sessionAccount, model);
         Account accountInDb = accountRepository.findByUserId(userId);
         if(accountInDb == null){
@@ -132,7 +134,7 @@ public class AccountController {
 
         model.addAttribute(new SendEmailLoginLinkRequestDto());
 
-        return "account/email-login";
+        return "find-password";
     }
 
     @PostMapping("/email-login")
@@ -143,25 +145,25 @@ public class AccountController {
         if(errors.hasErrors()){
             model.addAttribute(sendEmailLoginLinkRequestDto);
 
-            return "account/email-login";
+            return "find-password";
         }
 
         Account accountInDb = accountRepository.findByEmail(sendEmailLoginLinkRequestDto.getEmail());
 
         if (accountInDb == null) {
             model.addAttribute("notExistingEmailError", "가입되지 않은 이메일 입니다.");
-            return "account/email-login";
+            return "find-password";
         }
 
         if (!accountInDb.canSendLoginEmail()) {
             model.addAttribute("emailCannotSendError", "로그인 링크 이메일은 12시간동안 3번만 보낼 수 있습니다.");
-            return "account/email-login";
+            return "find-password";
         }
 
         accountService.sendLoginEmail(accountInDb);
         model.addAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
         model.addAttribute(sendEmailLoginLinkRequestDto);
-        return "account/email-login";
+        return "find-password";
     }
 
     @GetMapping("/login-by-email")

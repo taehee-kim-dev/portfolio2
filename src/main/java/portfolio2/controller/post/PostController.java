@@ -1,7 +1,5 @@
 package portfolio2.controller.post;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -13,23 +11,16 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.CurrentUser;
+import portfolio2.domain.account.SessionAccount;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
-import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.post.PostNewPostRequestDto;
 import portfolio2.service.PostService;
 import portfolio2.validator.post.PostNewPostRequestDtoValidator;
 
 import javax.validation.Valid;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -51,7 +42,7 @@ public class PostController {
     }
 
     @GetMapping(POST_NEW_POST_URL)
-    public String getPostNewPost(@CurrentUser Account sessionAccount, Model model) {
+    public String getPostNewPost(@SessionAccount Account sessionAccount, Model model) {
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PostNewPostRequestDto());
 
@@ -59,7 +50,7 @@ public class PostController {
     }
 
     @PostMapping(POST_NEW_POST_URL)
-    public String postPostNewPost(@CurrentUser Account sessionAccount, @Valid PostNewPostRequestDto postNewPostRequestDto, Errors errors, Model model) {
+    public String postPostNewPost(@SessionAccount Account sessionAccount, @Valid PostNewPostRequestDto postNewPostRequestDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("sessionAccount", sessionAccount);
             model.addAttribute(postNewPostRequestDto);
@@ -73,7 +64,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}")
-    public String showPost(@CurrentUser Account sessionAccount,
+    public String showPost(@SessionAccount Account sessionAccount,
                            @PathVariable Long postId,
                            Model model) {
 

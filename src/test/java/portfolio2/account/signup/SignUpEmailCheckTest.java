@@ -52,6 +52,8 @@ public class SignUpEmailCheckTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(model().attributeExists("nickname"))
+                .andExpect(model().attributeExists("userId"))
+                .andExpect(model().attributeExists("email"))
                 .andExpect(authenticated());
 
         Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(TEST_USER_ID);
@@ -77,6 +79,8 @@ public class SignUpEmailCheckTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(model().attributeExists("nickname"))
+                .andExpect(model().attributeExists("userId"))
+                .andExpect(model().attributeExists("email"))
                 .andExpect(authenticated());
 
         Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(TEST_USER_ID);
@@ -113,6 +117,8 @@ public class SignUpEmailCheckTest {
                 .andExpect(model().attribute("error", "invalidToken"))
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(unauthenticated());
 
         Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(newAccountToSignUp.getUserId());
@@ -148,6 +154,8 @@ public class SignUpEmailCheckTest {
                 .andExpect(model().attribute("error", "invalidEmail"))
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(unauthenticated());
 
         Account newAccountInDbAfterCompleteSignUp = accountRepository.findByUserId(newAccountToSignUp.getUserId());

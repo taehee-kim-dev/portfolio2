@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.CurrentUser;
+import portfolio2.domain.account.SessionAccount;
 import portfolio2.dto.account.TagUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.*;
 import portfolio2.service.AccountService;
@@ -78,7 +78,7 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String getProfileUpdate(@CurrentUser Account sessionAccount, Model model){
+    public String getProfileUpdate(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(modelMapper.map(sessionAccount, ProfileUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
@@ -86,7 +86,7 @@ public class AccountSettingController {
     }
 
     @PostMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String postProfileUpdate(@CurrentUser Account sessionAccount,
+    public String postProfileUpdate(@SessionAccount Account sessionAccount,
                                 @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
                                 Errors errors, Model model,
                                 RedirectAttributes redirectAttributes){
@@ -107,7 +107,7 @@ public class AccountSettingController {
 
 
     @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
-    public String getPasswordUpdate(@CurrentUser Account sessionAccount, Model model){
+    public String getPasswordUpdate(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PasswordUpdateRequestDto());
 
@@ -115,7 +115,7 @@ public class AccountSettingController {
     }
 
     @PostMapping(ACCOUNT_SETTING_PASSWORD_URL)
-    public String postPasswordUpdate(@CurrentUser Account sessionAccount,
+    public String postPasswordUpdate(@SessionAccount Account sessionAccount,
                                     @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
                                     Errors errors, Model model,
                                     RedirectAttributes redirectAttributes){
@@ -135,7 +135,7 @@ public class AccountSettingController {
 
 
     @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-    public String showNotificationUpdateView(@CurrentUser Account sessionAccount, Model model){
+    public String showNotificationUpdateView(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
@@ -143,7 +143,7 @@ public class AccountSettingController {
     }
 
     @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-    public String notificationUpdate(@CurrentUser Account sessionAccount,
+    public String notificationUpdate(@SessionAccount Account sessionAccount,
                                     @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
                                     Errors errors, Model model,
                                     RedirectAttributes redirectAttributes){
@@ -162,7 +162,7 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
-    public String showAccountSettingAccountView(@CurrentUser Account sessionAccount, Model model){
+    public String showAccountSettingAccountView(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(modelMapper.map(sessionAccount, AccountNicknameUpdateRequestDto.class));
         // 아래 문장 생략하면 GetMapping url로 view name 간주함.
@@ -170,7 +170,7 @@ public class AccountSettingController {
     }
 
     @PostMapping(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-    public String updateAccountNickname(@CurrentUser Account sessionAccount,
+    public String updateAccountNickname(@SessionAccount Account sessionAccount,
                                          @Valid @ModelAttribute AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto,
                                          Errors errors, Model model,
                                          RedirectAttributes redirectAttributes){
@@ -189,7 +189,7 @@ public class AccountSettingController {
     }
 
     @GetMapping(ACCOUNT_SETTING_TAG_URL)
-    public String showTagUpdateView(@CurrentUser Account sessionAccount, Model model) throws JsonProcessingException {
+    public String showTagUpdateView(@SessionAccount Account sessionAccount, Model model) throws JsonProcessingException {
         model.addAttribute("sessionAccount", sessionAccount);
         List<String> tag = accountService.getTag(sessionAccount);
         model.addAttribute("tag", tag);
@@ -202,7 +202,7 @@ public class AccountSettingController {
 
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
-    public ResponseEntity addTag(@CurrentUser Account sessionAccount,
+    public ResponseEntity addTag(@SessionAccount Account sessionAccount,
                                  @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
 
         String newTagTitle = tagUpdateRequestDto.getTagTitle();
@@ -220,7 +220,7 @@ public class AccountSettingController {
 
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
-    public ResponseEntity removeTag(@CurrentUser Account sessionAccount,
+    public ResponseEntity removeTag(@SessionAccount Account sessionAccount,
                                     @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
 
         String tagTitleToRemove = tagUpdateRequestDto.getTagTitle();

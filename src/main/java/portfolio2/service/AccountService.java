@@ -71,7 +71,7 @@ public class AccountService implements UserDetailsService {
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmail())
-                .subject("ShareMind 회원가입 이메일 인증")
+                .subject("TH 회원가입 이메일 인증")
                 .message(message)
                 .build();
 

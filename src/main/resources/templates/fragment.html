@@ -28,77 +28,82 @@
         }
     </style>
 
-    <title>ShareMind</title>
+    <title>TH</title>
 </th:block>
 
-<nav th:fragment="commonNav" class="navbar navbar-expand-lg navbar-light bg-light">
-    <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
-    <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
-    <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
-    <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
-    <a class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">ShareMind</a>
+<div th:fragment="commonNav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. -->
+        <!-- 타임리프가 알아서 경로 등 치환해줘서 편함. -->
+        <!-- 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용-->
+        <!-- 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. -->
+        <a class="navbar-brand" href="/" th:href="@{/}" style="margin-left: 3px">TH</a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/login}">로그인</a>
-            </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 1px;margin-right: 7px;">
-                <a class="nav-link btn btn-outline-info" type="button" th:href="@{/postNewPost}"
-                   style="padding-top: 6px;padding-bottom: 6px;margin-left: 17px;margin-right: 3px;">
-                    <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 등록
-                </a>
-            </li>
+        <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">로그인</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 1px;margin-right: 7px;">
+                    <a class="nav-link btn btn-outline-info" type="button" th:href="@{/postNewPost}"
+                       style="padding-top: 6px;padding-bottom: 6px;margin-left: 17px;margin-right: 3px;">
+                        <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 작성
+                    </a>
+                </li>
 
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/notification}">
-                    <i class="fas fa-bell fa-lg"></i>
-                </a>
-            </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/notification}">
+                        <i class="fas fa-bell fa-lg"></i>
+                    </a>
+                </li>
 
-            <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" style="padding: 0px;">
-                    <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
-                         width="39" height="39" class="rounded border bg-light"></svg>
-                    <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"
-                         width="39" height="39" class="rounded border"/>
-                </a>
-                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                    <h6 class="dropdown-header">
-                        <span sec:authentication="name">Username</span>
-                    </h6>
-                    <a class="dropdown-item" th:href="@{'/account/profile/' + ${#authentication.name}}">프로필</a>
-                    <a class="dropdown-item" th:href="@{'/account/post/' + ${#authentication.name}}">내 게시글</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" th:href="@{/account/setting/profile}">설정</a>
-                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                        <button class="dropdown-item" type="submit">로그아웃</button>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" style="padding: 0px;">
+                        <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                             width="39" height="39" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"
+                             width="39" height="39" class="rounded border"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+                        <h6 class="dropdown-header">
+                            <span sec:authentication="name">Username</span>
+                        </h6>
+                        <a class="dropdown-item" th:href="@{'/account/profile/' + ${#authentication.name}}">프로필</a>
+                        <a class="dropdown-item" th:href="@{'/account/post/' + ${#authentication.name}}">내 게시글</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" th:href="@{/account/setting/profile}">설정</a>
+                        <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit">로그아웃</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav" style="margin-right: 14px">
+                <li class="nav-item">
+                    <form th:action="@{/search/post}" class="form-inline" method="get">
+                        <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 14px"/>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
                     </form>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
 
-        <ul class="navbar-nav" style="margin-right: 14px">
-            <li class="nav-item">
-                <form th:action="@{/search/post}" class="form-inline" method="get">
-                    <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 14px"/>
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-                </form>
-            </li>
-        </ul>
+        </div>
+    </nav>
 
-
+    <div sec:authorize="isAuthenticated()" class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && !sessionAccount.emailVerified}">
+        <a href="#" th:href="@{/check-email}" class="alert-link">이메일 인증</a>을 해야 각종 알림, 비밀번호 찾기 등 이메일을 통한 서비스를 받으실 수 있습니다.
     </div>
 
-</nav>
+</div>
 
 <footer th:fragment="commonFooter" style="text-align: center; color: #6c757d; margin-top: 40px">
     © 2020 Copyright : taehee.kim.dev@gmail.com

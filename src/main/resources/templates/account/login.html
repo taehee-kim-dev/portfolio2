@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<nav th:replace="fragment.html :: commonNav"></nav>
+<div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container justify-content-center">
 
@@ -16,7 +16,7 @@
     <div th:if="${param.error}" class="alert alert-danger text-center" role="alert" st>
         <p>아이디/이메일 또는 패스워드가 올바르지 않습니다.</p>
         <p style="margin-bottom: 0px;">
-            확인 후 다시 입력하시거나, <a href="#" th:href="@{/email-login}">이메일로 로그인하기</a>를 이용해 주세요.
+            확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-password}">비밀번호 찾기</a>를 이용하세요.
         </p>
     </div>
 
@@ -27,6 +27,9 @@
             <label for="username">아이디 또는 이메일</label>
             <input id="username" name="username" type="text" class="form-control"
                    placeholder="ID or Email" aria-describedby="usernameHelp" autofocus required>
+            <small id="usernameHelp" class="form-text text-muted" style="margin-top: 10px">
+                인증되지 않은 이메일로는 로그인할 수 업습니다.
+            </small>
         </div>
 
         <div id="password-input-div" class="form-group">
@@ -34,7 +37,7 @@
             <input id="password" name="password" type="password" class="form-control"
                    aria-describedby="passwordHelp" placeholder="Password" required>
             <small id="passwordHelp" class="form-text text-muted" style="margin-top: 10px">
-                비밀번호가 기억나지 않는다면, <a href="#" th:href="@{/email-login}">이메일로 로그인하기</a>
+                비밀번호가 기억나지 않는다면, <a href="#" th:href="@{/find-password}">비밀번호 찾기</a>를 이용하세요.
             </small>
         </div>
 
@@ -47,7 +50,7 @@
             <button class="btn btn-primary btn-block" type="submit"
                     aria-describedby="submitHelp">로그인</button>
             <small id="submitHelp" class="form-text text-muted" style="margin-top: 10px;">
-                아직 계정이 없으시다면, <a href="#" th:href="@{/sign-up}">회원가입</a>을 해주세요!
+                아직 계정이 없으시다면, <a href="#" th:href="@{/sign-up}">회원가입</a>을 해보세요!
             </small>
         </div>
     </form>

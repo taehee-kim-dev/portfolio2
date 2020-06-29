@@ -18,13 +18,9 @@
 </head>
 <body>
 
-<nav th:replace="fragment.html :: commonNav"></nav>
+<div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container">
-
-    <div class="alert alert-warning text-center" role="alert" th:if="${accountInDb != null && !accountInDb.emailVerified}">
-        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
-    </div>
 
         <h2 style="text-align: center; margin-top: 75px; margin-bottom: 50px">프로필</h2>
 
@@ -44,18 +40,18 @@
                 <table style="text-align: center">
                     <tbody>
                         <tr>
-                            <td>닉네임 : </td><td th:text="${accountInDb.nickname}" style="font-size: 27px">nickname</td>
+                            <td>닉네임 : </td><td th:text="${accountInDb.nickname}" style="font-size: 27px">sampleNickname</td>
                         </tr>
                         <tr style="height: 56px;">
-                            <td>아이디 : </td><td th:text="${accountInDb.userId}"></td>
+                            <td>아이디 : </td><td th:text="${accountInDb.userId}">sampleUserId</td>
                         </tr>
                         <tr style="height: 35px;" th:if="${!isOwner && !#strings.isEmpty(accountInDb.bio)}">
                             <td>한 줄 소개 : </td>
-                            <td th:text="${accountInDb.bio}">bio</td>
+                            <td th:text="${accountInDb.bio}">sampleBio</td>
                         </tr>
                         <tr style="height: 35px;" th:if="${isOwner}">
                             <td>한 줄 소개 : </td>
-                            <td th:if="${!#strings.isEmpty(accountInDb.bio)}" th:text="${accountInDb.bio}" style="width: 264px">bio</td>
+                            <td th:if="${!#strings.isEmpty(accountInDb.bio)}" th:text="${accountInDb.bio}" style="width: 264px">sampleBio</td>
                             <td th:if="${#strings.isEmpty(accountInDb.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>
                         </tr>
                     </tbody>

@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<nav th:replace="fragment.html :: commonNav"></nav>
+<div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container">
     <div class="text-center" th:if="${error != null}" style="margin-top: 100px; margin-bottom: 60px">
@@ -14,7 +14,7 @@
 
     <div class="text-center" th:if="${error == null}">
 
-        <h3 style="margin-top: 100px">ShareMind 서비스를 사용하려면 이메일 인증을 해 주세요.</h3>
+        <h3 style="margin-top: 100px">TH 이메일 서비스를 사용하려면 이메일 인증을 해 주세요.</h3>
 
         <div>
             <p style="margin-top: 40px; margin-bottom: 10px;">회원님의 이메일 : </p>

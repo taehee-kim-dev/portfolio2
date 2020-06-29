@@ -5,20 +5,14 @@
 </head>
 <body>
 
-<nav th:replace="fragment.html :: commonNav"></nav>
+<div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container">
-
-    <div class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && !sessionAccount.emailVerified}">
-        ShareMind 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>해 주세요.
+    <div class="py-5 text-center" style="margin-top: 30px">
+        <h2>TH</h2>
     </div>
-    <div class="container">
-        <div class="py-5 text-center" style="margin-top: 30px">
-            <h2>ShareMind</h2>
-        </div>
-    </div>
-
 </div>
+
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
 </body>
