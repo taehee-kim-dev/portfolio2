@@ -127,8 +127,8 @@
 
 <div th:fragment="setting-menu (currentMenu)" class="list-group" style="text-align: center; width: 160px; margin-right: 75px">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/account/setting/profile}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/account/setting/password}">패스워드</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" href="#" th:href="@{/account/setting/notification}">알림</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" href="#" th:href="@{/account/setting/tag}">관심 태그</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/account/setting/password}">패스워드</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/account/setting/account}">계정</a>
 </div>

@@ -1,4 +1,4 @@
-package portfolio2.controller.ex;
+package portfolio2.controller.account;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,13 +11,17 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.SessionAccount;
-import portfolio2.dto.account.TagUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.*;
-import portfolio2.service.AccountService;
+import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
+import portfolio2.dto.account.TagUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
+import portfolio2.dto.account.profileupdate.ProfileUpdateRequestDto;
+import portfolio2.service.AccountService;
+import portfolio2.validator.account.profileupdate.AccountEmailUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.AccountNicknameUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.PasswordUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.ProfileUpdateRequestDtoValidator;
@@ -30,42 +34,29 @@ import java.util.stream.Collectors;
 @Controller
 public class AccountSettingController {
 
-    public static final String ACCOUNT_SETTING_PROFILE_URL = "/account/setting/profile";
-    public static final String ACCOUNT_SETTING_PROFILE_VIEW_NAME = "account/setting/profile";
-
-    public static final String ACCOUNT_SETTING_PASSWORD_URL = "/account/setting/password";
-    public static final String ACCOUNT_SETTING_PASSWORD_VIEW_NAME = "account/setting/password";
-
     public static final String ACCOUNT_SETTING_NOTIFICATION_URL = "/account/setting/notification";
     public static final String ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME = "account/setting/notification";
-
-    public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
-    public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
-
-    public static final String ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL = "/account/setting/account/nickname";
 
     public static final String ACCOUNT_SETTING_TAG_URL = "/account/setting/tag";
     public static final String ACCOUNT_SETTING_TAG_VIEW_NAME = "account/setting/tag";
 
+    public static final String ACCOUNT_SETTING_PASSWORD_URL = "/account/setting/password";
+    public static final String ACCOUNT_SETTING_PASSWORD_VIEW_NAME = "account/setting/password";
 
-    private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
+    public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
+    public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
+
+    public static final String ACCOUNT_SETTING_ACCOUNT_EMAIL_URL = "/account/setting/account/email";
+    public static final String ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL = "/account/setting/account/nickname";
+
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
     private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
+    private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
 
-    private final TagRepository tagRepository;
-
-    private final AccountService accountService;
+    private final AccountSettingService accountSettingService;
 
     private final ModelMapper modelMapper;
-
     private final ObjectMapper objectMapper;
-
-
-
-    @InitBinder("profileUpdateRequestDto")
-    public void initBinderForProfileUpdateRequestDto(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(profileUpdateRequestDtoValidator);
-    }
 
     @InitBinder("passwordUpdateRequestDto")
     public void initBinderForPasswordUpdateRequestDto(WebDataBinder webDataBinder){
@@ -77,37 +68,14 @@ public class AccountSettingController {
         webDataBinder.addValidators(accountNicknameUpdateRequestDtoValidator);
     }
 
-    @GetMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String getProfileUpdate(@SessionAccount Account sessionAccount, Model model){
-        model.addAttribute("sessionAccount", sessionAccount);
-        model.addAttribute(modelMapper.map(sessionAccount, ProfileUpdateRequestDto.class));
-        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
-        return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
+    @InitBinder("accountEmailUpdateRequestDto")
+    public void initBinderForAccountEmailUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(accountEmailUpdateRequestDtoValidator);
     }
-
-    @PostMapping(ACCOUNT_SETTING_PROFILE_URL)
-    public String postProfileUpdate(@SessionAccount Account sessionAccount,
-                                @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
-                                Errors errors, Model model,
-                                RedirectAttributes redirectAttributes){
-        if(errors.hasErrors()){
-            model.addAttribute("sessionAccount", sessionAccount);
-            model.addAttribute(profileUpdateRequestDto);
-
-            return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
-        }
-
-        accountService.updateProfile(sessionAccount, profileUpdateRequestDto);
-        // 한번 쓰고 사라지는 메시지
-        // 모델에 포함돼서 전달됨
-        redirectAttributes.addFlashAttribute("message", "프로필 수정이 완료되었습니다.");
-        return "redirect:" + ACCOUNT_SETTING_PROFILE_URL;
-    }
-
-
 
     @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
-    public String getPasswordUpdate(@SessionAccount Account sessionAccount, Model model){
+    public String showPasswordUpdatePage(@SessionAccount Account sessionAccount, Model model){
+
         model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute(new PasswordUpdateRequestDto());
 

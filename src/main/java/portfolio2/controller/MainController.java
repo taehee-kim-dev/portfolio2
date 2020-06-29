@@ -20,7 +20,10 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(@SessionAccount Account sessionAccount){
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
         return "account/login";
     }
 }

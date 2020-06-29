@@ -36,7 +36,11 @@ public class FindPasswordController {
     }
     
     @GetMapping(FIND_PASSWORD_URL)
-    public String showFindPasswordPage(Model model){
+    public String showFindPasswordPage(@SessionAccount Account sessionAccount, Model model){
+
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
 
         model.addAttribute(new FindPasswordRequestDto());
 
@@ -44,9 +48,13 @@ public class FindPasswordController {
     }
 
     @PostMapping(FIND_PASSWORD_URL)
-    public String sendFindPasswordEmail(
-            @Valid @ModelAttribute FindPasswordRequestDto findPasswordRequestDto,
-            Errors errors, Model model) {
+    public String sendFindPasswordEmail(@SessionAccount Account sessionAccount,
+                                        @Valid @ModelAttribute FindPasswordRequestDto findPasswordRequestDto,
+                                        Errors errors, Model model) {
+
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
 
         if(errors.hasErrors()){
             model.addAttribute(findPasswordRequestDto);
@@ -71,7 +79,12 @@ public class FindPasswordController {
     }
 
     @GetMapping("/check-find-password-link")
-    public String loginByEmail(String email, String token, Model model) {
+    public String checkFindPasswordLink(@SessionAccount Account sessionAccount,
+                                         String email, String token, Model model) {
+
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
 
         boolean isValid = findPasswordService.isValidLink(email, token);
 

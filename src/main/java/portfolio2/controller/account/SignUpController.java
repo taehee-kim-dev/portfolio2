@@ -33,7 +33,12 @@ public class SignUpController {
     }
 
     @GetMapping(SIGN_UP_URL)
-    public String showSignUpPage(Model model) {
+    public String showSignUpPage(@SessionAccount Account sessionAccount, Model model) {
+
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
+
         // name값을 생략하면, 객체 이름의 camel 케이스를 이름으로 줌.
         // model.addAttribute("signUpRequestDto", new SignUpRequestDto()); 와 동일.
         model.addAttribute(new SignUpRequestDto());
@@ -47,7 +52,15 @@ public class SignUpController {
         생략 가능.
     * */
     @PostMapping(SIGN_UP_URL)
-    public String signUp(@Valid @ModelAttribute SignUpRequestDto signUpRequestDto, Model model, Errors errors) {
+    public String signUp(@SessionAccount Account sessionAccount,
+                         @Valid @ModelAttribute SignUpRequestDto signUpRequestDto,
+                         Model model,
+                         Errors errors) {
+
+        if(sessionAccount != null){
+            return "redirect:/";
+        }
+
         if (errors.hasErrors()) {
             // Validation에서 error가 발생하면,
             // form을 다시 보여준다.

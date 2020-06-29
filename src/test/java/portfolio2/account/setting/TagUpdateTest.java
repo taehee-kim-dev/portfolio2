@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.ex.AccountSettingController;
+import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.tag.Tag;
@@ -53,13 +53,13 @@ public class TagUpdateTest {
     @Test
     void showTagSettingView() throws Exception{
 
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_TAG_URL))
+        mockMvc.perform(get(ExAccountSettingController.ACCOUNT_SETTING_TAG_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("tag"))
                 .andExpect(model().attributeExists("whitelist"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_TAG_VIEW_NAME));
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_TAG_VIEW_NAME));
 
     }
 
@@ -73,7 +73,7 @@ public class TagUpdateTest {
         TagUpdateRequestDto tagUpdateRequestDto = new TagUpdateRequestDto();
         tagUpdateRequestDto.setTagTitle(newTagtitleToAdd);
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_TAG_URL + "/add")
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_TAG_URL + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tagUpdateRequestDto))
                 .with(csrf()))
@@ -110,7 +110,7 @@ public class TagUpdateTest {
         TagUpdateRequestDto tagUpdateRequestDto = new TagUpdateRequestDto();
         tagUpdateRequestDto.setTagTitle(tagtitleToRemove);
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_TAG_URL + "/remove")
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_TAG_URL + "/remove")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tagUpdateRequestDto))
                 .with(csrf()))
@@ -158,7 +158,7 @@ public class TagUpdateTest {
 
 
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_TAG_URL + "/remove")
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_TAG_URL + "/remove")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"tagTitle\":\"notExistingTagTitle\"}")
                 .with(csrf()))

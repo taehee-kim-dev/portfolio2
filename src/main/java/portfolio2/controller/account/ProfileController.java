@@ -48,6 +48,7 @@ public class ProfileController {
 
         // 객체 타입의 camel case를 이름으로 준다.
         // mode.addAttribute("account", byUserId)와 같음.
+        model.addAttribute("sessionAccount", sessionAccount);
         model.addAttribute("accountInDb", accountInDb);
         model.addAttribute("isOwner", accountInDb.equals(sessionAccount));
         return "account/profile";

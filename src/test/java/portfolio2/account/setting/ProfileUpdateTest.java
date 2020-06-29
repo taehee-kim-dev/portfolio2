@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.ex.AccountSettingController;
+import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
@@ -95,11 +95,11 @@ public class ProfileUpdateTest {
     @Test
     void showProfileSettingView() throws Exception{
 
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
+        mockMvc.perform(get(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME));
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME));
     }
 
     @DisplayName("프로필 수정하기 - 모두 정상입력")
@@ -112,14 +112,14 @@ public class ProfileUpdateTest {
         String newOccupation = "updatedOccupation";
         String newProfileImage = "updatedProfileImage";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", newBio)
                 .param("location", newLocation)
                 .param("occupation", newOccupation)
                 .param("profileImage", newProfileImage)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
+                .andExpect(redirectedUrl(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attribute("message", "프로필 수정이 완료되었습니다."));
 
@@ -142,14 +142,14 @@ public class ProfileUpdateTest {
         String newOccupation = "updatedOccupation";
         String newProfileImage = "updatedProfileImage";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", newBio)
                 .param("location", newLocation)
                 .param("occupation", newOccupation)
                 .param("profileImage", newProfileImage)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("profileUpdateRequestDto", "bio", "tooLongBio"))
@@ -179,14 +179,14 @@ public class ProfileUpdateTest {
         String newOccupation = "updatedOccupation";
         String newProfileImage = "updatedProfileImage";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", newBio)
                 .param("location", newLocation)
                 .param("occupation", newOccupation)
                 .param("profileImage", newProfileImage)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("profileUpdateRequestDto", "location", "tooLongLocation"))
@@ -216,14 +216,14 @@ public class ProfileUpdateTest {
         String newOccupation = "updatedOccupationupdatedOccupation";
         String newProfileImage = "updatedProfileImage";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", newBio)
                 .param("location", newLocation)
                 .param("occupation", newOccupation)
                 .param("profileImage", newProfileImage)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PROFILE_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("profileUpdateRequestDto", "occupation", "tooLongOccupation"))

@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.ex.AccountSettingController;
+import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.service.AccountService;
@@ -45,12 +45,12 @@ public class NotificationUpdateTest {
     @Test
     void showNotificationSettingView() throws Exception{
 
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL))
+        mockMvc.perform(get(ExAccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("notificationUpdateRequestDto"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME));
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME));
 
     }
 
@@ -81,7 +81,7 @@ public class NotificationUpdateTest {
 
         assertFalse(existingAccount.isNotificationNewPostWithMyTagByEmail());
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL)
                 .param("notificationLikeOnMyPostByWeb", "false")
                 .param("notificationLikeOnMyReplyByWeb", "false")
                 .param("notificationReplyOnMyPostByWeb", "false")
@@ -94,7 +94,7 @@ public class NotificationUpdateTest {
                 .param("notificationNewPostWithMyTagByEmail", "true")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL))
+                .andExpect(redirectedUrl(ExAccountSettingController.ACCOUNT_SETTING_NOTIFICATION_URL))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attribute("message", "알림설정이 저장되었습니다."));
 

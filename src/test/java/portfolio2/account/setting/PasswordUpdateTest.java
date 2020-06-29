@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.ex.AccountSettingController;
+import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
@@ -44,12 +44,12 @@ public class PasswordUpdateTest {
     @Test
     void showPasswordSettingView() throws Exception{
 
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
+        mockMvc.perform(get(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("passwordUpdateRequestDto"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME));
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME));
     }
 
     @DisplayName("비밀번호 변경하기 - 모두 정상입력")
@@ -60,12 +60,12 @@ public class PasswordUpdateTest {
         String newPassword = "newPassword";
         String newPasswordConfirm = "newPassword";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
+                .andExpect(redirectedUrl(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attribute("message", "비밀번호 변경이 완료되었습니다."));
 
@@ -84,12 +84,12 @@ public class PasswordUpdateTest {
         String newPassword = "newPass";
         String newPasswordConfirm = "newPass";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("passwordUpdateRequestDto", "newPassword", "tooShortNewPassword"))
@@ -110,12 +110,12 @@ public class PasswordUpdateTest {
         String newPassword = "newPasswordnewPasswordnewPassword";
         String newPasswordConfirm = "newPasswordnewPasswordnewPassword";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("passwordUpdateRequestDto", "newPassword", "tooLongNewPassword"))
@@ -136,12 +136,12 @@ public class PasswordUpdateTest {
         String newPassword = "new Password";
         String newPasswordConfirm = "new Password";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("passwordUpdateRequestDto", "newPassword", "invalidFormatNewPassword"))
@@ -162,12 +162,12 @@ public class PasswordUpdateTest {
         String newPassword = "newPassword";
         String newPasswordConfirm = "notSameNewPassword";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("passwordUpdateRequestDto", "newPasswordConfirm", "notSamePassword"))
@@ -188,12 +188,12 @@ public class PasswordUpdateTest {
         String newPassword = "newPass";
         String newPasswordConfirm = "new Pass";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_URL)
                 .param("newPassword", newPassword)
                 .param("newPasswordConfirm", newPasswordConfirm)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("passwordUpdateRequestDto", "newPassword", "tooShortNewPassword"))

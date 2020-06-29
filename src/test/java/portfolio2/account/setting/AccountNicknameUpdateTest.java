@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.ex.AccountSettingController;
+import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
@@ -45,12 +45,12 @@ public class AccountNicknameUpdateTest {
     @Test
     void showAccountSettingAccountView() throws Exception{
 
-        mockMvc.perform(get(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
+        mockMvc.perform(get(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME));
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME));
 
     }
 
@@ -61,11 +61,11 @@ public class AccountNicknameUpdateTest {
 
         String newNickname = "newNickname";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
                 .param("nickname", newNickname)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
+                .andExpect(redirectedUrl(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attribute("message", "닉네임 변경이 완료되었습니다."));
 
@@ -82,11 +82,11 @@ public class AccountNicknameUpdateTest {
 
         String newNickname = "aa";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
                 .param("nickname", newNickname)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("accountNicknameUpdateRequestDto", "nickname", "tooShortNickname"))
@@ -106,11 +106,11 @@ public class AccountNicknameUpdateTest {
 
         String newNickname = "newNicknamenewNicknamenewNickname";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
                 .param("nickname", newNickname)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("accountNicknameUpdateRequestDto", "nickname", "tooLongNickname"))
@@ -130,11 +130,11 @@ public class AccountNicknameUpdateTest {
 
         String newNickname = "newNickname!";
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
                 .param("nickname", newNickname)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("accountNicknameUpdateRequestDto", "nickname", "invalidFormatNickname"))
@@ -163,11 +163,11 @@ public class AccountNicknameUpdateTest {
 
         accountService.saveNewAccount(signUpRequestDto);
 
-        mockMvc.perform(post(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+        mockMvc.perform(post(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
                 .param("nickname", existingNickname)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(AccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(view().name(ExAccountSettingController.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode
                         ("accountNicknameUpdateRequestDto", "nickname", "nicknameAlreadyExists"))
