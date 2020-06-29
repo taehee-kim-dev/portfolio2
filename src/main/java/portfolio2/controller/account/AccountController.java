@@ -12,7 +12,7 @@ import portfolio2.domain.account.SessionAccount;
 import portfolio2.dto.account.FindPasswordRequestDto;
 import portfolio2.service.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
-import portfolio2.validator.account.SendEmailLoginLinkRequestDtoValidator;
+import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
-    private final SendEmailLoginLinkRequestDtoValidator sendEmailLoginLinkRequestDtoValidator;
+    private final FindPasswordRequestDtoValidator findPasswordRequestDtoValidator;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
@@ -39,7 +39,7 @@ public class AccountController {
 
     @InitBinder("sendEmailLoginLinkRequestDto")
     public void initBinderForSendEmailLoginLinkRequestDtoValidator(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(sendEmailLoginLinkRequestDtoValidator);
+        webDataBinder.addValidators(findPasswordRequestDtoValidator);
     }
 
     @GetMapping("/sign-up")

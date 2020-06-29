@@ -8,7 +8,7 @@ import portfolio2.dto.account.FindPasswordRequestDto;
 
 @Component
 @RequiredArgsConstructor
-public class SendEmailLoginLinkRequestDtoValidator implements Validator {
+public class FindPasswordRequestDtoValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
