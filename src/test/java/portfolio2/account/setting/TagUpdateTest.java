@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.account.AccountSettingController;
+import portfolio2.controller.ex.AccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.tag.Tag;

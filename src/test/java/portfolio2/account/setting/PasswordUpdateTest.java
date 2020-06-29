@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.account.AccountSettingController;
+import portfolio2.controller.ex.AccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
