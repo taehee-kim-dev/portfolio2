@@ -21,6 +21,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SignUpController {
 
+    public static final String SIGN_UP_URL = "/sign-up";
+    public static final String SIGN_UP_VIEW_NAME = "account/sign-up";
+
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
     private final SignUpService signUpService;
 
@@ -29,12 +32,12 @@ public class SignUpController {
         webDataBinder.addValidators(signUpRequestDtoValidator);
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping(SIGN_UP_URL)
     public String showSignUpPage(Model model) {
         // name값을 생략하면, 객체 이름의 camel 케이스를 이름으로 줌.
         // model.addAttribute("signUpRequestDto", new SignUpRequestDto()); 와 동일.
         model.addAttribute(new SignUpRequestDto());
-        return "account/sign-up";
+        return SIGN_UP_VIEW_NAME;
     }
 
     /*
@@ -43,11 +46,12 @@ public class SignUpController {
         @Valid @ModelAttribute SignUpRequestDto signupForm
         생략 가능.
     * */
-    @PostMapping("/sign-up")
-    public String signUp(@Valid @ModelAttribute SignUpRequestDto signUpRequestDto, Errors errors) {
+    @PostMapping(SIGN_UP_URL)
+    public String signUp(@Valid @ModelAttribute SignUpRequestDto signUpRequestDto, Model model, Errors errors) {
         if (errors.hasErrors()) {
             // Validation에서 error가 발생하면,
             // form을 다시 보여준다.
+            model.addAttribute(signUpRequestDto);
             return "account/sign-up";
         }
 
