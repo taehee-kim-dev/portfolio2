@@ -23,11 +23,6 @@ public class EmailVerificationController {
 
     private final EmailVerificationService emailVerificationService;
 
-    @InitBinder("FindPasswordRequestDto")
-    public void initBinderForFindPasswordRequestDtoValidator(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(findPasswordRequestDtoValidator);
-    }
-
     @GetMapping("/check-email-verification-link")
     public String checkEmailVerificationLink(String email, String token, Model model){
 

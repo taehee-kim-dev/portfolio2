@@ -28,49 +28,11 @@ public class FindPasswordController {
     public final String FIND_PASSWORD_VIEW_NAME = "account/find-password";
 
     private final FindPasswordRequestDtoValidator findPasswordRequestDtoValidator;
-    private final AccountService accountService;
-    private final EmailVerificationService emailVerificationService;
-    private final AccountRepository accountRepository;
+    private final FindPasswordService findPasswordService;
 
     @InitBinder("FindPasswordRequestDto")
     public void initBinderForFindPasswordRequestDtoValidator(WebDataBinder webDataBinder){
         webDataBinder.addValidators(findPasswordRequestDtoValidator);
-    }
-
-    @GetMapping("/check-email-verification-link")
-    public String checkEmailVerificationLink(String email, String token, Model model){
-
-        String view = "account/email-verification-result";
-
-        HashMap<String, String> resultHashMap = emailVerificationService.checkEmailVerificationLink(email, token);
-
-        if(resultHashMap.get("result").equals("notExistingEmail")){
-            model.addAttribute("error", "notExistingEmail");
-            return view;
-        }else if(resultHashMap.get("result").equals("invalidToken")){
-            model.addAttribute("error", "invalidToken");
-            return view;
-        }
-
-        model.addAttribute("nickname", resultHashMap.get("nickname"));
-        model.addAttribute("userId", resultHashMap.get("userId"));
-        model.addAttribute("email", resultHashMap.get("email"));
-
-        return view;
-    }
-
-    @GetMapping("/send-email-verification-link")
-    public String sendEmailVerificationLink(@SessionAccount Account sessionAccount,
-                                            Model model,
-                                            RedirectAttributes redirectAttributes) {
-
-        if (!emailVerificationService.canSendEmailVerificationLink(Account sessionAccount)) {
-            model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
-            return "account/email-verification-result";
-        }
-
-        redirectAttributes.addFlashAttribute("message", "인증 이메일을 보냈습니다.");
-        return "redirect:/account/setting/account";
     }
     
     @GetMapping(FIND_PASSWORD_URL)
@@ -82,46 +44,44 @@ public class FindPasswordController {
     }
 
     @PostMapping(FIND_PASSWORD_URL)
-    public String sendEmailLoginLink(
+    public String sendFindPasswordEmail(
             @Valid @ModelAttribute FindPasswordRequestDto findPasswordRequestDto,
             Errors errors, Model model) {
 
         if(errors.hasErrors()){
             model.addAttribute(findPasswordRequestDto);
-
-            return "find-password";
+            return FIND_PASSWORD_VIEW_NAME;
         }
 
-        Account accountInDb = accountRepository.findByEmail(findPasswordRequestDto.getEmail());
+        HashMap<String, String> resultHashMap = findPasswordService.checkFindPasswordEmail(findPasswordRequestDto);
 
-        if (accountInDb == null) {
+        if(resultHashMap.get("result").equals("notExistingEmail")){
             model.addAttribute("notExistingEmailError", "가입되지 않은 이메일 입니다.");
-            return "find-password";
+            return FIND_PASSWORD_VIEW_NAME;
+        }else if(resultHashMap.get("result").equals("cannotSendEmail")){
+            model.addAttribute("cannotSendEmailError", "로그인 링크 이메일은 12시간동안 3번만 보낼 수 있습니다.");
+            return FIND_PASSWORD_VIEW_NAME;
         }
 
-        if (!accountInDb.canSendLoginEmail()) {
-            model.addAttribute("emailCannotSendError", "로그인 링크 이메일은 12시간동안 3번만 보낼 수 있습니다.");
-            return "find-password";
-        }
+        findPasswordService.sendFindPasswordEmail(findPasswordRequestDto);
 
-        accountService.sendLoginEmail(accountInDb);
-        model.addAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
+        model.addAttribute("successMessage", "비밀번호 찾기 이메일을 발송했습니다.");
         model.addAttribute(findPasswordRequestDto);
-        return "find-password";
+        return FIND_PASSWORD_VIEW_NAME;
     }
 
-    @GetMapping("/login-by-email")
-    public String loginByEmail(String token, String email, Model model) {
+    @GetMapping("/check-find-password-link")
+    public String loginByEmail(String email, String token, Model model) {
 
-        Account accountInDb = accountRepository.findByEmail(email);
-        String view = "account/logged-in-by-email";
+        boolean isValid = findPasswordService.isValidLink(email, token);
 
-        if (accountInDb == null || !accountInDb.isValidTokenForEmailLogin(token)) {
-            model.addAttribute("error", "잘못된 링크입니다.");
-            return view;
+        if(!isValid){
+            model.addAttribute("error", "유효하지 않은 링크 입니다.");
+            return "account/invalid-find-password-link-error";
         }
 
-        accountService.loginOrUpdateSessionAccount(accountInDb);
-        return view;
+        findPasswordService.logIn(email);
+
+        return "redirect:/account/setting/password";
     }
 }
