@@ -10,7 +10,7 @@ import portfolio2.account.testaccountinfo.TestAccountInfo;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
-import portfolio2.service.AccountService;
+import portfolio2.service.account.AccountService;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;

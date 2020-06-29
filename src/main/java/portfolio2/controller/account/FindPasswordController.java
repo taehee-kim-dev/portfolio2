@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.SessionAccount;
 import portfolio2.dto.account.FindPasswordRequestDto;
-import portfolio2.service.AccountService;
 import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 
 import javax.validation.Valid;

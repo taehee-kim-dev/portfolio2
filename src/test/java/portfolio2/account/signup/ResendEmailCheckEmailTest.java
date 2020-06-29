@@ -14,7 +14,7 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
-import portfolio2.service.AccountService;
+import portfolio2.service.account.AccountService;
 
 import java.time.LocalDateTime;
 

@@ -3,18 +3,11 @@ package portfolio2.controller.account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.SessionAccount;
-import portfolio2.dto.account.FindPasswordRequestDto;
-import portfolio2.service.AccountService;
-import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 
 @Controller

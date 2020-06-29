@@ -1,4 +1,4 @@
-package portfolio2.service;
+package portfolio2.service.account;
 
 
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import portfolio2.config.AppProperties;
-import portfolio2.domain.tag.Tag;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.UserAccount;
+import portfolio2.domain.account.CustomPrincipal;
+import portfolio2.domain.tag.Tag;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.NotificationUpdateRequestDto;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
+public class FindPasswordService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final EmailService emailService;
@@ -93,7 +93,7 @@ public class AccountService implements UserDetailsService {
     public void loginOrUpdateSessionAccount(Account account) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
+                new CustomPrincipal(account),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
@@ -114,7 +114,7 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(userIdOrEmail);
         }
 
-        return new UserAccount(account);
+        return new CustomPrincipal(account);
     }
 
     public void completeSignUp(Account account) {

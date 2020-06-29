@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import portfolio2.service.AccountService;
+import portfolio2.service.account.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
 
 @RequiredArgsConstructor

@@ -13,19 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.SessionAccount;
-import portfolio2.domain.tag.Tag;
-import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.account.TagUpdateRequestDto;
 import portfolio2.dto.account.profileupdate.*;
-import portfolio2.service.AccountService;
 import portfolio2.validator.account.profileupdate.AccountEmailUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.AccountNicknameUpdateRequestDtoValidator;
 import portfolio2.validator.account.profileupdate.PasswordUpdateRequestDtoValidator;
-import portfolio2.validator.account.profileupdate.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller

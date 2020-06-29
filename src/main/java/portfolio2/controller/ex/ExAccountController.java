@@ -10,7 +10,7 @@
 //import portfolio2.domain.account.AccountRepository;
 //import portfolio2.domain.account.SessionAccount;
 //import portfolio2.dto.account.FindPasswordRequestDto;
-//import portfolio2.service.AccountService;
+//import portfolio2.service.account.AccountService;
 //import portfolio2.dto.account.SignUpRequestDto;
 //import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 //import portfolio2.validator.account.SignUpRequestDtoValidator;

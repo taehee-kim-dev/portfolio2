@@ -12,7 +12,7 @@ import portfolio2.account.testaccountinfo.TestAccountInfo;
 import portfolio2.controller.ex.ExAccountSettingController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.service.AccountService;
+import portfolio2.service.account.AccountService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
