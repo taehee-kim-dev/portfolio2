@@ -29,8 +29,6 @@ public class PostController {
     private final PostRepository postRepository;
     private final PostService postService;
 
-    private final ModelMapper modelMapper;
-
     private final String POST_NEW_POST_URL = "/postNewPost";
     private final String POST_NEW_POST_VIEW_FOLDER = "post/form";
 
