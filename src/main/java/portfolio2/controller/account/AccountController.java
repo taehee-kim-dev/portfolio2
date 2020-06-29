@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.SessionAccount;
-import portfolio2.dto.account.SendEmailLoginLinkRequestDto;
+import portfolio2.dto.account.FindPasswordRequestDto;
 import portfolio2.service.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.validator.account.SendEmailLoginLinkRequestDtoValidator;
@@ -132,23 +132,23 @@ public class AccountController {
     @GetMapping("/email-login")
     public String getEmailLogin(Model model){
 
-        model.addAttribute(new SendEmailLoginLinkRequestDto());
+        model.addAttribute(new FindPasswordRequestDto());
 
         return "find-password";
     }
 
     @PostMapping("/email-login")
     public String sendEmailLoginLink(
-            @Valid @ModelAttribute SendEmailLoginLinkRequestDto sendEmailLoginLinkRequestDto,
+            @Valid @ModelAttribute FindPasswordRequestDto findPasswordRequestDto,
             Errors errors, Model model) {
 
         if(errors.hasErrors()){
-            model.addAttribute(sendEmailLoginLinkRequestDto);
+            model.addAttribute(findPasswordRequestDto);
 
             return "find-password";
         }
 
-        Account accountInDb = accountRepository.findByEmail(sendEmailLoginLinkRequestDto.getEmail());
+        Account accountInDb = accountRepository.findByEmail(findPasswordRequestDto.getEmail());
 
         if (accountInDb == null) {
             model.addAttribute("notExistingEmailError", "가입되지 않은 이메일 입니다.");
@@ -162,7 +162,7 @@ public class AccountController {
 
         accountService.sendLoginEmail(accountInDb);
         model.addAttribute("successMessage", "로그인 링크를 이메일로 발송했습니다.");
-        model.addAttribute(sendEmailLoginLinkRequestDto);
+        model.addAttribute(findPasswordRequestDto);
         return "find-password";
     }
 

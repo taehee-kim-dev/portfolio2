@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 * */
 @Data
 @NoArgsConstructor
-public class SendEmailLoginLinkRequestDto {
+public class FindPasswordRequestDto {
 
     private String email;
 
     @Builder
-    public SendEmailLoginLinkRequestDto(String email) {
+    public FindPasswordRequestDto(String email) {
         this.email = email;
     }
 }
