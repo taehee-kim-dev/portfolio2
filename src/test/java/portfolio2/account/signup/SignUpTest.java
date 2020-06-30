@@ -45,6 +45,9 @@ public class SignUpTest {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private SignUpService signUpService;
+
     @MockBean
     private EmailService emailService;
 
@@ -100,7 +103,7 @@ public class SignUpTest {
                 .password(TestAccountInfo.TEST_PASSWORD)
                 .build();
 
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
                 .param("userId", signUpRequestDto.getUserId())
                 .param("nickname", signUpRequestDto.getNickname())
                 .param("email", signUpRequestDto.getEmail())
@@ -172,7 +175,7 @@ public class SignUpTest {
                 .password(TestAccountInfo.TEST_PASSWORD)
                 .build();
 
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
                 .param("userId", signUpRequestDto.getUserId())
                 .param("nickname", signUpRequestDto.getNickname())
                 .param("email", signUpRequestDto.getEmail())
@@ -188,307 +191,307 @@ public class SignUpTest {
         assertNull(newAccountInDb);
     }
 
-//
-//
-//    // userId errors.
-//    @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 에러")
-//    @Test
-//    void signUpTooShortIdError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "ab")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "userId",
-//                        "tooShortUserId"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 너무 긴 userId 에러")
-//    @Test
-//    void signUpTooLongIdError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "abcdeabcdeabcdeabcdeab")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "userId",
-//                        "tooLongUserId"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 userId 에러")
-//    @Test
-//    void signUpInvalidFormatIdError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "sdf df")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "userId",
-//                        "invalidFormatUserId"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 이미 존재하는 userId 에러")
-//    @Test
-//    void signUpIdAlreadyExistsError() throws Exception{
-//
-//        Account existingAccount = accountRepository.save(Account.builder()
-//                .userId("testUserId")
-//                .email("test@email.com")
-//                .nickname("testNickname")
-//                .build());
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", existingAccount.getUserId())
-//                .param("nickname", "testNickname1")
-//                .param("email", "test1@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "userId",
-//                        "userIdAlreadyExists"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//
-//
-//    // nickname errors.
-//    @DisplayName("회원가입 POST 요청 - 너무 짧은 nickname 에러")
-//    @Test
-//    void signUpTooShortNicknameError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "ab")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "nickname",
-//                        "tooShortNickname"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 에러")
-//    @Test
-//    void signUpTooLongNicknameError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNicknametestNicknametestNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "nickname",
-//                        "tooLongNickname"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
-//    @Test
-//    void signUpInvalidFormatNicknameError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNi ckname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "nickname",
-//                        "invalidFormatNickname"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
-//    @Test
-//    void signUpNicknameAlreadyExistsError() throws Exception{
-//
-//        Account existingAccount = accountRepository.save(Account.builder()
-//                .userId("testUserId")
-//                .email("test@email.com")
-//                .nickname("testNickname")
-//                .build());
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId1")
-//                .param("nickname", existingAccount.getNickname())
-//                .param("email", "test1@email.com")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "nickname",
-//                        "nicknameAlreadyExists"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//
-//
-//    // email errors.
-//    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 email 에러")
-//    @Test
-//    void signUpInvalidFormatEmailError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email")
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "email",
-//                        "invalidFormatEmail"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 이미 존재하는 email 에러")
-//    @Test
-//    void signUpEmailAlreadyExistsError() throws Exception{
-//
-//        Account existingAccount = accountRepository.save(Account.builder()
-//                .userId("testUserId")
-//                .email("test@email.com")
-//                .nickname("testNickname")
-//                .build());
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId1")
-//                .param("nickname", "testNickname")
-//                .param("email", existingAccount.getEmail())
-//                .param("password", "12345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "email",
-//                        "emailAlreadyExists"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//
-//    // password errors.
-//    @DisplayName("회원가입 POST 요청 - 너무 짧은 password 에러")
-//    @Test
-//    void signUpTooShortPasswordError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "1234567")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "password",
-//                        "tooShortPassword"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 너무 긴 password 에러")
-//    @Test
-//    void signUpTooLongPasswordError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "12345678123456781234567812345678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "password",
-//                        "tooLongPassword"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
-//    @Test
-//    void signUpInvalidFormatPasswordError() throws Exception{
-//
-//        mockMvc.perform(post("/sign-up")
-//                .param("userId", "testUserId")
-//                .param("nickname", "testNickname")
-//                .param("email", "test@email.com")
-//                .param("password", "1234 5678")
-//                .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasErrors())
-//                .andExpect(model().attributeHasFieldErrorCode(
-//                        "signUpRequestDto",
-//                        "password",
-//                        "invalidFormatPassword"))
-//                .andExpect(model().attributeExists("signUpRequestDto"))
-//                .andExpect(view().name("account/sign-up"))
-//                .andExpect(unauthenticated());
-//    }
 
+    // userId errors.
+
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 에러")
+    @Test
+    void signUpTooShortUserIdError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", "ab")
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "tooShortUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 너무 긴 userId 에러")
+    @Test
+    void signUpTooLongUserIdError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", "abcdeabcdeabcdeabcdeab")
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "tooLongUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 userId 에러")
+    @Test
+    void signUpInvalidFormatUserIdError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", "sdf df")
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "invalidFormatUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+
+    @SignUpAndLoggedIn
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 userId 에러")
+    @Test
+    void signUpUserIdAlreadyExistsError() throws Exception{
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", "testNickname1")
+                .param("email", "test1@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "userIdAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+
+    // nickname errors.
+
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 nickname 에러")
+    @Test
+    void signUpTooShortNicknameError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", "ab")
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "tooShortNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 에러")
+    @Test
+    void signUpTooLongNicknameError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", "testNicknametestNicknametestNickname")
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "tooLongNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
+    @Test
+    void signUpInvalidFormatNicknameError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", "testNi ckname")
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @SignUpAndLoggedIn
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
+    @Test
+    void signUpNicknameAlreadyExistsError() throws Exception{
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", "testUserId1")
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", "test1@email.com")
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "nicknameAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+
+    // email errors.
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 email 에러")
+    @Test
+    void signUpInvalidFormatEmailError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", "test@email")
+                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "invalidFormatEmail"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @SignUpAndLoggedIn
+    @DisplayName("회원가입 POST 요청 - 이미 존재하는 email 에러")
+    @Test
+    void signUpEmailAlreadyExistsError() throws Exception{
+
+        Account existingAccountInDb = accountRepository.findByUserId(TestAccountInfo.TEST_USER_ID);
+
+        existingAccountInDb.setVerifiedEmail(existingAccountInDb.getEmailWaitingToBeVerified());
+        existingAccountInDb.setEmailVerified(true);
+        existingAccountInDb.setEmailWaitingToBeVerified(null);
+
+        accountRepository.save(existingAccountInDb);
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", "testUserId1")
+                .param("nickname", "testNickname1")
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "emailAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+
+    // password errors.
+
+    @DisplayName("회원가입 POST 요청 - 너무 짧은 password 에러")
+    @Test
+    void signUpTooShortPasswordError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", "1234567")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "tooShortPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 너무 긴 password 에러")
+    @Test
+    void signUpTooLongPasswordError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", "12345678123456781234567812345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "tooLongPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
+    @Test
+    void signUpInvalidFormatPasswordError() throws Exception{
+
+        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("password", "1234 5678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "invalidFormatPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
 
 }
