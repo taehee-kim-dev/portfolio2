@@ -8,20 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
 import portfolio2.account.testaccountinfo.TestAccountInfo;
-import portfolio2.controller.account.SignUpController;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
-import portfolio2.service.account.SignUpService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +30,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static portfolio2.config.UrlAndViewName.*;
 
 @Slf4j
 @SpringBootTest
@@ -44,9 +42,6 @@ public class SignUpTest {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private SignUpService signUpService;
 
     @MockBean
     private EmailService emailService;
@@ -62,7 +57,7 @@ public class SignUpTest {
     @SignUpAndLoggedIn
     @DisplayName("SecurityContextHolder 확인")
     @Test
-    void testSecurityContextHolder() throws Exception{
+    void testSecurityContextHolder(){
 
         CustomPrincipal customPrincipal
                 = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -74,11 +69,11 @@ public class SignUpTest {
     @DisplayName("회원가입 화면 보여주기 - 비로그인 상태")
     @Test
     void showSignUpPageWithoutLogIn() throws Exception{
-        mockMvc.perform(get(SignUpController.SIGN_UP_URL))
+        mockMvc.perform(get(SIGN_UP_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -86,9 +81,9 @@ public class SignUpTest {
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
     @Test
     void showSignUpPageWithLogIn() throws Exception{
-        mockMvc.perform(get(SignUpController.SIGN_UP_URL))
+        mockMvc.perform(get(SIGN_UP_URL))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
+                .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
     }
 
@@ -103,7 +98,7 @@ public class SignUpTest {
                 .password(TestAccountInfo.TEST_PASSWORD)
                 .build();
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", signUpRequestDto.getUserId())
                 .param("nickname", signUpRequestDto.getNickname())
                 .param("email", signUpRequestDto.getEmail())
@@ -112,7 +107,7 @@ public class SignUpTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("email"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/email-verification-request"))
+                .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
 
         then(emailService).should().sendEmail(any(EmailMessage.class));
@@ -175,14 +170,14 @@ public class SignUpTest {
                 .password(TestAccountInfo.TEST_PASSWORD)
                 .build();
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", signUpRequestDto.getUserId())
                 .param("nickname", signUpRequestDto.getNickname())
                 .param("email", signUpRequestDto.getEmail())
                 .param("password", signUpRequestDto.getPassword())
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
+                .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
 
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
@@ -198,7 +193,7 @@ public class SignUpTest {
     @Test
     void signUpTooShortUserIdError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "ab")
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -211,7 +206,7 @@ public class SignUpTest {
                         "userId",
                         "tooShortUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -219,7 +214,7 @@ public class SignUpTest {
     @Test
     void signUpTooLongUserIdError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "abcdeabcdeabcdeabcdeab")
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -232,7 +227,7 @@ public class SignUpTest {
                         "userId",
                         "tooLongUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -240,7 +235,7 @@ public class SignUpTest {
     @Test
     void signUpInvalidFormatUserIdError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "sdf df")
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -253,7 +248,7 @@ public class SignUpTest {
                         "userId",
                         "invalidFormatUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -265,7 +260,7 @@ public class SignUpTest {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", "testNickname1")
                 .param("email", "test1@email.com")
@@ -278,7 +273,7 @@ public class SignUpTest {
                         "userId",
                         "userIdAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -289,7 +284,7 @@ public class SignUpTest {
     @Test
     void signUpTooShortNicknameError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", "ab")
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -302,7 +297,7 @@ public class SignUpTest {
                         "nickname",
                         "tooShortNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -310,7 +305,7 @@ public class SignUpTest {
     @Test
     void signUpTooLongNicknameError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", "testNicknametestNicknametestNickname")
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -323,7 +318,7 @@ public class SignUpTest {
                         "nickname",
                         "tooLongNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -331,7 +326,7 @@ public class SignUpTest {
     @Test
     void signUpInvalidFormatNicknameError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", "testNi ckname")
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -344,7 +339,7 @@ public class SignUpTest {
                         "nickname",
                         "invalidFormatNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -355,7 +350,7 @@ public class SignUpTest {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", "test1@email.com")
@@ -368,7 +363,7 @@ public class SignUpTest {
                         "nickname",
                         "nicknameAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -379,7 +374,7 @@ public class SignUpTest {
     @Test
     void signUpInvalidFormatEmailError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", "test@email")
@@ -392,7 +387,7 @@ public class SignUpTest {
                         "email",
                         "invalidFormatEmail"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -411,7 +406,7 @@ public class SignUpTest {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
                 .param("nickname", "testNickname1")
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -424,7 +419,7 @@ public class SignUpTest {
                         "email",
                         "emailAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -435,7 +430,7 @@ public class SignUpTest {
     @Test
     void signUpTooShortPasswordError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -448,7 +443,7 @@ public class SignUpTest {
                         "password",
                         "tooShortPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -456,7 +451,7 @@ public class SignUpTest {
     @Test
     void signUpTooLongPasswordError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -469,7 +464,7 @@ public class SignUpTest {
                         "password",
                         "tooLongPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -477,7 +472,7 @@ public class SignUpTest {
     @Test
     void signUpInvalidFormatPasswordError() throws Exception{
 
-        mockMvc.perform(post(SignUpController.SIGN_UP_URL)
+        mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TestAccountInfo.TEST_USER_ID)
                 .param("nickname", TestAccountInfo.TEST_NICKNAME)
                 .param("email", TestAccountInfo.TEST_EMAIL)
@@ -490,7 +485,7 @@ public class SignUpTest {
                         "password",
                         "invalidFormatPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 

@@ -14,12 +14,14 @@ import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 
+import static portfolio2.config.UrlAndViewName.*;
+import static portfolio2.config.UrlAndViewName.HOME_URL;
+
 @Controller
 @RequiredArgsConstructor
 public class SignUpController {
 
-    public static final String SIGN_UP_URL = "/sign-up";
-    public static final String SIGN_UP_VIEW_NAME = "account/sign-up";
+
 
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
     private final SignUpService signUpService;
@@ -33,7 +35,7 @@ public class SignUpController {
     public String showSignUpPage(@SessionAccount Account sessionAccount, Model model) {
 
         if(sessionAccount != null){
-            return "redirect:/";
+            return REDIRECT + HOME_URL;
         }
 
         // name값을 생략하면, 객체 이름의 camel 케이스를 이름으로 줌.
@@ -55,7 +57,7 @@ public class SignUpController {
                          Model model) {
 
         if(sessionAccount != null){
-            return "redirect:/";
+            return REDIRECT + HOME_URL;
         }
 
         if (errors.hasErrors()) {
@@ -69,6 +71,6 @@ public class SignUpController {
 
         model.addAttribute("email", signUpRequestDto.getEmail());
 
-        return "account/email-verification-request";
+        return EMAIL_VERIFICATION_REQUEST_VIEW_NAME;
     }
 }
