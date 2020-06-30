@@ -21,6 +21,7 @@ import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
+import portfolio2.service.account.SignUpService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,7 +75,8 @@ public class SignUpTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME));
+                .andExpect(view().name(SignUpController.SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
     }
 
     @SignUpAndLoggedIn
@@ -84,7 +86,7 @@ public class SignUpTest {
         mockMvc.perform(get(SignUpController.SIGN_UP_URL))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated());
+                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 비로그인 상태")
@@ -108,24 +110,32 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("email"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/email-verification-request"))
-                .andExpect(authenticated());
+                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
 
         then(emailService).should().sendEmail(any(EmailMessage.class));
 
         Account newAccountInDb = accountRepository.findByUserId(signUpRequestDto.getUserId());
 
-        assertEquals(signUpRequestDto.getUserId(), newAccountInDb.getUserId());
-        assertEquals(signUpRequestDto.getNickname(), newAccountInDb.getNickname());
-        assertEquals(signUpRequestDto.getEmail(), newAccountInDb.getEmailWaitingToBeVerified());
+        assertEquals(newAccountInDb.getUserId(), signUpRequestDto.getUserId());
+        assertEquals(newAccountInDb.getNickname(), signUpRequestDto.getNickname());
+        assertNull(newAccountInDb.getVerifiedEmail());
         assertTrue(passwordEncoder.matches(signUpRequestDto.getPassword(), newAccountInDb.getPassword()));
 
-        assertNull(newAccountInDb.getVerifiedEmail());
-
+        assertEquals(newAccountInDb.getEmailWaitingToBeVerified(), signUpRequestDto.getEmail());
         assertFalse(newAccountInDb.isEmailVerified());
         assertNotNull(newAccountInDb.getEmailVerificationToken());
         assertNotNull(newAccountInDb.getEmailVerificationTokenFirstGeneratedAt());
         assertEquals(newAccountInDb.getCountOfSendingEmailVerificationEmail(), 1);
+        assertNotNull(newAccountInDb.getJoinedAt());
 
+        assertNull(newAccountInDb.getFindPasswordToken());
+        assertNull(newAccountInDb.getFindPasswordTokenFirstGeneratedAt());
+        assertEquals(newAccountInDb.getCountOfSendingFindPasswordEmail(), 0);
+
+        assertNull(newAccountInDb.getBio());
+        assertNull(newAccountInDb.getOccupation());
+        assertNull(newAccountInDb.getLocation());
+        assertNull(newAccountInDb.getProfileImage());
 
 
         assertTrue(newAccountInDb.isNotificationReplyOnMyPostByWeb());
@@ -137,7 +147,6 @@ public class SignUpTest {
         assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByWeb());
 
 
-
         assertFalse(newAccountInDb.isNotificationReplyOnMyPostByEmail());
         assertFalse(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
 
@@ -146,6 +155,9 @@ public class SignUpTest {
 
         assertFalse(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
 
+
+        assertNotNull(newAccountInDb.getTag());
+        assertNotNull(newAccountInDb.getPost());
     }
 
     @SignUpAndLoggedIn
@@ -168,7 +180,7 @@ public class SignUpTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated());
+                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
 
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
 

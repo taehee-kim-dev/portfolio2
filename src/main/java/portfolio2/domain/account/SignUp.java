@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import portfolio2.domain.SendEmail;
 import portfolio2.dto.account.SignUpRequestDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,8 +30,9 @@ public class SignUp {
         signUpRequestDto.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
         this.newAccount.setUserId(signUpRequestDto.getUserId());
         this.newAccount.setNickname(signUpRequestDto.getNickname());
-        this.newAccount.setEmailWaitingToBeVerified(signUpRequestDto.getEmail());
         this.newAccount.setPassword(signUpRequestDto.getPassword());
+        this.newAccount.setEmailWaitingToBeVerified(signUpRequestDto.getEmail());
+        this.newAccount.setJoinedAt(LocalDateTime.now());
         accountRepository.save(this.newAccount);
     }
 

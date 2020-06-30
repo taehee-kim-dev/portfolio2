@@ -32,10 +32,10 @@ public class Account {
     private String userId;
 
     @Column(unique = true)
-    private String verifiedEmail;
+    private String nickname;
 
     @Column(unique = true)
-    private String nickname;
+    private String verifiedEmail;
 
     private String password;
 
@@ -98,9 +98,11 @@ public class Account {
 
     private boolean notificationLikeOnMyReplyByWeb = true;
 
+
     private boolean notificationReplyOnMyPostByWeb = true;
 
     private boolean notificationReplyOnMyReplyByWeb = true;
+
 
     private boolean notificationNewPostWithMyTagByWeb = true;
 
@@ -110,9 +112,11 @@ public class Account {
 
     private boolean notificationLikeOnMyReplyByEmail = false;
 
+
     private boolean notificationReplyOnMyPostByEmail = false;
 
     private boolean notificationReplyOnMyReplyByEmail = false;
+
 
     private boolean notificationNewPostWithMyTagByEmail = false;
 
