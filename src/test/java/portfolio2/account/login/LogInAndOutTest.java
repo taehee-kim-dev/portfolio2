@@ -249,14 +249,46 @@ public class LogInAndOutTest {
                 .andExpect(unauthenticated());
     }
 
-    @DisplayName("인증 상태 테스트")
+
+
+    @DisplayName("인증 상태 테스트1")
     @SignUpAndLoggedIn
     @Test
-    void authenticatedTest() throws Exception {
+    void authenticatedTest1() throws Exception {
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(authenticated());
+    }
+
+    @DisplayName("인증 상태 테스트2")
+    @Test
+    void authenticatedTest2() throws Exception {
+
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .userId(TEST_USER_ID)
+                .nickname(TEST_NICKNAME)
+                .email(TEST_EMAIL)
+                .password(TEST_PASSWORD)
+                .build();
+
+        signUpService.signUp(signUpRequestDto);
+
+        Authentication authentication1
+                = SecurityContextHolder.getContext().getAuthentication();
+
+//        System.out.println("*** 테스트 출력1 ***");
+//        System.out.println(authentication1);
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Authentication authentication2
+                = SecurityContextHolder.getContext().getAuthentication();
+
+//        System.out.println("*** 테스트 출력2 ***");
+//        System.out.println(authentication2);
     }
 
     @DisplayName("비인증 상태 테스트1")

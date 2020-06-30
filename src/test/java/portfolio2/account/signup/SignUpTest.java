@@ -63,8 +63,8 @@ public class SignUpTest {
         Authentication authentication1
                 = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("*** 테스트 출력1 ***");
-        System.out.println(authentication1);
+//        System.out.println("*** 테스트 출력1 ***");
+//        System.out.println(authentication1);
     }
 
     @DisplayName("회원가입 화면 보여주기 - 비로그인 상태")
