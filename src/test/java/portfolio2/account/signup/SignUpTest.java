@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
-import portfolio2.account.testaccountinfo.TestAccountInfo;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CustomPrincipal;
@@ -30,6 +30,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static portfolio2.account.testaccountinfo.TestAccountInfo.*;
 import static portfolio2.config.UrlAndViewName.*;
 
 @Slf4j
@@ -59,11 +60,11 @@ public class SignUpTest {
     @Test
     void testSecurityContextHolder(){
 
-        CustomPrincipal customPrincipal
-                = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication1
+                = SecurityContextHolder.getContext().getAuthentication();
 
-        log.info("*** 테스트 출력 ***");
-        log.info(customPrincipal.getSessionAccount().getUserId());
+        System.out.println("*** 테스트 출력1 ***");
+        System.out.println(authentication1);
     }
 
     @DisplayName("회원가입 화면 보여주기 - 비로그인 상태")
@@ -84,7 +85,7 @@ public class SignUpTest {
         mockMvc.perform(get(SIGN_UP_URL))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 비로그인 상태")
@@ -92,10 +93,10 @@ public class SignUpTest {
     void allValidFieldsSignUpWithoutLogIn() throws Exception{
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(TestAccountInfo.TEST_USER_ID)
-                .nickname(TestAccountInfo.TEST_NICKNAME)
-                .email(TestAccountInfo.TEST_EMAIL)
-                .password(TestAccountInfo.TEST_PASSWORD)
+                .userId(TEST_USER_ID)
+                .nickname(TEST_NICKNAME)
+                .email(TEST_EMAIL)
+                .password(TEST_PASSWORD)
                 .build();
 
         mockMvc.perform(post(SIGN_UP_URL)
@@ -108,7 +109,7 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("email"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         then(emailService).should().sendEmail(any(EmailMessage.class));
 
@@ -167,7 +168,7 @@ public class SignUpTest {
                 .userId("testUserId2")
                 .nickname("testNickname2")
                 .email("test2@email.com")
-                .password(TestAccountInfo.TEST_PASSWORD)
+                .password(TEST_PASSWORD)
                 .build();
 
         mockMvc.perform(post(SIGN_UP_URL)
@@ -178,7 +179,7 @@ public class SignUpTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(authenticated().withUsername(TestAccountInfo.TEST_USER_ID));
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
 
@@ -195,9 +196,9 @@ public class SignUpTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "ab")
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -216,9 +217,9 @@ public class SignUpTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "abcdeabcdeabcdeabcdeab")
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -237,9 +238,9 @@ public class SignUpTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "sdf df")
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -261,7 +262,7 @@ public class SignUpTest {
         SecurityContextHolder.getContext().setAuthentication(null);
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("userId", TEST_USER_ID)
                 .param("nickname", "testNickname1")
                 .param("email", "test1@email.com")
                 .param("password", "12345678")
@@ -285,10 +286,10 @@ public class SignUpTest {
     void signUpTooShortNicknameError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("userId", TEST_USER_ID)
                 .param("nickname", "ab")
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -306,10 +307,10 @@ public class SignUpTest {
     void signUpTooLongNicknameError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("userId", TEST_USER_ID)
                 .param("nickname", "testNicknametestNicknametestNickname")
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -327,10 +328,10 @@ public class SignUpTest {
     void signUpInvalidFormatNicknameError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
+                .param("userId", TEST_USER_ID)
                 .param("nickname", "testNi ckname")
-                .param("email", TestAccountInfo.TEST_EMAIL)
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -352,7 +353,7 @@ public class SignUpTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("nickname", TEST_NICKNAME)
                 .param("email", "test1@email.com")
                 .param("password", "12345678")
                 .with(csrf()))
@@ -375,10 +376,10 @@ public class SignUpTest {
     void signUpInvalidFormatEmailError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
                 .param("email", "test@email")
-                .param("password", TestAccountInfo.TEST_PASSWORD)
+                .param("password", TEST_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
@@ -396,7 +397,7 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsError() throws Exception{
 
-        Account existingAccountInDb = accountRepository.findByUserId(TestAccountInfo.TEST_USER_ID);
+        Account existingAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
 
         existingAccountInDb.setVerifiedEmail(existingAccountInDb.getEmailWaitingToBeVerified());
         existingAccountInDb.setEmailVerified(true);
@@ -409,7 +410,7 @@ public class SignUpTest {
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
                 .param("nickname", "testNickname1")
-                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("email", TEST_EMAIL)
                 .param("password", "12345678")
                 .with(csrf()))
                 .andExpect(status().isOk())
@@ -431,9 +432,9 @@ public class SignUpTest {
     void signUpTooShortPasswordError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
                 .param("password", "1234567")
                 .with(csrf()))
                 .andExpect(status().isOk())
@@ -452,9 +453,9 @@ public class SignUpTest {
     void signUpTooLongPasswordError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
                 .param("password", "12345678123456781234567812345678")
                 .with(csrf()))
                 .andExpect(status().isOk())
@@ -473,9 +474,9 @@ public class SignUpTest {
     void signUpInvalidFormatPasswordError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", TestAccountInfo.TEST_USER_ID)
-                .param("nickname", TestAccountInfo.TEST_NICKNAME)
-                .param("email", TestAccountInfo.TEST_EMAIL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
                 .param("password", "1234 5678")
                 .with(csrf()))
                 .andExpect(status().isOk())
