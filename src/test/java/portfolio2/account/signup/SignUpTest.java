@@ -54,16 +54,16 @@ public class SignUpTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private SignUpAndLogInWithAccount1Process signUpAndLogInWithAccount1Process;
+    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutWithAccount1Process signUpAndLogOutWithAccount1Process;
+    private OnlySignUpProcessForTest onlySignUpProcessForTest;
 
     @Autowired
-    private SignUpAndLogInWithAccount2Process signUpAndLogInWithAccount2Process;
+    private SignUpConfirmProcessForTest signUpConfirmProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutWithAccount2Process signUpAndLogOutWithAccount2Process;
+    private LogInConfirmProcessForTest logInConfirmProcessForTest;
 
 
     @AfterEach
@@ -90,8 +90,9 @@ public class SignUpTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SIGN_UP_VIEW_NAME))
-                .andExpect(unauthenticated());
+                .andExpect(view().name(SIGN_UP_VIEW_NAME));
+
+        logInConfirmProcessForTest.isSomeoneLoggedIn();
     }
 
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
@@ -278,7 +279,11 @@ public class SignUpTest {
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -368,7 +373,11 @@ public class SignUpTest {
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -416,7 +425,11 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -448,7 +461,11 @@ public class SignUpTest {
 
         accountRepository.save(existingAccountInDb);
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -533,136 +550,138 @@ public class SignUpTest {
                 .andExpect(unauthenticated());
     }
 
-    @DisplayName("SignUpAndLogInWithAccount1Process 테스트")
-    @Test
-    void signUpAndLogInWithAccount1ProcessTest() throws Exception{
-        signUpAndLogInWithAccount1Process.signUpAndLogIn();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-    }
-
-    @DisplayName("SignUpAndLogInWithAccount2Process 테스트")
-    @Test
-    void signUpAndLogInWithAccount2ProcessTest() throws Exception{
-        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
-
-    @DisplayName("SignUpAndLogOutWithAccount1Process 테스트")
-    @Test
-    void signUpAndLogOutWithAccount1ProcessTest() throws Exception{
-        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-    }
-
-    @DisplayName("SignUpAndLogOutWithAccount2Process 테스트")
-    @Test
-    void signUpAndLogOutWithAccount2ProcessTest() throws Exception{
-        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
-
-    @DisplayName("하나는 로그인 하고 나머지 하나는 로그아웃 했을때 최종적으로 인증되어있는 계정 없음")
-    @Test
-    void signUpAndLogInAndLogOutProcessTest() throws Exception{
-        signUpAndLogInWithAccount1Process.signUpAndLogIn();
-        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
-
-    @DisplayName("하나는 로그아웃 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
-    @Test
-    void signUpAndLogOutAndLogInProcessTest() throws Exception{
-        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
-
-    @DisplayName("하나로 로그인 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
-    @Test
-    void signUpAndLogInAndLogInProcessTest() throws Exception{
-        signUpAndLogInWithAccount1Process.signUpAndLogIn();
-        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
-
-    @DisplayName("둘 다 회원가입 후 바로 로그아웃 했으면 최종적으로 인증되어있는 계정 없음.")
-    @Test
-    void signUpAndLogOutWithTwoAccountProcessTest() throws Exception{
-        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        assertNotNull(account1);
-        assertEquals(TEST_USER_ID_1, account1.getUserId());
-
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account2);
-        assertEquals(TEST_USER_ID_2, account2.getUserId());
-    }
+//    @DisplayName("SignUpAndLogInWithAccount1Process 테스트")
+//    @Test
+//    void signUpAndLogInWithAccount1ProcessTest() throws Exception{
+//        signUpAndLogInProcess.signUpAndLogIn();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//    }
+//
+//    @DisplayName("SignUpAndLogInWithAccount2Process 테스트")
+//    @Test
+//    void signUpAndLogInWithAccount2ProcessTest() throws Exception{
+//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
+//
+//    @DisplayName("SignUpAndLogOutWithAccount1Process 테스트")
+//    @Test
+//    void signUpAndLogOutWithAccount1ProcessTest() throws Exception{
+//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
+//
+//
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//    }
+//
+//    @DisplayName("SignUpAndLogOutWithAccount2Process 테스트")
+//    @Test
+//    void signUpAndLogOutWithAccount2ProcessTest() throws Exception{
+//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
+//
+//    @DisplayName("하나는 로그인 하고 나머지 하나는 로그아웃 했을때 최종적으로 인증되어있는 계정 없음")
+//    @Test
+//    void signUpAndLogInAndLogOutProcessTest() throws Exception{
+//        signUpAndLogInProcess.signUpAndLogIn();
+//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
+//
+//    @DisplayName("하나는 로그아웃 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
+//    @Test
+//    void signUpAndLogOutAndLogInProcessTest() throws Exception{
+//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
+//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
+//
+//    @DisplayName("하나로 로그인 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
+//    @Test
+//    void signUpAndLogInAndLogInProcessTest() throws Exception{
+//        signUpAndLogInProcess.signUpAndLogIn();
+//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
+//
+//    @DisplayName("둘 다 회원가입 후 바로 로그아웃 했으면 최종적으로 인증되어있는 계정 없음.")
+//    @Test
+//    void signUpAndLogOutWithTwoAccountProcessTest() throws Exception{
+//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
+//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        assertNotNull(account1);
+//        assertEquals(TEST_USER_ID_1, account1.getUserId());
+//
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account2);
+//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//    }
 
 }

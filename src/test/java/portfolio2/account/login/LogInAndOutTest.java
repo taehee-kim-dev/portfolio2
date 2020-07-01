@@ -40,16 +40,16 @@ public class LogInAndOutTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private LogInProcess logInProcess;
+    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
 
     @Autowired
-    private SignUpAndLogInWithAccount1Process signUpAndLogInWithAccount1Process;
+    private OnlySignUpProcessForTest onlySignUpProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutWithAccount1Process signUpAndLogOutWithAccount1Process;
+    private SignUpConfirmProcessForTest signUpConfirmProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutWithAccount2Process signUpAndLogOutWithAccount2Process;
+    private LogInConfirmProcessForTest logInConfirmProcessForTest;
 
     @AfterEach
     void afterEach(){
@@ -257,6 +257,48 @@ public class LogInAndOutTest {
                 .andExpect(unauthenticated());
     }
 
+    @DisplayName("signUpConfirmProcessForTestWithSignUpAndLoggedIn")
+    @SignUpAndLoggedIn
+    @Test
+    void signUpConfirmProcessForTestWithSignUpAndLoggedIn() throws Exception {
+        assertTrue(signUpConfirmProcessForTest.isSignedUpUserId(TEST_USER_ID));
+        assertEquals(TEST_USER_ID, signUpConfirmProcessForTest.getSignedUpAccountInDbByUserId(TEST_USER_ID).getUserId());
+
+        assertTrue(logInConfirmProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInConfirmProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+//        System.out.println("*** 테스트 출력1 ***");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL));
+
+//        System.out.println("*** 테스트 출력2 ***");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
+    }
+
+    @DisplayName("아무도 로그인하지 않은 상태 테스트")
+    @Test
+    void anyoneNotLoggedIn() throws Exception {
+
+        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
+
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
+
+//        System.out.println("*** 테스트 출력1 ***");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
+    }
+
 
 
     @DisplayName("인증 상태 테스트1")
@@ -331,103 +373,103 @@ public class LogInAndOutTest {
                 .andExpect(unauthenticated());
     }
 
-    @DisplayName("Account1로 로그인하고, Account2로 로그인하면 Account2로 로그인됨")
-    @Test
-    void duplicateLogInTest() throws Exception{
-        // 두 계정 회원가입 후 로그아웃
-        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-
-        // 로그아웃 상태 확인
-        Authentication authentication1
-                = SecurityContextHolder.getContext().getAuthentication();
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(authentication1);
-
-        assertNull(authentication1);
-
-        // Account1로 로그인 후 Account2로 로그인하면 Account2로 로그인 안됨
-        logInProcess.logIn(TEST_USER_ID_1);
-        logInProcess.logIn(TEST_USER_ID_2);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-
-        // 두 계정 존재 확인
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account1);
-        assertNotNull(account2);
-    }
-
-    @DisplayName("Account1, Account2로 회원가입하고 모두 로그아웃 후 Accout2로 로그인")
-    @Test
-    void signUpAndLogOutAndLogInTest() throws Exception{
-        // 두 계정 회원가입 후 로그아웃
-        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-
-        // 로그아웃 상태 확인
-        Authentication authentication1
-                = SecurityContextHolder.getContext().getAuthentication();
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(authentication1);
-
-        assertNull(authentication1);
-
-        // Account2로 로그인
-        logInProcess.logIn(TEST_USER_ID_2);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-
-        // 두 계정 존재 확인
-        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-        assertNotNull(account1);
-        assertNotNull(account2);
-    }
-
-    @DisplayName("로그인 상태 테스트")
-    @Test
-    void logIn() throws Exception{
-        signUpAndLogInWithAccount1Process.signUpAndLogIn();
-        assertNotNull(SecurityContextHolder.getContext().getAuthentication());
-        CustomPrincipal customPrincipal = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        assertEquals(TEST_USER_ID_1, customPrincipal.getSessionAccount().getUserId());
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
-    }
-
-    @DisplayName("로그인 후 로그아웃 상태 테스트")
-    @Test
-    void logOut() throws Exception{
-        signUpAndLogInWithAccount1Process.signUpAndLogIn();
-        assertNotNull(SecurityContextHolder.getContext().getAuthentication());
-        CustomPrincipal customPrincipal = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        assertEquals(TEST_USER_ID_1, customPrincipal.getSessionAccount().getUserId());
-
-        SecurityContextHolder.getContext().setAuthentication(null);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-    }
-
-    @DisplayName("로그아웃 상태 테스트")
-    @Test
-    void logOutTest() throws Exception{
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-    }
+//    @DisplayName("Account1로 로그인하고, Account2로 로그인하면 Account2로 로그인됨")
+//    @Test
+//    void duplicateLogInTest() throws Exception{
+//        // 두 계정 회원가입 후 로그아웃
+//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
+//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        // 로그아웃 상태 확인
+//        Authentication authentication1
+//                = SecurityContextHolder.getContext().getAuthentication();
+//
+////        System.out.println("*** 테스트 출력1 ***");
+////        System.out.println(authentication1);
+//
+//        assertNull(authentication1);
+//
+//        // Account1로 로그인 후 Account2로 로그인하면 Account2로 로그인 안됨
+//        logInProcess.logIn(TEST_USER_ID_1);
+//        logInProcess.logIn(TEST_USER_ID_2);
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+//
+//        // 두 계정 존재 확인
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account1);
+//        assertNotNull(account2);
+//    }
+//
+//    @DisplayName("Account1, Account2로 회원가입하고 모두 로그아웃 후 Accout2로 로그인")
+//    @Test
+//    void signUpAndLogOutAndLogInTest() throws Exception{
+//        // 두 계정 회원가입 후 로그아웃
+//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
+//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        // 로그아웃 상태 확인
+//        Authentication authentication1
+//                = SecurityContextHolder.getContext().getAuthentication();
+//
+////        System.out.println("*** 테스트 출력1 ***");
+////        System.out.println(authentication1);
+//
+//        assertNull(authentication1);
+//
+//        // Account2로 로그인
+//        logInProcess.logIn(TEST_USER_ID_2);
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+//
+//        // 두 계정 존재 확인
+//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
+//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
+//        assertNotNull(account1);
+//        assertNotNull(account2);
+//    }
+//
+//    @DisplayName("로그인 상태 테스트")
+//    @Test
+//    void logIn() throws Exception{
+//        signUpAndLogInWithAccount1Process.signUpAndLogIn();
+//        assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+//        CustomPrincipal customPrincipal = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        assertEquals(TEST_USER_ID_1, customPrincipal.getSessionAccount().getUserId());
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
+//    }
+//
+//    @DisplayName("로그인 후 로그아웃 상태 테스트")
+//    @Test
+//    void logOut() throws Exception{
+//        signUpAndLogInWithAccount1Process.signUpAndLogIn();
+//        assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+//        CustomPrincipal customPrincipal = (CustomPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        assertEquals(TEST_USER_ID_1, customPrincipal.getSessionAccount().getUserId());
+//
+//        SecurityContextHolder.getContext().setAuthentication(null);
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//    }
+//
+//    @DisplayName("로그아웃 상태 테스트")
+//    @Test
+//    void logOutTest() throws Exception{
+//        assertNull(SecurityContextHolder.getContext().getAuthentication());
+//
+//        mockMvc.perform(get(HOME_URL))
+//                .andExpect(status().isOk())
+//                .andExpect(unauthenticated());
+//    }
 
 }

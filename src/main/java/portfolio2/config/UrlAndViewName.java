@@ -30,5 +30,6 @@ public class UrlAndViewName {
 
 
     // AccountSettingController.java
-    public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "/account/setting/account";
+    public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
+    public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";
 }
