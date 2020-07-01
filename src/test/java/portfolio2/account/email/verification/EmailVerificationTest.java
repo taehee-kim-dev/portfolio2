@@ -59,10 +59,10 @@ public class EmailVerificationTest {
 
     // 정상 링크
 
-    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태")
+    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 안 된 상태")
     @SignUpAndLoggedIn
     @Test
-    void validLinkNotLoggedIn() throws Exception{
+    void validLinkNotLoggedInNotFirstVerified() throws Exception{
 
         // 로그아웃
         logInAndOutProcess.logOut();
@@ -71,6 +71,59 @@ public class EmailVerificationTest {
         assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        // 이메일 인증 링크
+        String emailVerificationLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
+                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
+
+        // 유효 링크 인증
+        mockMvc.perform(get(emailVerificationLink))
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeExists("nickname"))
+                .andExpect(model().attributeExists("userId"))
+                .andExpect(model().attributeExists("email"))
+                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        // 인증 대기 이메일 인증된 이메일로 변경됨
+        assertEquals(TEST_EMAIL, accountEmailVerified.getVerifiedEmail());
+        // 이메일 인증됨으로 바뀜
+        assertTrue(accountEmailVerified.isEmailVerified());
+        // 이메일 처음 인증됨 설정
+        assertTrue(accountEmailVerified.isEmailFirstVerified());
+        // 이메일 인증 토큰 null로 됨
+        assertNull(accountEmailVerified.getEmailVerificationToken());
+        // 인증 대기 이메일 null로 됨
+        assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
+        // 토큰 발행 시간 존재
+        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        // 인증 이메일 전송 횟수 1회
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+        // 이메일 전송 1회
+        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
+    }
+
+    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 된 상태")
+    @SignUpAndLoggedIn
+    @Test
+    void validLinkNotLoggedInFirstVerified() throws Exception{
+
+        // 로그아웃
+        logInAndOutProcess.logOut();
+
+        // 로그아웃 확인
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+        // 처음 인증 설정
+        accountInDbToBeEmailVerified.setEmailFirstVerified(true);
+        accountRepository.save(accountInDbToBeEmailVerified);
 
         // 이메일 인증 링크
         String emailVerificationLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
