@@ -33,9 +33,16 @@ public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityCont
 
         // Authentication 만들고 SecurityContext에 넣어주기
         UserDetails customPrincipal = accountService.loadUserByUsername(TEST_USER_ID);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(customPrincipal, customPrincipal.getPassword(), customPrincipal.getAuthorities());
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                customPrincipal,
+                customPrincipal.getPassword(),
+                customPrincipal.getAuthorities());
+
         SecurityContext context = SecurityContextHolder.createEmptyContext();
+
         context.setAuthentication(authentication);
+
         return context;
     }
 }

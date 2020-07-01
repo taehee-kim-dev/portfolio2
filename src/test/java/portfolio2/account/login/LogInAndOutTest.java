@@ -13,8 +13,6 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.service.account.SignUpService;
 
 
-import java.sql.SQLOutput;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -25,6 +23,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.UrlAndViewName.*;
+
+/*
+* ** 최종 결론 **
+* 로그인은 무조건 SecurityContextHolder를 사용한 코드 직접 작성으로
+* 로그인 인증 검증은 무조건 mockMvc로
+* 로그아웃은 상관없으나 편의상 SecurityContextHolder를 사용한 코드 직접 작성으로
+*
+* 즉, 로그인, 로그아웃은 무조건 SecurityContextHolder를 사용한 코드 직접 작성으로
+* 로그인 인증 검증은 무조건 mockMvc로.
+*
+* 코드로 이어서 중복 로그인하면 마지막 계정으로 인증정보 안바뀜.
+* 즉, 코드로 로그인을 이후 인증 검증을 하되, 중간에 다른 계정으로 로그인 불가능.
+* 단, 로그아웃 하고 새로 로그인한 상태로 mockMvc 검증을 하면 가능함.
+* 한 번 mockMvc를 지나가면, 해당 인증 내용으로 고정됨.
+*
+* 최종 결론 : 로그인, 로그아웃은 SecurityContextHolder를 사용한 코드 직접 작성으로 하되,
+* 검증은 맨 마지막에 mockMvc로 한다.
+* */
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -308,8 +324,10 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        System.out.println("***");
-        System.out.println(SecurityContextHolder.getContext());
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***");
+//        System.out.println(SecurityContextHolder.getContext());
         // 결론 : 한 mockMvc 테스트 안에서만 검증된다.
         // 그 다음에 출력하는것은 의미없다.
     }
@@ -331,12 +349,16 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-//        System.out.println("***1");
-//        System.out.println(SecurityContextHolder.getContext());
-
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***1");
+//        System.out.println(SecurityContextHolder.getContext());
+
+
 
         assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
@@ -351,6 +373,9 @@ public class LogInAndOutTest {
     void logInByCodingAndHomePrint() throws Exception{
 
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
 
 //        System.out.println("***1");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -392,17 +417,38 @@ public class LogInAndOutTest {
     void duplicateLogInInRow() throws Exception{
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        // logInAndOutProcess.logOut();
+
 //        System.out.println("***1");
 //        System.out.println(SecurityContextHolder.getContext());
-
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
 
 //        System.out.println("***2");
 //        System.out.println(SecurityContextHolder.getContext());
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
 //        System.out.println("***3");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -420,7 +466,195 @@ public class LogInAndOutTest {
         * 로그인 인증 상태 검증은 무조건 mockMvc 검증으로.
         * */
 
+    }
+
+    @DisplayName("직접 코드로 로그인 후 홈으로 갔을 때 상태 출력 - 어노테이션 검증")
+    @SignUpAndLoggedIn
+    @Test
+    void logInByCodingAndHomePrintWithAnnotation() throws Exception{
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+
+//        System.out.println("***1 존재함");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***2 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***3 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***4 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        // 결론 : 직접 코드로 로그인하면 여러개의 연속된 mockMvc에서 정상적으로 인증된다.
+        // 하지만, 직접 작성한 코드 검증으로는 검증이 안된다.
+    }
+
+    @DisplayName("모두 코드로 연속으로 이어서 로그인 하면, 마지막 인증된 계정은 마지막에 로그인한 계정 - 어노테이션 검증")
+    @SignUpAndLoggedIn
+    @Test
+    void duplicateLogInInRowWithAnnotaion() throws Exception{
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+
+//        System.out.println("***1 존재함");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+
+//        System.out.println("***2 2로 존재함");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("***3 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        // 코드로 작성한 로그인들 중간중간은 코드로 검증 된다.
+        // 하지만, mockMvc를 넘어가면 코드로 검증이 안 된다.
+
+        // mockMvc로 로그인 -> mockMvc를 넘어가면 무조건 인증정보 사라짐. mockMvc 검증이든, 직접 코드 작성 검증이든 인증정보 사라짐.
+        // 직접 코드로 로그인 -> mockMvc를 넘어가도 mockMvc에서는 인증정보 안사라짐. 하지만, 직접 코드 작성 검증에서는 사라짐.
+        // mockMvc 전에는 직접 코드 작성 검증으로 검증됨.
+
+
+        /*
+         * 최종 결론 :
+         * 로그인은 무조건 직접 작성 코드(SecurityContextHolder 사용) 으로.
+         * 로그인 인증 상태 검증은 무조건 mockMvc 검증으로.
+         * */
 
     }
 
+    @DisplayName("직접 코드 작성으로 로그아웃, 코드와 mockMvc 모두로 검증.")
+    @SignUpAndLoggedIn
+    @Test
+    void codeLogOutAndTestWithCodeAndMockMvc() throws Exception{
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+
+        logInAndOutProcess.logOut();
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("*** 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+    }
+
+    @DisplayName("mockMvc로 로그아웃, 코드와 mockMvc 모두로 검증.")
+    @SignUpAndLoggedIn
+    @Test
+    void mockMvcLogOutAndTestWithCodeAndMockMvc() throws Exception{
+
+        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("*** 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+
+        /*
+        * 결론 : 코드로 로그아웃 하나, mockMvc로 로그아웃 하나 둘다 정상 검증.
+        * */
+    }
+
+    @DisplayName("로그인 안하고 로그아웃")
+    @Test
+    void logOutWitNotLoggedIn() throws Exception{
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        mockMvc.perform(post("/logout")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(unauthenticated());
+
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+//        System.out.println("*** 존재하지 않음");
+//        System.out.println(SecurityContextHolder.getContext());
+    }
+
+    @DisplayName("모두 직접 작성 코드로 테스트")
+    @Test
+    void onlyCodeTest() throws Exception{
+        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        logInAndOutProcess.logOut();
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+    }
+
+    @DisplayName("로그인 로그아웃은 직접 작성 코드로, 검증만 마지막에 mockMvc로")
+    @SignUpAndLoggedIn
+    @Test
+    void logInAndOutWithCodeAndValidationWithMockMvc() throws Exception{
+        // logInAndOutProcess.logOut();
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        mockMvc.perform(get(HOME_URL))
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+    }
 }
