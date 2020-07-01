@@ -36,7 +36,7 @@ import static portfolio2.config.UrlAndViewName.*;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SignUpTest {
+public class SignUpProcessTest {
 
     @Autowired
     private MockMvc mockMvc;

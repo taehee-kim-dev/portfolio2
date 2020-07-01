@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class SignUp {
+public class SignUpProcess {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;

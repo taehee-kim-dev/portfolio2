@@ -10,11 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @NamedEntityGraph(name = "Post.withAllRelation", attributeNodes = {
         @NamedAttributeNode("tag")
