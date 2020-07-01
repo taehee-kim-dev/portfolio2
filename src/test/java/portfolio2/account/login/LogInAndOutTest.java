@@ -258,7 +258,7 @@ public class LogInAndOutTest {
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
-                .andExpect(authenticated());
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
     @DisplayName("인증 상태 테스트2")

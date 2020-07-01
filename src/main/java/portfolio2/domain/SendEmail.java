@@ -9,6 +9,8 @@ import portfolio2.domain.account.Account;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
 
+import static portfolio2.config.UrlAndViewName.*;
+
 @RequiredArgsConstructor
 @Component
 public class SendEmail {
@@ -22,8 +24,8 @@ public class SendEmail {
         context.setVariable("nickname", newAccount.getNickname());
         context.setVariable("userId", newAccount.getUserId());
         context.setVariable("host", appProperties.getHost());
-        context.setVariable("emailVerificationLink", "/check-email-verification-link?" +
-                "email=" + newAccount.getEmailWaitingToBeVerified() +
+        context.setVariable("emailVerificationLink", CHECK_EMAIL_VERIFICATION_LINK_URL +
+                "?email=" + newAccount.getEmailWaitingToBeVerified() +
                 "&token=" + newAccount.getEmailVerificationToken());
 
         String message = templateEngine.process("email/email-for-email-verification", context);

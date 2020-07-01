@@ -10,8 +10,8 @@ import portfolio2.domain.account.LogInOrSessionUpdateProcess;
 @Service
 public class EmailVerificationService {
 
-    private EmailVerificationProcess emailVerificationProcess;
-    private LogInOrSessionUpdateProcess logInOrSessionUpdateProcess;
+    private final EmailVerificationProcess emailVerificationProcess;
+    private final LogInOrSessionUpdateProcess logInOrSessionUpdateProcess;
 
     public boolean checkEmailVerificationLink(String email, String token) {
         // 맞는 링크인지 확인

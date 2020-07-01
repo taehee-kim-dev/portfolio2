@@ -9,6 +9,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.SessionAccount;
 import portfolio2.service.account.EmailVerificationService;
 
+import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;
 
 @Controller
@@ -31,7 +32,7 @@ public class EmailVerificationController {
 
         Account sessionAccount = emailVerificationService.emailVerifyAndLogIn();
 
-        model.addAttribute("sessionAccount", sessionAccount);
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("nickname", sessionAccount.getNickname());
         model.addAttribute("userId", sessionAccount.getUserId());
         model.addAttribute("email", sessionAccount.getVerifiedEmail());

@@ -19,6 +19,7 @@ public class UrlAndViewName {
     public static final String EMAIL_VERIFICATION_REQUEST_VIEW_NAME = "account/email-verification-request";
 
 
+
     // EmailVerificationController.java
     public static final String CHECK_EMAIL_VERIFICATION_LINK_URL = "/check-email-verification-link";
 

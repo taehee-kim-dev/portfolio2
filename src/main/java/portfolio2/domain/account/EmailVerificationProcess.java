@@ -40,8 +40,8 @@ public class EmailVerificationProcess {
         this.accountToBeVerified.setEmailVerificationToken(null);
         // 인증 대기중인 이메일 값 null로 설정
         this.accountToBeVerified.setEmailWaitingToBeVerified(null);
-        // 인증한 계정 반환
-        return this.accountToBeVerified;
+        // 인증한 계정 저장 후 반환
+        return accountRepository.save(this.accountToBeVerified);
     }
 
     public void clearField() {
