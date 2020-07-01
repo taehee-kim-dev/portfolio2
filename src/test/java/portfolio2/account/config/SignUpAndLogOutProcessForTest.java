@@ -1,6 +1,7 @@
 package portfolio2.account.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
@@ -11,7 +12,7 @@ import static portfolio2.account.config.TestAccountInfo.*;
 
 @Component
 @RequiredArgsConstructor
-public class SignUpAndLogInProcessForTest {
+public class SignUpAndLogOutProcessForTest {
 
     private final SignUpService signUpService;
     private final AccountRepository accountRepository;
@@ -26,6 +27,7 @@ public class SignUpAndLogInProcessForTest {
 
         signUpService.signUp(signUpRequestDto);
 
+        SecurityContextHolder.getContext().setAuthentication(null);
         return accountRepository.findByUserId(TEST_USER_ID);
     }
 
@@ -61,6 +63,7 @@ public class SignUpAndLogInProcessForTest {
                 .build();
 
         signUpService.signUp(signUpRequestDto);
+        SecurityContextHolder.getContext().setAuthentication(null);
         return accountRepository.findByUserId(userId);
     }
 }
