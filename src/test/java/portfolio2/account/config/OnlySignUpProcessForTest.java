@@ -19,7 +19,7 @@ public class OnlySignUpProcessForTest {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Account signUpAndLogIn(){
+    public Account signUpDefault(){
         Account account = new Account();
         account.setUserId(TEST_USER_ID);
         account.setNickname(TEST_NICKNAME);
@@ -29,7 +29,7 @@ public class OnlySignUpProcessForTest {
         return accountRepository.save(account);
     }
 
-    public Account signUpAndLogIn(int suffix){
+    public Account signUpNotDefaultWithSuffix(int suffix){
 
         String userId = null;
         String nickname = null;

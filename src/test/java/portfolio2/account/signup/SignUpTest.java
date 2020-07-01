@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
@@ -22,7 +20,6 @@ import portfolio2.mail.EmailService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -254,7 +251,7 @@ public class SignUpTest {
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-
+        onlySignUpProcessForTest.signUpDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -349,15 +346,10 @@ public class SignUpTest {
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
-    @SignUpAndLoggedIn
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(unauthenticated());
+        onlySignUpProcessForTest.signUpDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -406,18 +398,13 @@ public class SignUpTest {
     }
 
     @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 에러")
-    @SignUpAndLoggedIn
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(unauthenticated());
+        onlySignUpProcessForTest.signUpDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", "testUserId1")
+                .param("userId", TEST_USER_ID_1)
                 .param("nickname", "testNickname1")
                 .param("email", TEST_EMAIL)
                 .param("password", "12345678")
@@ -439,26 +426,15 @@ public class SignUpTest {
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 인증된 이메일로 존재하는 email 에러")
-    @SignUpAndLoggedIn
     @Test
     void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 
-        Account existingAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
-
-        existingAccountInDb.setVerifiedEmail(existingAccountInDb.getEmailWaitingToBeVerified());
-        existingAccountInDb.setEmailVerified(true);
-        existingAccountInDb.setEmailWaitingToBeVerified(null);
-
-        accountRepository.save(existingAccountInDb);
-
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(unauthenticated());
+        Account existingAccount = onlySignUpProcessForTest.signUpDefault();
+        existingAccount.setVerifiedEmail(TEST_EMAIL);
+        accountRepository.save(existingAccount);
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", "testUserId1")
+                .param("userId", TEST_USER_ID_1)
                 .param("nickname", "testNickname1")
                 .param("email", TEST_EMAIL)
                 .param("password", "12345678")
@@ -548,94 +524,5 @@ public class SignUpTest {
 
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
-//
-//
-//    @DisplayName("하나는 로그인 하고 나머지 하나는 로그아웃 했을때 최종적으로 인증되어있는 계정 없음")
-//    @Test
-//    void signUpAndLogInAndLogOutProcessTest() throws Exception{
-//
-//        signUpAndLogInProcessForTest.signUpAndLogIn(1);
-//
-//        mockMvc.perform(post("/logout")
-//                .with(csrf()))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl(HOME_URL))
-//                .andExpect(unauthenticated());
-//
-//        signUpAndLogInProcessForTest.signUpAndLogIn(2);
-//
-//        mockMvc.perform(post("/logout")
-//                .with(csrf()))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl(HOME_URL))
-//                .andExpect(unauthenticated());
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(unauthenticated());
-//
-//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_1));
-//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_2));
-//    }
-//
-//    @DisplayName("하나는 로그아웃 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
-//    @Test
-//    void signUpAndLogOutAndLogInProcessTest() throws Exception{
-//
-//        signUpAndLogInProcessForTest.signUpAndLogIn(1);
-//
-//        mockMvc.perform(post("/logout")
-//                .with(csrf()))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl(HOME_URL))
-//                .andExpect(unauthenticated());
-//
-//        signUpAndLogInProcessForTest.signUpAndLogIn(2);
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-//
-//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_1));
-//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_2));
-//    }
-//
-//    @DisplayName("하나로 로그인 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
-//    @Test
-//    void signUpAndLogInAndLogInProcessTest() throws Exception{
-//        signUpAndLogInProcess.signUpAndLogIn();
-//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-//
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
-//    }
-//
-//    @DisplayName("둘 다 회원가입 후 바로 로그아웃 했으면 최종적으로 인증되어있는 계정 없음.")
-//    @Test
-//    void signUpAndLogOutWithTwoAccountProcessTest() throws Exception{
-//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(unauthenticated());
-//
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
-//    }
 
 }
