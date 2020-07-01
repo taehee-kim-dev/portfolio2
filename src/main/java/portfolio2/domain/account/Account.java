@@ -42,6 +42,8 @@ public class Account {
 
     private String emailWaitingToBeVerified;
 
+    private boolean isEmailFirstVerified;
+
     private boolean isEmailVerified;
 
     private String emailVerificationToken;
