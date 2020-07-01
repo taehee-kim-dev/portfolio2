@@ -39,9 +39,6 @@ public class LogInAndOutTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
-
-    @Autowired
     private OnlySignUpProcessForTest onlySignUpProcessForTest;
 
     @Autowired
@@ -76,11 +73,10 @@ public class LogInAndOutTest {
     }
 
     @DisplayName("올바른 아이디, 비밀번호로 로그인 성공")
-    @SignUpAndLoggedIn
     @Test
     void logInSuccessWithCorrectIdAndPassword() throws Exception {
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        onlySignUpProcessForTest.signUpDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -92,19 +88,13 @@ public class LogInAndOutTest {
     }
 
     @DisplayName("올바른 인증된 이메일, 비밀번호로 로그인 성공 - 비로그인 상태")
-    @SignUpAndLoggedIn
     @Test
     void logInSuccessWithCorrectVerifiedEmailAndPassword() throws Exception {
 
-        Account signedUpAccountInDb = accountRepository.findByUserId(TestAccountInfo.TEST_USER_ID);
+        Account signedUpAccountInDb = onlySignUpProcessForTest.signUpDefault();
 
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
-        signedUpAccountInDb.setEmailVerified(true);
-        signedUpAccountInDb.setEmailWaitingToBeVerified(null);
-
         accountRepository.save(signedUpAccountInDb);
-
-        SecurityContextHolder.getContext().setAuthentication(null);
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_EMAIL)
