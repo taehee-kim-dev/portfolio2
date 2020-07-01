@@ -21,8 +21,6 @@ import static portfolio2.config.UrlAndViewName.HOME_URL;
 @RequiredArgsConstructor
 public class SignUpController {
 
-
-
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
     private final SignUpService signUpService;
 

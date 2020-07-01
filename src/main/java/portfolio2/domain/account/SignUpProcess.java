@@ -38,7 +38,7 @@ public class SignUpProcess {
         return this.newAccount;
     }
 
-    public void clearNewAccountField(){
+    public void clearField(){
         this.newAccount = null;
     }
 }

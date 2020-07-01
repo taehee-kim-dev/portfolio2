@@ -14,4 +14,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     boolean existsByVerifiedEmail(String email);
 
     Account findByVerifiedEmail(String email);
+
+    boolean existsByEmailWaitingToBeVerified(String email);
 }

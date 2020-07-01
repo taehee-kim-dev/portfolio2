@@ -25,7 +25,7 @@ public class SignUpService {
         signUpProcess.setInitialInformOfNewAccount(signUpRequestDto);
         // 인증 메일 발송
         Account newAccount = signUpProcess.sendEmailVerificationEmail();
-        signUpProcess.clearNewAccountField();
+        signUpProcess.clearField();
         // 로그인
         logInOrSessionUpdateProcess.loginOrSessionUpdate(newAccount);
     }

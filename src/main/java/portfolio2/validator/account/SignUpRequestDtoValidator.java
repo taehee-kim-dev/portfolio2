@@ -64,7 +64,8 @@ public class SignUpRequestDtoValidator implements Validator {
             errors.rejectValue("nickname", "nicknameAlreadyExists", "이미 사용중인 닉네임 입니다.");
         }
         
-        if(accountRepository.existsByVerifiedEmail(signUpRequestDto.getEmail())){
+        if(accountRepository.existsByVerifiedEmail(signUpRequestDto.getEmail())
+                || accountRepository.existsByEmailWaitingToBeVerified(signUpRequestDto.getEmail())){
             errors.rejectValue("email", "emailAlreadyExists", "이미 사용중인 이메일 입니다.");
         }
     }

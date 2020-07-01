@@ -36,7 +36,7 @@ import static portfolio2.config.UrlAndViewName.*;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SignUpProcessTest {
+public class SignUpTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -393,9 +393,33 @@ public class SignUpProcessTest {
     }
 
     @SignUpAndLoggedIn
-    @DisplayName("회원가입 POST 요청 - 이미 존재하는 email 에러")
+    @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 에러")
     @Test
-    void signUpEmailAlreadyExistsError() throws Exception{
+    void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", "testUserId1")
+                .param("nickname", "testNickname1")
+                .param("email", TEST_EMAIL)
+                .param("password", "12345678")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "emailAlreadyExists"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+    }
+
+    @SignUpAndLoggedIn
+    @DisplayName("회원가입 POST 요청 - 이미 인증된 이메일로 존재하는 email 에러")
+    @Test
+    void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 
         Account existingAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
 
