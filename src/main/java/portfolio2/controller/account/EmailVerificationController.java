@@ -40,17 +40,17 @@ public class EmailVerificationController {
     }
 
 
-    @GetMapping(SEND_EMAIL_VERIFICATION_LINK_URL)
-    public String sendEmailVerificationLink(@SessionAccount Account sessionAccount,
-                                            Model model,
-                                            RedirectAttributes redirectAttributes) {
-
-        if (!emailVerificationService.canSendEmailVerificationLink(Account sessionAccount)) {
-            model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
-            return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
-        }
-
-        redirectAttributes.addFlashAttribute("message", "인증 이메일을 보냈습니다.");
-        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
-    }
+//    @GetMapping(SEND_EMAIL_VERIFICATION_LINK_URL)
+//    public String sendEmailVerificationLink(@SessionAccount Account sessionAccount,
+//                                            Model model,
+//                                            RedirectAttributes redirectAttributes) {
+//
+//        if (!emailVerificationService.canSendEmailVerificationLink(Account sessionAccount)) {
+//            model.addAttribute("error", "인증 이메일은 12시간동안 5번만 보낼 수 있습니다.");
+//            return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
+//        }
+//
+//        redirectAttributes.addFlashAttribute("message", "인증 이메일을 보냈습니다.");
+//        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+//    }
 }

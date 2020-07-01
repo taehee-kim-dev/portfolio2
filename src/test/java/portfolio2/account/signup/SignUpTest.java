@@ -55,8 +55,8 @@ public class SignUpTest {
         accountRepository.deleteAll();
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("SecurityContextHolder 확인")
+    @SignUpAndLoggedIn
     @Test
     void testSecurityContextHolder(){
 
@@ -78,8 +78,8 @@ public class SignUpTest {
                 .andExpect(unauthenticated());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
+    @SignUpAndLoggedIn
     @Test
     void showSignUpPageWithLogIn() throws Exception{
         mockMvc.perform(get(SIGN_UP_URL))
@@ -159,8 +159,8 @@ public class SignUpTest {
         assertNotNull(newAccountInDb.getPost());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
+    @SignUpAndLoggedIn
     @Test
     void allValidFieldsSignUpWithLogIn() throws Exception{
 
@@ -254,8 +254,8 @@ public class SignUpTest {
     }
 
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 userId 에러")
+    @SignUpAndLoggedIn
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
@@ -344,8 +344,8 @@ public class SignUpTest {
                 .andExpect(unauthenticated());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
+    @SignUpAndLoggedIn
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
@@ -392,8 +392,8 @@ public class SignUpTest {
                 .andExpect(unauthenticated());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 에러")
+    @SignUpAndLoggedIn
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
@@ -416,8 +416,8 @@ public class SignUpTest {
                 .andExpect(unauthenticated());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("회원가입 POST 요청 - 이미 인증된 이메일로 존재하는 email 에러")
+    @SignUpAndLoggedIn
     @Test
     void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 

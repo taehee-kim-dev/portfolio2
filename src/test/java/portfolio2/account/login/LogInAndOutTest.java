@@ -58,8 +58,8 @@ public class LogInAndOutTest {
                 .andExpect(unauthenticated());
     }
 
-    @SignUpAndLoggedIn
     @DisplayName("로그인 화면 보여주기 - 로그인 상태")
+    @SignUpAndLoggedIn
     @Test
     void showLogInPageWithLogIn() throws Exception{
         mockMvc.perform(get(LOGIN_URL))
