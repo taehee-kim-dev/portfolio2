@@ -33,7 +33,7 @@ import static portfolio2.config.UrlAndViewName.*;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FirstEmailVerificationTest {
+public class AfterFirstSendingEmailVerificationEmailTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,34 +60,22 @@ public class FirstEmailVerificationTest {
     void afterEach(){
         accountRepository.deleteAll();
     }
-    
-    // 정상 링크
 
-    @DisplayName("이메일 인증 - 정상 링크 - 처음 회원가입 시 - 비로그인 상태")
+    @DisplayName("이메일 인증보내기 - 보내기 가능 상태 - 본인 계정으로 로그인 상태")
     @SignUpAndLoggedIn
     @Test
-    void emailVerificationTestWithValidLinkWhenFirstSignUpNotLoggedIn() throws Exception{
+    void sendEmailVerificationEmailWithLogInByOwnAccount() throws Exception{
 
-        // 로그아웃
-        SecurityContextHolder.getContext().setAuthentication(null);
+        String emailToSendEmail = "emailToSend@email.com";
 
-        // 유효 링크 찾기
-        Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
-
-        String validLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
-                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
-        System.out.println(validLink);
-
-        // 유효 링크 인증
-        mockMvc.perform(get(validLink))
-                .andExpect(status().isOk())
+        // 인증 이메일 보내기
+        mockMvc.perform(post(AFTER_FIRST_SEND_EMAIL_VERIFICATION_EMAIL_URL)
+                .param("email", emailToSendEmail))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("nickname"))
-                .andExpect(model().attributeExists("userId"))
-                .andExpect(model().attributeExists("email"))
+                .andExpect(flash().attribute("message", "인증 이메일을 보냈습니다."))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(REDIRECT + ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -103,46 +91,7 @@ public class FirstEmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
-    }
-
-    @DisplayName("이메일 인증 - 정상 링크 - 처음 회원가입 시 - 본인 계정으로 로그인 상태")
-    @SignUpAndLoggedIn
-    @Test
-    void emailVerificationTestWithValidLinkWhenFirstSignUpLoggedInByOwnAccount() throws Exception{
-
-        // 유효 링크 찾기
-        Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
-
-        String validLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
-                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
-
-        // 유효 링크 인증
-        mockMvc.perform(get(validLink))
-                .andExpect(status().isOk())
-                .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
-                .andExpect(model().attributeExists("nickname"))
-                .andExpect(model().attributeExists("userId"))
-                .andExpect(model().attributeExists("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
-
-        // 이메일 인증 확인
-        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
-        assertEquals(TEST_EMAIL, accountEmailVerified.getVerifiedEmail());
-
-        assertTrue(accountEmailVerified.isEmailVerified());
-        assertTrue(accountEmailVerified.isEmailFirstVerified());
-
-        assertNull(accountEmailVerified.getEmailVerificationToken());
-        assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
-
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
-        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
-
-        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
+        verify(emailService, times(2)).sendEmail(any(EmailMessage.class));
     }
 
     @SignUpAndLoggedIn
@@ -253,7 +202,7 @@ public class FirstEmailVerificationTest {
         Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
         assertNotNull(account2);
     }
-    
+
     // 잘못된 링크 - 로그아웃 상태
 
     @SignUpAndLoggedIn
@@ -281,7 +230,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -325,7 +274,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidTokenLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -367,7 +316,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -409,7 +358,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -449,7 +398,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidTokenLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -487,7 +436,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -538,7 +487,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -555,7 +504,7 @@ public class FirstEmailVerificationTest {
 
         assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
-        
+
         // 다른계정 회원가입 상태 확인
         Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
         assertNotNull(account2);
@@ -593,7 +542,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidTokenLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -646,7 +595,7 @@ public class FirstEmailVerificationTest {
         mockMvc.perform(get(invalidLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 

@@ -13,25 +13,25 @@ import static portfolio2.config.UrlAndViewName.*;
 
 @RequiredArgsConstructor
 @Component
-public class SendEmail {
+public class EmailSendingProcess {
 
     private final EmailService emailService;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
 
-    public void sendEmailVerificationEmail(Account newAccount) {
+    public void sendEmailVerificationEmail(Account account) {
         Context context = new Context();
-        context.setVariable("nickname", newAccount.getNickname());
-        context.setVariable("userId", newAccount.getUserId());
+        context.setVariable("nickname", account.getNickname());
+        context.setVariable("userId", account.getUserId());
         context.setVariable("host", appProperties.getHost());
         context.setVariable("emailVerificationLink", CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + newAccount.getEmailWaitingToBeVerified() +
-                "&token=" + newAccount.getEmailVerificationToken());
+                "?email=" + account.getEmailWaitingToBeVerified() +
+                "&token=" + account.getEmailVerificationToken());
 
         String message = templateEngine.process("email/email-for-email-verification", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
-                .to(newAccount.getEmailWaitingToBeVerified())
+                .to(account.getEmailWaitingToBeVerified())
                 .subject("TH 이메일 인증")
                 .message(message)
                 .build();

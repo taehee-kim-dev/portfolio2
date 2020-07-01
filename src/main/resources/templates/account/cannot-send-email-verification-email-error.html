@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+</head>
+<body>
+
+<div th:replace="fragment.html :: commonNav"></div>
+
+<div class="container">
+        <div  class="alert alert-danger" role="alert" th:text="${cannotSendError}" style="margin-top: 100px;">
+            인증 이메일은 12시간동안...에러 메세지
+        </div>
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

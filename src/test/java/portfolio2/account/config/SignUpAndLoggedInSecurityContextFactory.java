@@ -1,4 +1,4 @@
-package portfolio2.account.testaccountinfo;
+package portfolio2.account.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +11,7 @@ import portfolio2.service.account.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
-import static portfolio2.account.testaccountinfo.TestAccountInfo.*;
+import static portfolio2.account.config.TestAccountInfo.*;
 
 @RequiredArgsConstructor
 public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedIn> {

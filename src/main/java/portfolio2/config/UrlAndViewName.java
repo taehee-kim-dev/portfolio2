@@ -25,7 +25,8 @@ public class UrlAndViewName {
 
     public static final String EMAIL_VERIFICATION_RESULT_VIEW_NAME = "account/email-verification-result";
 
-    public static final String SEND_EMAIL_VERIFICATION_LINK_URL = "/send-email-verification-link";
+    public static final String AFTER_FIRST_SEND_EMAIL_VERIFICATION_EMAIL_URL = "/account/setting/account/email";
+    public static final String CANNOT_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME = "account/cannot-send-email-verification-email-error";
 
 
     // AccountSettingController.java

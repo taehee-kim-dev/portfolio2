@@ -7,15 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.account.testaccountinfo.*;
+import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.dto.account.SignUpRequestDto;
-import portfolio2.service.account.AccountService;
 import portfolio2.service.account.SignUpService;
-
-import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static portfolio2.account.testaccountinfo.TestAccountInfo.*;
+import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.UrlAndViewName.*;
 
 @SpringBootTest

@@ -1,4 +1,4 @@
-package portfolio2.account.testaccountinfo;
+package portfolio2.account.config;
 
 public class TestAccountInfo {
 

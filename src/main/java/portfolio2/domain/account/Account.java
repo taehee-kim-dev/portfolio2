@@ -159,22 +159,12 @@ public class Account {
         }
     }
 
-    public void completeSignUp() {
-        this.isEmailVerified = true;
-        this.joinedAt = LocalDateTime.now();
-    }
-
-    public boolean isValidTokenForEmailCheck(String token) {
-        return this.emailVerificationToken.equals(token);
-    }
-
-    public boolean canSendConfirmEmail() {
+    public boolean canSendEmailVerificationEmail() {
         // 인증 이메일을 이미 5번 보냈는가?
         if(this.countOfSendingEmailVerificationEmail == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
             return this.emailVerificationTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
         }
-
         return true;
     }
 
@@ -196,10 +186,6 @@ public class Account {
             // 날짜 재설정 없이 카운트만 증가
             this.countOfSendingFindPasswordEmail++;
         }
-    }
-
-    public boolean isValidTokenForEmailLogin(String token) {
-        return this.findPasswordToken.equals(token);
     }
 
     public boolean canSendLoginEmail() {

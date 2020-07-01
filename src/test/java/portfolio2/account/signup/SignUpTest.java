@@ -12,10 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.account.testaccountinfo.*;
+import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.domain.account.SignUpProcess;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
@@ -31,7 +30,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static portfolio2.account.testaccountinfo.TestAccountInfo.*;
+import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.UrlAndViewName.*;
 
 @Slf4j
