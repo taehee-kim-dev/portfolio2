@@ -11,6 +11,8 @@ import portfolio2.service.account.AccountService;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
+import static portfolio2.account.testaccountinfo.TestAccountInfo.*;
+
 @RequiredArgsConstructor
 public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedIn> {
 
@@ -21,16 +23,16 @@ public class SignUpAndLoggedInSecurityContextFactory implements WithSecurityCont
     public SecurityContext createSecurityContext(SignUpAndLoggedIn signUpAndLoggedIn) {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(TestAccountInfo.TEST_USER_ID)
-                .nickname(TestAccountInfo.TEST_NICKNAME)
-                .email(TestAccountInfo.TEST_EMAIL)
-                .password(TestAccountInfo.TEST_PASSWORD)
+                .userId(TEST_USER_ID)
+                .nickname(TEST_NICKNAME)
+                .email(TEST_EMAIL)
+                .password(TEST_PASSWORD)
                 .build();
 
         signUpService.signUp(signUpRequestDto);
 
         // Authentication 만들고 SecurityContext에 넣어주기
-        UserDetails customPrincipal = accountService.loadUserByUsername(TestAccountInfo.TEST_USER_ID);
+        UserDetails customPrincipal = accountService.loadUserByUsername(TEST_USER_ID);
         Authentication authentication = new UsernamePasswordAuthenticationToken(customPrincipal, customPrincipal.getPassword(), customPrincipal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
