@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
@@ -261,7 +260,7 @@ public class LogInAndOutTest {
     @SignUpAndLoggedIn
     @Test
     void signUpConfirmProcessForTestWithSignUpAndLoggedIn() throws Exception {
-        assertTrue(signUpConfirmProcessForTest.isSignedUpUserId(TEST_USER_ID));
+        assertTrue(signUpConfirmProcessForTest.isSignedUpByUserId(TEST_USER_ID));
         assertEquals(TEST_USER_ID, signUpConfirmProcessForTest.getSignedUpAccountInDbByUserId(TEST_USER_ID).getUserId());
 
         assertTrue(logInConfirmProcessForTest.isSomeoneLoggedIn());

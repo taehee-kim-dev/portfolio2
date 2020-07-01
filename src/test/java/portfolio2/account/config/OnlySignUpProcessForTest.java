@@ -2,7 +2,10 @@ package portfolio2.account.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import portfolio2.domain.account.Account;
+import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
@@ -13,20 +16,20 @@ import static portfolio2.account.config.TestAccountInfo.TEST_PASSWORD_2;
 @RequiredArgsConstructor
 public class OnlySignUpProcessForTest {
 
-    private final SignUpService signUpService;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public void signUpAndLogIn(){
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(TEST_USER_ID)
-                .nickname(TEST_NICKNAME)
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .build();
+    public Account signUpAndLogIn(){
+        Account account = new Account();
+        account.setUserId(TEST_USER_ID);
+        account.setNickname(TEST_NICKNAME);
+        account.setEmailWaitingToBeVerified(TEST_EMAIL);
+        account.setPassword(passwordEncoder.encode(TEST_PASSWORD));
 
-        signUpService.signUp(signUpRequestDto);
+        return accountRepository.save(account);
     }
 
-    public void signUpAndLogIn(int suffix){
+    public Account signUpAndLogIn(int suffix){
 
         String userId = null;
         String nickname = null;
@@ -50,16 +53,12 @@ public class OnlySignUpProcessForTest {
                 throw new IllegalArgumentException("SignUpAndLogInProcess의 signUpAndLogIn의 매개변수 잘못넘김");
         }
 
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(userId)
-                .nickname(nickname)
-                .email(email)
-                .password(password)
-                .build();
+        Account account = new Account();
+        account.setUserId(userId);
+        account.setNickname(nickname);
+        account.setEmailWaitingToBeVerified(email);
+        account.setPassword(passwordEncoder.encode(password));
 
-        signUpService.signUp(signUpRequestDto);
-
-        // 로그아웃
-        SecurityContextHolder.getContext().setAuthentication(null);
+        return accountRepository.save(account);
     }
 }

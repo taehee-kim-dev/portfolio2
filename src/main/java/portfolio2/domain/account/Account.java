@@ -119,17 +119,17 @@ public class Account {
 
 
 
-    private boolean notificationLikeOnMyPostByEmail = false;
+    private boolean notificationLikeOnMyPostByEmail = true;
 
-    private boolean notificationLikeOnMyReplyByEmail = false;
-
-
-    private boolean notificationReplyOnMyPostByEmail = false;
-
-    private boolean notificationReplyOnMyReplyByEmail = false;
+    private boolean notificationLikeOnMyReplyByEmail = true;
 
 
-    private boolean notificationNewPostWithMyTagByEmail = false;
+    private boolean notificationReplyOnMyPostByEmail = true;
+
+    private boolean notificationReplyOnMyReplyByEmail = true;
+
+
+    private boolean notificationNewPostWithMyTagByEmail = true;
 
 
 

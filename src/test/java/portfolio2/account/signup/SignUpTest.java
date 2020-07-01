@@ -54,33 +54,12 @@ public class SignUpTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
-
-    @Autowired
     private OnlySignUpProcessForTest onlySignUpProcessForTest;
-
-    @Autowired
-    private SignUpConfirmProcessForTest signUpConfirmProcessForTest;
-
-    @Autowired
-    private LogInConfirmProcessForTest logInConfirmProcessForTest;
 
 
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
-    }
-
-    @DisplayName("SecurityContextHolder 확인")
-    @SignUpAndLoggedIn
-    @Test
-    void testSecurityContextHolder(){
-
-        Authentication authentication1
-                = SecurityContextHolder.getContext().getAuthentication();
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(authentication1);
     }
 
     @DisplayName("회원가입 화면 보여주기 - 비로그인 상태")
@@ -90,9 +69,8 @@ public class SignUpTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(view().name(SIGN_UP_VIEW_NAME));
-
-        logInConfirmProcessForTest.isSomeoneLoggedIn();
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
@@ -127,33 +105,51 @@ public class SignUpTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
+        
+        // 이메일 인증 이메일 1회 발송 확인
+        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
 
-        then(emailService).should().sendEmail(any(EmailMessage.class));
 
         Account newAccountInDb = accountRepository.findByUserId(signUpRequestDto.getUserId());
-
+        
+        // 아이디, 닉네임 확인
         assertEquals(signUpRequestDto.getUserId(), newAccountInDb.getUserId());
         assertEquals(signUpRequestDto.getNickname(), newAccountInDb.getNickname());
+        
+        // 인증된 메일 null 확인
         assertNull(newAccountInDb.getVerifiedEmail());
+        
+        // 비밀번호 암호화 확인
         assertTrue(passwordEncoder.matches(signUpRequestDto.getPassword(), newAccountInDb.getPassword()));
-
+        
+        // 인증 대기 이메일 값 일치 확인
         assertEquals(signUpRequestDto.getEmail(), newAccountInDb.getEmailWaitingToBeVerified());
+        // 이메일 인증 상태 false 확인
         assertFalse(newAccountInDb.isEmailVerified());
+        // 이메일 인증 토큰 값 존재 확인
         assertNotNull(newAccountInDb.getEmailVerificationToken());
+        // 이메일 인증 토큰 생성 시간 존재 확인
         assertNotNull(newAccountInDb.getEmailVerificationTokenFirstGeneratedAt());
+        // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, newAccountInDb.getCountOfSendingEmailVerificationEmail());
+        // 회원 가입 시간 존재 확인
         assertNotNull(newAccountInDb.getJoinedAt());
 
+        // 비밀번호 찾기 토큰 null 확인
         assertNull(newAccountInDb.getFindPasswordToken());
+        // 비밀번호 찾기 토큰 생성 시간 null 확인
         assertNull(newAccountInDb.getFindPasswordTokenFirstGeneratedAt());
+        // 비밀번호 찾기 이메일 발송 횟수 0 확인
         assertEquals(0, newAccountInDb.getCountOfSendingFindPasswordEmail());
 
+
+        // 프로필 값 모두 null 확인
         assertNull(newAccountInDb.getBio());
         assertNull(newAccountInDb.getOccupation());
         assertNull(newAccountInDb.getLocation());
         assertNull(newAccountInDb.getProfileImage());
 
-
+        // Web 알림 값 모두 true 확인
         assertTrue(newAccountInDb.isNotificationReplyOnMyPostByWeb());
         assertTrue(newAccountInDb.isNotificationReplyOnMyReplyByWeb());
 
@@ -162,54 +158,25 @@ public class SignUpTest {
 
         assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByWeb());
 
+        // 이메일 알림 값 모두 true 확인
+        assertTrue(newAccountInDb.isNotificationReplyOnMyPostByEmail());
+        assertTrue(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
 
-        assertFalse(newAccountInDb.isNotificationReplyOnMyPostByEmail());
-        assertFalse(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(newAccountInDb.isNotificationLikeOnMyPostByEmail());
+        assertTrue(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
 
-        assertFalse(newAccountInDb.isNotificationLikeOnMyPostByEmail());
-        assertFalse(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
 
-        assertFalse(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
-
-
+        // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getTag());
         assertNotNull(newAccountInDb.getPost());
 
-        assertNull(signUpProcess.getNewAccount());
-    }
-
-    @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
-    @SignUpAndLoggedIn
-    @Test
-    void allValidFieldsSignUpWithLogIn() throws Exception{
-
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId("testUserId2")
-                .nickname("testNickname2")
-                .email("test2@email.com")
-                .password(TEST_PASSWORD)
-                .build();
-
-        mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", signUpRequestDto.getUserId())
-                .param("nickname", signUpRequestDto.getNickname())
-                .param("email", signUpRequestDto.getEmail())
-                .param("password", signUpRequestDto.getPassword())
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
-
-        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
-
-        Account newAccountInDb = accountRepository.findByUserId(signUpRequestDto.getUserId());
-        assertNull(newAccountInDb);
+        // SignUpProcess 필드값 null 초기화 확인
         assertNull(signUpProcess.getNewAccount());
     }
 
 
     // userId errors.
-
     @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 에러")
     @Test
     void signUpTooShortUserIdError() throws Exception{
@@ -229,6 +196,9 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 userId 에러")
@@ -250,6 +220,9 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 userId 에러")
@@ -271,19 +244,17 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
     }
 
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 userId 에러")
-    @SignUpAndLoggedIn
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(unauthenticated());
+
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -300,6 +271,9 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertTrue(accountRepository.existsByUserId(TEST_USER_ID));
+        assertFalse(accountRepository.existsByNickname("testNickname1"));
     }
 
 
@@ -324,6 +298,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 nickname 에러")
@@ -345,6 +321,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
@@ -366,6 +344,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 존재하는 nickname 에러")
@@ -394,6 +374,9 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertTrue(accountRepository.existsByUserId(TEST_USER_ID));
+        assertFalse(accountRepository.existsByUserId("test1@email.com"));
     }
 
 
@@ -418,6 +401,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 에러")
@@ -446,6 +431,11 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertTrue(accountRepository.existsByUserId(TEST_USER_ID));
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID_1));
+
+
     }
 
     @DisplayName("회원가입 POST 요청 - 이미 인증된 이메일로 존재하는 email 에러")
@@ -482,6 +472,9 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertTrue(accountRepository.existsByUserId(TEST_USER_ID));
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID_1));
     }
 
 
@@ -506,6 +499,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 너무 긴 password 에러")
@@ -527,6 +522,8 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
@@ -548,102 +545,59 @@ public class SignUpTest {
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
-    }
 
-//    @DisplayName("SignUpAndLogInWithAccount1Process 테스트")
-//    @Test
-//    void signUpAndLogInWithAccount1ProcessTest() throws Exception{
-//        signUpAndLogInProcess.signUpAndLogIn();
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
 //
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
-//
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//    }
-//
-//    @DisplayName("SignUpAndLogInWithAccount2Process 테스트")
-//    @Test
-//    void signUpAndLogInWithAccount2ProcessTest() throws Exception{
-//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
-//    }
-//
-//    @DisplayName("SignUpAndLogOutWithAccount1Process 테스트")
-//    @Test
-//    void signUpAndLogOutWithAccount1ProcessTest() throws Exception{
-//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
-//
-//
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(unauthenticated());
-//
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//    }
-//
-//    @DisplayName("SignUpAndLogOutWithAccount2Process 테스트")
-//    @Test
-//    void signUpAndLogOutWithAccount2ProcessTest() throws Exception{
-//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
-//
-//        mockMvc.perform(get(HOME_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(unauthenticated());
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
-//    }
 //
 //    @DisplayName("하나는 로그인 하고 나머지 하나는 로그아웃 했을때 최종적으로 인증되어있는 계정 없음")
 //    @Test
 //    void signUpAndLogInAndLogOutProcessTest() throws Exception{
-//        signUpAndLogInProcess.signUpAndLogIn();
-//        signUpAndLogOutWithAccount2Process.signUpAndLogOut();
+//
+//        signUpAndLogInProcessForTest.signUpAndLogIn(1);
+//
+//        mockMvc.perform(post("/logout")
+//                .with(csrf()))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl(HOME_URL))
+//                .andExpect(unauthenticated());
+//
+//        signUpAndLogInProcessForTest.signUpAndLogIn(2);
+//
+//        mockMvc.perform(post("/logout")
+//                .with(csrf()))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl(HOME_URL))
+//                .andExpect(unauthenticated());
 //
 //        mockMvc.perform(get(HOME_URL))
 //                .andExpect(status().isOk())
 //                .andExpect(unauthenticated());
 //
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_1));
+//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_2));
 //    }
 //
 //    @DisplayName("하나는 로그아웃 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")
 //    @Test
 //    void signUpAndLogOutAndLogInProcessTest() throws Exception{
-//        signUpAndLogOutWithAccount1Process.signUpAndLogOut();
-//        signUpAndLogInWithAccount2Process.signUpAndLogIn();
+//
+//        signUpAndLogInProcessForTest.signUpAndLogIn(1);
+//
+//        mockMvc.perform(post("/logout")
+//                .with(csrf()))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl(HOME_URL))
+//                .andExpect(unauthenticated());
+//
+//        signUpAndLogInProcessForTest.signUpAndLogIn(2);
 //
 //        mockMvc.perform(get(HOME_URL))
 //                .andExpect(status().isOk())
 //                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 //
-//        Account account1 = accountRepository.findByUserId(TEST_USER_ID_1);
-//        assertNotNull(account1);
-//        assertEquals(TEST_USER_ID_1, account1.getUserId());
-//
-//        Account account2 = accountRepository.findByUserId(TEST_USER_ID_2);
-//        assertNotNull(account2);
-//        assertEquals(TEST_USER_ID_2, account2.getUserId());
+//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_1));
+//        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_2));
 //    }
 //
 //    @DisplayName("하나로 로그인 하고 나머지 하나로 로그인 했을때 마지막 계정으로 인증되어 있음")

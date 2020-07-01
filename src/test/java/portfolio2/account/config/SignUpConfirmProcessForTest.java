@@ -15,7 +15,7 @@ public class SignUpConfirmProcessForTest {
 
     private final AccountRepository accountRepository;
 
-    public boolean isSignedUpUserId(String userId){
+    public boolean isSignedUpByUserId(String userId){
         return accountRepository.existsByUserId(userId);
     }
 
