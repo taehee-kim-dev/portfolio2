@@ -34,25 +34,31 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
+
+
     @Column(unique = true)
     private String verifiedEmail;
+
+    @Column(unique = true)
+    private String emailWaitingToBeVerified;
+
+
 
     private String password;
 
 
-    private String emailWaitingToBeVerified;
 
-    private boolean isEmailFirstVerified;
+    private boolean isEmailFirstVerified = false;
 
-    private boolean isEmailVerified;
+    private boolean isEmailVerified = false;
+
+
 
     private String emailVerificationToken;
 
     private LocalDateTime emailVerificationTokenFirstGeneratedAt;
 
     private int countOfSendingEmailVerificationEmail = 0;
-
-    private LocalDateTime joinedAt;
 
 
 
@@ -63,14 +69,6 @@ public class Account {
     private int countOfSendingFindPasswordEmail = 0;
 
 
-
-
-
-    private String bio;
-
-    private String occupation;
-
-    private String location;
 
     /*
         @Lob :
@@ -93,6 +91,17 @@ public class Account {
     @Lob
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
+
+    private String bio;
+
+    private String occupation;
+
+    private String location;
+
+
+
+    private LocalDateTime joinedAt;
+
 
 
 

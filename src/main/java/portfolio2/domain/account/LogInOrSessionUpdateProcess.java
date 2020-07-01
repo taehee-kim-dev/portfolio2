@@ -10,11 +10,12 @@ import java.util.List;
 @Component
 public class LogInOrSessionUpdateProcess {
 
-    public void loginOrSessionUpdate(Account accountOrSessionObject) {
+    public Account loginOrSessionUpdate(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new CustomPrincipal(accountOrSessionObject),
-                accountOrSessionObject.getPassword(),
+                new CustomPrincipal(account),
+                account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
+        return account;
     }
 }
