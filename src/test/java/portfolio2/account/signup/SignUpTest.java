@@ -172,6 +172,34 @@ public class SignUpTest {
         assertNull(signUpProcess.getNewAccount());
     }
 
+    @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
+    @SignUpAndLoggedIn
+    @Test
+    void allValidFieldsSignUpWithLogIn() throws Exception{
+
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .userId(TEST_USER_ID_2)
+                .nickname(TEST_NICKNAME_2)
+                .email(TEST_EMAIL_2)
+                .password(TEST_PASSWORD_2)
+                .build();
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", signUpRequestDto.getUserId())
+                .param("nickname", signUpRequestDto.getNickname())
+                .param("email", signUpRequestDto.getEmail())
+                .param("password", signUpRequestDto.getPassword())
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        // 이메일 인증 이메일 총 1회만 전송됨
+        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID_2));
+    }
+
 
     // userId errors.
     @DisplayName("회원가입 POST 요청 - 너무 짧은 userId 에러")
