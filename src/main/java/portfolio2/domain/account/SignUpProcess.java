@@ -1,16 +1,12 @@
 package portfolio2.domain.account;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.SendEmail;
 import portfolio2.dto.account.SignUpRequestDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -36,17 +32,13 @@ public class SignUpProcess {
         accountRepository.save(this.newAccount);
     }
 
-    public void sendEmailVerificationEmail() {
+    public Account sendEmailVerificationEmail() {
         this.newAccount.generateEmailCheckToken();
         sendEmail.sendEmailVerificationEmail(this.newAccount);
+        return this.newAccount;
     }
 
-    public void login() {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new CustomPrincipal(this.newAccount),
-                this.newAccount.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(token);
+    public void clearNewAccountField(){
         this.newAccount = null;
     }
 }
