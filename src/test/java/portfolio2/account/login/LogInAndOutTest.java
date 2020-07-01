@@ -4,13 +4,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
 
@@ -33,19 +30,10 @@ public class LogInAndOutTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private SignUpService signUpService;
-
-    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
-    private OnlySignUpProcessForTest onlySignUpProcessForTest;
-
-    @Autowired
-    private SignUpConfirmProcessForTest signUpConfirmProcessForTest;
-
-    @Autowired
-    private LogInConfirmProcessForTest logInConfirmProcessForTest;
+    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
 
     @AfterEach
     void afterEach(){
@@ -77,7 +65,7 @@ public class LogInAndOutTest {
     @Test
     void logInWithCorrectIdAndPasswordWithLogIn() throws Exception {
 
-        onlySignUpProcessForTest.signUpNotDefaultWithSuffix(2);
+        signUpAndLogOutProcessForTest.signUpAndLogOutNotDefaultWith(TEST_USER_ID_2);
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -95,7 +83,7 @@ public class LogInAndOutTest {
     @Test
     void logInSuccessWithCorrectIdAndPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -110,7 +98,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithCorrectIdAndIncorrectPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -125,7 +113,7 @@ public class LogInAndOutTest {
     @Test
     void logInSuccessWithCorrectVerifiedEmailAndPassword() throws Exception {
 
-        Account signedUpAccountInDb = onlySignUpProcessForTest.signUpDefault();
+        Account signedUpAccountInDb = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
         accountRepository.save(signedUpAccountInDb);
@@ -143,7 +131,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithCorrectEmailAndIncorrectPassword() throws Exception {
 
-        Account signedUpAccountInDb = onlySignUpProcessForTest.signUpDefault();
+        Account signedUpAccountInDb = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -160,7 +148,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithIncorrectUserIdAndCorrectPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", "incorrectUserId")
@@ -175,7 +163,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithIncorrectUserIdAndIncorrectPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", "incorrectUserId")
@@ -190,7 +178,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithIncorrectVerifiedEmailAndCorrectPassword() throws Exception {
 
-        Account signedUpAccountInDb = onlySignUpProcessForTest.signUpDefault();
+        Account signedUpAccountInDb = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -205,7 +193,7 @@ public class LogInAndOutTest {
     @DisplayName("틀린 인증된 이메일, 틀린 비밀번호로 로그인 실패")
     @Test
     void logInFailureWithIncorrectVerifiedEmailAndIncorrectPassword() throws Exception {
-        Account signedUpAccountInDb = onlySignUpProcessForTest.signUpDefault();
+        Account signedUpAccountInDb = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -221,7 +209,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithCorrectUnverifiedEmailAndCorrectPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_EMAIL)
@@ -236,7 +224,7 @@ public class LogInAndOutTest {
     @Test
     void logInFailureWithCorrectUnverifiedEmailAndIncorrectPassword() throws Exception {
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_EMAIL)
@@ -257,130 +245,5 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(unauthenticated());
     }
-
-
-
-
-
-
-
-
-
-    @DisplayName("signUpConfirmProcessForTestWithSignUpAndLoggedIn")
-    @SignUpAndLoggedIn
-    @Test
-    void signUpConfirmProcessForTestWithSignUpAndLoggedIn() throws Exception {
-        assertTrue(signUpConfirmProcessForTest.isSignedUpByUserId(TEST_USER_ID));
-        assertEquals(TEST_USER_ID, signUpConfirmProcessForTest.getSignedUpAccountInDbByUserId(TEST_USER_ID).getUserId());
-
-        assertTrue(logInConfirmProcessForTest.isSomeoneLoggedIn());
-        assertTrue(logInConfirmProcessForTest.isLoggedInByUserId(TEST_USER_ID));
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(SecurityContextHolder.getContext());
-
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL));
-
-//        System.out.println("*** 테스트 출력2 ***");
-//        System.out.println(SecurityContextHolder.getContext());
-
-        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
-    }
-
-    @DisplayName("아무도 로그인하지 않은 상태 테스트")
-    @Test
-    void anyoneNotLoggedIn() throws Exception {
-
-        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
-
-        mockMvc.perform(post("/logout")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(HOME_URL))
-                .andExpect(unauthenticated());
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(SecurityContextHolder.getContext());
-
-        assertFalse(logInConfirmProcessForTest.isSomeoneLoggedIn());
-    }
-
-
-
-    @DisplayName("인증 상태 테스트1")
-    @SignUpAndLoggedIn
-    @Test
-    void authenticatedTest1() throws Exception {
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
-    }
-
-    @DisplayName("인증 상태 테스트2")
-    @Test
-    void authenticatedTest2() throws Exception {
-
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(TEST_USER_ID)
-                .nickname(TEST_NICKNAME)
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .build();
-
-        signUpService.signUp(signUpRequestDto);
-
-        Authentication authentication1
-                = SecurityContextHolder.getContext().getAuthentication();
-
-//        System.out.println("*** 테스트 출력1 ***");
-//        System.out.println(authentication1);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
-
-        Authentication authentication2
-                = SecurityContextHolder.getContext().getAuthentication();
-
-//        System.out.println("*** 테스트 출력2 ***");
-//        System.out.println(authentication2);
-    }
-
-    @DisplayName("비인증 상태 테스트1")
-    @SignUpAndLoggedIn
-    @Test
-    void unauthenticatedTest1() throws Exception {
-
-        SecurityContextHolder.getContext().setAuthentication(null);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-    }
-
-    @DisplayName("비인증 상태 테스트2")
-    @Test
-    void unauthenticatedTest2() throws Exception {
-
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .userId(TEST_USER_ID)
-                .nickname(TEST_NICKNAME)
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .build();
-
-        signUpService.signUp(signUpRequestDto);
-
-        SecurityContextHolder.getContext().setAuthentication(null);
-
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(unauthenticated());
-    }
-
 
 }

@@ -17,7 +17,7 @@ public class SignUpAndLogOutProcessForTest {
     private final SignUpService signUpService;
     private final AccountRepository accountRepository;
 
-    public Account signUpAndLogIn(){
+    public Account signUpAndLogOutDefault(){
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)
                 .nickname(TEST_NICKNAME)
@@ -31,21 +31,21 @@ public class SignUpAndLogOutProcessForTest {
         return accountRepository.findByUserId(TEST_USER_ID);
     }
 
-    public Account signUpAndLogIn(int suffix){
+    public Account signUpAndLogOutNotDefaultWith(String testUserId){
 
         String userId = null;
         String nickname = null;
         String email = null;
         String password = null;
 
-        switch(suffix){
-            case 1:
+        switch(testUserId){
+            case TEST_USER_ID_1:
                 userId = TEST_USER_ID_1;
                 nickname = TEST_NICKNAME_1;
                 email = TEST_EMAIL_1;
                 password = TEST_PASSWORD_1;
                 break;
-            case 2:
+            case TEST_USER_ID_2:
                 userId = TEST_USER_ID_2;
                 nickname = TEST_NICKNAME_2;
                 email = TEST_EMAIL_2;

@@ -6,11 +6,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import portfolio2.domain.account.CustomPrincipal;
 import portfolio2.service.account.AccountService;
 
 @RequiredArgsConstructor
 @Component
-public class LogInProcess {
+public class LogInAndOutProcess {
 
     private final AccountService accountService;
 
@@ -19,5 +20,20 @@ public class LogInProcess {
         UserDetails customPrincipal = accountService.loadUserByUsername(userId);
         Authentication authentication = new UsernamePasswordAuthenticationToken(customPrincipal, customPrincipal.getPassword(), customPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public void logOut(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
+    public boolean isSomeoneLoggedIn(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null;
+    }
+
+    public boolean isLoggedInByUserId(String userId){
+        CustomPrincipal customPrincipal
+                = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userId.equals(customPrincipal.getSessionAccount().getUserId());
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.SignUpProcess;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
@@ -41,9 +40,6 @@ public class SignUpTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private SignUpProcess signUpProcess;
-
     @MockBean
     private EmailService emailService;
 
@@ -51,7 +47,7 @@ public class SignUpTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private OnlySignUpProcessForTest onlySignUpProcessForTest;
+    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
 
 
     @AfterEach
@@ -167,9 +163,6 @@ public class SignUpTest {
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getTag());
         assertNotNull(newAccountInDb.getPost());
-
-        // SignUpProcess 필드값 null 초기화 확인
-        assertNull(signUpProcess.getNewAccount());
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
@@ -279,7 +272,7 @@ public class SignUpTest {
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -377,7 +370,7 @@ public class SignUpTest {
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -429,7 +422,7 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
-        onlySignUpProcessForTest.signUpDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID_1)
@@ -457,7 +450,7 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 
-        Account existingAccount = onlySignUpProcessForTest.signUpDefault();
+        Account existingAccount = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         existingAccount.setVerifiedEmail(TEST_EMAIL);
         accountRepository.save(existingAccount);
 
