@@ -15,6 +15,8 @@ import portfolio2.domain.account.AccountRepository;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -30,7 +32,7 @@ import static portfolio2.config.UrlAndViewName.*;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FirstEmailVerificationTest {
+public class EmailVerificationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,15 +59,18 @@ public class FirstEmailVerificationTest {
 
     // 정상 링크
 
-    @DisplayName("이메일 인증 - 정상 링크 - 처음 회원가입 시 - 비로그인 상태")
+    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태")
     @SignUpAndLoggedIn
     @Test
-    void emailVerificationTestWithValidLinkWhenFirstSignUpNotLoggedIn() throws Exception{
-
-        Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+    void validLinkNotLoggedIn() throws Exception{
 
         // 로그아웃
         logInAndOutProcess.logOut();
+
+        // 로그아웃 확인
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+
+        Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
 
         // 이메일 인증 링크
         String emailVerificationLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
@@ -104,14 +109,22 @@ public class FirstEmailVerificationTest {
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
     }
 
-    @DisplayName("이메일 인증 - 정상 링크 - 처음 회원가입 시 - 본인 계정으로 로그인 상태")
+
+    @DisplayName("이메일 인증 - 정상 링크 - 본인 계정으로 로그인 상태")
     @SignUpAndLoggedIn
     @Test
-    void emailVerificationTestWithValidLinkWhenFirstSignUpLoggedInByOwnAccount() throws Exception{
+    void validLinkLoggedInByOwnAccount() throws Exception{
 
         // 유효 링크 찾기
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+        // 처음 인증된 상태
+        accountInDbToBeEmailVerified.setEmailFirstVerified(true);
+        LocalDateTime beforeTokenGeneratedAt
+                = accountInDbToBeEmailVerified.getEmailVerificationTokenFirstGeneratedAt();
+        // 상태값 저장
+        accountRepository.save(accountInDbToBeEmailVerified);
 
+        // 이후에 링크 발급받은 상태
         // 이메일 인증 링크
         String validLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
                 "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
@@ -142,7 +155,8 @@ public class FirstEmailVerificationTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertEquals(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt(),
+                beforeTokenGeneratedAt);
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
         // 이메일 전송 1회
@@ -150,12 +164,13 @@ public class FirstEmailVerificationTest {
     }
 
     @SignUpAndLoggedIn
-    @DisplayName("이메일 인증 - 정상 링크 - 처음 회원가입 시 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
+    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
     @Test
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{
 
+        // 로그아웃
         logInAndOutProcess.logOut();
-
+        // 로그아웃 확인
         assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
         // 다른 새로운 계정으로 회원가입 후 로그인
@@ -471,9 +486,9 @@ public class FirstEmailVerificationTest {
     @Test
     void inValidTokenWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
         Account accountInDbToBeEmailVerified
                 = signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
@@ -512,9 +527,9 @@ public class FirstEmailVerificationTest {
     @Test
     void inValidLinkWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
 
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
@@ -544,7 +559,5 @@ public class FirstEmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
-
-
 
 }

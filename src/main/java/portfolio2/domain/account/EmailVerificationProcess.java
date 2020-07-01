@@ -47,37 +47,6 @@ public class EmailVerificationProcess {
         return accountToBeVerified;
     }
 
-    public boolean canSendEmailVerificationEmail(Account sessionAccount) {
-        // 세션 계정을 DB에서 꺼낸다.
-        // 이메일 인증 이메일을 보낼 수 있는지 검사한다.
-        // 보낼 수 있으면 필드에 저장하고 return true
-        // 보낼 수 없으면 필드에 저장하지 않고 return false
-        Account accountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
-        if(accountInDb.canSendEmailVerificationEmail()){
-            this.accountToBeVerified = accountInDb;
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public void changeAccountState(AccountEmailUpdateRequestDto accountEmailUpdateRequestDto) {
-        // 계정 상태 변경
-        // 이메일 인증 안됨으로 변경
-        this.accountToBeVerified.setEmailVerified(false);
-        // 인증된 이메일 없앰
-        this.accountToBeVerified.setVerifiedEmail(null);
-        // 인증 대기중 이메일 설정
-        this.accountToBeVerified.setEmailWaitingToBeVerified(accountEmailUpdateRequestDto.getEmail());
-    }
-
-    public void sendEmailVerificationEmail() {
-        // 이메일 인증 이메일 첫 번째 이후 전송
-        // 앞에서 보낼 수 있음을 인증받은 상태이다.
-        this.accountToBeVerified.generateEmailCheckToken();
-        emailSendingProcess.sendEmailVerificationEmail(accountToBeVerified);
-    }
-
     public void clearField() {
         this.accountToBeVerified = null;
     }
