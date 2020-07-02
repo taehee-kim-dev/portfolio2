@@ -62,6 +62,7 @@ public class SignUpTest {
         mockMvc.perform(get(SIGN_UP_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
@@ -97,6 +98,7 @@ public class SignUpTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("email"))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
         
@@ -186,6 +188,8 @@ public class SignUpTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(HOME_URL))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 이메일 총 1회만 전송됨
@@ -213,6 +217,8 @@ public class SignUpTest {
                         "userId",
                         "tooShortUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -237,6 +243,8 @@ public class SignUpTest {
                         "userId",
                         "tooLongUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -261,6 +269,8 @@ public class SignUpTest {
                         "userId",
                         "invalidFormatUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -288,6 +298,8 @@ public class SignUpTest {
                         "userId",
                         "userIdAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -315,6 +327,8 @@ public class SignUpTest {
                         "nickname",
                         "tooShortNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -338,6 +352,8 @@ public class SignUpTest {
                         "nickname",
                         "tooLongNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -361,6 +377,8 @@ public class SignUpTest {
                         "nickname",
                         "invalidFormatNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -386,6 +404,8 @@ public class SignUpTest {
                         "nickname",
                         "nicknameAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -413,6 +433,8 @@ public class SignUpTest {
                         "email",
                         "invalidFormatEmail"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -424,7 +446,8 @@ public class SignUpTest {
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
-
+        Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_EMAIL, existingAccount.getEmailWaitingToBeVerified());
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID_1)
                 .param("nickname", "testNickname1")
@@ -438,6 +461,8 @@ public class SignUpTest {
                         "email",
                         "emailAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -468,6 +493,8 @@ public class SignUpTest {
                         "email",
                         "emailAlreadyExists"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -495,6 +522,8 @@ public class SignUpTest {
                         "password",
                         "tooShortPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -518,6 +547,8 @@ public class SignUpTest {
                         "password",
                         "tooLongPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
@@ -541,6 +572,8 @@ public class SignUpTest {
                         "password",
                         "invalidFormatPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(SIGN_UP_VIEW_NAME))
                 .andExpect(unauthenticated());
 
