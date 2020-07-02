@@ -32,6 +32,10 @@ public class UrlAndViewName {
     public static final String ACCOUNT_SETTING_PROFILE_URL = "/account/setting/profile";
     public static final String ACCOUNT_SETTING_PROFILE_VIEW_NAME = "account/setting/profile";
 
+    public static final String SHOW_PROFILE_URL = "/account/profile/";
+    public static final String SHOW_PROFILE_VIEW_NAME = "account/profile";
+    public static final String SHOW_PROFILE_NOT_FOUND_ERORR_VIEW_NAME = "account/profile-not-found-error";
+
     // AccountSettingController.java
     public static final String ACCOUNT_SETTING_ACCOUNT_URL = "/account/setting/account";
     public static final String ACCOUNT_SETTING_ACCOUNT_VIEW_NAME = "account/setting/account";

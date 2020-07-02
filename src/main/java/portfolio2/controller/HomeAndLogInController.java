@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.SessionAccount;
+import portfolio2.domain.account.config.SessionAccount;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;

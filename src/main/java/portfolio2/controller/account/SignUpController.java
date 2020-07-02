@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.SessionAccount;
+import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.dto.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 import portfolio2.validator.account.SignUpRequestDtoValidator;
@@ -65,9 +65,9 @@ public class SignUpController {
             return SIGN_UP_VIEW_NAME;
         }
 
-        signUpService.signUp(signUpRequestDto);
+        Account updatedSessionAccount = signUpService.signUp(signUpRequestDto);
 
-        model.addAttribute("email", signUpRequestDto.getEmail());
+        model.addAttribute("email", updatedSessionAccount.getEmailWaitingToBeVerified());
 
         return EMAIL_VERIFICATION_REQUEST_VIEW_NAME;
     }

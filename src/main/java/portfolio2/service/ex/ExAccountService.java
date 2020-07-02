@@ -18,7 +18,7 @@
 //import portfolio2.config.AppProperties;
 //import portfolio2.domain.account.Account;
 //import portfolio2.domain.account.AccountRepository;
-//import portfolio2.domain.account.CustomPrincipal;
+//import portfolio2.domain.account.config.CustomPrincipal;
 //import portfolio2.domain.tag.Tag;
 //import portfolio2.dto.account.SignUpRequestDto;
 //import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;

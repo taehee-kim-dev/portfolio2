@@ -6,12 +6,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import portfolio2.domain.account.CustomPrincipal;
+import portfolio2.domain.account.config.CustomPrincipal;
 import portfolio2.service.account.AccountService;
 
 @RequiredArgsConstructor
 @Component
-public class LogInAndOutProcess {
+public class LogInAndOutProcessForTest {
 
     private final AccountService accountService;
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.CustomPrincipal;
+import portfolio2.domain.account.config.CustomPrincipal;
 
 @Slf4j
 @Transactional

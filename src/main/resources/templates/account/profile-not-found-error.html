@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+</head>
+<body>
+
+<div th:replace="fragment.html :: commonNav"></div>
+
+<div class="container">
+
+    <div class="notification py-5 text-center" th:if="${notFoundError}">
+        <p class="lead" style="margin-top: 10px; margin-bottom: 35px">프로필 조회</p>
+        <div class="alert alert-danger" role="alert">
+            존재하지 않는 사용자 입니다.
+        </div>
+    </div>
+
+</div>
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+</body>
+</html>

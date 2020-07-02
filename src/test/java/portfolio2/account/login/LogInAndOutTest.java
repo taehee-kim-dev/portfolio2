@@ -4,13 +4,11 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.service.account.SignUpService;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,7 +60,7 @@ public class LogInAndOutTest {
     private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
 
     @Autowired
-    private LogInAndOutProcess logInAndOutProcess;
+    private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @AfterEach
     void afterEach(){
@@ -324,7 +322,7 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -353,14 +351,14 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***1");
 //        System.out.println(SecurityContextHolder.getContext());
 
 
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***2");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -374,8 +372,8 @@ public class LogInAndOutTest {
 
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
 //        System.out.println("***1");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -384,7 +382,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***2");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -393,7 +391,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***3");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -403,7 +401,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***4");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -417,8 +415,8 @@ public class LogInAndOutTest {
     void duplicateLogInInRow() throws Exception{
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
@@ -438,7 +436,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 
 //        System.out.println("***2");
@@ -448,7 +446,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***3");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -473,8 +471,8 @@ public class LogInAndOutTest {
     @Test
     void logInByCodingAndHomePrintWithAnnotation() throws Exception{
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
 //        System.out.println("***1 존재함");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -483,7 +481,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***2 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -492,7 +490,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***3 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -502,7 +500,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***4 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -516,16 +514,16 @@ public class LogInAndOutTest {
     @Test
     void duplicateLogInInRowWithAnnotaion() throws Exception{
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
 //        System.out.println("***1 존재함");
 //        System.out.println(SecurityContextHolder.getContext());
 
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
 //        System.out.println("***2 2로 존재함");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -534,7 +532,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("***3 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -543,7 +541,7 @@ public class LogInAndOutTest {
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         // 코드로 작성한 로그인들 중간중간은 코드로 검증 된다.
         // 하지만, mockMvc를 넘어가면 코드로 검증이 안 된다.
@@ -566,18 +564,18 @@ public class LogInAndOutTest {
     @Test
     void codeLogOutAndTestWithCodeAndMockMvc() throws Exception{
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        logInAndOutProcess.logOut();
+        logInAndOutProcessForTest.logOut();
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("*** 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -588,8 +586,8 @@ public class LogInAndOutTest {
     @Test
     void mockMvcLogOutAndTestWithCodeAndMockMvc() throws Exception{
 
-        assertTrue(logInAndOutProcess.isSomeoneLoggedIn());
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isSomeoneLoggedIn());
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(post("/logout")
                 .with(csrf()))
@@ -597,13 +595,13 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("*** 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -617,7 +615,7 @@ public class LogInAndOutTest {
     @Test
     void logOutWitNotLoggedIn() throws Exception{
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(post("/logout")
                 .with(csrf()))
@@ -625,13 +623,13 @@ public class LogInAndOutTest {
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated());
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
 //        System.out.println("*** 존재하지 않음");
 //        System.out.println(SecurityContextHolder.getContext());
@@ -641,9 +639,9 @@ public class LogInAndOutTest {
     @Test
     void onlyCodeTest() throws Exception{
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
-        logInAndOutProcess.logOut();
+        logInAndOutProcessForTest.logOut();
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
     }
 
     @DisplayName("로그인 로그아웃은 직접 작성 코드로, 검증만 마지막에 mockMvc로")

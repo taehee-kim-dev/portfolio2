@@ -1,4 +1,4 @@
-package portfolio2.domain.account;
+package portfolio2.domain.account.config;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

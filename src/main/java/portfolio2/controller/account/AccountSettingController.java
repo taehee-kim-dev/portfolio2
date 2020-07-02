@@ -12,7 +12,7 @@
 //import org.springframework.web.bind.annotation.*;
 //import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 //import portfolio2.domain.account.Account;
-//import portfolio2.domain.account.SessionAccount;
+//import portfolio2.domain.account.config.SessionAccount;
 //import portfolio2.dto.account.TagUpdateRequestDto;
 //import portfolio2.dto.account.profileupdate.*;
 //import portfolio2.validator.account.profileupdate.AccountEmailUpdateRequestDtoValidator;

@@ -1,7 +1,6 @@
 package portfolio2.controller.post;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.SessionAccount;
+import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;

@@ -8,7 +8,7 @@
 //import org.springframework.web.bind.annotation.*;
 //import portfolio2.domain.account.Account;
 //import portfolio2.domain.account.AccountRepository;
-//import portfolio2.domain.account.SessionAccount;
+//import portfolio2.domain.account.config.SessionAccount;
 //import portfolio2.dto.account.FindPasswordRequestDto;
 //import portfolio2.service.account.AccountService;
 //import portfolio2.dto.account.SignUpRequestDto;

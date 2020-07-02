@@ -1,7 +1,9 @@
-package portfolio2.domain.account;
+package portfolio2.domain.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import portfolio2.domain.account.Account;
+import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.email.EmailSendingProcess;
 import portfolio2.dto.account.EmailVerificationRequestDto;
 

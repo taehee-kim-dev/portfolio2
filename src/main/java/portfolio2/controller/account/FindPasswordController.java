@@ -10,7 +10,7 @@
 //import org.springframework.web.bind.annotation.ModelAttribute;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import portfolio2.domain.account.Account;
-//import portfolio2.domain.account.SessionAccount;
+//import portfolio2.domain.account.config.SessionAccount;
 //import portfolio2.dto.account.FindPasswordRequestDto;
 //import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 //

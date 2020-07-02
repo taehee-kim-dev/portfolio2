@@ -47,7 +47,7 @@ public class EmailVerificationTest {
     private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
 
     @Autowired
-    private LogInAndOutProcess logInAndOutProcess;
+    private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @MockBean
     private EmailService emailService;
@@ -65,10 +65,10 @@ public class EmailVerificationTest {
     void validLinkNotLoggedInNotFirstVerified() throws Exception{
 
         // 로그아웃
-        logInAndOutProcess.logOut();
+        logInAndOutProcessForTest.logOut();
 
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
 
@@ -115,10 +115,10 @@ public class EmailVerificationTest {
     void validLinkNotLoggedInFirstVerified() throws Exception{
 
         // 로그아웃
-        logInAndOutProcess.logOut();
+        logInAndOutProcessForTest.logOut();
 
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
         // 처음 인증 설정
@@ -222,15 +222,15 @@ public class EmailVerificationTest {
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{
 
         // 로그아웃
-        logInAndOutProcess.logOut();
+        logInAndOutProcessForTest.logOut();
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         // 다른 새로운 계정으로 회원가입 후 로그인
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         // 로그인된 계정 확인
-        logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2);
+        logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2);
 
         // 유효 링크 찾기
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
@@ -278,7 +278,7 @@ public class EmailVerificationTest {
         Account accountInDbToBeEmailVerified = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
@@ -317,7 +317,7 @@ public class EmailVerificationTest {
         Account accountInDbToBeEmailVerified = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
                 "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
@@ -355,7 +355,7 @@ public class EmailVerificationTest {
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         String invalidLink = CHECK_EMAIL_VERIFICATION_LINK_URL + "?inval id";
 
@@ -390,7 +390,7 @@ public class EmailVerificationTest {
 
         Account accountInDbToBeEmailVerified = signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
@@ -427,7 +427,7 @@ public class EmailVerificationTest {
 
         Account accountInDbToBeEmailVerified = signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
                 "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
@@ -463,7 +463,7 @@ public class EmailVerificationTest {
 
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         String invalidLink = CHECK_EMAIL_VERIFICATION_LINK_URL + "?invalid";
 
@@ -499,12 +499,12 @@ public class EmailVerificationTest {
 
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         Account accountInDbToBeEmailVerified
                 = signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
@@ -541,12 +541,12 @@ public class EmailVerificationTest {
 
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         Account accountInDbToBeEmailVerified
                 = signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
                 "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
@@ -582,11 +582,11 @@ public class EmailVerificationTest {
 
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
-        assertFalse(logInAndOutProcess.isSomeoneLoggedIn());
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
-        assertTrue(logInAndOutProcess.isLoggedInByUserId(TEST_USER_ID_2));
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
         String invalidLink = CHECK_EMAIL_VERIFICATION_LINK_URL + "?in-valid";
 

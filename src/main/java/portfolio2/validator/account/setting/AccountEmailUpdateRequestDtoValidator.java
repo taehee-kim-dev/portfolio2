@@ -1,4 +1,4 @@
-package portfolio2.validator.account.profile.update;
+package portfolio2.validator.account.setting;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
