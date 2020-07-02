@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import portfolio2.dto.account.profileupdate.PasswordUpdateRequestDto;
+import portfolio2.dto.account.profile.update.PasswordUpdateRequestDto;
 
 @Component
 @RequiredArgsConstructor
@@ -26,9 +26,7 @@ public class PasswordUpdateRequestDtoValidator implements Validator {
             errors.rejectValue("newPassword", "tooLongNewPassword", "비밀번호는 30자 이내여야 합니다.");
         }else if((passwordUpdateRequestDto.getNewPassword().contains(" "))){
             errors.rejectValue("newPassword", "invalidFormatNewPassword", "비밀번호에 공백은 포함될 수 없습니다.");
-        }
-
-        if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())){
+        }else if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())) {
             errors.rejectValue("newPasswordConfirm", "notSamePassword", "위의 비밀번호와 같지 않습니다.");
         }
         

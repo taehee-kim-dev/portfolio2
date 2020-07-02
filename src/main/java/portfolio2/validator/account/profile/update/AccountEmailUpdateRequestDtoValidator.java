@@ -5,8 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.profileupdate.AccountEmailUpdateRequestDto;
-import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
+import portfolio2.dto.account.profile.update.AccountEmailUpdateRequestDto;
 
 @Component
 @RequiredArgsConstructor
@@ -28,11 +27,9 @@ public class AccountEmailUpdateRequestDtoValidator implements Validator {
 
         if(!(accountEmailUpdateRequestDto.getEmail().matches(emailPattern))){
             errors.rejectValue("email", "invalidFormatEmail", "이메일 형식에 맞지 않습니다.");
-        }
-
-        if(accountRepository.existsByVerifiedEmail(accountEmailUpdateRequestDto.getEmail())){
+        }else if(accountRepository.existsByVerifiedEmail(accountEmailUpdateRequestDto.getEmail())){
             errors.rejectValue("email", "emailAlreadyExists", "이미 사용중인 이메일 입니다.");
         }
-        
+
     }
 }

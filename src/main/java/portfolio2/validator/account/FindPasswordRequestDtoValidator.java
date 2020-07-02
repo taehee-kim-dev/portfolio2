@@ -25,12 +25,13 @@ public class FindPasswordRequestDtoValidator implements Validator {
         
         String emailPattern = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
-        if(!(findPasswordRequestDto.getEmail().matches(emailPattern))){
-            errors.rejectValue("email", "invalidFormatEmail","이메일 형식에 맞지 않습니다.");
-        }
+        String email = findPasswordRequestDto.getEmail();
 
-        if(!accountRepository.existsByVerifiedEmail(findPasswordRequestDto.getEmail())){
+        if(!(email.matches(emailPattern))){
+            errors.rejectValue("email", "invalidFormatEmail","이메일 형식에 맞지 않습니다.");
+        }else if(!accountRepository.existsByVerifiedEmail(email)){
             errors.rejectValue("email", "emailNotExists", "가입되어있지 않은 이메일 입니다.");
         }
+
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.profileupdate.AccountNicknameUpdateRequestDto;
+import portfolio2.dto.account.profile.update.AccountNicknameUpdateRequestDto;
 
 @Component
 @RequiredArgsConstructor
@@ -31,9 +31,7 @@ public class AccountNicknameUpdateRequestDtoValidator implements Validator {
             errors.rejectValue("nickname", "tooLongNickname", "닉네임은 15자 이내여야 합니다.");
         }else if(!(accountNicknameUpdateRequestDto.getNickname().matches(nicknamePattern))){
             errors.rejectValue("nickname", "invalidFormatNickname", "형식에 맞지 않는 닉네임 입니다.");
-        }
-
-        if(accountRepository.existsByNickname(accountNicknameUpdateRequestDto.getNickname())){
+        }else if(accountRepository.existsByNickname(accountNicknameUpdateRequestDto.getNickname())){
             errors.rejectValue("nickname", "nicknameAlreadyExists", "이미 사용중인 닉네임 입니다.");
         }
         
