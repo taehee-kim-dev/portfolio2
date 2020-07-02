@@ -82,6 +82,8 @@ public class EmailVerificationTest {
         mockMvc.perform(get(emailVerificationLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attribute("isOwnerLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -135,6 +137,8 @@ public class EmailVerificationTest {
         mockMvc.perform(get(emailVerificationLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attribute("isOwnerLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -188,6 +192,8 @@ public class EmailVerificationTest {
         mockMvc.perform(get(validLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attribute("isOwnerLoggedIn", true))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -244,7 +250,8 @@ public class EmailVerificationTest {
         mockMvc.perform(get(validLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
+                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attribute("isOwnerLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -292,6 +299,10 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
@@ -331,6 +342,10 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
@@ -368,6 +383,10 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
@@ -407,8 +426,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -444,8 +467,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -479,8 +506,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -524,8 +555,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인
@@ -566,8 +601,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인
@@ -605,8 +644,12 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인

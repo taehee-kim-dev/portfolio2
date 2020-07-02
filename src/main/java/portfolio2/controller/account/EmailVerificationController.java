@@ -12,9 +12,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.dto.account.EmailVerificationRequestDto;
 import portfolio2.service.account.EmailVerificationService;
-import portfolio2.service.account.SignUpService;
 import portfolio2.validator.account.EmailVerificationRequestDtoValidator;
-import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 
@@ -35,7 +33,6 @@ public class EmailVerificationController {
     }
 
     // 이메일 인증 링크 확인
-    // 인증 되면, 로그인 유무와 관계없이 무조건 현재 인증 링크에 해당하는 계정으로 로그인
     @GetMapping(CHECK_EMAIL_VERIFICATION_LINK_URL)
     public String checkEmailVerificationLink(@SessionAccount Account sessionAccount,
                                              @Valid @ModelAttribute
@@ -44,18 +41,30 @@ public class EmailVerificationController {
                                              Errors errors,
                                              Model model){
 
-        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-
-        if(errors.hasErrors()){
+        if(errors.hasErrors() || emailVerificationRequestDto == null){
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute("invalidLinkError", "invalidLinkError");
             return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
         }
 
-        Account updatedSessionAccount = emailVerificationService.emailVerifyAndLogIn(emailVerificationRequestDto);
+        Account verifiedAccount = emailVerificationService.emailVerifyAndLogInIfLoggedInByOwnAccount(emailVerificationRequestDto, sessionAccount);
+        boolean isOwnerLoggedIn = false;
+        if(sessionAccount != null){
+            isOwnerLoggedIn = sessionAccount.getUserId().equals(verifiedAccount.getUserId());
+        }else{
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        }
 
-        model.addAttribute("nickname", updatedSessionAccount.getNickname());
-        model.addAttribute("userId", updatedSessionAccount.getUserId());
-        model.addAttribute("email", updatedSessionAccount.getVerifiedEmail());
+        if(isOwnerLoggedIn){
+            model.addAttribute(SESSION_ACCOUNT, verifiedAccount);
+        }else{
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        }
+
+        model.addAttribute("isOwnerLoggedIn", isOwnerLoggedIn);
+        model.addAttribute("nickname", verifiedAccount.getNickname());
+        model.addAttribute("userId", verifiedAccount.getUserId());
+        model.addAttribute("email", verifiedAccount.getVerifiedEmail());
 
         return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
     }

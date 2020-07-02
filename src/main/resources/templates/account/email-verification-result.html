@@ -10,7 +10,7 @@
 <div class="container">
     <div class="notification py-5 text-center" th:if="${invalidLinkError}">
         <p class="lead">TH 이메일 인증</p>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" style="margin-top: 42px;">
             유효하지 않은 이메일 인증 링크 입니다.
         </div>
     </div>
@@ -18,8 +18,13 @@
     <div class="notification text-center" th:if="${invalidLinkError == null}" style="margin-top:90px">
         <h3 style="margin-bottom: 30px;">TH 이메일 인증 성공</h3>
         <h2><span th:text="${nickname}">nickname</span>(<span th:text="${userId}">userId</span>)님의 이메일(<span th:text="${email}">email</span>)이 인증되었습니다!</h2>
-        <h3 style="margin-top: 30px; margin-bottom: 30px">다시 로그인하여 이용해 주세요.</h3>
-        <small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small>
+        <div th:if="${sessionAccount != null && isOwnerLoggedIn}">
+            <div style="margin-top: 40px"><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
+        </div>
+        <div th:if="${!isOwnerLoggedIn}">
+            <h3 style="margin-top: 30px; margin-bottom: 30px">로그인하여 이용해 주세요.</h3>
+            <div><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
+        </div>
     </div>
 
 </div>
