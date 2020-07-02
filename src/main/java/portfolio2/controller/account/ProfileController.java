@@ -37,9 +37,9 @@ public class ProfileController {
                               @SessionAccount Account sessionAccount,
                               Model model){
 
-        Account searchedAccount = profileService.findUser(userId);
-
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+
+        Account searchedAccount = profileService.findUser(userId);
 
         // 존재하지 않는 사용자인 경우
         if(searchedAccount == null){
@@ -69,8 +69,9 @@ public class ProfileController {
                                     @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
                                     Errors errors, Model model,
                                     RedirectAttributes redirectAttributes){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+
         if(errors.hasErrors()){
-            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute(profileUpdateRequestDto);
             return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
         }

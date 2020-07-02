@@ -27,6 +27,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
+import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;
 
 @Slf4j

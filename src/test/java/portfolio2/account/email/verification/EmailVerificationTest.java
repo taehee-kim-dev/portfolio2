@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
+import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;
 
 @Slf4j
@@ -81,12 +82,12 @@ public class EmailVerificationTest {
         mockMvc.perform(get(emailVerificationLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
+                .andExpect(unauthenticated());
 
         // 이메일 인증 확인
         Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
@@ -134,12 +135,12 @@ public class EmailVerificationTest {
         mockMvc.perform(get(emailVerificationLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
+                .andExpect(unauthenticated());
 
         // 이메일 인증 확인
         Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
@@ -187,11 +188,11 @@ public class EmailVerificationTest {
         mockMvc.perform(get(validLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists("sessionAccount"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -248,7 +249,8 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인
         Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
@@ -291,6 +293,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
         // 이메일 인증 확인
@@ -329,6 +332,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
         // 이메일 인증 확인
@@ -365,6 +369,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
         // 이메일 인증 확인
@@ -403,6 +408,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -439,6 +445,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -473,6 +480,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         // 이메일 인증 확인
@@ -517,6 +525,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인
@@ -558,6 +567,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인
@@ -596,6 +606,7 @@ public class EmailVerificationTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
                 .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
         // 이메일 인증 확인

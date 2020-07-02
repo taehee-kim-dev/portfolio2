@@ -15,9 +15,7 @@ public class HomeAndLogInController {
 
     @GetMapping(HOME_URL)
     public String home(@SessionAccount Account sessionAccount, Model model){
-        if(sessionAccount != null){
-            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        }
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         return HOME_VIEW_NAME;
     }
 

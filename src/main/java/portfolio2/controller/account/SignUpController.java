@@ -14,6 +14,7 @@ import portfolio2.validator.account.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 
+import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;
 import static portfolio2.config.UrlAndViewName.HOME_URL;
 
@@ -65,9 +66,10 @@ public class SignUpController {
             return SIGN_UP_VIEW_NAME;
         }
 
-        Account updatedSessionAccount = signUpService.signUp(signUpRequestDto);
+        Account signedUpSessionAccount = signUpService.signUp(signUpRequestDto);
 
-        model.addAttribute("email", updatedSessionAccount.getEmailWaitingToBeVerified());
+        model.addAttribute(SESSION_ACCOUNT, signedUpSessionAccount);
+        model.addAttribute("email", signedUpSessionAccount.getEmailWaitingToBeVerified());
 
         return EMAIL_VERIFICATION_REQUEST_VIEW_NAME;
     }

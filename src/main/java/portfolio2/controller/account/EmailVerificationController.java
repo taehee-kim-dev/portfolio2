@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import portfolio2.domain.account.Account;
+import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.dto.account.EmailVerificationRequestDto;
 import portfolio2.service.account.EmailVerificationService;
 import portfolio2.service.account.SignUpService;
@@ -36,11 +37,14 @@ public class EmailVerificationController {
     // 이메일 인증 링크 확인
     // 인증 되면, 로그인 유무와 관계없이 무조건 현재 인증 링크에 해당하는 계정으로 로그인
     @GetMapping(CHECK_EMAIL_VERIFICATION_LINK_URL)
-    public String checkEmailVerificationLink(@Valid @ModelAttribute
+    public String checkEmailVerificationLink(@SessionAccount Account sessionAccount,
+                                             @Valid @ModelAttribute
                                                          EmailVerificationRequestDto
                                                          emailVerificationRequestDto,
                                              Errors errors,
                                              Model model){
+
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
 
         if(errors.hasErrors()){
             model.addAttribute("invalidLinkError", "invalidLinkError");
@@ -49,7 +53,6 @@ public class EmailVerificationController {
 
         Account updatedSessionAccount = emailVerificationService.emailVerifyAndLogIn(emailVerificationRequestDto);
 
-        model.addAttribute(SESSION_ACCOUNT, updatedSessionAccount);
         model.addAttribute("nickname", updatedSessionAccount.getNickname());
         model.addAttribute("userId", updatedSessionAccount.getUserId());
         model.addAttribute("email", updatedSessionAccount.getVerifiedEmail());
