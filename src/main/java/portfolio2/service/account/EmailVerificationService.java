@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.EmailVerificationProcess;
 import portfolio2.domain.account.LogInOrSessionUpdateProcess;
+import portfolio2.dto.account.EmailVerificationRequestDto;
 
 @Transactional
 @RequiredArgsConstructor
@@ -15,18 +16,11 @@ public class EmailVerificationService {
     private final EmailVerificationProcess emailVerificationProcess;
     private final LogInOrSessionUpdateProcess logInOrSessionUpdateProcess;
 
-    public boolean checkEmailVerificationLink(String email, String token) {
-        // 맞는 링크인지 확인
-        // 아니면 바로 false return
-        return emailVerificationProcess.isValidLink(email, token);
-    }
-
-    public Account emailVerifyAndLogIn() {
+    public Account emailVerifyAndLogIn(EmailVerificationRequestDto emailVerificationRequestDto) {
         // 이메일 인증
-        Account emailVerifiedAccountInDb = emailVerificationProcess.verifyEmail();
-        // EmailVerificationProcess 필드 초기화
-        emailVerificationProcess.clearField();
-        // 로그인 유무와 관계없이 무조건 현재 인증 링크에 해당하는 계정으로 로그인 후 해당 세션계정 객체 반환
+        Account emailVerifiedAccountInDb = emailVerificationProcess.verifyEmail(emailVerificationRequestDto);
+        // 로그인 유무와 관계없이 무조건 현재 인증 링크에 해당하는 계정으로 세션 업데이트 후
+        // 해당 세션 계정 객체 반환
         return logInOrSessionUpdateProcess.loginOrSessionUpdate(emailVerifiedAccountInDb);
     }
 }

@@ -42,21 +42,17 @@ public class EmailVerificationController {
                                              Errors errors,
                                              Model model){
 
-        System.out.println("***");
-        System.out.println(emailVerificationRequestDto.getEmail());
-        System.out.println(emailVerificationRequestDto.getToken());
-
         if(errors.hasErrors()){
             model.addAttribute("invalidLinkError", "invalidLinkError");
             return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
         }
 
-        Account sessionAccount = emailVerificationService.emailVerifyAndLogIn();
+        Account updatedSessionAccount = emailVerificationService.emailVerifyAndLogIn(emailVerificationRequestDto);
 
-        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        model.addAttribute("nickname", sessionAccount.getNickname());
-        model.addAttribute("userId", sessionAccount.getUserId());
-        model.addAttribute("email", sessionAccount.getVerifiedEmail());
+        model.addAttribute(SESSION_ACCOUNT, updatedSessionAccount);
+        model.addAttribute("nickname", updatedSessionAccount.getNickname());
+        model.addAttribute("userId", updatedSessionAccount.getUserId());
+        model.addAttribute("email", updatedSessionAccount.getVerifiedEmail());
 
         return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
     }
