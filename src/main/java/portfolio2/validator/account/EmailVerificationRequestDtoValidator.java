@@ -33,9 +33,9 @@ public class EmailVerificationRequestDtoValidator implements Validator {
         Account checkAccount = accountRepository.findByEmailWaitingToBeVerified(emailVerificationRequestDto.getEmail());
 
         if(checkAccount == null){
-            errors.rejectValue("email", "invalidEmail", "인증 대기중인 이메일에 존재하지 않음.");
+            errors.rejectValue("email", "invalidLink", "인증 대기중인 이메일에 존재하지 않음.");
         }else if(!checkAccount.getEmailVerificationToken().equals(emailVerificationRequestDto.getToken())){
-            errors.rejectValue("token", "invalidToken", "인증 대기중인 이메일에는 존재하나, 토큰값이 일치하지 않음.");
+            errors.rejectValue("token", "invalidLink", "인증 대기중인 이메일에는 존재하나, 토큰값이 일치하지 않음.");
         }
 
     }

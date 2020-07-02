@@ -57,7 +57,7 @@ public class EmailVerificationTest {
         accountRepository.deleteAll();
     }
 
-//    // 정상 링크
+    // 정상 링크
 //
 //    @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 안 된 상태")
 //    @SignUpAndLoggedIn

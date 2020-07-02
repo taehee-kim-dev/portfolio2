@@ -51,18 +51,6 @@ public class EmailVerificationController {
             return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
         }
 
-
-//        boolean isValidLink
-//                = emailVerificationService.checkEmailVerificationLink(
-//                        emailVerificationRequestDto.getEmail(),
-//                        emailVerificationRequestDto.getToken()
-//                );
-//
-//        if(!isValidLink){
-//            model.addAttribute("invalidLinkError", "invalidLinkError");
-//            return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
-//        }
-
         Account sessionAccount = emailVerificationService.emailVerifyAndLogIn();
 
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
