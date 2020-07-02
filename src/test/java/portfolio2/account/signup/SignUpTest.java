@@ -122,7 +122,7 @@ public class SignUpTest {
         // 이메일 인증 토큰 값 존재 확인
         assertNotNull(newAccountInDb.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(newAccountInDb.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(newAccountInDb.getFirstCountOfSendingEmailVerificationEmailSetAt());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, newAccountInDb.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인

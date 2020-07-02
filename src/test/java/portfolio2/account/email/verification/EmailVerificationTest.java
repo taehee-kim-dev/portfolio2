@@ -102,7 +102,7 @@ public class EmailVerificationTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
         // 이메일 전송 1회
@@ -155,7 +155,7 @@ public class EmailVerificationTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
         // 이메일 전송 1회
@@ -173,7 +173,7 @@ public class EmailVerificationTest {
         // 처음 인증된 상태
         accountInDbToBeEmailVerified.setEmailFirstVerified(true);
         LocalDateTime beforeTokenGeneratedAt
-                = accountInDbToBeEmailVerified.getEmailVerificationTokenFirstGeneratedAt();
+                = accountInDbToBeEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt();
         // 상태값 저장
         accountRepository.save(accountInDbToBeEmailVerified);
 
@@ -208,7 +208,7 @@ public class EmailVerificationTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertEquals(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt(),
+        assertEquals(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt(),
                 beforeTokenGeneratedAt);
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
@@ -260,7 +260,7 @@ public class EmailVerificationTest {
         assertNull(accountEmailVerified.getEmailVerificationToken());
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 나중에 회원가입하고 로그인했던 계정 존재 확인
@@ -304,7 +304,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -342,7 +342,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -378,7 +378,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -416,7 +416,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -452,7 +452,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -486,7 +486,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -530,7 +530,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -571,7 +571,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 
@@ -609,7 +609,7 @@ public class EmailVerificationTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getEmailVerificationTokenFirstGeneratedAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
     }
 

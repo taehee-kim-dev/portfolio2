@@ -2,7 +2,7 @@
 //
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Component;
-//import portfolio2.domain.EmailSendingProcess;
+//import portfolio2.domain.email.EmailSendingProcess;
 //import portfolio2.dto.account.profileupdate.AccountEmailUpdateRequestDto;
 //
 //@RequiredArgsConstructor

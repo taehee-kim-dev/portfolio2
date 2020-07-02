@@ -56,7 +56,7 @@ public class Account {
 
     private String emailVerificationToken;
 
-    private LocalDateTime emailVerificationTokenFirstGeneratedAt;
+    private LocalDateTime firstCountOfSendingEmailVerificationEmailSetAt;
 
     private int countOfSendingEmailVerificationEmail = 0;
 
@@ -139,33 +139,36 @@ public class Account {
     @OneToMany(mappedBy = "author")
     private Set<Post> post = new HashSet<>();
 
+    public boolean canSendEmailVerificationEmail() {
+        // 인증 이메일을 이미 5번 보냈는가?
+        if(this.countOfSendingEmailVerificationEmail == 5){
+            // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
+            return this.firstCountOfSendingEmailVerificationEmailSetAt.isBefore(LocalDateTime.now().minusHours(12));
+        }
+        return true;
+    }
 
     public void generateEmailCheckToken() {
         // 앞에서 재전송 허가받은 상태이므로,
         // 무조건 토큰값 생성.
         this.emailVerificationToken = UUID.randomUUID().toString();
+    }
+
+    public void increaseOrResetCountOfSendingEmailVerificationEmail() {
         if(countOfSendingEmailVerificationEmail == 0 || countOfSendingEmailVerificationEmail == 5){
             // 이미 앞에서 이메일 재전송 허가받은 상태.
-            // 현재 가입 후 첫번째 또는 6번째 이메일 전송이라면,
+            // 현재 회원가입 후 첫번째 또는 12시간 후 6번째 이메일 전송이라면,
             // 새로운 첫 번째 이메일 전송이 되는 것이므로,
-            // 이메일 토큰 생성 시간 새로 설정
-            emailVerificationTokenFirstGeneratedAt = LocalDateTime.now();
+            // 첫 번째 카운트 세팅 시간 새로 설정
+            firstCountOfSendingEmailVerificationEmailSetAt = LocalDateTime.now();
             // 이메일 전송 카운트 1로 초기화
             countOfSendingEmailVerificationEmail = 1;
         }else{
-            // 가입 후 첫 번째나, 6번째가 아니라면
-            // 날짜 재설정 없이 카운트만 증가
+            // 회원가입 후 첫 번째나, 12시간 후 6번째 전송이 아니라면
+            // 첫 번째 카운트 세팅 시간 새로 설정 없이,
+            // 이메일 전송 카운트 횟수만 증가
             this.countOfSendingEmailVerificationEmail++;
         }
-    }
-
-    public boolean canSendEmailVerificationEmail() {
-        // 인증 이메일을 이미 5번 보냈는가?
-        if(this.countOfSendingEmailVerificationEmail == 5){
-            // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
-            return this.emailVerificationTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
-        }
-        return true;
     }
 
 
