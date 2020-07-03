@@ -14,8 +14,6 @@ import portfolio2.account.config.SignUpAndLogOutProcessForTest;
 import portfolio2.account.config.SignUpAndLoggedIn;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.SignUpRequestDto;
-import portfolio2.dto.account.profile.update.ProfileUpdateRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
 

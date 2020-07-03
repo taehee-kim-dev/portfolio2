@@ -1,6 +1,5 @@
 package portfolio2.service;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
-import portfolio2.dto.post.PostNewPostRequestDto;
+import portfolio2.dto.request.post.PostNewPostRequestDto;
 
 import java.time.LocalDateTime;
 

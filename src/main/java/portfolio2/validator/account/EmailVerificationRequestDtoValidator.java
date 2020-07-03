@@ -6,8 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.EmailVerificationRequestDto;
-import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.request.account.EmailVerificationRequestDto;
 
 @Component
 @RequiredArgsConstructor

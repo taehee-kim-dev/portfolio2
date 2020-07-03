@@ -1,4 +1,4 @@
-package portfolio2.dto.post;
+package portfolio2.dto.request.post;
 
 import lombok.*;
 

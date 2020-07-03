@@ -43,6 +43,18 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 27px">
+                        <label for="occupation">직업</label>
+                        <input id="occupation" type="text" th:field="*{occupation}" class="form-control"
+                               placeholder="대학생" aria-describedby="occupationHelp" required>
+                        <small id="occupationHelp" class="form-text text-muted">
+                            20자 이내로 입력해 주세요.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">
+                            occupation error
+                        </small>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 39px">
                         <label for="location">지역</label>
                         <input id="location" type="text" th:field="*{location}" class="form-control"
                                placeholder="서울특별시 강남구"
@@ -52,18 +64,6 @@
                         </small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">
                             location error
-                        </small>
-                    </div>
-
-                    <div class="form-group" style="margin-bottom: 39px">
-                        <label for="occupation">직업</label>
-                        <input id="occupation" type="text" th:field="*{occupation}" class="form-control"
-                               placeholder="대학생" aria-describedby="occupationHelp" required>
-                        <small id="occupationHelp" class="form-text text-muted">
-                            20자 이내로 입력해 주세요.
-                        </small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">
-                            occupation error
                         </small>
                     </div>
 

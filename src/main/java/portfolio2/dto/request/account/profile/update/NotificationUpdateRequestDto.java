@@ -1,4 +1,4 @@
-package portfolio2.dto.account.profile.update;
+package portfolio2.dto.request.account.profile.update;
 
 import lombok.Data;
 

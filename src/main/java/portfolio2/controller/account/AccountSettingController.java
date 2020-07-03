@@ -15,6 +15,7 @@
 //import portfolio2.domain.account.config.SessionAccount;
 //import portfolio2.dto.account.TagUpdateRequestDto;
 //import portfolio2.dto.account.profile.update.*;
+//import portfolio2.service.account.AccountSettingService;
 //
 //import javax.validation.Valid;
 //import java.util.List;
@@ -72,7 +73,7 @@
 //            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
 //        }
 //
-//        accountSettingService.updateNotification(sessionAccount, notificationUpdateRequestDto);
+//        accountSettingService.updateNotificationAndSession(sessionAccount, notificationUpdateRequestDto);
 //        // 한번 쓰고 사라지는 메시지
 //        // 모델에 포함돼서 전달됨
 //        redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");

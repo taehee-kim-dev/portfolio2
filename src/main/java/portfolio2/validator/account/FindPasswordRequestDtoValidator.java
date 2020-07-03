@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.FindPasswordRequestDto;
+import portfolio2.dto.request.account.FindPasswordRequestDto;
 
 @RequiredArgsConstructor
 @Component

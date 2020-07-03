@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.request.account.SignUpRequestDto;
 
 import java.time.LocalDateTime;
 

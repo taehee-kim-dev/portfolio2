@@ -14,7 +14,7 @@ import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
-import portfolio2.dto.post.PostNewPostRequestDto;
+import portfolio2.dto.request.post.PostNewPostRequestDto;
 import portfolio2.service.PostService;
 import portfolio2.validator.post.PostNewPostRequestDtoValidator;
 

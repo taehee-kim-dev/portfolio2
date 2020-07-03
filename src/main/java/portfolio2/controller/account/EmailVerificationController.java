@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
-import portfolio2.dto.account.EmailVerificationRequestDto;
+import portfolio2.dto.request.account.EmailVerificationRequestDto;
+import portfolio2.dto.response.account.EmailVerificationResponseDto;
 import portfolio2.service.account.EmailVerificationService;
 import portfolio2.validator.account.EmailVerificationRequestDtoValidator;
 
@@ -36,8 +37,8 @@ public class EmailVerificationController {
     @GetMapping(CHECK_EMAIL_VERIFICATION_LINK_URL)
     public String checkEmailVerificationLink(@SessionAccount Account sessionAccount,
                                              @Valid @ModelAttribute
-                                                         EmailVerificationRequestDto
-                                                         emailVerificationRequestDto,
+                                                     EmailVerificationRequestDto
+                                                     emailVerificationRequestDto,
                                              Errors errors,
                                              Model model){
 
@@ -47,25 +48,24 @@ public class EmailVerificationController {
             return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
         }
 
-        Account verifiedAccount = emailVerificationService.emailVerifyAndLogInIfLoggedInByOwnAccount(emailVerificationRequestDto, sessionAccount);
-        boolean isOwnerLoggedIn = false;
-        if(sessionAccount != null){
-            isOwnerLoggedIn = sessionAccount.getUserId().equals(verifiedAccount.getUserId());
+        EmailVerificationResponseDto emailVerificationResponseDto
+                = emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount(
+                        emailVerificationRequestDto, sessionAccount);
+
+        // 일단 메일 인증된 계정정보 모델에 담음.
+        model.addAttribute("nickname", emailVerificationResponseDto.getEmailVerifiedAccountInDb().getNickname());
+        model.addAttribute("userId", emailVerificationResponseDto.getEmailVerifiedAccountInDb().getUserId());
+        model.addAttribute("email", emailVerificationResponseDto.getEmailVerifiedAccountInDb().getVerifiedEmail());
+
+        // 이메일 인증된 계정으로 로그인 되어있는 경우, 업데이트된 세션으로 저장.
+        if(emailVerificationResponseDto.isEmailVerifiedAccountLoggedIn()){
+            model.addAttribute(SESSION_ACCOUNT, emailVerificationResponseDto.getUpdatedSessionAccount());
         }else{
+            // 그 외의 경우는 현재 세션으로 저장.
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         }
-
-        if(isOwnerLoggedIn){
-            model.addAttribute(SESSION_ACCOUNT, verifiedAccount);
-        }else{
-            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        }
-
-        model.addAttribute("isOwnerLoggedIn", isOwnerLoggedIn);
-        model.addAttribute("nickname", verifiedAccount.getNickname());
-        model.addAttribute("userId", verifiedAccount.getUserId());
-        model.addAttribute("email", verifiedAccount.getVerifiedEmail());
-
+        // 이메일 인증된 계정으로 현재 로그인 되어있는지 상태값 모델에 담아 전달.
+        model.addAttribute("isEmailVerifiedAccountLoggedIn", emailVerificationResponseDto.isEmailVerifiedAccountLoggedIn());
         return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
     }
 }

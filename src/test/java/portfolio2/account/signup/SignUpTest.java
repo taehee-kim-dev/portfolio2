@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.request.account.SignUpRequestDto;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
 

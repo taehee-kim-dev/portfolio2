@@ -30,6 +30,17 @@ import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.config.UrlAndViewName.*;
 
+/*
+로그아웃 상태 -> 유효하지 않은 이메일 인증 링크 -> 로그아웃 상태(인증 안됨) -> 유효하지 않은 링크입니다 뷰
+로그아웃 상태 -> 유효한 이메일 인증 링크 -> 로그아웃 상태(인증됨) -> 인증완료 뷰(로그인하여 이용해 주세요)
+
+내 계정으로 로그인 상태 -> 유효하지 않은 이메일 인증 링크 -> 내 계정으로 로그인 상태(인증 안됨) -> 유효하지 않은 링크입니다 뷰
+내 계정으로 로그인 상태 -> 유효한 이메일 인증 링크 -> 내 계정으로 로그인 상태(인증됨, 세션 업데이트) -> 인증완료 뷰(로그인 문구 없음)
+
+다른 계정으로 로그인 상태 -> 유효하지 않은 이메일 인증 링크 -> 다른 계정으로 로그인 상태(내 계정 인증 안됨) -> 유효하지 않은 링크입니다 뷰
+다른 계정으로 로그인 상태 -> 유효한 이메일 인증 링크 -> 다른 계정으로 로그인 상태(내 계정 인증 됨) -> 인증완료 뷰(해당 계정으로 로그인하여 이용해 주세요)
+* */
+
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -83,7 +94,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist("invalidLinkError"))
-                .andExpect(model().attribute("isOwnerLoggedIn", false))
+                .andExpect(model().attribute("isEmailVerifiedAccountLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -138,7 +149,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist("invalidLinkError"))
-                .andExpect(model().attribute("isOwnerLoggedIn", false))
+                .andExpect(model().attribute("isEmailVerifiedAccountLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -193,7 +204,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist("invalidLinkError"))
-                .andExpect(model().attribute("isOwnerLoggedIn", true))
+                .andExpect(model().attribute("isEmailVerifiedAccountLoggedIn", true))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -251,7 +262,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist("invalidLinkError"))
-                .andExpect(model().attribute("isOwnerLoggedIn", false))
+                .andExpect(model().attribute("isEmailVerifiedAccountLoggedIn", false))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
@@ -299,7 +310,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -342,7 +353,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -383,7 +394,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -426,7 +437,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -467,7 +478,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -506,7 +517,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -555,7 +566,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -601,7 +612,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -644,7 +655,7 @@ public class EmailVerificationTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(model().attributeDoesNotExist("isOwnerLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))

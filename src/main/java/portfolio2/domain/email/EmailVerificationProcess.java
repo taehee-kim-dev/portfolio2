@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.email.EmailSendingProcess;
-import portfolio2.dto.account.EmailVerificationRequestDto;
+import portfolio2.dto.request.account.EmailVerificationRequestDto;
 
 @RequiredArgsConstructor
 @Component
 public class EmailVerificationProcess {
 
     private final AccountRepository accountRepository;
-    private final EmailSendingProcess emailSendingProcess;
 
     // 이메일 인증 처리
     public Account verifyEmail(EmailVerificationRequestDto emailVerificationRequestDto) {
@@ -35,7 +33,7 @@ public class EmailVerificationProcess {
         return accountToBeVerified;
     }
 
-    public boolean isOwnerLoggedIn(Account sessionAccount, Account emailVerifiedAccountInDb) {
+    public boolean isEmailVerifiedAccountLoggedIn(Account sessionAccount, Account emailVerifiedAccountInDb) {
         // 현재 로그인중인 세션 사용자와 이메일 인증이 된 사용자가 같은가?
         return sessionAccount.getUserId().equals(emailVerifiedAccountInDb.getUserId());
     }

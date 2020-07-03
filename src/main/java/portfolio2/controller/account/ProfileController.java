@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
-import portfolio2.dto.account.profile.update.ProfileUpdateRequestDto;
-import portfolio2.service.ProfileService;
+import portfolio2.dto.request.account.profile.update.ProfileUpdateRequestDto;
+import portfolio2.service.account.ProfileService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
@@ -76,7 +76,7 @@ public class ProfileController {
             return ACCOUNT_SETTING_PROFILE_VIEW_NAME;
         }
 
-        profileService.updateProfile(sessionAccount, profileUpdateRequestDto);
+        profileService.updateProfileAndSession(sessionAccount, profileUpdateRequestDto);
         // 한번 쓰고 사라지는 메시지
         // 모델에 포함돼서 전달됨
         redirectAttributes.addFlashAttribute("message", "프로필 수정이 완료되었습니다.");

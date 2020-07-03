@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.profile.update.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.profile.update.ProfileUpdateRequestDto;
 
 @RequiredArgsConstructor
 @Component

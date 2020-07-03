@@ -1,4 +1,4 @@
-package portfolio2.service;
+package portfolio2.service.account;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.LogInOrSessionUpdateProcess;
 import portfolio2.domain.account.profile.ProfileSearchProcess;
 import portfolio2.domain.account.profile.ProfileUpdateProcess;
-import portfolio2.dto.account.profile.update.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.profile.update.ProfileUpdateRequestDto;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,7 +22,7 @@ public class ProfileService {
         return profileSearchProcess.searchProfile(userIdToSearch);
     }
 
-    public void updateProfile(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
+    public void updateProfileAndSession(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
         // 프로필 업데이트
         Account updatedAccount
                 = profileUpdateProcess.updateProfile(sessionAccount, profileUpdateRequestDto);

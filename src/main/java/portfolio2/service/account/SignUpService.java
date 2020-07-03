@@ -7,7 +7,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.LogInOrSessionUpdateProcess;
 import portfolio2.domain.account.SignUpProcess;
 import portfolio2.domain.email.SendingEmailVerificationEmailProcess;
-import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.request.account.SignUpRequestDto;
 
 @Transactional
 @RequiredArgsConstructor

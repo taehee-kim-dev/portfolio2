@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.account.SignUpRequestDto;
+import portfolio2.dto.request.account.SignUpRequestDto;
 import portfolio2.service.account.SignUpService;
 
 import static portfolio2.account.config.TestAccountInfo.*;
