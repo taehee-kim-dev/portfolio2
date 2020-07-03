@@ -84,6 +84,7 @@ public class AccountProfileUpdateTest {
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attributeCount(1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_PROFILE_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -120,6 +121,7 @@ public class AccountProfileUpdateTest {
                         "tooLongBio"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
                 .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -153,6 +155,7 @@ public class AccountProfileUpdateTest {
                         "tooLongLocation"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
                 .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -186,7 +189,47 @@ public class AccountProfileUpdateTest {
                         "tooLongOccupation"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
                 .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertNotEquals(sampleBio, updatedAccount.getBio());
+        assertNotEquals(sampleLocation, updatedAccount.getLocation());
+        assertNotEquals(sampleOccupation, updatedAccount.getOccupation());
+        assertNotEquals(sampleProfileImage, updatedAccount.getProfileImage());
+    }
+
+    @DisplayName("입력값 에러 각각 모두 출력")
+    @SignUpAndLoggedIn
+    @Test
+    void showAllErrorCodes() throws Exception{
+        String sampleBio = "sampleBio";
+        String sampleLocation = "sampleLocationsampleLocationsampleLocation";
+        String sampleOccupation = "sampleOccupationsampleOccupation";
+        String sampleProfileImage = "sampleProfileImage";
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
+                .param("bio", sampleBio)
+                .param("location", sampleLocation)
+                .param("occupation", sampleOccupation)
+                .param("profileImage", sampleProfileImage)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "profileUpdateRequestDto",
+                        "location",
+                        "tooLongLocation"))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "profileUpdateRequestDto",
+                        "occupation",
+                        "tooLongOccupation"))
+                .andExpect(model().attributeErrorCount("profileUpdateRequestDto", 2))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(flash().attributeCount(0))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);

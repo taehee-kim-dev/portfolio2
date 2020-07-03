@@ -580,4 +580,37 @@ public class SignUpTest {
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
+    @DisplayName("입력 에러 모두 각각 출력")
+    @Test
+    void displayAllErrorCodes() throws Exception{
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", "aa")
+                .param("nickname", TEST_NICKNAME)
+                .param("email", "asdfasdf@email")
+                .param("password", "1234567812345678123456781234567")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "tooShortUserId"))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "email",
+                        "invalidFormatEmail"))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "tooLongPassword"))
+                .andExpect(model().attributeErrorCount("signUpRequestDto", 3))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
 }
