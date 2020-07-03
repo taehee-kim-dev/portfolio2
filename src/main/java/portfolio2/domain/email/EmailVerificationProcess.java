@@ -34,4 +34,9 @@ public class EmailVerificationProcess {
         // 인증한 계정 저장 후 반환
         return accountToBeVerified;
     }
+
+    public boolean isOwnerLoggedIn(Account sessionAccount, Account emailVerifiedAccountInDb) {
+        // 현재 로그인중인 세션 사용자와 이메일 인증이 된 사용자가 같은가?
+        return sessionAccount.getUserId().equals(emailVerifiedAccountInDb.getUserId());
+    }
 }

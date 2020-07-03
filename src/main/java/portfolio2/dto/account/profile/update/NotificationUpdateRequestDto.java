@@ -10,9 +10,11 @@ public class NotificationUpdateRequestDto {
 
     private boolean notificationLikeOnMyReplyByWeb;
 
+
     private boolean notificationReplyOnMyPostByWeb;
 
     private boolean notificationReplyOnMyReplyByWeb;
+
 
     private boolean notificationNewPostWithMyTagByWeb;
 
@@ -21,9 +23,11 @@ public class NotificationUpdateRequestDto {
 
     private boolean notificationLikeOnMyReplyByEmail;
 
+
     private boolean notificationReplyOnMyPostByEmail;
 
     private boolean notificationReplyOnMyReplyByEmail;
+
 
     private boolean notificationNewPostWithMyTagByEmail;
 }

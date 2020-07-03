@@ -20,13 +20,14 @@ public class EmailVerificationService {
         // 이메일 인증
         Account emailVerifiedAccountInDb = emailVerificationProcess.verifyEmail(emailVerificationRequestDto);
 
-        // 기존에 본인 계정으로 로그인 상태였으면, 세션 업데이트 후 반환
-        // 인증된 계정의 아이디와 세션 계정의 아이디가 같다면, 기존에 본인 계정으로 로그인하고 있던 상태.
-        if(sessionAccount != null && emailVerifiedAccountInDb.getUserId().equals(sessionAccount.getUserId()))
-            return logInOrSessionUpdateProcess.loginOrSessionUpdate(emailVerifiedAccountInDb);
+        // 현재 로그인 된 상태라면,
+        if(sessionAccount != null){
+            // 본인 계정으로 로그인 상태라면, 세션 업데이트 후 반환
+            if(emailVerificationProcess.isOwnerLoggedIn(sessionAccount, emailVerifiedAccountInDb))
+                return logInOrSessionUpdateProcess.loginOrSessionUpdate(emailVerifiedAccountInDb);
+        }
 
         // 기존에 로그아웃 상태였거나, 다른 계정으로 로그인 상태였다면 상태 유지
         return emailVerifiedAccountInDb;
-
     }
 }
