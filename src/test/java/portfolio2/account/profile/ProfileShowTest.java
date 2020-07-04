@@ -11,12 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.LogInAndOutProcessForTest;
 import portfolio2.account.config.SignUpAndLogInProcessForTest;
 import portfolio2.account.config.SignUpAndLogOutProcessForTest;
-import portfolio2.account.config.SignUpAndLoggedIn;
-import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewName.*;
 
 @Slf4j
 @SpringBootTest
@@ -59,13 +56,13 @@ public class ProfileShowTest {
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        mockMvc.perform(get(SHOW_PROFILE_URL + '/' + TEST_USER_ID))
+        mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("searchedAccount"))
                 .andExpect(model().attribute("isOwner", false))
-                .andExpect(view().name(SHOW_PROFILE_VIEW_NAME))
+                .andExpect(view().name(PROFILE_VIEW_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -75,14 +72,14 @@ public class ProfileShowTest {
         signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        mockMvc.perform(get(SHOW_PROFILE_URL + '/' + TEST_USER_ID_2))
+        mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("notFoundError"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(SHOW_PROFILE_NOT_FOUND_ERORR_VIEW_NAME))
+                .andExpect(view().name(PROFILE_VIEW_NOT_FOUND_ERROR_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -92,13 +89,13 @@ public class ProfileShowTest {
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        mockMvc.perform(get(SHOW_PROFILE_URL + '/' + TEST_USER_ID))
+        mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("searchedAccount"))
                 .andExpect(model().attribute("isOwner", true))
-                .andExpect(view().name(SHOW_PROFILE_VIEW_NAME))
+                .andExpect(view().name(PROFILE_VIEW_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
@@ -109,13 +106,13 @@ public class ProfileShowTest {
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        mockMvc.perform(get(SHOW_PROFILE_URL + '/' + TEST_USER_ID_2))
+        mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("searchedAccount"))
                 .andExpect(model().attribute("isOwner", false))
-                .andExpect(view().name(SHOW_PROFILE_VIEW_NAME))
+                .andExpect(view().name(PROFILE_VIEW_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
@@ -125,14 +122,14 @@ public class ProfileShowTest {
         signUpAndLogInProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        mockMvc.perform(get(SHOW_PROFILE_URL + '/' + TEST_USER_ID_2))
+        mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("notFoundError"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(SHOW_PROFILE_NOT_FOUND_ERORR_VIEW_NAME))
+                .andExpect(view().name(PROFILE_VIEW_NOT_FOUND_ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 }

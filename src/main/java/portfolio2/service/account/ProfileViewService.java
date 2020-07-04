@@ -12,21 +12,11 @@ import portfolio2.dto.request.account.profile.update.ProfileUpdateRequestDto;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ProfileService {
+public class ProfileViewService {
 
     private final ProfileSearchProcess profileSearchProcess;
-    private final ProfileUpdateProcess profileUpdateProcess;
-    private final LogInOrSessionUpdateProcess logInOrSessionUpdateProcess;
 
     public Account findUser(String userIdToSearch) {
         return profileSearchProcess.searchProfile(userIdToSearch);
-    }
-
-    public void updateProfileAndSession(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
-        // 프로필 업데이트
-        Account updatedAccount
-                = profileUpdateProcess.updateProfile(sessionAccount, profileUpdateRequestDto);
-        // 세션 업데이트
-        logInOrSessionUpdateProcess.loginOrSessionUpdate(updatedAccount);
     }
 }

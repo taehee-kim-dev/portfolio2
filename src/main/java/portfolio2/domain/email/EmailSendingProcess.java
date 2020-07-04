@@ -9,7 +9,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.mail.EmailMessage;
 import portfolio2.mail.EmailService;
 
-import static portfolio2.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewName.*;
 
 @RequiredArgsConstructor
 @Component
@@ -28,7 +28,7 @@ public class EmailSendingProcess {
                 "?email=" + account.getEmailWaitingToBeVerified() +
                 "&token=" + account.getEmailVerificationToken());
 
-        String message = templateEngine.process("email/email-for-email-verification", context);
+        String message = templateEngine.process("email-content/email-for-email-verification", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmailWaitingToBeVerified())

@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/", "/login", "/sign-up", "/check-email-verification-link",
                         "/find-password", "/check-find-password-link").permitAll()
                 // GET 요청만 허용
-                .mvcMatchers(HttpMethod.GET, "/account/profile/*").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/account/profile-view/*").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()

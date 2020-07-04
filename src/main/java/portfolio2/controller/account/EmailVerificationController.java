@@ -18,7 +18,7 @@ import portfolio2.validator.account.EmailVerificationRequestDtoValidator;
 import javax.validation.Valid;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewName.*;
 
 @Controller
 @RequiredArgsConstructor

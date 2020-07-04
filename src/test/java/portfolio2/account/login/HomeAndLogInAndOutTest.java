@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewName.*;
 
 /*
 * ** 최종 결론 **
