@@ -1,4 +1,4 @@
-package portfolio2.account.profile.update;
+package portfolio2.account.setting;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;

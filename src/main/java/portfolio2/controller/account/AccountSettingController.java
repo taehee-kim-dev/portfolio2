@@ -1,10 +1,8 @@
 package portfolio2.controller.account;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -13,13 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
-import portfolio2.dto.account.TagUpdateRequestDto;
-import portfolio2.dto.request.account.profile.update.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.setting.update.NotificationUpdateRequestDto;
+import portfolio2.dto.request.account.setting.update.ProfileUpdateRequestDto;
 import portfolio2.service.account.AccountSettingService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.controller.config.UrlAndViewName.*;
@@ -87,35 +84,35 @@ public class AccountSettingController {
         return "redirect:" + ACCOUNT_SETTING_PROFILE_URL;
     }
 
-//
-//    // 알림 설정
-//
-//    @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-//    public String showNotificationUpdateView(@SessionAccount Account sessionAccount, Model model){
-//        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//        model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateRequestDto.class));
-//        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
-//        return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
-//    }
-//
-//    @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
-//    public String notificationUpdate(@SessionAccount Account sessionAccount,
-//                                     @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
-//                                     Errors errors, Model model,
-//                                     RedirectAttributes redirectAttributes){
-//        if(errors.hasErrors()){
-//            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//            model.addAttribute(notificationUpdateRequestDto);
-//            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
-//        }
-//
-//        accountSettingService.updateNotificationAndSession(sessionAccount, notificationUpdateRequestDto);
-//        // 한번 쓰고 사라지는 메시지
-//        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");
-//        return REDIRECT + ACCOUNT_SETTING_NOTIFICATION_URL;
-//    }
-//
+
+    // 알림 설정
+
+    @GetMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
+    public String showNotificationUpdateView(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        model.addAttribute(modelMapper.map(sessionAccount, NotificationUpdateRequestDto.class));
+        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
+        return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+    }
+
+    @PostMapping(ACCOUNT_SETTING_NOTIFICATION_URL)
+    public String notificationUpdate(@SessionAccount Account sessionAccount,
+                                     @Valid @ModelAttribute NotificationUpdateRequestDto notificationUpdateRequestDto,
+                                     Errors errors, Model model,
+                                     RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            model.addAttribute(notificationUpdateRequestDto);
+            return ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
+        }
+
+        accountSettingService.updateNotificationAndSession(sessionAccount, notificationUpdateRequestDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "알림설정이 저장되었습니다.");
+        return REDIRECT + ACCOUNT_SETTING_NOTIFICATION_URL;
+    }
+
 
 //    // 관심 태그 설정
 //
