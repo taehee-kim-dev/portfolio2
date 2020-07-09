@@ -44,9 +44,8 @@ public class PostService {
             if(existingTagInDb == null){
                 // 해당 타이틀로 기존에 데이터베이스에 존재하는 태그가 없으면,
 
-                newTagOnPost = Tag.builder()
-                        .title(tagTitle)
-                        .build();
+                newTagOnPost = new Tag();
+                newTagOnPost.setTitle(tagTitle);
 
                 newTagOnPost = tagRepository.save(newTagOnPost);
             }else{

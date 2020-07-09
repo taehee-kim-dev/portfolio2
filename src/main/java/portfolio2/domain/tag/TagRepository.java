@@ -8,4 +8,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface TagRepository extends JpaRepository<Tag, Long> {
     Tag findByTitle(String title);
+
+    int countByTitle(String newTagTitleToAdd);
 }

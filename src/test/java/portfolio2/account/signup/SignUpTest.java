@@ -164,7 +164,7 @@ public class SignUpTest {
         assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
-        assertNotNull(newAccountInDb.getTag());
+        assertNotNull(newAccountInDb.getInterestTag());
         assertNotNull(newAccountInDb.getPost());
     }
 

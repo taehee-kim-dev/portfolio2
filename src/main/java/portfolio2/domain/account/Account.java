@@ -134,7 +134,7 @@ public class Account {
 
 
     @ManyToMany
-    private Set<Tag> tag = new HashSet<>();
+    private Set<Tag> interestTag = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
     private Set<Post> post = new HashSet<>();

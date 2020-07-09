@@ -3,6 +3,7 @@ package portfolio2.controller.account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,6 +18,8 @@ import portfolio2.service.account.AccountSettingService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.controller.config.UrlAndViewName.*;
@@ -114,38 +117,38 @@ public class AccountSettingController {
     }
 
 
-//    // 관심 태그 설정
-//
-//    @GetMapping(ACCOUNT_SETTING_TAG_URL)
-//    public String showTagUpdateView(@SessionAccount Account sessionAccount, Model model) throws JsonProcessingException {
-//        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//        List<String> tag = accountSettingService.getTagOfAccount(sessionAccount);
-//        model.addAttribute("tag", tag);
-//        return ACCOUNT_SETTING_TAG_VIEW_NAME;
-//    }
-//
-//    @ResponseBody
-//    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
-//    public ResponseEntity<String> addTag(@SessionAccount Account sessionAccount,
-//                                 @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
-//        accountSettingService.addTagToAccount(sessionAccount, tagUpdateRequestDto);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @ResponseBody
-//    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
-//    public ResponseEntity<String> removeTag(@SessionAccount Account sessionAccount,
-//                                    @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
-//
-//        boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);
-//
-//        if(!result){
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        return ResponseEntity.ok().build();
-//    }
-//
+    // 관심 태그 설정
+
+    @GetMapping(ACCOUNT_SETTING_TAG_URL)
+    public String showTagUpdateView(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        List<String> tag = accountSettingService.getInterestTagOfAccount(sessionAccount);
+        model.addAttribute("tag", tag);
+        return ACCOUNT_SETTING_TAG_VIEW_NAME;
+    }
+
+    @ResponseBody
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
+    public ResponseEntity<String> addTag(@SessionAccount Account sessionAccount,
+                                         @RequestBody portfolio2.dto.account.TagUpdateRequestDto tagUpdateRequestDto){
+        accountSettingService.addInterestTagToAccount(sessionAccount, tagUpdateRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
+    public ResponseEntity<String> removeTag(@SessionAccount Account sessionAccount,
+                                    @RequestBody portfolio2.dto.account.TagUpdateRequestDto tagUpdateRequestDto){
+
+        boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);
+
+        if(!result){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
 //    // 비밀번호 변경
 //
 //    @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
