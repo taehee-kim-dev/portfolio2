@@ -102,7 +102,7 @@ public class TagUpdateTest {
 
         Tag existingTag = new Tag();
         existingTag.setTitle(newTagTitleToAdd);
-        tagRepository.save(existingTag);
+        Tag existingTagInDb = tagRepository.save(existingTag);
 
         mockMvc.perform(post(ACCOUNT_SETTING_TAG_URL + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,13 +112,7 @@ public class TagUpdateTest {
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
-        assertEquals(1, updatedAccount.getInterestTag().size());
-
-        Tag newAddedTag = tagRepository.findByTitle(newTagTitleToAdd);
-        assertEquals(1, tagRepository.countByTitle(newTagTitleToAdd));
-        assertNotNull(newAddedTag);
-
-        assertTrue(updatedAccount.getInterestTag().contains(newAddedTag));
+        assertTrue(updatedAccount.getInterestTag().contains(existingTagInDb));
     }
 
     @DisplayName("태그 추가하기 - 이미 존재하는 태그 - 이미 사용자가 갖고있는 태그")
@@ -128,7 +122,6 @@ public class TagUpdateTest {
 
         String newTagTitleToAdd = "newTagTitleToAdd";
 
-
         Tag existingTag = new Tag();
         existingTag.setTitle(newTagTitleToAdd);
         Tag existingTagInDb = tagRepository.save(existingTag);
@@ -136,7 +129,6 @@ public class TagUpdateTest {
         Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
         existingAccount.getInterestTag().add(existingTagInDb);
         accountRepository.save(existingAccount);
-
 
         TagUpdateRequestDto tagUpdateRequestDto = new TagUpdateRequestDto();
         tagUpdateRequestDto.setTagTitle(newTagTitleToAdd);
@@ -149,15 +141,7 @@ public class TagUpdateTest {
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
-
-        Tag newAddedTag = tagRepository.findByTitle(newTagTitleToAdd);
-
-        assertEquals(1, tagRepository.countByTitle(newTagTitleToAdd));
-        assertEquals(1, updatedAccount.getInterestTag().size());
-
-        assertNotNull(newAddedTag);
-
-        assertTrue(updatedAccount.getInterestTag().contains(newAddedTag));
+        assertTrue(updatedAccount.getInterestTag().contains(existingTagInDb));
     }
 
 
@@ -190,11 +174,9 @@ public class TagUpdateTest {
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account tagAddedAccount = accountRepository.findByUserId(TEST_USER_ID);
-
         assertFalse(tagAddedAccount.getInterestTag().contains(existingTagToRemove));
 
         Tag removedTag = tagRepository.findByTitle(tagTitleToRemove);
-
         assertNotNull(removedTag);
     }
 
@@ -208,7 +190,7 @@ public class TagUpdateTest {
         String existingTagTitle = "existingTagTitle";
         Tag existingTag = new Tag();
         existingTag.setTitle(existingTagTitle);
-        tagRepository.save(existingTag);
+        Tag existingTagInDb = tagRepository.save(existingTag);
 
         existingAccount.getInterestTag().add(existingTag);
         accountRepository.save(existingAccount);
@@ -224,7 +206,7 @@ public class TagUpdateTest {
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account tagNotRemovedAccount = accountRepository.findByUserId(TEST_USER_ID);
-        assertTrue(tagNotRemovedAccount.getInterestTag().contains(existingTag));
+        assertTrue(tagNotRemovedAccount.getInterestTag().contains(existingTagInDb));
 
         Tag notRemovedTag = tagRepository.findByTitle(existingTagTitle);
         assertNotNull(notRemovedTag);
