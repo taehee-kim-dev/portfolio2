@@ -47,7 +47,6 @@ public class AccountSettingService {
 
         logInOrSessionUpdateProcess.loginOrSessionUpdate(updatedAccount);
     }
-    // TODO: 인증된 이메일 없으면 이메일 알림 받을 수 없음.
 
     public List<String> getInterestTagOfAccount(Account sessionAccount) {
         return tagUpdateProcess.getInterestTagOfAccount(sessionAccount);

@@ -17,7 +17,13 @@ public class NotificationUpdateProcess {
     public Account updateNotification(Account sessionAccount, NotificationUpdateRequestDto notificationUpdateRequestDto) {
         Account accountToUpdate = accountRepository.findByUserId(sessionAccount.getUserId());
         modelMapper.map(notificationUpdateRequestDto, accountToUpdate);
+        if(!accountToUpdate.isEmailVerified()){
+            accountToUpdate.setNotificationLikeOnMyPostByEmail(false);
+            accountToUpdate.setNotificationLikeOnMyReplyByEmail(false);
+            accountToUpdate.setNotificationReplyOnMyPostByEmail(false);
+            accountToUpdate.setNotificationReplyOnMyReplyByEmail(false);
+            accountToUpdate.setNotificationNewPostWithMyTagByEmail(false);
+        }
         return accountToUpdate;
     }
-    // TODO: 인증된 이메일 없으면 이메일 알림 받을 수 없음.
 }

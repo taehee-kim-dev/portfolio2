@@ -56,10 +56,10 @@ public class AccountNotificationUpdateTest {
 
     // 모두 정상 입력
 
-    @DisplayName("알림설정 - 모두 정상 입력")
+    @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증되지 않은 상태")
     @SignUpAndLoggedIn
     @Test
-    void updateProfileSuccess() throws Exception{
+    void updateProfileSuccessEmailNotVerified() throws Exception{
 
         mockMvc.perform(post(ACCOUNT_SETTING_NOTIFICATION_URL)
                 .param("notificationLikeOnMyPostByWeb", String.valueOf(false))
@@ -67,11 +67,11 @@ public class AccountNotificationUpdateTest {
                 .param("notificationReplyOnMyPostByWeb", String.valueOf(false))
                 .param("notificationReplyOnMyReplyByWeb", String.valueOf(false))
                 .param("notificationNewPostWithMyTagByWeb", String.valueOf(false))
-                .param("notificationLikeOnMyPostByEmail", String.valueOf(false))
-                .param("notificationLikeOnMyReplyByEmail", String.valueOf(false))
-                .param("notificationReplyOnMyPostByEmail", String.valueOf(false))
-                .param("notificationReplyOnMyReplyByEmail", String.valueOf(false))
-                .param("notificationNewPostWithMyTagByEmail", String.valueOf(false))
+                .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
+                .param("notificationLikeOnMyReplyByEmail", String.valueOf(true))
+                .param("notificationReplyOnMyPostByEmail", String.valueOf(true))
+                .param("notificationReplyOnMyReplyByEmail", String.valueOf(true))
+                .param("notificationNewPostWithMyTagByEmail", String.valueOf(true))
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
@@ -96,5 +96,51 @@ public class AccountNotificationUpdateTest {
         assertFalse(updatedAccount.isNotificationReplyOnMyReplyByEmail());
 
         assertFalse(updatedAccount.isNotificationNewPostWithMyTagByEmail());
+    }
+
+    @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증된 상태")
+    @SignUpAndLoggedIn
+    @Test
+    void updateProfileSuccessEmailVerified() throws Exception{
+
+        Account accountToUpdate = accountRepository.findByUserId(TEST_USER_ID);
+        accountToUpdate.setEmailVerified(true);
+        accountRepository.save(accountToUpdate);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_NOTIFICATION_URL)
+                .param("notificationLikeOnMyPostByWeb", String.valueOf(false))
+                .param("notificationLikeOnMyReplyByWeb", String.valueOf(false))
+                .param("notificationReplyOnMyPostByWeb", String.valueOf(false))
+                .param("notificationReplyOnMyReplyByWeb", String.valueOf(false))
+                .param("notificationNewPostWithMyTagByWeb", String.valueOf(false))
+                .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
+                .param("notificationLikeOnMyReplyByEmail", String.valueOf(true))
+                .param("notificationReplyOnMyPostByEmail", String.valueOf(true))
+                .param("notificationReplyOnMyReplyByEmail", String.valueOf(true))
+                .param("notificationNewPostWithMyTagByEmail", String.valueOf(true))
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attributeCount(1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(ACCOUNT_SETTING_NOTIFICATION_URL))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertFalse(updatedAccount.isNotificationLikeOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationLikeOnMyReplyByWeb());
+
+        assertFalse(updatedAccount.isNotificationReplyOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationReplyOnMyReplyByWeb());
+
+        assertFalse(updatedAccount.isNotificationNewPostWithMyTagByWeb());
+
+        assertTrue(updatedAccount.isNotificationLikeOnMyPostByEmail());
+        assertTrue(updatedAccount.isNotificationLikeOnMyReplyByEmail());
+
+        assertTrue(updatedAccount.isNotificationReplyOnMyPostByEmail());
+        assertTrue(updatedAccount.isNotificationReplyOnMyReplyByEmail());
+
+        assertTrue(updatedAccount.isNotificationNewPostWithMyTagByEmail());
     }
 }
