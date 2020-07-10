@@ -23,6 +23,11 @@
 
             <div>
 
+                <div class="alert alert-danger" role="alert" th:if="${#bools.isFalse(sessionAccount.isEmailVerified())}"
+                     style="padding-left: 32px;padding-top: 15px;">
+                    인증된 이메일이 없어, 이메일로 알림 받기 기능은 사용할 수 없습니다.
+                </div>
+
                 <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
                     style="margin-bottom: 33px; padding: 10px 46px 8px 21px;">
                     <span th:text="${message}">알림설정 저장 완료 메시지</span>
@@ -40,7 +45,8 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}" class="custom-control-input" id="notificationLikeOnMyPostByEmail">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}" class="custom-control-input" id="notificationLikeOnMyPostByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationLikeOnMyPostByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
@@ -55,7 +61,8 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyReplyByEmail}" class="custom-control-input" id="notificationLikeOnMyReplyByEmail">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyReplyByEmail}" class="custom-control-input" id="notificationLikeOnMyReplyByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationLikeOnMyReplyByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
@@ -70,7 +77,8 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationReplyOnMyPostByEmail}" class="custom-control-input" id="notificationReplyOnMyPostByEmail">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyPostByEmail}" class="custom-control-input" id="notificationReplyOnMyPostByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationReplyOnMyPostByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
@@ -85,7 +93,8 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationReplyOnMyReplyByEmail}" class="custom-control-input" id="notificationReplyOnMyReplyByEmail">
+                                <input type="checkbox" th:field="*{notificationReplyOnMyReplyByEmail}" class="custom-control-input" id="notificationReplyOnMyReplyByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationReplyOnMyReplyByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
@@ -100,7 +109,8 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationNewPostWithMyTagByEmail}" class="custom-control-input" id="tagNotificationByEmail">
+                                <input type="checkbox" th:field="*{notificationNewPostWithMyTagByEmail}" class="custom-control-input" id="tagNotificationByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="tagNotificationByEmail">이메일로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">

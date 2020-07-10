@@ -29,7 +29,13 @@ public class EmailVerificationProcess {
         accountToBeVerified.setEmailVerificationToken(null);
         // 인증 대기중인 이메일 값 null로 설정
         accountToBeVerified.setEmailWaitingToBeVerified(null);
-        // 인증한 계정 저장 후 반환
+        // 이메일 알림 설정 모두 true로 변경
+        accountToBeVerified.setNotificationLikeOnMyPostByEmail(true);
+        accountToBeVerified.setNotificationLikeOnMyReplyByEmail(true);
+        accountToBeVerified.setNotificationReplyOnMyPostByEmail(true);
+        accountToBeVerified.setNotificationReplyOnMyReplyByEmail(true);
+        accountToBeVerified.setNotificationNewPostWithMyTagByEmail(true);
+        // 인증한 계정 반환
         return accountToBeVerified;
     }
 

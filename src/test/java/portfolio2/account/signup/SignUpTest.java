@@ -150,14 +150,14 @@ public class SignUpTest {
 
         assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByWeb());
 
-        // 이메일 알림 값 모두 true 확인
-        assertTrue(newAccountInDb.isNotificationReplyOnMyPostByEmail());
-        assertTrue(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(newAccountInDb.isNotificationReplyOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
 
-        assertTrue(newAccountInDb.isNotificationLikeOnMyPostByEmail());
-        assertTrue(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(newAccountInDb.isNotificationLikeOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
 
-        assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getInterestTag());
