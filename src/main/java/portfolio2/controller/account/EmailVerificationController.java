@@ -13,7 +13,7 @@ import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.dto.request.account.EmailVerificationRequestDto;
 import portfolio2.dto.response.account.EmailVerificationResponseDto;
 import portfolio2.service.account.EmailVerificationService;
-import portfolio2.validator.account.EmailVerificationRequestDtoValidator;
+import portfolio2.validator.email.link.EmailVerificationRequestDtoValidator;
 
 import javax.validation.Valid;
 
@@ -45,7 +45,7 @@ public class EmailVerificationController {
         if(errors.hasErrors() || emailVerificationRequestDto == null){
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute("invalidLinkError", "invalidLinkError");
-            return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
+            return INVALID_EMAIL_LINK_ERROR_VIEW_NAME;
         }
 
         EmailVerificationResponseDto emailVerificationResponseDto
@@ -66,6 +66,6 @@ public class EmailVerificationController {
         }
         // 이메일 인증된 계정으로 현재 로그인 되어있는지 상태값 모델에 담아 전달.
         model.addAttribute("isEmailVerifiedAccountLoggedIn", emailVerificationResponseDto.isEmailVerifiedAccountLoggedIn());
-        return EMAIL_VERIFICATION_RESULT_VIEW_NAME;
+        return EMAIL_VERIFICATION_SUCCESS_VIEW_NAME;
     }
 }

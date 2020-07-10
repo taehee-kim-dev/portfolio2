@@ -61,13 +61,7 @@ public class Account {
     private int countOfSendingEmailVerificationEmail = 0;
 
 
-
-    private String findPasswordToken;
-
-    private LocalDateTime findPasswordTokenFirstGeneratedAt;
-
-    private int countOfSendingFindPasswordEmail = 0;
-
+    private String showPasswordUpdatePageToken;
 
 
     /*
@@ -172,32 +166,7 @@ public class Account {
     }
 
 
-    public void generateLoginEmailToken() {
-        // 앞에서 재전송 허가받은 상태이므로,
-        // 무조건 토큰값 생성.
-        this.findPasswordToken = UUID.randomUUID().toString();
-        if(countOfSendingFindPasswordEmail == 0 || countOfSendingFindPasswordEmail == 3){
-            // 이미 앞에서 이메일 재전송 허가받은 상태.
-            // 현재 가입 후 첫번째 또는 4번째 이메일 전송이라면,
-            // 새로운 첫 번째 이메일 전송이 되는 것이므로,
-            // 이메일 토큰 생성 시간 새로 설정
-            findPasswordTokenFirstGeneratedAt = LocalDateTime.now();
-            // 이메일 전송 카운트 1로 초기화
-            countOfSendingFindPasswordEmail = 1;
-        }else{
-            // 가입 후 첫 번째나, 4번째가 아니라면
-            // 날짜 재설정 없이 카운트만 증가
-            this.countOfSendingFindPasswordEmail++;
-        }
-    }
-
-    public boolean canSendLoginEmail() {
-        // 인증 이메일을 이미 3번 보냈는가?
-        if(this.countOfSendingFindPasswordEmail == 3){
-            // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
-            return this.findPasswordTokenFirstGeneratedAt.isBefore(LocalDateTime.now().minusHours(12));
-        }
-
-        return true;
+    public void generateShowPasswordUpdatePageToken() {
+        this.showPasswordUpdatePageToken = UUID.randomUUID().toString();
     }
 }

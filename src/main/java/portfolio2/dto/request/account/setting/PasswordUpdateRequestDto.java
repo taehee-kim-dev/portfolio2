@@ -1,4 +1,4 @@
-package portfolio2.dto.request.account.setting.update;
+package portfolio2.dto.request.account.setting;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

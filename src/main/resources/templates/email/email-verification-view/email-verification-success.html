@@ -8,12 +8,6 @@
 <div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container">
-    <div class="notification py-5 text-center" th:if="${invalidLinkError}">
-        <p class="lead">TH 이메일 인증</p>
-        <div class="alert alert-danger" role="alert" style="margin-top: 42px;">
-            유효하지 않은 이메일 인증 링크 입니다.
-        </div>
-    </div>
 
     <div class="notification text-center" th:if="${invalidLinkError == null}" style="margin-top:90px">
         <h3 style="margin-bottom: 30px;">TH 이메일 인증 성공</h3>

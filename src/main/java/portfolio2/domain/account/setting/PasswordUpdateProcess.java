@@ -1,22 +1,22 @@
 package portfolio2.domain.account.setting;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.request.account.setting.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
 
 @RequiredArgsConstructor
 @Component
-public class ProfileUpdateProcess {
+public class PasswordUpdateProcess {
 
     private final AccountRepository accountRepository;
-    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public Account updateProfile(Account sessionAccount, ProfileUpdateRequestDto profileUpdateRequestDto) {
+    public Account updatePassword(Account sessionAccount, PasswordUpdateRequestDto passwordUpdateRequestDto) {
         Account accountToUpdate = accountRepository.findByUserId(sessionAccount.getUserId());
-        modelMapper.map(profileUpdateRequestDto, accountToUpdate);
+        accountToUpdate.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getNewPassword()));
         return accountToUpdate;
     }
 }

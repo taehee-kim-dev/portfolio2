@@ -1,4 +1,4 @@
-package portfolio2.mail;
+package portfolio2.email;
 
 public interface EmailService {
 

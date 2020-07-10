@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
-import portfolio2.dto.request.account.setting.update.NotificationUpdateRequestDto;
-import portfolio2.dto.request.account.setting.update.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.setting.NotificationUpdateRequestDto;
+import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
+import portfolio2.dto.request.account.setting.ProfileUpdateRequestDto;
 import portfolio2.service.account.AccountSettingService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
+import portfolio2.validator.account.setting.PasswordUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
 
@@ -29,7 +31,7 @@ import static portfolio2.controller.config.UrlAndViewName.*;
 public class AccountSettingController {
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
-//    private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
+    private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
 //    private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
 //    private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
 
@@ -43,10 +45,10 @@ public class AccountSettingController {
         webDataBinder.addValidators(profileUpdateRequestDtoValidator);
     }
 
-//    @InitBinder("passwordUpdateRequestDto")
-//    public void initBinderForPasswordUpdateRequestDto(WebDataBinder webDataBinder){
-//        webDataBinder.addValidators(passwordUpdateRequestDtoValidator);
-//    }
+    @InitBinder("passwordUpdateRequestDto")
+    public void initBinderForPasswordUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(passwordUpdateRequestDtoValidator);
+    }
 //
 //    @InitBinder("accountNicknameUpdateRequestDto")
 //    public void initBinderForAccountNicknameUpdateRequestDto(WebDataBinder webDataBinder){
@@ -149,33 +151,33 @@ public class AccountSettingController {
         return ResponseEntity.ok().build();
     }
 
-//    // 비밀번호 변경
-//
-//    @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
-//    public String showPasswordUpdatePage(@SessionAccount Account sessionAccount, Model model){
-//        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//        model.addAttribute(new PasswordUpdateRequestDto());
-//        return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
-//    }
-//
-//    @PostMapping(ACCOUNT_SETTING_PASSWORD_URL)
-//    public String postPasswordUpdate(@SessionAccount Account sessionAccount,
-//                                    @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
-//                                    Errors errors, Model model,
-//                                    RedirectAttributes redirectAttributes){
-//        if(errors.hasErrors()){
-//            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//            model.addAttribute(passwordUpdateRequestDto);
-//            return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
-//        }
-//
-//        accountSettingService.updatePassword(sessionAccount, passwordUpdateRequestDto);
-//
-//        // 한번 쓰고 사라지는 메시지
-//        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
-//        return REDIRECT + ACCOUNT_SETTING_PASSWORD_URL;
-//    }
+    // 비밀번호 변경
+
+    @GetMapping(ACCOUNT_SETTING_PASSWORD_URL)
+    public String showPasswordUpdatePage(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        model.addAttribute(new PasswordUpdateRequestDto());
+        return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
+    }
+
+    @PostMapping(ACCOUNT_SETTING_PASSWORD_URL)
+    public String postPasswordUpdate(@SessionAccount Account sessionAccount,
+                                    @Valid @ModelAttribute PasswordUpdateRequestDto passwordUpdateRequestDto,
+                                    Errors errors, Model model,
+                                    RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            model.addAttribute(passwordUpdateRequestDto);
+            return ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
+        }
+
+        accountSettingService.updatePasswordAndSession(sessionAccount, passwordUpdateRequestDto);
+
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+        return REDIRECT + ACCOUNT_SETTING_PASSWORD_URL;
+    }
 //
 //    // 계정 정보 변경
 //

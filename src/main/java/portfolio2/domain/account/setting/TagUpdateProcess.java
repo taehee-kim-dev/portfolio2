@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class TagProcess {
+public class TagUpdateProcess {
 
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;

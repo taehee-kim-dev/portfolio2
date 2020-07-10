@@ -16,17 +16,19 @@ public class UrlAndViewName {
     public static final String SIGN_UP_URL = "/sign-up";
     public static final String SIGN_UP_VIEW_NAME = "account/sign-up";
 
-    public static final String EMAIL_VERIFICATION_REQUEST_VIEW_NAME = "account/email-verification-view/email-verification-request";
+    public static final String EMAIL_VERIFICATION_REQUEST_VIEW_NAME = "email/email-verification-view/email-verification-request";
 
 
 
     // EmailVerificationController.java
     public static final String CHECK_EMAIL_VERIFICATION_LINK_URL = "/check-email-verification-link";
 
-    public static final String EMAIL_VERIFICATION_RESULT_VIEW_NAME = "account/email-verification-view/email-verification-result";
+    public static final String EMAIL_VERIFICATION_SUCCESS_VIEW_NAME = "email/email-verification-view/email-verification-success";
+    public static final String INVALID_EMAIL_LINK_ERROR_VIEW_NAME = "email/email-link-error";
 
     public static final String AFTER_FIRST_SEND_EMAIL_VERIFICATION_EMAIL_URL = "/account/setting/account/email";
-    public static final String CANNOT_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME = "account/cannot-send-email-verification-email-error";
+    public static final String CANNOT_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME
+            = "email/email-verification-view/cannot-send-email-verification-email-error";
 
     // ProfileController.java
     public static final String PROFILE_VIEW_URL = "/account/profile-view";
@@ -51,4 +53,7 @@ public class UrlAndViewName {
 
     public static final String ACCOUNT_SETTING_ACCOUNT_EMAIL_URL = "/account/setting/account/email";
     public static final String ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL = "/account/setting/account/nickname";
+
+    // CheckShowPasswordUpdatePageLinkController.java
+    public static final String CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL = "/check-show-password-update-page-link";
 }

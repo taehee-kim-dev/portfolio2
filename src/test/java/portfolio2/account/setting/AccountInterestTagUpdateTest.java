@@ -32,7 +32,7 @@ import static portfolio2.controller.config.UrlAndViewName.ACCOUNT_SETTING_TAG_VI
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TagUpdateTest {
+public class AccountInterestTagUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

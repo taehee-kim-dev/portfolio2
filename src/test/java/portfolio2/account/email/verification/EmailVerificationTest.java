@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.mail.EmailMessage;
-import portfolio2.mail.EmailService;
+import portfolio2.email.EmailMessage;
+import portfolio2.email.EmailService;
 
 import java.time.LocalDateTime;
 
@@ -99,7 +99,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
                 .andExpect(unauthenticated());
 
         // 이메일 인증 확인
@@ -154,7 +154,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
                 .andExpect(unauthenticated());
 
         // 이메일 인증 확인
@@ -208,7 +208,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -266,7 +266,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("userId"))
                 .andExpect(model().attributeExists("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -314,7 +314,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -357,7 +357,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -398,7 +398,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -441,7 +441,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -482,7 +482,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -521,7 +521,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -547,12 +547,12 @@ public class EmailVerificationTest {
     @Test
     void inValidEmailWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogInProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        Account accountInDbToBeEmailVerified
-                = signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -570,7 +570,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -594,12 +594,12 @@ public class EmailVerificationTest {
     @Test
     void inValidTokenWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        Account accountInDbToBeEmailVerified
-                = signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -616,7 +616,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -659,7 +659,7 @@ public class EmailVerificationTest {
                 .andExpect(model().attributeDoesNotExist("nickname"))
                 .andExpect(model().attributeDoesNotExist("userId"))
                 .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(EMAIL_VERIFICATION_RESULT_VIEW_NAME))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -672,6 +672,181 @@ public class EmailVerificationTest {
         assertFalse(accountEmailVerified.isEmailFirstVerified());
 
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+    }
+
+    @DisplayName("이메일 인증 - email 파라미터가 null - 다른 계정으로 로그인 상태")
+    @Test
+    void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("email", (String) null)
+                .param("token", accountInDbToBeEmailVerified.getEmailVerificationToken()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+    }
+
+    @DisplayName("이메일 인증 - token 파라미터가 null - 다른 계정으로 로그인 상태")
+    @Test
+    void tokenParameterNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
+                .param("token", (String) null))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+    }
+
+    @DisplayName("이메일 인증 - email, token 파라미터가 null - 다른 계정으로 로그인 상태")
+    @Test
+    void emailAndTokenParameterNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("email", (String) null)
+                .param("token", (String) null))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+    }
+
+    @DisplayName("이메일 인증 - 인증 대기중인 이메일은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
+    @Test
+    void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+
+        accountInDbToBeEmailVerified.setEmailVerificationToken(null);
+        accountRepository.save(accountInDbToBeEmailVerified);
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
+                .param("token", "abcde"))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
         assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());

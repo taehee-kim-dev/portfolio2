@@ -1,4 +1,4 @@
-package portfolio2.mail;
+package portfolio2.email;
 
 
 import lombok.RequiredArgsConstructor;

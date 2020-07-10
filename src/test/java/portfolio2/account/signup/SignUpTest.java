@@ -14,8 +14,8 @@ import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.request.account.SignUpRequestDto;
-import portfolio2.mail.EmailMessage;
-import portfolio2.mail.EmailService;
+import portfolio2.email.EmailMessage;
+import portfolio2.email.EmailService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -132,11 +132,7 @@ public class SignUpTest {
         assertNotNull(newAccountInDb.getJoinedAt());
 
         // 비밀번호 찾기 토큰 null 확인
-        assertNull(newAccountInDb.getFindPasswordToken());
-        // 비밀번호 찾기 토큰 생성 시간 null 확인
-        assertNull(newAccountInDb.getFindPasswordTokenFirstGeneratedAt());
-        // 비밀번호 찾기 이메일 발송 횟수 0 확인
-        assertEquals(0, newAccountInDb.getCountOfSendingFindPasswordEmail());
+        assertNull(newAccountInDb.getShowPasswordUpdatePageToken());
 
 
         // 프로필 값 모두 null 확인
