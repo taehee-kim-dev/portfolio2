@@ -80,4 +80,25 @@ public class EmailSendingProcess {
 
         emailService.sendEmail(emailMessage);
     }
+
+    public void sendFindPasswordEmail(Account account) {
+        Context context = new Context();
+        context.setVariable("nickname", account.getNickname());
+        context.setVariable("userId", account.getUserId());
+        context.setVariable("host", appProperties.getHost());
+        context.setVariable("nickname", account.getNickname());
+        context.setVariable("passwordUpdateLink", CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL +
+                "?email=" + account.getVerifiedEmail() +
+                "&token=" + account.getShowPasswordUpdatePageToken());
+
+        String message = templateEngine.process("email/email-content/email-for-find-password", context);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getVerifiedEmail())
+                .subject("TH 비밀번호 찾기")
+                .message(message)
+                .build();
+
+        emailService.sendEmail(emailMessage);
+    }
 }

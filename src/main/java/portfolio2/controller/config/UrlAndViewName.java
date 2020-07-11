@@ -54,4 +54,9 @@ public class UrlAndViewName {
 
     // CheckShowPasswordUpdatePageLinkController.java
     public static final String CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL = "/check-show-password-update-page-link";
+
+    // FindPasswordController.java
+    public static final String FIND_PASSWORD_URL = "/find-password";
+    public static final String FIND_PASSWORD_VIEW_NAME = "account/find-password-view/find-password";
+
 }

@@ -14,9 +14,4 @@ import lombok.NoArgsConstructor;
 public class FindPasswordRequestDto {
 
     private String email;
-
-    @Builder
-    public FindPasswordRequestDto(String email) {
-        this.email = email;
-    }
 }

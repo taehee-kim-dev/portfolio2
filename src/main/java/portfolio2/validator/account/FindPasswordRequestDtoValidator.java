@@ -30,7 +30,7 @@ public class FindPasswordRequestDtoValidator implements Validator {
         if(!(email.matches(emailPattern))){
             errors.rejectValue("email", "invalidFormatEmail","이메일 형식에 맞지 않습니다.");
         }else if(!accountRepository.existsByVerifiedEmail(email)){
-            errors.rejectValue("email", "emailNotExists", "가입되어있지 않은 이메일 입니다.");
+            errors.rejectValue("email", "emailNotExists", "가입되어 있지 않거나, 인증되어 있지 않은 이메일 입니다.");
         }
 
     }
