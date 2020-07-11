@@ -60,12 +60,15 @@
                         <input id="email" type="text" th:field="*{email}" class="form-control"
                                placeholder="Email" aria-describedby="emailHelp"
                                th:classappend="${#fields.hasErrors('email') || #bools.isFalse(sessionAccount.isEmailVerified())} ? 'is-invalid' : 'is-valid'">
-                        <div th:if="${#bools.isTrue(sessionAccount.isEmailVerified())}" class="valid-feedback">
+                        <div th:if="${#bools.isTrue(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}" class="valid-feedback">
                             인증이 완료된 이메일 입니다.
                         </div>
-                        <div th:if="${#bools.isFalse(sessionAccount.isEmailVerified())}" class="invalid-feedback">
+                        <div th:if="${#bools.isFalse(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}" class="invalid-feedback">
                             아직 인증되지 않은 이메일 입니다.
                         </div>
+                        <small id="emailHelp" class="form-text text-muted" style="margin-top: 6px">
+                            이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.
+                        </small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
                     </div>
 
