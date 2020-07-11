@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
-import portfolio2.dto.request.account.setting.NotificationUpdateRequestDto;
-import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
-import portfolio2.dto.request.account.setting.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.setting.*;
 import portfolio2.service.account.AccountSettingService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
+import portfolio2.validator.account.setting.AccountNicknameUpdateRequestDtoValidator;
 import portfolio2.validator.account.setting.PasswordUpdateRequestDtoValidator;
 
 import javax.validation.Valid;
@@ -32,7 +31,7 @@ public class AccountSettingController {
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
-//    private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
+    private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
 //    private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
 
     private final AccountSettingService accountSettingService;
@@ -49,11 +48,11 @@ public class AccountSettingController {
     public void initBinderForPasswordUpdateRequestDto(WebDataBinder webDataBinder){
         webDataBinder.addValidators(passwordUpdateRequestDtoValidator);
     }
-//
-//    @InitBinder("accountNicknameUpdateRequestDto")
-//    public void initBinderForAccountNicknameUpdateRequestDto(WebDataBinder webDataBinder){
-//        webDataBinder.addValidators(accountNicknameUpdateRequestDtoValidator);
-//    }
+
+    @InitBinder("accountNicknameUpdateRequestDto")
+    public void initBinderForAccountNicknameUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(accountNicknameUpdateRequestDtoValidator);
+    }
 //
 //    @InitBinder("accountEmailUpdateRequestDto")
 //    public void initBinderForAccountEmailUpdateRequestDto(WebDataBinder webDataBinder){
@@ -178,36 +177,43 @@ public class AccountSettingController {
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
         return REDIRECT + ACCOUNT_SETTING_PASSWORD_URL;
     }
-//
-//    // 계정 정보 변경
-//
-//    // 닉네임 변경
-//
-//    @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
-//    public String showAccountSettingAccountView(@SessionAccount Account sessionAccount, Model model){
-//        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//        model.addAttribute(modelMapper.map(sessionAccount, AccountNicknameUpdateRequestDto.class));
-//        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
-//        return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
-//    }
-//
-//    @PostMapping(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
-//    public String updateAccountNickname(@SessionAccount Account sessionAccount,
-//                                         @Valid @ModelAttribute AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto,
-//                                         Errors errors, Model model,
-//                                         RedirectAttributes redirectAttributes){
-//        if(errors.hasErrors()){
-//            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//            model.addAttribute(accountNicknameUpdateRequestDto);
-//            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
-//        }
-//
-//        accountSettingService.updateAccountNickname(sessionAccount, accountNicknameUpdateRequestDto);
-//        // 한번 쓰고 사라지는 메시지
-//        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
-//        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_URL;
-//    }
+
+    // 계정 정보 변경
+
+    @GetMapping(ACCOUNT_SETTING_ACCOUNT_URL)
+    public String showAccountSettingAccountView(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        model.addAttribute(modelMapper.map(sessionAccount, AccountNicknameUpdateRequestDto.class));
+        AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
+        if (sessionAccount.isEmailVerified()){
+            accountEmailUpdateRequestDto.setEmail(sessionAccount.getVerifiedEmail());
+        }else{
+            accountEmailUpdateRequestDto.setEmail(sessionAccount.getEmailWaitingToBeVerified());
+        }
+        model.addAttribute(accountEmailUpdateRequestDto);
+        // 아래 문장 생략하면 GetMapping url로 view name 간주함.
+        return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+    }
+
+    // 닉네임 변경
+
+    @PostMapping(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+    public String updateAccountNickname(@SessionAccount Account sessionAccount,
+                                         @Valid @ModelAttribute AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto,
+                                         Errors errors, Model model,
+                                         RedirectAttributes redirectAttributes){
+        if(errors.hasErrors()){
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            model.addAttribute(accountNicknameUpdateRequestDto);
+            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+        }
+
+        accountSettingService.updateAccountNicknameAndSession(sessionAccount, accountNicknameUpdateRequestDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
+        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_URL;
+    }
 //
 //    // 이메일 변경
 //

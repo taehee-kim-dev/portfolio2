@@ -53,7 +53,7 @@ public class SendingEmailVerificationEmailTest {
 
     // 무조건 로그인 상태에서만 보낼 수 밖에 없다.
     @DisplayName("이메일 인증 이메일 전송 - 1회 - 성공")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void sendOneTimeSuccess(){
         // 회원가입 후 로그인 상태

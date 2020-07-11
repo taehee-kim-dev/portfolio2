@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.account.config.SignUpAndLoggedIn;
+import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 
@@ -44,7 +44,7 @@ public class AccountProfileUpdateTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("프로필 수정 화면 보여주기")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showProfileUpdatePage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_PROFILE_URL))
@@ -59,7 +59,7 @@ public class AccountProfileUpdateTest {
     // 모두 정상 입력
 
     @DisplayName("프로필 업데이트 - 모두 정상 입력")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void updateProfileSuccess() throws Exception{
         String sampleBio = "sampleBio";
@@ -90,7 +90,7 @@ public class AccountProfileUpdateTest {
     // 입력 에러
 
     @DisplayName("프로필 업데이트 - 너무 긴 자기소개 에러")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooLongBioError() throws Exception{
         String sampleBio = "sampleBiosampleBiosampleBiosampleBiosampleBio";
@@ -124,7 +124,7 @@ public class AccountProfileUpdateTest {
     }
 
     @DisplayName("프로필 업데이트 - 너무 긴 지역 에러")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooLongLocationError() throws Exception{
         String sampleBio = "sampleBio";
@@ -158,7 +158,7 @@ public class AccountProfileUpdateTest {
     }
 
     @DisplayName("프로필 업데이트 - 너무 긴 직업 에러")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooLongOccupationError() throws Exception{
         String sampleBio = "sampleBio";
@@ -192,7 +192,7 @@ public class AccountProfileUpdateTest {
     }
 
     @DisplayName("입력값 에러 각각 모두 출력")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showAllErrorCodes() throws Exception{
         String sampleBio = "sampleBio";

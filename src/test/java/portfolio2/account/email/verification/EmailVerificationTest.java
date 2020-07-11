@@ -72,7 +72,7 @@ public class EmailVerificationTest {
     // 정상 링크
 
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 안 된 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validLinkNotLoggedInNotFirstVerified() throws Exception{
 
@@ -124,7 +124,7 @@ public class EmailVerificationTest {
     }
 
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 된 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validLinkNotLoggedInFirstVerified() throws Exception{
 
@@ -189,7 +189,7 @@ public class EmailVerificationTest {
 
 
     @DisplayName("이메일 인증 - 정상 링크 - 본인 계정으로 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validLinkLoggedInByOwnAccount() throws Exception{
 
@@ -252,7 +252,7 @@ public class EmailVerificationTest {
         assertTrue(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
     }
 
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
     @Test
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{

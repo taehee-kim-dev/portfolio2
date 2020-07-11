@@ -34,6 +34,8 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
+    private String nicknameBeforeUpdate;
+
 
 
     @Column(unique = true)

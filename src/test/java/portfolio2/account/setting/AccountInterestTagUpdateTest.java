@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import portfolio2.account.config.SignUpAndLoggedIn;
+import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.tag.Tag;
@@ -52,7 +52,7 @@ public class AccountInterestTagUpdateTest {
     }
 
     @DisplayName("계정 관심 태그 설정 화면 보여주기")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showAccountTagSettingView() throws Exception{
 
@@ -65,7 +65,7 @@ public class AccountInterestTagUpdateTest {
     }
 
     @DisplayName("태그 추가하기 - 완전히 새로운 태그")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void addNewTag() throws Exception{
 
@@ -91,7 +91,7 @@ public class AccountInterestTagUpdateTest {
     }
 
     @DisplayName("태그 추가하기 - 이미 존재하는 태그 - 사용자는 갖고있지 않음.")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void addTagExistingInTagRepository() throws Exception{
 
@@ -116,7 +116,7 @@ public class AccountInterestTagUpdateTest {
     }
 
     @DisplayName("태그 추가하기 - 이미 존재하는 태그 - 이미 사용자가 갖고있는 태그")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void addTagExistingInTagRepositoryAndAccount() throws Exception{
 
@@ -146,7 +146,7 @@ public class AccountInterestTagUpdateTest {
 
 
     @DisplayName("태그 삭제하기 - 존재하는 태그 정상 삭제")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void removeTag() throws Exception{
 
@@ -181,7 +181,7 @@ public class AccountInterestTagUpdateTest {
     }
 
     @DisplayName("존재하지 않는 태그 삭제하기 오류")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void removeNotExistingTag() throws Exception{
 

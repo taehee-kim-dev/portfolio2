@@ -12,17 +12,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.LogInAndOutProcessForTest;
 import portfolio2.account.config.SignUpAndLogInProcessForTest;
 import portfolio2.account.config.SignUpAndLogOutProcessForTest;
-import portfolio2.account.config.SignUpAndLoggedIn;
+import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.email.EmailMessage;
 import portfolio2.email.EmailService;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -63,7 +59,7 @@ public class ShowPasswordUpdatePageTest {
     // 정상 링크
 
     @DisplayName("비밀번호 변경 페이지 보여주기 - 정상 링크 - 로그아웃 상태 - 인증된 이메일")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validLinkNotLoggedIn() throws Exception{
 
@@ -102,7 +98,7 @@ public class ShowPasswordUpdatePageTest {
 
 
     @DisplayName("비밀번호 변경 페이지 보여주기 - 정상 링크 - 본인 계정으로 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validLinkLoggedInByOwnAccount() throws Exception{
 
@@ -133,7 +129,7 @@ public class ShowPasswordUpdatePageTest {
         assertNull(showedPasswordUpdatePageAccount.getShowPasswordUpdatePageToken());
     }
 
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
     @Test
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{
@@ -610,7 +606,7 @@ public class ShowPasswordUpdatePageTest {
         assertNotNull(notShowedPasswordUpdatePageAccount.getShowPasswordUpdatePageToken());
     }
 
-    @DisplayName("이메일 인증 - 이메일에 대항하는 계정은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
+    @DisplayName("이메일 인증 - 이메일에 해당하는 계정은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
     @Test
     void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
 

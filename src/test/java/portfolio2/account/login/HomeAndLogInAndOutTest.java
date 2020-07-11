@@ -74,7 +74,7 @@ public class HomeAndLogInAndOutTest {
     }
 
     @DisplayName("홈 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showHomeLoggedIn() throws Exception{
         mockMvc.perform(get(HOME_URL))
@@ -96,7 +96,7 @@ public class HomeAndLogInAndOutTest {
     }
 
     @DisplayName("로그인 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showLogInPageWithLogIn() throws Exception{
         mockMvc.perform(get(LOGIN_URL))
@@ -106,7 +106,7 @@ public class HomeAndLogInAndOutTest {
     }
 
     @DisplayName("올바른 아이디, 비밀번호로 로그인 시도 - 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void logInWithCorrectIdAndPasswordWithLogIn() throws Exception {
 
@@ -289,7 +289,7 @@ public class HomeAndLogInAndOutTest {
     }
 
     @DisplayName("로그아웃 테스트")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void logout() throws Exception {
         mockMvc.perform(post("/logout")

@@ -10,11 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.account.config.SignUpAndLoggedIn;
+import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.email.EmailSendingProcess;
-import portfolio2.domain.email.SendingPasswordUpdateNotificationEmailProcess;
 import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +55,7 @@ public class AccountPasswordUpdateTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("비밀번호 변경 화면 보여주기")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showAccountPasswordUpdatePage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_PASSWORD_URL))
@@ -71,7 +70,7 @@ public class AccountPasswordUpdateTest {
     // 모두 정상 입력
 
     @DisplayName("비밀번호 변경 모두 정상 입력 - 인증된 이메일이 없는 경우")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void updatePasswordSuccessNotEmailVerified() throws Exception{
         String newPassword = "ChangedPassword";
@@ -97,7 +96,7 @@ public class AccountPasswordUpdateTest {
     }
 
     @DisplayName("비밀번호 변경 모두 정상 입력 - 인증된 이메일이 있는 경우")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void updatePasswordSuccessWithEmailVerified() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -132,7 +131,7 @@ public class AccountPasswordUpdateTest {
     // 비밀번호 확인은 모두 맞는 상태
 
     @DisplayName("너무 짧은 비밀번호 - 비밀번호 확인 일치")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooShortNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -172,7 +171,7 @@ public class AccountPasswordUpdateTest {
     }
 
     @DisplayName("너무 긴 비밀번호 - 비밀번호 확인 일치")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooLongNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -212,7 +211,7 @@ public class AccountPasswordUpdateTest {
     }
 
     @DisplayName("형식에 맞지 않는 비밀번호 - 비밀번호 확인 일치")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void invalidFormatNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -254,7 +253,7 @@ public class AccountPasswordUpdateTest {
     // 확인 비밀번호만 불일치
 
     @DisplayName("정상 비밀번호 입력 - 확인 비밀번호 불일치")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void validNewPasswordAndIncorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -295,7 +294,7 @@ public class AccountPasswordUpdateTest {
 
     // 비정상 비밀번호 - 확인 비밀번호 불일치하면 비정상 비밀번호에 대한 에러문구만 띄움
     @DisplayName("형식에 맞지 않는 비밀번호 - 비밀번호 확인 불일치")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void invalidFormatNewPasswordAndIncorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);

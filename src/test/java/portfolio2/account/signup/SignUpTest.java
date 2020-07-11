@@ -69,7 +69,7 @@ public class SignUpTest {
     }
 
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void showSignUpPageWithLogIn() throws Exception{
         mockMvc.perform(get(SIGN_UP_URL))
@@ -120,6 +120,8 @@ public class SignUpTest {
         
         // 인증 대기 이메일 값 일치 확인
         assertEquals(signUpRequestDto.getEmail(), newAccountInDb.getEmailWaitingToBeVerified());
+        // 이메일 처음 인증 상태 false 확인
+        assertFalse(newAccountInDb.isEmailFirstVerified());
         // 이메일 인증 상태 false 확인
         assertFalse(newAccountInDb.isEmailVerified());
         // 이메일 인증 토큰 값 존재 확인
@@ -165,7 +167,7 @@ public class SignUpTest {
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
-    @SignUpAndLoggedIn
+    @SignUpAndLoggedInEmailNotVerified
     @Test
     void allValidFieldsSignUpWithLogIn() throws Exception{
 
