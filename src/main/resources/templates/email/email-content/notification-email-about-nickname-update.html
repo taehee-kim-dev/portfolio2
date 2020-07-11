@@ -8,9 +8,10 @@
     <div>
         <p>안녕하세요, <span th:text="${nickname}">sampleNickname</span>(<span th:text="${userId}">sampleUserId</span>)님!</p>
 
-        <h2>회원님의 닉네임이 <span th:text="${beforeNickname}">sampleBeforeNickname</span> 에서 <span th:text="${afterNickname}">sampleAfterNickname</span>로 변경되었습니다.</h2>
+        <p style="font-size: 18px">회원님의 닉네임이 <span th:text="${beforeNickname}" style="font-weight: bold">sampleBeforeNickname</span> 에서
+            <span th:text="${afterNickname}" style="font-weight: bold">sampleAfterNickname</span>&nbsp;로 변경되었습니다.</p>
 
-        <h2>만약 본인이 변경하지 않으셨다면, 아래의 링크를 클릭하여 비밀번호를 변경한 후, 이메일을 다시 변경해 주세요.</h2>
+        <p>만약 본인이 변경하지 않으셨다면, 아래의 링크를 클릭하여 비밀번호를 변경한 후, 닉네임을 다시 변경해 주세요.</p>
 
         <div style="margin-top: 6px">
             <a th:href="${host + passwordUpdateLink}">비밀번호 변경하기</a>

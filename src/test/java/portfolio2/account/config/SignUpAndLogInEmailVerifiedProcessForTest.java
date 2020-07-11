@@ -74,10 +74,10 @@ public class SignUpAndLogInEmailVerifiedProcessForTest {
 
         signUpService.signUp(signUpRequestDto);
 
-        Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
+        Account signedUpAccount = accountRepository.findByUserId(userId);
 
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
-        emailVerificationRequestDto.setEmail(TEST_EMAIL);
+        emailVerificationRequestDto.setEmail(email);
         emailVerificationRequestDto.setToken(signedUpAccount.getEmailVerificationToken());
         emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount
                 (emailVerificationRequestDto, signedUpAccount);

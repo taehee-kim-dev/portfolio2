@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
+import portfolio2.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
 import portfolio2.domain.account.Account;
@@ -26,15 +28,14 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static portfolio2.account.config.TestAccountInfo.TEST_NICKNAME;
-import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
+import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.controller.config.UrlAndViewName.*;
 
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AccountNIcknameUpdateTest {
+public class AccountNicknameUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +44,10 @@ public class AccountNIcknameUpdateTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
+
+    @Autowired
+    private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
     @MockBean
     private EmailSendingProcess emailSendingProcess;
@@ -168,6 +172,80 @@ public class AccountNIcknameUpdateTest {
                         "accountNicknameUpdateRequestDto",
                         "nickname",
                         "tooLongNickname"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeExists("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
+        assertNotEquals(newNickname, notUpdatedAccount.getNickname());
+        assertNull(notUpdatedAccount.getNicknameBeforeUpdate());
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임 - 이메일 인증 된 상태")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void invalidFormatNicknameError() throws Exception{
+        AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
+                = new AccountNicknameUpdateRequestDto();
+        String newNickname = "newNick%name";
+        accountNicknameUpdateRequestDto.setNickname(newNickname);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+                .param("nickname", accountNicknameUpdateRequestDto.getNickname())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "accountNicknameUpdateRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeExists("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
+        assertNotEquals(newNickname, notUpdatedAccount.getNickname());
+        assertNull(notUpdatedAccount.getNicknameBeforeUpdate());
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("입력 에러 - 이미 존재하는 닉네임 - 이메일 인증 된 상태")
+    @Test
+    void nicknameAlreadyExistsError() throws Exception{
+        signUpAndLogOutEmailVerifiedProcessForTest.signUpAndLogOutNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
+
+        AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
+                = new AccountNicknameUpdateRequestDto();
+        String newNickname = TEST_NICKNAME_2;
+        accountNicknameUpdateRequestDto.setNickname(newNickname);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+                .param("nickname", accountNicknameUpdateRequestDto.getNickname())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "accountNicknameUpdateRequestDto",
+                        "nickname",
+                        "nicknameAlreadyExists"
                 ))
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))

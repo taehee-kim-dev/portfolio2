@@ -70,11 +70,11 @@ public class EmailSendingProcess {
                 "?email=" + account.getVerifiedEmail() +
                 "&token=" + account.getShowPasswordUpdatePageToken());
 
-        String message = templateEngine.process("email/email-content/notification-email-about-password-update", context);
+        String message = templateEngine.process("email/email-content/notification-email-about-nickname-update", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getVerifiedEmail())
-                .subject("TH 비밀번호 변경 알림")
+                .subject("TH 닉네임 변경 알림")
                 .message(message)
                 .build();
 
