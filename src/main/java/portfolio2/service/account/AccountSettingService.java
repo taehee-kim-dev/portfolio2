@@ -7,11 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.LogInOrSessionUpdateProcess;
 import portfolio2.domain.account.setting.*;
+import portfolio2.domain.email.SendingEmailVerificationEmailProcess;
 import portfolio2.dto.account.TagUpdateRequestDto;
-import portfolio2.dto.request.account.setting.AccountNicknameUpdateRequestDto;
-import portfolio2.dto.request.account.setting.NotificationUpdateRequestDto;
-import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
-import portfolio2.dto.request.account.setting.ProfileUpdateRequestDto;
+import portfolio2.dto.request.account.setting.*;
 
 import java.util.List;
 
@@ -25,6 +23,8 @@ public class AccountSettingService {
     private final TagUpdateProcess tagUpdateProcess;
     private final PasswordUpdateProcess passwordUpdateProcess;
     private final NicknameUpdateProcess nicknameUpdateProcess;
+    private final EmailUpdateProcess emailUpdateProcess;
+    private final SendingEmailVerificationEmailProcess sendingEmailVerificationEmailProcess;
 
 
     private final LogInOrSessionUpdateProcess logInOrSessionUpdateProcess;
@@ -75,5 +75,14 @@ public class AccountSettingService {
         }
         updatedAccount.setNicknameBeforeUpdate(null);
         logInOrSessionUpdateProcess.loginOrSessionUpdate(updatedAccount);
+    }
+
+    public boolean canSendEmailVerificationEmail(Account sessionAccount) {
+        return sendingEmailVerificationEmailProcess.canSendEmailVerificationEmail(sessionAccount);
+    }
+
+    public void updateAccountEmailAndSession(Account sessionAccount, AccountEmailUpdateRequestDto accountEmailUpdateRequestDto) {
+        Account emailSentAccount = emailUpdateProcess.updateEmail(sessionAccount, accountEmailUpdateRequestDto);
+        logInOrSessionUpdateProcess.loginOrSessionUpdate(emailSentAccount);
     }
 }

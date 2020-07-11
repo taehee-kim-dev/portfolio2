@@ -13,9 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.account.TagUpdateRequestDto;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -41,10 +44,10 @@ public class AccountInterestTagUpdateTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private TagRepository tagRepository;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private TagRepository tagRepository;
 
     @AfterEach
     void afterEach(){

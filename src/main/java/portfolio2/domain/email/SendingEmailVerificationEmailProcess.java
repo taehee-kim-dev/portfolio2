@@ -22,6 +22,8 @@ public class SendingEmailVerificationEmailProcess {
     public Account sendEmailVerificationEmail(Account account){
         // 이미 전송 허가 받은 상태
         Account accountToSendEmail = accountRepository.findByUserId(account.getUserId());
+        // 인증 상태 false로 변경
+        accountToSendEmail.setEmailVerified(false);
         // 인증된 메일 null로 변경
         accountToSendEmail.setVerifiedEmail(null);
         // 토큰 새로 생성

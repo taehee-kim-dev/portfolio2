@@ -15,6 +15,7 @@ import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.dto.request.account.setting.*;
 import portfolio2.service.account.AccountSettingService;
 import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
+import portfolio2.validator.account.setting.AccountEmailUpdateRequestDtoValidator;
 import portfolio2.validator.account.setting.AccountNicknameUpdateRequestDtoValidator;
 import portfolio2.validator.account.setting.PasswordUpdateRequestDtoValidator;
 
@@ -32,12 +33,11 @@ public class AccountSettingController {
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
     private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
-//    private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
+    private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
 
     private final AccountSettingService accountSettingService;
 
     private final ModelMapper modelMapper;
-    private final ObjectMapper objectMapper;
 
     @InitBinder("profileUpdateRequestDto")
     public void initBinderForProfileUpdateRequestDto(WebDataBinder webDataBinder){
@@ -53,11 +53,11 @@ public class AccountSettingController {
     public void initBinderForAccountNicknameUpdateRequestDto(WebDataBinder webDataBinder){
         webDataBinder.addValidators(accountNicknameUpdateRequestDtoValidator);
     }
-//
-//    @InitBinder("accountEmailUpdateRequestDto")
-//    public void initBinderForAccountEmailUpdateRequestDto(WebDataBinder webDataBinder){
-//        webDataBinder.addValidators(accountEmailUpdateRequestDtoValidator);
-//    }
+
+    @InitBinder("accountEmailUpdateRequestDto")
+    public void initBinderForAccountEmailUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(accountEmailUpdateRequestDtoValidator);
+    }
 
     // 프로필 설정
 
@@ -221,24 +221,34 @@ public class AccountSettingController {
         redirectAttributes.addFlashAttribute("message", "닉네임 변경이 완료되었습니다.");
         return REDIRECT + ACCOUNT_SETTING_ACCOUNT_URL;
     }
-//
-//    // 이메일 변경
-//
-//    @PostMapping(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
-//    public String updateAccountNickname(@SessionAccount Account sessionAccount,
-//                                        @Valid @ModelAttribute AccountEmailUpdateRequestDto accountEmailUpdateRequestDto,
-//                                        Errors errors, Model model,
-//                                        RedirectAttributes redirectAttributes){
-//        if(errors.hasErrors()){
-//            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-//            model.addAttribute(accountEmailUpdateRequestDto);
-//            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
-//        }
-//
-//        accountSettingService.updateAccountEmail(sessionAccount, accountEmailUpdateRequestDto);
-//        // 한번 쓰고 사라지는 메시지
-//        // 모델에 포함돼서 전달됨
-//        redirectAttributes.addFlashAttribute("message", "인증 이메일을 발송했습니다.");
-//        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_URL;
-//    }
+
+    // 이메일 변경
+    @PostMapping(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
+    public String updateAccountNickname(@SessionAccount Account sessionAccount,
+                                        @Valid @ModelAttribute AccountEmailUpdateRequestDto accountEmailUpdateRequestDto,
+                                        Errors errors, Model model,
+                                        RedirectAttributes redirectAttributes){
+
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+
+        if(errors.hasErrors()){
+            AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto = new AccountNicknameUpdateRequestDto();
+            accountNicknameUpdateRequestDto.setNickname(sessionAccount.getNickname());
+            model.addAttribute(accountNicknameUpdateRequestDto);
+            model.addAttribute(accountEmailUpdateRequestDto);
+            return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
+        }
+
+        if (!accountSettingService.canSendEmailVerificationEmail(sessionAccount)){
+            model.addAttribute("cannotSendError",
+                    "이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.");
+            return CANNOT_SEND_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME;
+        }
+
+        accountSettingService.updateAccountEmailAndSession(sessionAccount, accountEmailUpdateRequestDto);
+        // 한번 쓰고 사라지는 메시지
+        // 모델에 포함돼서 전달됨
+        redirectAttributes.addFlashAttribute("message", "인증 이메일을 발송했습니다.");
+        return REDIRECT + ACCOUNT_SETTING_ACCOUNT_URL;
+    }
 }

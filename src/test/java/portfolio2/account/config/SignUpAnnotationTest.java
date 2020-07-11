@@ -13,7 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
 import portfolio2.domain.email.EmailSendingProcess;
+import portfolio2.domain.post.PostRepository;
+import portfolio2.domain.tag.TagRepository;
 import portfolio2.email.EmailMessage;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

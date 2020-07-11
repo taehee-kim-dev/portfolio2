@@ -1,6 +1,7 @@
 package portfolio2.domain.account;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.tag.Tag;
 
@@ -126,7 +127,6 @@ public class Account {
 
 
     private boolean notificationNewPostWithMyTagByEmail = false;
-
 
 
     @ManyToMany

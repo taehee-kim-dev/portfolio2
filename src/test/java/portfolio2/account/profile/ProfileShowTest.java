@@ -11,7 +11,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.LogInAndOutProcessForTest;
 import portfolio2.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
+import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.domain.post.PostRepository;
+import portfolio2.domain.tag.TagRepository;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -43,6 +48,9 @@ public class ProfileShowTest {
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @AfterEach
     void afterEach(){
