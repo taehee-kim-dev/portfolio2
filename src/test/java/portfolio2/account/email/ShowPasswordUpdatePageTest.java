@@ -625,13 +625,13 @@ public class ShowPasswordUpdatePageTest {
 
         accountInDbToShowPasswordUpdatePage.setVerifiedEmail(accountInDbToShowPasswordUpdatePage.getEmailWaitingToBeVerified());
         accountInDbToShowPasswordUpdatePage.setEmailVerified(true);
-        accountInDbToShowPasswordUpdatePage.generateShowPasswordUpdatePageToken();
+        accountInDbToShowPasswordUpdatePage.setShowPasswordUpdatePageToken(null);
         accountRepository.save(accountInDbToShowPasswordUpdatePage);
 
         // 유효 링크 인증
         mockMvc.perform(get(CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL)
                 .param("email", accountInDbToShowPasswordUpdatePage.getVerifiedEmail())
-                .param("token", (String)null))
+                .param("token", "abcde"))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("invalidLinkError"))
@@ -641,7 +641,7 @@ public class ShowPasswordUpdatePageTest {
 
         // 토큰 확인
         Account notShowedPasswordUpdatePageAccount = accountRepository.findByUserId(TEST_USER_ID);
-        assertNotNull(notShowedPasswordUpdatePageAccount.getShowPasswordUpdatePageToken());
+        assertNull(notShowedPasswordUpdatePageAccount.getShowPasswordUpdatePageToken());
     }
 
 }
