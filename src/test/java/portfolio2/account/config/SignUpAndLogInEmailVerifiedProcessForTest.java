@@ -1,23 +1,26 @@
 package portfolio2.account.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
+import portfolio2.dto.request.account.EmailVerificationRequestDto;
 import portfolio2.dto.request.account.SignUpRequestDto;
+import portfolio2.service.account.AccountService;
+import portfolio2.service.account.EmailVerificationService;
 import portfolio2.service.account.SignUpService;
 
 import static portfolio2.account.config.TestAccountInfo.*;
 
 @Component
 @RequiredArgsConstructor
-public class SignUpAndLogOutProcessForTest {
+public class SignUpAndLogInEmailVerifiedProcessForTest {
 
     private final SignUpService signUpService;
     private final AccountRepository accountRepository;
+    private final EmailVerificationService emailVerificationService;
 
-    public Account signUpAndLogOutDefault(){
+    public Account signUpAndLogInDefault(){
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)
                 .nickname(TEST_NICKNAME)
@@ -27,11 +30,18 @@ public class SignUpAndLogOutProcessForTest {
 
         signUpService.signUp(signUpRequestDto);
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
+
+        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
+        emailVerificationRequestDto.setEmail(TEST_EMAIL);
+        emailVerificationRequestDto.setToken(signedUpAccount.getEmailVerificationToken());
+        emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount
+                (emailVerificationRequestDto, signedUpAccount);
+
         return accountRepository.findByUserId(TEST_USER_ID);
     }
 
-    public Account signUpAndLogOutNotDefaultWith(String testUserId){
+    public Account signUpAndLogInNotDefaultWith(String testUserId){
 
         String userId = null;
         String nickname = null;
@@ -63,7 +73,15 @@ public class SignUpAndLogOutProcessForTest {
                 .build();
 
         signUpService.signUp(signUpRequestDto);
-        SecurityContextHolder.getContext().setAuthentication(null);
+
+        Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
+
+        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
+        emailVerificationRequestDto.setEmail(TEST_EMAIL);
+        emailVerificationRequestDto.setToken(signedUpAccount.getEmailVerificationToken());
+        emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount
+                (emailVerificationRequestDto, signedUpAccount);
+
         return accountRepository.findByUserId(userId);
     }
 }

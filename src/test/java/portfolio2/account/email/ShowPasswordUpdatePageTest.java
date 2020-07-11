@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.LogInAndOutProcessForTest;
-import portfolio2.account.config.SignUpAndLogInProcessForTest;
-import portfolio2.account.config.SignUpAndLogOutProcessForTest;
+import portfolio2.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
+import portfolio2.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
@@ -40,10 +40,10 @@ public class ShowPasswordUpdatePageTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
+    private SignUpAndLogInEmailNotVerifiedProcessForTest signUpAndLogInEmailNotVerifiedProcessForTest;
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
@@ -146,7 +146,7 @@ public class ShowPasswordUpdatePageTest {
         accountRepository.save(beforeAccount);
 
         // 다른 새로운 계정으로 회원가입 후 로그인
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         // 로그인된 계정 확인
         logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2);
@@ -183,7 +183,7 @@ public class ShowPasswordUpdatePageTest {
     void inValidEmailWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -220,7 +220,7 @@ public class ShowPasswordUpdatePageTest {
     void inValidTokenWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -257,7 +257,7 @@ public class ShowPasswordUpdatePageTest {
     void inValidLinkWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -290,7 +290,7 @@ public class ShowPasswordUpdatePageTest {
     @Test
     void inValidEmailWithLogInByOwnAccount() throws Exception{
 
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -325,7 +325,7 @@ public class ShowPasswordUpdatePageTest {
     @Test
     void inValidTokenWithLogInByOwnAccount() throws Exception{
 
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -360,7 +360,7 @@ public class ShowPasswordUpdatePageTest {
     @Test
     void inValidLinkWithLogInByOwnAccount() throws Exception{
 
-        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToShowPasswordUpdatePage = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -394,11 +394,11 @@ public class ShowPasswordUpdatePageTest {
     void inValidEmailWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -434,11 +434,11 @@ public class ShowPasswordUpdatePageTest {
     void inValidTokenWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -474,11 +474,11 @@ public class ShowPasswordUpdatePageTest {
     void inValidLinkWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -509,11 +509,11 @@ public class ShowPasswordUpdatePageTest {
     void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -543,11 +543,11 @@ public class ShowPasswordUpdatePageTest {
     void tokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -577,11 +577,11 @@ public class ShowPasswordUpdatePageTest {
     void emailTokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -611,11 +611,11 @@ public class ShowPasswordUpdatePageTest {
     void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToShowPasswordUpdatePage
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 

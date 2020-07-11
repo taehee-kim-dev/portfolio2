@@ -205,6 +205,13 @@ public class AccountSettingController {
         if(errors.hasErrors()){
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute(accountNicknameUpdateRequestDto);
+            AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
+            if (sessionAccount.isEmailVerified()){
+                accountEmailUpdateRequestDto.setEmail(sessionAccount.getVerifiedEmail());
+            }else{
+                accountEmailUpdateRequestDto.setEmail(sessionAccount.getEmailWaitingToBeVerified());
+            }
+            model.addAttribute(accountEmailUpdateRequestDto);
             return ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
         }
 

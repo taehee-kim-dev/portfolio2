@@ -43,7 +43,7 @@ public class SignUpAndLoggedInEmailVerifiedSecurityContextFactory implements Wit
         emailVerificationRequestDto.setEmail(TEST_EMAIL);
         emailVerificationRequestDto.setToken(signedUpAccount.getEmailVerificationToken());
         emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount
-                (emailVerificationRequestDto, null);
+                (emailVerificationRequestDto, signedUpAccount);
 
 
         // Authentication 만들고 SecurityContext에 넣어주기

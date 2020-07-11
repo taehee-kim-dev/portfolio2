@@ -48,7 +48,7 @@ public class SignUpTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
 
 
     @AfterEach
@@ -281,7 +281,7 @@ public class SignUpTest {
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -387,7 +387,7 @@ public class SignUpTest {
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -443,7 +443,7 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_EMAIL, existingAccount.getEmailWaitingToBeVerified());
         mockMvc.perform(post(SIGN_UP_URL)
@@ -474,7 +474,7 @@ public class SignUpTest {
     @Test
     void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 
-        Account existingAccount = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account existingAccount = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         existingAccount.setVerifiedEmail(TEST_EMAIL);
         accountRepository.save(existingAccount);
 

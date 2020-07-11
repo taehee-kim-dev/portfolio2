@@ -53,10 +53,10 @@ public class EmailVerificationTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
+    private SignUpAndLogInEmailNotVerifiedProcessForTest signUpAndLogInEmailNotVerifiedProcessForTest;
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
@@ -263,7 +263,7 @@ public class EmailVerificationTest {
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         // 다른 새로운 계정으로 회원가입 후 로그인
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         // 로그인된 계정 확인
         logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2);
@@ -322,7 +322,7 @@ public class EmailVerificationTest {
     void inValidEmailWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToBeEmailVerified = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -375,7 +375,7 @@ public class EmailVerificationTest {
     void inValidTokenWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToBeEmailVerified = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -427,7 +427,7 @@ public class EmailVerificationTest {
     void inValidLinkWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -477,7 +477,7 @@ public class EmailVerificationTest {
     @Test
     void inValidEmailWithLogInByOwnAccount() throws Exception{
 
-        Account accountInDbToBeEmailVerified = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -528,7 +528,7 @@ public class EmailVerificationTest {
     @Test
     void inValidTokenWithLogInByOwnAccount() throws Exception{
 
-        Account accountInDbToBeEmailVerified = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -578,7 +578,7 @@ public class EmailVerificationTest {
     @Test
     void inValidLinkWithLogInByOwnAccount() throws Exception{
 
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
@@ -629,11 +629,11 @@ public class EmailVerificationTest {
     void inValidEmailWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogInProcessForTest.signUpAndLogInDefault();
+                = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-         signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+         signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -685,11 +685,11 @@ public class EmailVerificationTest {
     void inValidTokenWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -739,11 +739,11 @@ public class EmailVerificationTest {
     @Test
     void inValidLinkWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -791,11 +791,11 @@ public class EmailVerificationTest {
     void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -843,11 +843,11 @@ public class EmailVerificationTest {
     void tokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -895,11 +895,11 @@ public class EmailVerificationTest {
     void emailAndTokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
@@ -947,14 +947,14 @@ public class EmailVerificationTest {
     void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         accountInDbToBeEmailVerified.setEmailVerificationToken(null);
         accountRepository.save(accountInDbToBeEmailVerified);
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        signUpAndLogInProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 

@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.LogInAndOutProcessForTest;
-import portfolio2.account.config.SignUpAndLogInProcessForTest;
-import portfolio2.account.config.SignUpAndLogOutProcessForTest;
+import portfolio2.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
+import portfolio2.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 import portfolio2.domain.account.AccountRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,10 +36,10 @@ public class ProfileShowTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private SignUpAndLogInProcessForTest signUpAndLogInProcessForTest;
+    private SignUpAndLogInEmailNotVerifiedProcessForTest signUpAndLogInEmailNotVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutProcessForTest signUpAndLogOutProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
@@ -53,7 +53,7 @@ public class ProfileShowTest {
     @DisplayName("비로그인 상태에서 프로필 조회 - 존재하는 사용자의 프로필")
     @Test
     void searchExistingProfileNotLoggedIn() throws Exception{
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID))
@@ -69,7 +69,7 @@ public class ProfileShowTest {
     @DisplayName("비로그인 상태에서 프로필 조회 - 존재하지 않는 사용자의 프로필")
     @Test
     void searchNotExistingProfileNotLoggedIn() throws Exception{
-        signUpAndLogOutProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))
@@ -86,7 +86,7 @@ public class ProfileShowTest {
     @DisplayName("로그인 상태에서 본인 프로필 조회 - 존재하는 사용자의 프로필")
     @Test
     void searchOwnProfileLoggedIn() throws Exception{
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID))
@@ -102,8 +102,8 @@ public class ProfileShowTest {
     @DisplayName("로그인 상태에서 다른 사람의 프로필 조회 - 존재하는 사용자의 프로필")
     @Test
     void searchOtherExistingProfileLoggedIn() throws Exception{
-        signUpAndLogOutProcessForTest.signUpAndLogOutNotDefaultWith(TEST_USER_ID_2);
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutNotDefaultWith(TEST_USER_ID_2);
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))
@@ -119,7 +119,7 @@ public class ProfileShowTest {
     @DisplayName("로그인 상태에서 프로필 조회 - 존재하지 않는 사용자의 프로필")
     @Test
     void searchNotExistingProfileLoggedIn() throws Exception{
-        signUpAndLogInProcessForTest.signUpAndLogInDefault();
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(get(PROFILE_VIEW_URL + '/' + TEST_USER_ID_2))

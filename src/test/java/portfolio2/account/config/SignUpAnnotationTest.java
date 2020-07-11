@@ -31,6 +31,9 @@ public class SignUpAnnotationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private LogInAndOutProcessForTest logInAndOutProcessForTest;
+
     @MockBean
     private EmailSendingProcess emailSendingProcess;
 
@@ -103,6 +106,8 @@ public class SignUpAnnotationTest {
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
         assertNotNull(signedUpAccount.getPost());
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
     }
 
     @DisplayName("회원가입 후 이메일 인증 됨 테스트")
@@ -169,5 +174,7 @@ public class SignUpAnnotationTest {
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
         assertNotNull(signedUpAccount.getPost());
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
     }
 }
