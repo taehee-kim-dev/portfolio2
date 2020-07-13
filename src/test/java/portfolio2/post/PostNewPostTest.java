@@ -52,7 +52,7 @@ public class PostNewPostTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
@@ -182,13 +182,13 @@ public class PostNewPostTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postNewPostRequestDto",
+                        "postRequestDto",
                         "title",
                         "emptyTitle"
 
                 ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -215,13 +215,13 @@ public class PostNewPostTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postNewPostRequestDto",
+                        "postRequestDto",
                         "content",
                         "emptyContent"
 
                 ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -248,19 +248,19 @@ public class PostNewPostTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().errorCount(2))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postNewPostRequestDto",
+                        "postRequestDto",
                         "title",
                         "emptyTitle"
 
                 ))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postNewPostRequestDto",
+                        "postRequestDto",
                         "content",
                         "emptyContent"
 
                 ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));

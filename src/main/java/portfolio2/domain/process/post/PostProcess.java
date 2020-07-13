@@ -8,7 +8,7 @@ import portfolio2.domain.post.Post;
 import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
-import portfolio2.dto.request.post.PostNewPostRequestDto;
+import portfolio2.dto.request.post.PostRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -20,22 +20,22 @@ public class PostProcess {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
-    public Post saveNewPost(Account sessionAccount, PostNewPostRequestDto postNewPostRequestDto){
+    public Post saveNewPost(Account sessionAccount, PostRequestDto postRequestDto){
         Account authorAccountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
         Post newPost = new Post();
         newPost.setAuthor(authorAccountInDb);
-        newPost.setTitle(postNewPostRequestDto.getTitle());
-        newPost.setContent(postNewPostRequestDto.getContent());
+        newPost.setTitle(postRequestDto.getTitle());
+        newPost.setContent(postRequestDto.getContent());
         LocalDateTime currentTime = LocalDateTime.now();
         newPost.setFirstWrittenTime(currentTime);
         newPost.setLastModifiedTime(currentTime);
         return postRepository.save(newPost);
     }
 
-    public Post addTagToNewPost(Post savedNewPostInDb, PostNewPostRequestDto postNewPostRequestDto){
+    public Post addTagToNewPost(Post savedNewPostInDb, PostRequestDto postRequestDto){
         // 태그 처리
-        if (!postNewPostRequestDto.getTagTitleOnPost().isEmpty()){
-            String[] tagArray = postNewPostRequestDto.getTagTitleOnPost().split(",");
+        if (!postRequestDto.getTagTitleOnPost().isEmpty()){
+            String[] tagArray = postRequestDto.getTagTitleOnPost().split(",");
             for(String tagTitle : tagArray){
                 Tag newTagOnNewPost;
                 Tag existingTagInDb = tagRepository.findByTitle(tagTitle);

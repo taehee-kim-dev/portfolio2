@@ -10,9 +10,9 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.domain.post.Post;
 import portfolio2.domain.tag.Tag;
-import portfolio2.dto.request.post.PostNewPostRequestDto;
+import portfolio2.dto.request.post.PostRequestDto;
 import portfolio2.service.PostService;
-import portfolio2.validator.post.PostNewPostRequestDtoValidator;
+import portfolio2.validator.post.PostRequestDtoValidator;
 
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
@@ -28,30 +28,30 @@ import static portfolio2.controller.config.UrlAndViewNameAboutPost.*;
 public class PostController {
     private final PostService postService;
 
-    private final PostNewPostRequestDtoValidator postNewPostRequestDtoValidator;
+    private final PostRequestDtoValidator postRequestDtoValidator;
 
-    @InitBinder("postNewPostRequestDto")
-    public void initBinderForPostNewPostRequestDto(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(postNewPostRequestDtoValidator);
+    @InitBinder("postRequestDto")
+    public void initBinderForPostRequestDto(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(postRequestDtoValidator);
     }
 
     @GetMapping(POST_NEW_POST_URL)
     public String showPostNewPostView(@SessionAccount Account sessionAccount, Model model) {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        model.addAttribute(new PostNewPostRequestDto());
+        model.addAttribute(new PostRequestDto());
         return POST_NEW_POST_VIEW_NAME;
     }
 
     @PostMapping(POST_NEW_POST_URL)
     public String postPostNewPost(@SessionAccount Account sessionAccount,
-                                  @Valid @ModelAttribute PostNewPostRequestDto postNewPostRequestDto,
+                                  @Valid @ModelAttribute PostRequestDto postRequestDto,
                                   Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-            model.addAttribute(postNewPostRequestDto);
+            model.addAttribute(postRequestDto);
             return POST_NEW_POST_VIEW_NAME;
         }
-        Post savedNewPostInDb = postService.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);
+        Post savedNewPostInDb = postService.saveNewPostWithTag(sessionAccount, postRequestDto);
         return REDIRECT + POST_VIEW_URL + '/' + savedNewPostInDb.getId();
     }
 
