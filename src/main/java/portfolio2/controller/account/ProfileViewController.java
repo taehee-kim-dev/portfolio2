@@ -3,15 +3,13 @@ package portfolio2.controller.account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
 import portfolio2.service.account.ProfileViewService;
-import portfolio2.validator.account.profile.update.ProfileUpdateRequestDtoValidator;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
 
 @Controller
 @RequiredArgsConstructor

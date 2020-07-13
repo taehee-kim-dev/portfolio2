@@ -1,7 +1,6 @@
 package portfolio2.account.signup;
 
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,13 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.post.PostRepository;
-import portfolio2.domain.tag.TagRepository;
 import portfolio2.dto.request.account.SignUpRequestDto;
 import portfolio2.email.EmailMessage;
 import portfolio2.email.EmailService;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.*;
 
 @Slf4j
 @Transactional

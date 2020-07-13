@@ -15,7 +15,8 @@ import portfolio2.service.account.AccountService;
 
 import javax.sql.DataSource;
 
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.*;
 
 @Configuration
 @EnableWebSecurity

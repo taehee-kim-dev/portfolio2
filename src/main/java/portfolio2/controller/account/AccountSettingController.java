@@ -1,6 +1,5 @@
 package portfolio2.controller.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.REDIRECT;
 
 @RequiredArgsConstructor
 @Controller

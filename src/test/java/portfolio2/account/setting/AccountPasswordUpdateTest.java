@@ -1,7 +1,6 @@
 package portfolio2.account.setting;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.account.config.TestAccountInfo.TEST_PASSWORD;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
 
 @Slf4j
 @SpringBootTest

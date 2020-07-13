@@ -15,11 +15,7 @@ import portfolio2.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.post.PostRepository;
-import portfolio2.domain.tag.TagRepository;
 import portfolio2.email.EmailService;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
 
 @Slf4j
 @SpringBootTest

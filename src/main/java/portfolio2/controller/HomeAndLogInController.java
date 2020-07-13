@@ -8,7 +8,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.domain.account.config.SessionAccount;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.*;
 
 @Controller
 public class HomeAndLogInController {

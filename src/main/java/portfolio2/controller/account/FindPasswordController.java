@@ -17,7 +17,9 @@ import portfolio2.validator.account.FindPasswordRequestDtoValidator;
 
 import javax.validation.Valid;
 
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.HOME_URL;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.REDIRECT;
 
 @Controller
 @RequiredArgsConstructor

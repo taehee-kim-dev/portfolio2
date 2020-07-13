@@ -9,7 +9,7 @@ import portfolio2.domain.account.Account;
 import portfolio2.email.EmailMessage;
 import portfolio2.email.EmailService;
 
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
 
 @RequiredArgsConstructor
 @Component

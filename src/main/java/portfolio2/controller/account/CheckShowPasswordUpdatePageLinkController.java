@@ -1,7 +1,6 @@
 package portfolio2.controller.account;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -18,7 +17,8 @@ import portfolio2.validator.email.link.ShowUpdatePasswordPageRequestDtoValidator
 import javax.validation.Valid;
 
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewName.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.controller.config.UrlAndViewNameAboutBasic.REDIRECT;
 
 @Controller
 @RequiredArgsConstructor
