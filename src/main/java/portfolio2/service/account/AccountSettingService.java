@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.account.LogInOrSessionUpdateProcess;
-import portfolio2.domain.account.setting.*;
-import portfolio2.domain.email.SendingEmailVerificationEmailProcess;
+import portfolio2.domain.process.account.LogInOrSessionUpdateProcess;
+import portfolio2.domain.process.setting.*;
+import portfolio2.domain.process.email.SendingEmailVerificationEmailProcess;
 import portfolio2.dto.account.TagUpdateRequestDto;
 import portfolio2.dto.request.account.setting.*;
 

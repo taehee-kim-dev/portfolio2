@@ -15,7 +15,7 @@ import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.email.EmailSendingProcess;
+import portfolio2.domain.process.email.EmailSendingProcess;
 import portfolio2.dto.request.account.setting.AccountNicknameUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;

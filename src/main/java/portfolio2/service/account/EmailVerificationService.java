@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
-import portfolio2.domain.email.EmailVerificationProcess;
-import portfolio2.domain.account.LogInOrSessionUpdateProcess;
+import portfolio2.domain.process.email.EmailVerificationProcess;
+import portfolio2.domain.process.account.LogInOrSessionUpdateProcess;
 import portfolio2.dto.request.account.EmailVerificationRequestDto;
 import portfolio2.dto.response.account.EmailVerificationResponseDto;
 

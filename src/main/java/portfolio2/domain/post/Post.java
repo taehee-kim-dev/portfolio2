@@ -31,14 +31,8 @@ public class Post {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String content;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
-    private String image;
-
     @ManyToMany
     private Set<Tag> tag  = new HashSet<>();
-
-    @Column(unique = true)
-    private String path;
 
     private LocalDateTime firstWrittenTime;
 

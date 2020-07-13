@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.account.LogInOrSessionUpdateProcess;
+import portfolio2.domain.process.account.LogInOrSessionUpdateProcess;
 import portfolio2.dto.request.account.ShowPasswordUpdatePageRequestDto;
 
 @Transactional

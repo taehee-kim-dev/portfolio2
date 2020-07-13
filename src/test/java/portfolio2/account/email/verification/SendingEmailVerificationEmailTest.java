@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.email.EmailSendingProcess;
+import portfolio2.domain.process.email.EmailSendingProcess;
 import portfolio2.dto.request.account.setting.AccountEmailUpdateRequestDto;
 
 import java.time.LocalDateTime;

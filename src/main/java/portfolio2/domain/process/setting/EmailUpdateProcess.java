@@ -1,14 +1,11 @@
-package portfolio2.domain.account.setting;
+package portfolio2.domain.process.setting;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.email.EmailSendingProcess;
-import portfolio2.domain.email.SendingEmailVerificationEmailProcess;
+import portfolio2.domain.process.email.SendingEmailVerificationEmailProcess;
 import portfolio2.dto.request.account.setting.AccountEmailUpdateRequestDto;
-import portfolio2.dto.request.account.setting.PasswordUpdateRequestDto;
 
 @RequiredArgsConstructor
 @Component

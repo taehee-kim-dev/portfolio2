@@ -1,4 +1,4 @@
-package portfolio2.domain.email;
+package portfolio2.domain.process.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

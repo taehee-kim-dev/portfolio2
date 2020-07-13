@@ -52,7 +52,7 @@
                     <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 1px;margin-right: 7px;">
-                    <a class="nav-link btn btn-outline-info" type="button" th:href="@{/postNewPost}"
+                    <a class="nav-link btn btn-outline-info" type="button" th:href="@{/post-new-post}"
                        style="padding-top: 6px;padding-bottom: 6px;margin-left: 17px;margin-right: 3px;">
                         <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 작성
                     </a>

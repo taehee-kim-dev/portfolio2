@@ -1,4 +1,4 @@
-package portfolio2.domain.account.setting;
+package portfolio2.domain.process.setting;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

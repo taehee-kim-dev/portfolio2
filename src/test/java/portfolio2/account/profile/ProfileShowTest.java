@@ -80,10 +80,11 @@ public class ProfileShowTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundError"))
+                .andExpect(model().attributeExists("notFoundErrorTitle"))
+                .andExpect(model().attributeExists("notFoundErrorContent"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(PROFILE_VIEW_NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -130,10 +131,11 @@ public class ProfileShowTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundError"))
+                .andExpect(model().attributeExists("notFoundErrorTitle"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
+                .andExpect(model().attributeExists("notFoundErrorContent"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(PROFILE_VIEW_NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 }

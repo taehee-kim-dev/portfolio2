@@ -10,11 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.email.EmailSendingProcess;
-import portfolio2.domain.post.PostRepository;
-import portfolio2.domain.tag.TagRepository;
-
-import java.util.List;
+import portfolio2.domain.process.email.EmailSendingProcess;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

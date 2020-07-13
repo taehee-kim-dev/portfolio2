@@ -19,7 +19,7 @@
         <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 작성</h1>
     </div>
     <form id="post-form" class="needs-validation"  style="margin: auto; width: 750px"
-          th:action="@{/postNewPost}" th:object="${postNewPostRequestDto}" method="post" novalidate>
+          th:action="@{/post-new-post}" th:object="${postNewPostRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
             <input type="text" th:field="*{title}" class="form-control"
@@ -39,8 +39,8 @@
                 태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
                 <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
             </div>
-            <input id="tag" name="tag" >
-            <input type="hidden" id="total_tag_to_submit" name="tagTitleOnPost">
+            <input id="tag" name="tag" th:value="${postNewPostRequestDto.getTagTitleOnPost()}">
+            <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postNewPostRequestDto.getTagTitleOnPost()}">
         </div>
 
         <div class="form-group" >
@@ -54,6 +54,15 @@
 <script src="/library/summernote/summernote-bs4.min.js"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript">
+    let total_tag = []
+
+    window.addEventListener('DOMContentLoaded', function () {
+        const existing_tag_str = document.getElementById("total-tag-to-submit").value;
+        if (existing_tag_str !== ""){
+            total_tag = existing_tag_str.split(',');
+        }
+    });
+
     $(function () {
         $('#post-content').summernote({
             fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
@@ -61,8 +70,6 @@
             height: 300
         });
     });
-
-    const total_tag = []
 
     function onAdd(e) {
         // 태그 추가 시
@@ -84,7 +91,9 @@
     new_tag.on("remove", onRemove);
 
     function submit_func(){
-        document.getElementById('total_tag_to_submit').value = total_tag.join();
+        document.getElementById('total-tag-to-submit').value
+        document.getElementById('total-tag-to-submit').value = total_tag.join();
+        console.log(document.getElementById('total-tag-to-submit').value);
         document.getElementById('post-form').submit();
     }
 </script>

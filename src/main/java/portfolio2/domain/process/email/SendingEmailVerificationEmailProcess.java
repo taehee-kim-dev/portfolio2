@@ -1,11 +1,9 @@
-package portfolio2.domain.email;
+package portfolio2.domain.process.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import portfolio2.domain.account.Account;
 import portfolio2.domain.account.AccountRepository;
-
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Component

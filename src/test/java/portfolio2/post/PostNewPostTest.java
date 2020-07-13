@@ -1,63 +1,64 @@
-//package portfolio2.post;
-//
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.transaction.annotation.Transactional;
-//import portfolio2.account.testaccountinfo.SignUpAndLoggedIn;
-//import portfolio2.account.testaccountinfo.TestAccountInfo;
-//import portfolio2.domain.account.Account;
-//import portfolio2.domain.account.AccountRepository;
-//import portfolio2.domain.post.Post;
-//import portfolio2.domain.post.PostRepository;
-//import portfolio2.domain.tag.Tag;
-//import portfolio2.domain.tag.TagRepository;
-//
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//
-//@Transactional
-//@SpringBootTest
-//@AutoConfigureMockMvc
-//public class PostNewPostTest {
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private AccountRepository accountRepository;
-//
-//    @Autowired
-//    private PostRepository postRepository;
-//
-//    @Autowired
-//    private TagRepository tagRepository;
-//
-//    private final String SESSION_ACCOUNT = "sessionAccount";
-//
-//    private final String POST_NEW_POST_URL = "/postNewPost";
-//    private final String POST_NEW_POST_VIEW_FOLDER = "post/form";
-//
-//    @DisplayName("글 작성 화면 보여주기")
-//    @SignUpAndLoggedIn
-//    @Test
-//    void showPostNewPostView() throws Exception{
-//        mockMvc.perform(get(POST_NEW_POST_URL))
-//                .andExpect(status().isOk())
-//                .andExpect(model().hasNoErrors())
-//                .andExpect(model().attributeExists(SESSION_ACCOUNT))
-//                .andExpect(model().attributeExists("postNewPostRequestDto"))
-//                .andExpect(view().name(POST_NEW_POST_VIEW_FOLDER + "/post-new-post-form"));
-//    }
-//
+package portfolio2.post;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
+import portfolio2.domain.account.Account;
+import portfolio2.domain.account.AccountRepository;
+import portfolio2.domain.post.Post;
+import portfolio2.domain.post.PostRepository;
+import portfolio2.domain.tag.Tag;
+import portfolio2.domain.tag.TagRepository;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
+import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
+import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
+import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_VIEW_NAME;
+
+@Transactional
+@SpringBootTest
+@AutoConfigureMockMvc
+public class PostNewPostTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+
+    @DisplayName("글 작성 화면 보여주기")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void showPostNewPostView() throws Exception{
+        mockMvc.perform(get(POST_NEW_POST_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+    }
+
 //    @DisplayName("글 작성 POST 요청 - 모두 정상 입력(모두 새로운 태그)")
 //    @SignUpAndLoggedIn
 //    @Test
@@ -199,4 +200,4 @@
 //        Post newPost = postRepository.findByAuthor(author);
 //        assertNull(newPost);
 //    }
-//}
+}

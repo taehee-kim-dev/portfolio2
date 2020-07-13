@@ -1,9 +1,11 @@
-package portfolio2.domain.account;
+package portfolio2.domain.process.account;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import portfolio2.domain.account.Account;
+import portfolio2.domain.account.AccountRepository;
 import portfolio2.dto.request.account.SignUpRequestDto;
 
 import java.time.LocalDateTime;
