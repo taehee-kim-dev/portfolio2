@@ -15,6 +15,8 @@ import portfolio2.domain.post.PostRepository;
 import portfolio2.domain.tag.Tag;
 import portfolio2.domain.tag.TagRepository;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
 import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
-import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_VIEW_NAME;
+import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
 
 @Transactional
 @SpringBootTest
@@ -53,7 +55,7 @@ public class PostNewPostTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("postRequestDto"))
-                .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
+                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
@@ -96,6 +98,10 @@ public class PostNewPostTest {
 
         assertFalse(savedNewPostInDb.getTag().contains(testTag1));
         assertFalse(savedNewPostInDb.getTag().contains(testTag2));
+        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
+        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
+        assertNotNull(firstWrittenTime);
+        assertEquals(firstWrittenTime, lastModifiedTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 일부 기존 존재하는 태그")
@@ -135,6 +141,10 @@ public class PostNewPostTest {
             assertNotNull(containedTagInPost);
             assertTrue(savedNewPostInDb.getTag().contains(containedTagInPost));
         }
+        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
+        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
+        assertNotNull(firstWrittenTime);
+        assertEquals(firstWrittenTime, lastModifiedTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 태그 입력 안했을 때")
@@ -190,7 +200,7 @@ public class PostNewPostTest {
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
+                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
@@ -223,7 +233,7 @@ public class PostNewPostTest {
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
+                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
@@ -262,7 +272,7 @@ public class PostNewPostTest {
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("postRequestDto"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(POST_NEW_POST_VIEW_NAME))
+                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);

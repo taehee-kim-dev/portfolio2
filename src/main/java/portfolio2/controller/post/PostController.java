@@ -39,7 +39,7 @@ public class PostController {
     public String showPostNewPostView(@SessionAccount Account sessionAccount, Model model) {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute(new PostRequestDto());
-        return POST_NEW_POST_VIEW_NAME;
+        return POST_NEW_POST_FORM_VIEW_NAME;
     }
 
     @PostMapping(POST_NEW_POST_URL)
@@ -49,7 +49,7 @@ public class PostController {
         if (errors.hasErrors()) {
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute(postRequestDto);
-            return POST_NEW_POST_VIEW_NAME;
+            return POST_NEW_POST_FORM_VIEW_NAME;
         }
         Post savedNewPostInDb = postService.saveNewPostWithTag(sessionAccount, postRequestDto);
         return REDIRECT + POST_VIEW_URL + '/' + savedNewPostInDb.getId();
@@ -67,7 +67,11 @@ public class PostController {
             return NOT_FOUND_ERROR_VIEW_NAME;
         }
         model.addAttribute(foundPostInDb);
-        model.addAttribute("isAuthor", sessionAccount.getUserId().equals(foundPostInDb.getAuthor().getUserId()));
+        if(sessionAccount == null){
+            model.addAttribute("isAuthor", false);
+        }else{
+            model.addAttribute("isAuthor", sessionAccount.getUserId().equals(foundPostInDb.getAuthor().getUserId()));
+        }
         model.addAttribute("firstWrittenTime", foundPostInDb.getFirstWrittenTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         model.addAttribute("tagOnPost", foundPostInDb.getTag().stream().map(Tag::getTitle).collect(Collectors.toList()));
         return POST_VIEW_NAME;
