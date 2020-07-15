@@ -4,11 +4,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.account.config.*;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,8 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutBasic.*;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 /*
 * ** 최종 결론 **

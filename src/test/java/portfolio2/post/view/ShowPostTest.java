@@ -11,18 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.LogInAndOutProcessForTest;
 import portfolio2.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.post.Post;
-import portfolio2.domain.post.PostRepository;
-import portfolio2.domain.tag.Tag;
-import portfolio2.domain.tag.TagRepository;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.post.Post;
+import portfolio2.module.post.PostRepository;
+import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,10 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutAccount.NOT_FOUND_ERROR_VIEW_NAME;
-import static portfolio2.controller.config.UrlAndViewNameAboutBasic.HOME_URL;
-import static portfolio2.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.NOT_FOUND_ERROR_VIEW_NAME;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
 @Transactional
 @SpringBootTest

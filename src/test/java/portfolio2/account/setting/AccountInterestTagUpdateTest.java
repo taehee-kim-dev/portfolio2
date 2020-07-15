@@ -11,11 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.tag.Tag;
-import portfolio2.domain.tag.TagRepository;
-import portfolio2.dto.account.TagUpdateRequestDto;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.tag.Tag;
+import portfolio2.module.tag.TagRepository;
+import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -24,9 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutAccount.ACCOUNT_SETTING_TAG_URL;
-import static portfolio2.controller.config.UrlAndViewNameAboutAccount.ACCOUNT_SETTING_TAG_VIEW_NAME;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ACCOUNT_SETTING_TAG_URL;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ACCOUNT_SETTING_TAG_VIEW_NAME;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 
 @Transactional

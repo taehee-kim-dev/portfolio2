@@ -12,11 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.*;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.request.account.SignUpRequestDto;
-import portfolio2.email.EmailMessage;
-import portfolio2.email.EmailService;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.dto.request.SignUpRequestDto;
+import portfolio2.infra.email.EmailMessage;
+import portfolio2.infra.email.EmailService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,8 +28,8 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutBasic.*;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @Slf4j
 @Transactional
@@ -164,7 +164,6 @@ public class SignUpTest {
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getInterestTag());
-        assertNotNull(newAccountInDb.getPost());
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")

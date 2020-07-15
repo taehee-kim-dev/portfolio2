@@ -7,9 +7,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import portfolio2.dto.request.account.SignUpRequestDto;
-import portfolio2.service.account.AccountService;
-import portfolio2.service.account.SignUpService;
+import portfolio2.module.account.dto.request.SignUpRequestDto;
+import portfolio2.module.account.service.AccountService;
+import portfolio2.module.account.service.SignUpService;
 
 import static portfolio2.account.config.TestAccountInfo.*;
 

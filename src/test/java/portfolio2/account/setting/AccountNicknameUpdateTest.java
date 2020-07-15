@@ -13,10 +13,10 @@ import portfolio2.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.process.email.EmailSendingProcess;
-import portfolio2.dto.request.account.setting.AccountNicknameUpdateRequestDto;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.dto.request.AccountNicknameUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.*;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @Slf4j
 @SpringBootTest

@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.process.email.EmailSendingProcess;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.service.process.EmailSendingProcess;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -102,7 +102,6 @@ public class SignUpAnnotationTest {
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
-        assertNotNull(signedUpAccount.getPost());
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
     }
@@ -170,7 +169,6 @@ public class SignUpAnnotationTest {
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
-        assertNotNull(signedUpAccount.getPost());
 
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
     }

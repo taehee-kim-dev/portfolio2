@@ -8,12 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.account.config.SignUpAndLoggedInEmailVerified;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.domain.post.Post;
-import portfolio2.domain.post.PostRepository;
-import portfolio2.domain.tag.Tag;
-import portfolio2.domain.tag.TagRepository;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.post.Post;
+import portfolio2.module.post.PostRepository;
+import portfolio2.module.tag.Tag;
+import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.config.StaticFinalName.SESSION_ACCOUNT;
-import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
-import static portfolio2.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
+import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
+import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
 
 @Transactional
 @SpringBootTest

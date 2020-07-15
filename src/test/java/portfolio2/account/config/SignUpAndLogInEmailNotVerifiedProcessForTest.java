@@ -2,10 +2,10 @@ package portfolio2.account.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import portfolio2.domain.account.Account;
-import portfolio2.domain.account.AccountRepository;
-import portfolio2.dto.request.account.SignUpRequestDto;
-import portfolio2.service.account.SignUpService;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.dto.request.SignUpRequestDto;
+import portfolio2.module.account.service.SignUpService;
 
 import static portfolio2.account.config.TestAccountInfo.*;
 
