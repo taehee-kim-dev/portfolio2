@@ -134,10 +134,15 @@
                 const reader = new FileReader();
                 reader.onload = e => {
                     if (e.target.result) {
+                        if (!e.target.result.startsWith("data:image")) {
+                            alert("이미지 파일을 선택하세요.");
+                            return;
+                        }
+
                         let img = document.createElement("img");
                         img.id = 'new-profile';
                         img.src = e.target.result;
-                        img.width = 250;
+                        img.width = 300;
 
                         $newProfileImage.html(img);
                         $newProfileImage.show();
@@ -170,6 +175,12 @@
 
         $cutBtn.click(function () {
             let dataUrl = cropper.getCroppedCanvas().toDataURL();
+            if (dataUrl.length > 1000 * 1024) {
+                alert("선택한 이미지 영역의 용량이 너무 큽니다.\n" +
+                    "보다 작은 영역을 선택하거나, 용량이 작은 이미지를 사용하세요.");
+                return;
+            }
+
             let newImage = document.createElement("img");
             newImage.id = "cropped-new-profile-image";
             newImage.src = dataUrl;
