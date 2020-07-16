@@ -60,7 +60,12 @@
 
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/notification}">
-                        <i class="fas fa-bell fa-lg"></i>
+                        <span th:if="${notificationCount == 0}">
+                            <i class="far fa-bell fa-lg"></i>
+                        </span>
+                        <span th:if="${notificationCount >= 1}" class="text-danger">
+                            <i class="fas fa-bell fa-lg"></i>
+                        </span>
                     </a>
                 </li>
 

@@ -64,7 +64,7 @@ public class PostEventListener {
         allTagInNewPostAndAccount.forEach(tag -> {
             notification.getCommonTag().add(tag);
         });
-        notification.setCreated(LocalDateTime.now());
+        notification.setCreatedDateTime(LocalDateTime.now());
         notification.setNotificationType(NotificationType.POST_WITH_MY_INTEREST_TAG_IS_POSTED);
         notificationRepository.save(notification);
     }

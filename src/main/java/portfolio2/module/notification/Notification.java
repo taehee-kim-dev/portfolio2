@@ -34,7 +34,7 @@ public class Notification {
     @ManyToMany
     private Set<Tag> commonTag = new HashSet<>();
 
-    private LocalDateTime created;
+    private LocalDateTime createdDateTime;
 
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
