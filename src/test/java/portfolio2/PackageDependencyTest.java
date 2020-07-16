@@ -16,6 +16,10 @@ public class PackageDependencyTest {
     private static final String TAG = "..module.tag..";
     private static final String JAVA_LANG_OBJECT = "..java.lang..";
 
+    @ArchTest
+    ArchRule modulePackageRule = classes().that().resideInAPackage("portfolio2.module..")
+            .should().onlyBeAccessed().byClassesThat()
+            .resideInAnyPackage("portfolio2.module..");
 
     @ArchTest
     ArchRule postPackageRuleAccessedRule = classes().that().resideInAPackage(POST)
