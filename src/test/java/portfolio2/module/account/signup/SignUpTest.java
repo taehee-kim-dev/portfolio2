@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -31,11 +33,8 @@ import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
-@Slf4j
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-public class SignUpTest {
+@MockMvcTest
+public class SignUpTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

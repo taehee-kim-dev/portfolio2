@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -40,9 +42,8 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 * 검증은 맨 마지막에 mockMvc로 한다.
 * */
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class HomeAndLogInAndOutTest {
+@MockMvcTest
+public class HomeAndLogInAndOutTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

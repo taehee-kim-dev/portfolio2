@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
@@ -28,10 +30,8 @@ import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
-@Slf4j
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ShowPasswordUpdatePageTest {
+@MockMvcTest
+public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

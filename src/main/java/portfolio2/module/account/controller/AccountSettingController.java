@@ -129,7 +129,7 @@ public class AccountSettingController {
 
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
-    public ResponseEntity<String> addTag(@SessionAccount Account sessionAccount,
+    public ResponseEntity addTag(@SessionAccount Account sessionAccount,
                                          @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
         accountSettingService.addInterestTagToAccount(sessionAccount, tagUpdateRequestDto);
         return ResponseEntity.ok().build();
@@ -137,7 +137,7 @@ public class AccountSettingController {
 
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
-    public ResponseEntity<String> removeTag(@SessionAccount Account sessionAccount,
+    public ResponseEntity removeTag(@SessionAccount Account sessionAccount,
                                     @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
 
         boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);

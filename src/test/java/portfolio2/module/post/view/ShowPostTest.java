@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
@@ -34,10 +36,8 @@ import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAcc
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ShowPostTest {
+@MockMvcTest
+public class ShowPostTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -66,8 +66,8 @@ public class ShowPostTest {
         Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
         Post newPost = new Post();
         newPost.setAuthor(existingAccount);
-        newPost.setTitle("테스트 제목 입니다.");
-        newPost.setContent("테스트 내용 입니다.");
+        newPost.setTitle("This is test title.");
+        newPost.setContent("This is test content.");
         LocalDateTime firstWrittenTime = LocalDateTime.now();
         newPost.setFirstWrittenTime(firstWrittenTime);
         newPost.setLastModifiedTime(firstWrittenTime);

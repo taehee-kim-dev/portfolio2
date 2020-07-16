@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -28,10 +30,8 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-public class PostNewPostTest {
+@MockMvcTest
+public class PostNewPostTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,9 +82,9 @@ public class PostNewPostTest {
     @Test
     void postNewPostWithAllNewTag() throws Exception{
 
-        String titleOfNewPost = "테스트 제목.";
-        String contentOfNewPost = "<p>테스트 내용.</p>";
-        String tagOfNewPost = "테스트 태그 1,테스트 태그 2,테스트 태그 3";
+        String titleOfNewPost = "Test title";
+        String contentOfNewPost = "<p>Test content</p>";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -103,9 +103,9 @@ public class PostNewPostTest {
         assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
 
         Tag testTag1 = new Tag();
-        testTag1.setTitle("테스트 태그 1");
+        testTag1.setTitle("Test tag 1");
         Tag testTag2 = new Tag();
-        testTag2.setTitle("테스트 태그 2");
+        testTag2.setTitle("Test tag 2");
 
         String[] postedTag = tagOfNewPost.split(",");
         for(String tagTitle : postedTag){
@@ -128,14 +128,14 @@ public class PostNewPostTest {
     void postNewPostWithExistingTag() throws Exception{
         Tag existingTag1 = new Tag();
         Tag existingTag2 = new Tag();
-        existingTag1.setTitle("태그 1");
-        existingTag2.setTitle("태그 2");
+        existingTag1.setTitle("Tag 1");
+        existingTag2.setTitle("Tag 2");
         tagRepository.save(existingTag1);
         tagRepository.save(existingTag2);
 
-        String titleOfNewPost = "테스트 제목 입니다.";
-        String contentOfNewPost = "<p>테스트 내용 입니다.</p>";
-        String tagOfNewPost = "태그 1,태그 2,태그 3";
+        String titleOfNewPost = "This is test title.";
+        String contentOfNewPost = "<p>This is test content.</p>";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -170,8 +170,8 @@ public class PostNewPostTest {
     @Test
     void postNewPostWithEmptyTag() throws Exception{
 
-        String titleOfNewPost = "테스트 제목 입니다.";
-        String contentOfNewPost = "<p>테스트 내용 입니다.</p>";
+        String titleOfNewPost = "This is test title.";
+        String contentOfNewPost = "<p>This is test content.</p>";
         String tagOfNewPost = "";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
@@ -199,8 +199,8 @@ public class PostNewPostTest {
     void postNewPostWithEmptyTitle() throws Exception{
 
         String titleOfNewPost = "";
-        String contentOfNewPost = "<p>테스트 내용 입니다.</p>";
-        String tagOfNewPost = "태그 1,태그 2,태그 3";
+        String contentOfNewPost = "<p>This is test content.</p>";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -231,9 +231,9 @@ public class PostNewPostTest {
     @Test
     void postNewPostWithEmptyContent() throws Exception{
 
-        String titleOfNewPost = "테스트 내용 입니다.";
+        String titleOfNewPost = "This is test title.";
         String contentOfNewPost = "";
-        String tagOfNewPost = "태그 1,태그 2,태그 3";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)

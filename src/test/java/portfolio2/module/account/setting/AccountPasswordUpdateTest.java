@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -30,10 +32,8 @@ import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
-@Slf4j
-@SpringBootTest
-@AutoConfigureMockMvc
-public class AccountPasswordUpdateTest {
+@MockMvcTest
+public class AccountPasswordUpdateTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

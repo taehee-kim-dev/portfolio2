@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -41,10 +43,8 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 다른 계정으로 로그인 상태 -> 유효한 이메일 인증 링크 -> 다른 계정으로 로그인 상태(내 계정 인증 됨) -> 인증완료 뷰(해당 계정으로 로그인하여 이용해 주세요)
 * */
 
-@Slf4j
-@SpringBootTest
-@AutoConfigureMockMvc
-public class EmailVerificationTest {
+@MockMvcTest
+public class EmailVerificationTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

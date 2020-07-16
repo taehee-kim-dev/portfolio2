@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -31,10 +33,8 @@ import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAcc
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-public class AccountInterestTagUpdateTest {
+@MockMvcTest
+public class AccountInterestTagUpdateTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

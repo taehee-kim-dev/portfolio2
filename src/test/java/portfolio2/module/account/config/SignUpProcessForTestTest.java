@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.service.process.EmailSendingProcess;
@@ -18,9 +20,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 
-@Slf4j
-@SpringBootTest
-public class SignUpProcessForTestTest {
+
+@MockMvcTest
+public class SignUpProcessForTestTest extends ContainerBaseTest {
 
     @Autowired
     private AccountRepository accountRepository;
