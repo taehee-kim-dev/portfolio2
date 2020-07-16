@@ -17,6 +17,8 @@ import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -48,6 +50,12 @@ public class AccountInterestTagUpdateTest {
 
     @AfterEach
     void afterEach(){
+        List<Account> allAccount = accountRepository.findAll();
+        for(Account account : allAccount){
+            account.getInterestTag().clear();
+            accountRepository.save(account);
+        }
+        tagRepository.deleteAll();
         accountRepository.deleteAll();
     }
 

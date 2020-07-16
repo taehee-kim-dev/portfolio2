@@ -1,5 +1,6 @@
 package portfolio2.module.post.view;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import portfolio2.module.post.PostRepository;
 import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -70,6 +72,24 @@ public class ShowPostTest {
         newPost.setFirstWrittenTime(firstWrittenTime);
         newPost.setLastModifiedTime(firstWrittenTime);
         postRepository.save(newPost);
+    }
+
+    @AfterEach
+    void afterEach(){
+        List<Account> allAccount = accountRepository.findAll();
+        for(Account account : allAccount){
+            account.getInterestTag().clear();
+            accountRepository.save(account);
+        }
+        List<Post> allPost = postRepository.findAll();
+        for(Post post : allPost){
+            post.setAuthor(null);
+            post.getTag().clear();
+            postRepository.save(post);
+        }
+        postRepository.deleteAll();
+        tagRepository.deleteAll();
+        accountRepository.deleteAll();
     }
 
     @DisplayName("글 보여주기 - 로그인 안 한 상태")
