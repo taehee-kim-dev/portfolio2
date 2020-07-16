@@ -14,7 +14,7 @@ import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAcc
 
 @RequiredArgsConstructor
 @Component
-public class EmailSendingProcess {
+public class EmailSendingProcessForAccount {
 
     private final EmailService emailService;
     private final TemplateEngine templateEngine;

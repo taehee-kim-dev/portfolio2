@@ -1,4 +1,4 @@
-package portfolio2.module.post;
+package portfolio2.module.notification;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,32 +12,30 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@NamedEntityGraph(name = "Post.withTag", attributeNodes = {
-        @NamedAttributeNode("tag")
-})
-@Entity
-public class Post {
+@NoArgsConstructor
+public class Notification {
 
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    private Account author;
-
     private String title;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
-    private String content;
+    private String link;
+
+    private boolean isChecked;
+
+    @ManyToOne
+    private Account account;
 
     @ManyToMany
-    private Set<Tag> tag  = new HashSet<>();
+    private Set<Tag> commonTag = new HashSet<>();
 
-    private LocalDateTime firstWrittenTime;
+    private LocalDateTime created;
 
-    private LocalDateTime lastModifiedTime;
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
 }

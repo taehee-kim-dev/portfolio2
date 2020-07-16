@@ -27,7 +27,6 @@ import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*
 @Controller
 public class PostController {
     private final PostService postService;
-
     private final PostRequestDtoValidator postRequestDtoValidator;
 
     @InitBinder("postRequestDto")
@@ -52,6 +51,7 @@ public class PostController {
             return POST_NEW_POST_FORM_VIEW_NAME;
         }
         Post savedNewPostInDb = postService.saveNewPostWithTag(sessionAccount, postRequestDto);
+        postService.sendWebAndEmailNotification(savedNewPostInDb);
         return REDIRECT + POST_VIEW_URL + '/' + savedNewPostInDb.getId();
     }
 

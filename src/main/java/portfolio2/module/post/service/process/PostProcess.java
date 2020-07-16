@@ -1,12 +1,14 @@
 package portfolio2.module.post.service.process;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.dto.PostRequestDto;
+import portfolio2.module.post.event.PostPostedEvent;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
@@ -19,6 +21,7 @@ public class PostProcess {
     private final AccountRepository accountRepository;
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Post saveNewPost(Account sessionAccount, PostRequestDto postRequestDto){
         Account authorAccountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
@@ -51,5 +54,11 @@ public class PostProcess {
             }
         }
         return savedNewPostInDb;
+    }
+
+    public Post sendWebAndEmailNotificationAboutTag(Post newPost){
+        if(!newPost.getTag().isEmpty())
+            eventPublisher.publishEvent(new PostPostedEvent(newPost));
+        return newPost;
     }
 }

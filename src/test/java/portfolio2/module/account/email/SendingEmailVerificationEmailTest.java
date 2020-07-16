@@ -1,12 +1,9 @@
 package portfolio2.module.account.email;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
@@ -14,7 +11,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
 
 import java.time.LocalDateTime;
@@ -57,7 +54,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @MockBean
-    private EmailSendingProcess emailSendingProcess;
+    private EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     @AfterEach
     void afterEach(){
@@ -99,7 +96,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(2)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }
 
     @DisplayName("기존에 이메일 인증 안된 상태 - 새로운 이메일로 전송 - 모든 입력 정상 - 1회 성공")
@@ -137,7 +134,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(2)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }
 
     @DisplayName("기존에 이메일 인증 된 상태 - 새로운 이메일로 인증 이메일 전송 - 모든 입력 정상 - 1회 성공")
@@ -174,7 +171,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(2)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }
 
     // 입력 에러
@@ -217,7 +214,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(1)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
     }
 
     @DisplayName("이미 사용중인 이메일 - 본인이 인증한 이메일")
@@ -257,7 +254,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(1)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
     }
 
     @DisplayName("이미 사용중인 이메일 - 다른 사람이 이미 인증한 이메일")
@@ -300,7 +297,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(2)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }
 
     // 12시간동안 5회까지 성공
@@ -340,7 +337,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             assertEquals(beforeTime, afterTime);
             assertEquals(time, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-            verify(emailSendingProcess, times(time)).sendEmailVerificationEmail(any(Account.class));
+            verify(emailSendingProcessForAccount, times(time)).sendEmailVerificationEmail(any(Account.class));
             beforeTime = afterTime;
             beforeToken = afterToken;
         }
@@ -383,7 +380,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             assertEquals(beforeTime, afterTime);
             assertEquals(time, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-            verify(emailSendingProcess, times(time)).sendEmailVerificationEmail(any(Account.class));
+            verify(emailSendingProcessForAccount, times(time)).sendEmailVerificationEmail(any(Account.class));
             beforeTime = afterTime;
             beforeToken = afterToken;
         }
@@ -410,7 +407,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
         assertEquals(5, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(5)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(5)).sendEmailVerificationEmail(any(Account.class));
     }
 
     @DisplayName("12시간 후 10번 째 까지 전송 성공")
@@ -449,7 +446,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             assertEquals(beforeTime, afterTime1);
             assertEquals(time1, accountAfterEmailSent1.getCountOfSendingEmailVerificationEmail());
 
-            verify(emailSendingProcess, times(time1)).sendEmailVerificationEmail(any(Account.class));
+            verify(emailSendingProcessForAccount, times(time1)).sendEmailVerificationEmail(any(Account.class));
             beforeTime = afterTime1;
             beforeToken = afterToken1;
         }
@@ -487,7 +484,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNotEquals(beforeTime, afterTime2);
         assertEquals(1, accountAfterEmailSent2.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(6)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(6)).sendEmailVerificationEmail(any(Account.class));
         beforeTime = afterTime2;
         beforeToken = afterToken2;
 
@@ -519,7 +516,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             assertEquals(beforeTime, afterTime3);
             assertEquals(time3 - 5, accountAfterEmailSent3.getCountOfSendingEmailVerificationEmail());
 
-            verify(emailSendingProcess, times(time3)).sendEmailVerificationEmail(any(Account.class));
+            verify(emailSendingProcessForAccount, times(time3)).sendEmailVerificationEmail(any(Account.class));
             beforeTime = afterTime3;
             beforeToken = afterToken3;
         }
@@ -550,6 +547,6 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(beforeTime, afterTime4);
         assertEquals(5, accountAfterEmailSent4.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcess, times(10)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(10)).sendEmailVerificationEmail(any(Account.class));
     }
 }

@@ -1,18 +1,16 @@
 package portfolio2.module.account.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +31,7 @@ public class SignUpAnnotationTest extends ContainerBaseTest {
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @MockBean
-    private EmailSendingProcess emailSendingProcess;
+    private EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     @AfterEach
     void afterEach(){
@@ -46,7 +44,7 @@ public class SignUpAnnotationTest extends ContainerBaseTest {
     void signUpAndEmailNotVerified(){
         Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
         // 이메일 인증 이메일 1회 발송 확인
-        verify(emailSendingProcess, times(1)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
 
         // 아이디, 닉네임 확인
         assertEquals(TEST_USER_ID, signedUpAccount.getUserId());
@@ -113,7 +111,7 @@ public class SignUpAnnotationTest extends ContainerBaseTest {
     void signUpAndEmailVerified(){
         Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
         // 이메일 인증 이메일 1회 발송 확인
-        verify(emailSendingProcess, times(1)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
 
         // 아이디, 닉네임 확인
         assertEquals(TEST_USER_ID, signedUpAccount.getUserId());

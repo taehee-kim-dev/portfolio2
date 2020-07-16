@@ -1,6 +1,7 @@
 package portfolio2.module.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
@@ -22,6 +23,10 @@ public class PostService {
     public Post saveNewPostWithTag(Account sessionAccount, PostRequestDto postRequestDto) {
         Post savedPostInDb = postProcess.saveNewPost(sessionAccount, postRequestDto);
         return postProcess.addTagToNewPost(savedPostInDb, postRequestDto);
+    }
+
+    public void sendWebAndEmailNotification(Post newPost){
+        postProcess.sendWebAndEmailNotificationAboutTag(newPost);
     }
 
     public Post findPost(Long postId) {

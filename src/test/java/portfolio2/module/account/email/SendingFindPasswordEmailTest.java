@@ -1,12 +1,9 @@
 package portfolio2.module.account.email;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
@@ -14,7 +11,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,7 +52,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @MockBean
-    private EmailSendingProcess emailSendingProcess;
+    private EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     @AfterEach
     void afterEach(){
@@ -117,7 +114,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
         Account accountAfterEmailSend = accountRepository.findByUserId(TEST_USER_ID);
         assertNotNull(accountAfterEmailSend.getShowPasswordUpdatePageToken());
 
-        verify(emailSendingProcess, times(1)).sendFindPasswordEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendFindPasswordEmail(any(Account.class));
     }
 
     @DisplayName("비밀번호 찾기 메일 전송 - 정상입력 성공 - 이메일 인증된 상태 - 로그인 상태")
@@ -141,7 +138,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
         Account accountAfterEmailSend = accountRepository.findByUserId(TEST_USER_ID);
         assertNull(accountAfterEmailSend.getShowPasswordUpdatePageToken());
 
-        verify(emailSendingProcess, times(0)).sendFindPasswordEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendFindPasswordEmail(any(Account.class));
     }
 
     // 입력값 오류
@@ -171,7 +168,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
         Account accountAfterEmailSend = accountRepository.findByUserId(TEST_USER_ID);
         assertNull(accountAfterEmailSend.getShowPasswordUpdatePageToken());
 
-        verify(emailSendingProcess, times(0)).sendFindPasswordEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendFindPasswordEmail(any(Account.class));
     }
 
     @DisplayName("입력 오류 - 존재하지 않거나 인증되지 않은 이메일")
@@ -199,6 +196,6 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
         Account accountAfterEmailSend = accountRepository.findByUserId(TEST_USER_ID);
         assertNull(accountAfterEmailSend.getShowPasswordUpdatePageToken());
 
-        verify(emailSendingProcess, times(0)).sendFindPasswordEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendFindPasswordEmail(any(Account.class));
     }
 }

@@ -1,12 +1,9 @@
 package portfolio2.module.account.setting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,7 +12,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 import portfolio2.module.account.dto.request.PasswordUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +42,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     private PasswordEncoder passwordEncoder;
 
     @MockBean
-    private EmailSendingProcess emailSendingProcess;
+    private EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     @AfterEach
     void afterEach(){
@@ -90,7 +87,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertTrue(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(updatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -121,7 +118,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertTrue(passwordEncoder.matches(newPassword, updatedAccount.getPassword()));
-        verify(emailSendingProcess, times(1))
+        verify(emailSendingProcessForAccount, times(1))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNotNull(updatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -165,7 +162,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -205,7 +202,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -245,7 +242,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -287,7 +284,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
@@ -328,7 +325,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
-        verify(emailSendingProcess, times(0))
+        verify(emailSendingProcessForAccount, times(0))
                 .sendPasswordUpdateNotificationEmail(any(Account.class));
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }

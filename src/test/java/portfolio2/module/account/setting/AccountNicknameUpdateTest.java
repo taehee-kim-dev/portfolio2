@@ -1,12 +1,9 @@
 package portfolio2.module.account.setting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
@@ -17,7 +14,7 @@ import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcess;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 import portfolio2.module.account.dto.request.AccountNicknameUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +46,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
     @MockBean
-    private EmailSendingProcess emailSendingProcess;
+    private EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     @AfterEach
     void afterEach(){
@@ -79,7 +76,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(newNickname, updatedAccount.getNickname());
@@ -108,7 +105,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(1)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(1)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(newNickname, updatedAccount.getNickname());
@@ -145,7 +142,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
@@ -181,7 +178,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
@@ -217,7 +214,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
@@ -255,7 +252,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
                 .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
-        verify(emailSendingProcess, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
 
         Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());

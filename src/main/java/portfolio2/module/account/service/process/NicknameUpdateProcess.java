@@ -5,14 +5,13 @@ import org.springframework.stereotype.Component;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.dto.request.AccountNicknameUpdateRequestDto;
-import portfolio2.module.account.service.process.EmailSendingProcess;
 
 @RequiredArgsConstructor
 @Component
 public class NicknameUpdateProcess {
 
     private final AccountRepository accountRepository;
-    private final EmailSendingProcess emailSendingProcess;
+    private final EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     public Account updateNickname(Account sessionAccount, AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto) {
         Account accountInDbToUpdate = accountRepository.findByUserId(sessionAccount.getUserId());
@@ -23,7 +22,7 @@ public class NicknameUpdateProcess {
 
     public Account sendNicknameUpdateNotificationEmail(Account updatedAccount) {
         updatedAccount.generateShowPasswordUpdatePageToken();
-        emailSendingProcess.sendNicknameUpdateNotificationEmail(updatedAccount);
+        emailSendingProcessForAccount.sendNicknameUpdateNotificationEmail(updatedAccount);
         return updatedAccount;
     }
 }

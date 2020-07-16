@@ -10,7 +10,7 @@ import portfolio2.module.account.AccountRepository;
 public class SendingEmailVerificationEmailProcess {
 
     private final AccountRepository accountRepository;
-    private final EmailSendingProcess emailSendingProcess;
+    private final EmailSendingProcessForAccount emailSendingProcessForAccount;
 
     public boolean canSendEmailVerificationEmail(Account account) {
         Account accountToCheck = accountRepository.findByUserId(account.getUserId());
@@ -27,7 +27,7 @@ public class SendingEmailVerificationEmailProcess {
         // 토큰 새로 생성
         accountToSendEmail.generateEmailCheckToken();
         // 인증 메일 전송
-        emailSendingProcess.sendEmailVerificationEmail(accountToSendEmail);
+        emailSendingProcessForAccount.sendEmailVerificationEmail(accountToSendEmail);
         // 카운트 횟수 초기화 or 증가
         accountToSendEmail.increaseOrResetCountOfSendingEmailVerificationEmail();
         // 이메일 알림 설정 모두 false
