@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class TagPredicate {
 
-    public static Predicate findByAccountInterestTagAndPostTag(Set<Tag> accountInterestTag, Set<Tag> postTag){
+    public static Predicate findAllTagByAccountInterestTagAndPostTag(Set<Tag> accountInterestTag, Set<Tag> postTag){
         QTag tag = QTag.tag;
         return tag.in(accountInterestTag).and(tag.in(postTag));
     }

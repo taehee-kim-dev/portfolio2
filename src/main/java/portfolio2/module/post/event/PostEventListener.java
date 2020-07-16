@@ -43,7 +43,7 @@ public class PostEventListener {
             accounts.forEach(account -> {
                 if(account != newPost.getAuthor()){
                     Iterable<Tag> allTagInNewPostAndAccount
-                            = tagRepository.findAll(TagPredicate.findByAccountInterestTagAndPostTag(account.getInterestTag(), newPost.getTag()));
+                            = tagRepository.findAll(TagPredicate.findAllTagByAccountInterestTagAndPostTag(account.getInterestTag(), newPost.getTag()));
                     if(account.isEmailVerified() && account.isNotificationNewPostWithMyTagByEmail()){
                         emailSendingProcessForPost.sendNotificationEmailForNewPostWithInterestTag(account, newPost, allTagInNewPostAndAccount);
                     }
