@@ -139,7 +139,7 @@
         $(function () {
             moment.locale('ko');
             $(".date-weekday-time").text(function(index, dateTime) {
-                return moment(dateTime, "yyyy-MM-dd HH:mm:ss").format('LLLL');
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
             });
         })
     </script>

@@ -72,7 +72,7 @@ public class PostController {
         }else{
             model.addAttribute("isAuthor", sessionAccount.getUserId().equals(foundPostInDb.getAuthor().getUserId()));
         }
-        model.addAttribute("firstWrittenTime", foundPostInDb.getFirstWrittenTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        model.addAttribute("firstWrittenTime", foundPostInDb.getFirstWrittenTime());
         model.addAttribute("tagOnPost", foundPostInDb.getTag().stream().map(Tag::getTitle).collect(Collectors.toList()));
         return POST_VIEW_NAME;
     }
