@@ -21,7 +21,7 @@
                 <td style="min-width:100px"><span>작성자 : </span></td><td style="vertical-align: middle" th:text="${post.getAuthor().getUserId()}">글 작성자 아이디</td>
             </tr>
             <tr>
-                <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" th:text="${firstWrittenTime}">글 작성 날짜</td>
+                <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
             <tr>
                 <td style="min-width:100px;vertical-align: middle"><span>태그 : </span></td>
@@ -48,5 +48,6 @@
     const input = document.querySelector('input[name=tag]');
     tagify = new Tagify(input);
 </script>
+<script th:replace="fragment.html :: date-time"></script>
 </body>
 </html>

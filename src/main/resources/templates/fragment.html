@@ -132,3 +132,15 @@
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/account/setting/password}">패스워드</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/account/setting/account}">계정</a>
 </div>
+
+<div th:fragment="date-time">
+    <script src="/library/momentjs/moment-with-locales.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            moment.locale('ko');
+            $(".date-weekday-time").text(function(index, dateTime) {
+                return moment(dateTime, "yyyy-MM-dd HH:mm:ss").format('LLLL');
+            });
+        })
+    </script>
+</div>
