@@ -246,14 +246,14 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(signedUpAccount.isNotificationCommentOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
-        assertFalse(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyPostByEmail());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
-        assertFalse(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
