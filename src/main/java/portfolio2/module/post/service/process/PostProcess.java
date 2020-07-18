@@ -7,7 +7,7 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
-import portfolio2.module.post.dto.PostRequestDto;
+import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.event.PostPostedEvent;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
@@ -23,7 +23,7 @@ public class PostProcess {
     private final TagRepository tagRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public Post saveNewPost(Account sessionAccount, PostRequestDto postRequestDto){
+    public Post saveNewPost(Account sessionAccount, PostNewPostRequestDto postRequestDto){
         Account authorAccountInDb = accountRepository.findByUserId(sessionAccount.getUserId());
         Post newPost = new Post();
         newPost.setAuthor(authorAccountInDb);
@@ -35,7 +35,7 @@ public class PostProcess {
         return postRepository.save(newPost);
     }
 
-    public Post addTagToNewPost(Post savedNewPostInDb, PostRequestDto postRequestDto){
+    public Post addTagToNewPost(Post savedNewPostInDb, PostNewPostRequestDto postRequestDto){
         // 태그 처리
         if (!postRequestDto.getTagTitleOnPost().isEmpty()){
             String[] tagArray = postRequestDto.getTagTitleOnPost().split(",");

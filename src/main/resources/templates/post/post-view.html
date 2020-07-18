@@ -38,7 +38,7 @@
             </tbody>
         </table>
 
-        <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{#}"
+        <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{'/post-update/' + ${post.getId()}}"
            style="width: 300px; margin-right: 50px">게시글  수정</a>
         <a th:if="${isAuthor}" class="btn btn-danger" href="#" th:href="@{#}"
               style="width: 300px">게시글 삭제</a>

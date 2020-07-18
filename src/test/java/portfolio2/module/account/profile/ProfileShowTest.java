@@ -1,12 +1,9 @@
 package portfolio2.module.account.profile;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -80,11 +77,11 @@ public class ProfileShowTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundErrorTitle"))
-                .andExpect(model().attributeExists("notFoundErrorContent"))
+                .andExpect(model().attributeExists("errorTitle"))
+                .andExpect(model().attributeExists("errorContent"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -131,11 +128,11 @@ public class ProfileShowTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundErrorTitle"))
+                .andExpect(model().attributeExists("errorTitle"))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
-                .andExpect(model().attributeExists("notFoundErrorContent"))
+                .andExpect(model().attributeExists("errorContent"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
-                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 }

@@ -29,9 +29,9 @@ public class ProfileViewController {
 
         // 존재하지 않는 사용자인 경우
         if(searchedAccount == null){
-            model.addAttribute("notFoundErrorTitle", "사용자 조회 에러");
-            model.addAttribute("notFoundErrorContent", "존재하지 않는 사용자 입니다.");
-            return NOT_FOUND_ERROR_VIEW_NAME;
+            model.addAttribute("errorTitle", "사용자 조회 에러");
+            model.addAttribute("errorContent", "존재하지 않는 사용자 입니다.");
+            return ERROR_VIEW_NAME;
         }
 
         // 존재하는 사용자인 경우

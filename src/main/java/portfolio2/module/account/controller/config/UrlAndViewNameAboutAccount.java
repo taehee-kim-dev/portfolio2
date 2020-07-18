@@ -25,7 +25,7 @@ public class UrlAndViewNameAboutAccount {
     // ProfileController.java
     public static final String PROFILE_VIEW_URL = "/account/profile-view";
     public static final String PROFILE_VIEW_VIEW_NAME = "account/profile-view";
-    public static final String NOT_FOUND_ERROR_VIEW_NAME = "error/not-found-error";
+    public static final String ERROR_VIEW_NAME = "error/error-view";
 
     // AccountSettingController.java
     public static final String ACCOUNT_SETTING_PROFILE_URL = "/account/setting/profile";

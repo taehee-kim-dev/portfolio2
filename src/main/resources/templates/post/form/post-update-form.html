@@ -16,10 +16,11 @@
 
 <div class="container">
     <div>
-        <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 작성</h1>
+        <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 수정</h1>
     </div>
     <form id="post-form" class="needs-validation"  style="margin: auto; width: 750px"
-          th:action="@{/post-new-post}" th:object="${postNewPostRequestDto}" method="post" novalidate>
+          th:action="@{/post-update}" th:object="${postUpdateRequestDto}" method="post" novalidate>
+        <input type="hidden" th:field="*{postIdToUpdate}">
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
             <input type="text" th:field="*{title}" class="form-control"
@@ -39,8 +40,8 @@
                 태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
                 <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
             </div>
-            <input id="tag" name="tag" th:value="${postNewPostRequestDto.getTagTitleOnPost()}">
-            <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postNewPostRequestDto.getTagTitleOnPost()}">
+            <input id="tag" name="tag" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
+            <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
         </div>
 
         <div class="form-group" >

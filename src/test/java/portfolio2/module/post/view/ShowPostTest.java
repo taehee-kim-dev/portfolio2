@@ -5,10 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
@@ -32,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.NOT_FOUND_ERROR_VIEW_NAME;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ERROR_VIEW_NAME;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
@@ -161,14 +158,14 @@ public class ShowPostTest extends ContainerBaseTest {
         mockMvc.perform(get(POST_VIEW_URL + '/' + existingPost.getId() + 1))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundErrorTitle"))
-                .andExpect(model().attributeExists("notFoundErrorContent"))
+                .andExpect(model().attributeExists("errorTitle"))
+                .andExpect(model().attributeExists("errorContent"))
                 .andExpect(model().attributeDoesNotExist(("post")))
                 .andExpect(model().attributeDoesNotExist("isAuthor"))
                 .andExpect(model().attributeDoesNotExist("firstWrittenTime"))
                 .andExpect(model().attributeDoesNotExist("tagOnPost"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -183,14 +180,14 @@ public class ShowPostTest extends ContainerBaseTest {
         mockMvc.perform(get(POST_VIEW_URL + '/' + existingPost.getId() + 1))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("notFoundErrorTitle"))
-                .andExpect(model().attributeExists("notFoundErrorContent"))
+                .andExpect(model().attributeExists("errorTitle"))
+                .andExpect(model().attributeExists("errorContent"))
                 .andExpect(model().attributeDoesNotExist(("post")))
                 .andExpect(model().attributeDoesNotExist("isAuthor"))
                 .andExpect(model().attributeDoesNotExist("firstWrittenTime"))
                 .andExpect(model().attributeDoesNotExist("tagOnPost"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(NOT_FOUND_ERROR_VIEW_NAME))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 

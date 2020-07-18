@@ -72,7 +72,7 @@ public class PostNewPostTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postRequestDto"))
+                .andExpect(model().attributeExists("postNewPostRequestDto"))
                 .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
@@ -210,13 +210,13 @@ public class PostNewPostTest extends ContainerBaseTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postRequestDto",
+                        "postNewPostRequestDto",
                         "title",
                         "emptyTitle"
 
                 ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postRequestDto"))
+                .andExpect(model().attributeExists("postNewPostRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -239,24 +239,35 @@ public class PostNewPostTest extends ContainerBaseTest {
                 .param("title", titleOfNewPost)
                 .param("content", contentOfNewPost)
                 .param("tagTitleOnPost", tagOfNewPost)
-                .with(csrf()))
-                .andExpect(model().hasErrors())
-                .andExpect(model().errorCount(1))
-                .andExpect(model().attributeHasFieldErrorCode(
-                        "postRequestDto",
-                        "content",
-                        "emptyContent"
-
-                ))
-                .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postRequestDto"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
+                .with(csrf()))  .andExpect(model().hasNoErrors())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
         Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
-        assertNull(savedNewPostInDb);
+
+        assertEquals(titleOfNewPost, savedNewPostInDb.getTitle());
+        assertEquals(contentOfNewPost, savedNewPostInDb.getContent());
+        assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
+
+        Tag testTag1 = new Tag();
+        testTag1.setTitle("Test tag 1");
+        Tag testTag2 = new Tag();
+        testTag2.setTitle("Test tag 2");
+
+        String[] postedTag = tagOfNewPost.split(",");
+        for(String tagTitle : postedTag){
+            Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
+            assertNotNull(containedTagInPost);
+            assertTrue(savedNewPostInDb.getTag().contains(containedTagInPost));
+        }
+
+        assertFalse(savedNewPostInDb.getTag().contains(testTag1));
+        assertFalse(savedNewPostInDb.getTag().contains(testTag2));
+        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
+        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
+        assertNotNull(firstWrittenTime);
+        assertEquals(firstWrittenTime, lastModifiedTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 제목과 내용 모두 입력 안했을 때")
@@ -274,21 +285,15 @@ public class PostNewPostTest extends ContainerBaseTest {
                 .param("tagTitleOnPost", tagOfNewPost)
                 .with(csrf()))
                 .andExpect(model().hasErrors())
-                .andExpect(model().errorCount(2))
+                .andExpect(model().errorCount(1))
                 .andExpect(model().attributeHasFieldErrorCode(
-                        "postRequestDto",
+                        "postNewPostRequestDto",
                         "title",
                         "emptyTitle"
 
                 ))
-                .andExpect(model().attributeHasFieldErrorCode(
-                        "postRequestDto",
-                        "content",
-                        "emptyContent"
-
-                ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("postRequestDto"))
+                .andExpect(model().attributeExists("postNewPostRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
