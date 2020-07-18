@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import portfolio2.module.account.Account;
+import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
@@ -16,8 +17,8 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@NamedEntityGraph(name = "Post.withTag", attributeNodes = {
-        @NamedAttributeNode("tag")
+@NamedEntityGraph(name = "Post.withCurrentTag", attributeNodes = {
+        @NamedAttributeNode("currentTag")
 })
 @Entity
 public class Post {
@@ -34,9 +35,17 @@ public class Post {
     private String content;
 
     @ManyToMany
-    private List<Tag> tag = new ArrayList<>();
+    private List<Tag> currentTag = new ArrayList<>();
 
-    private LocalDateTime firstWrittenTime;
+    @ManyToMany
+    private List<Tag> beforeTag = new ArrayList<>();
 
-    private LocalDateTime lastModifiedTime;
+    private LocalDateTime firstWrittenDateTime;
+
+    private LocalDateTime lastModifiedDateTime;
+
+    public void updateTitleAndContent(PostUpdateRequestDto postUpdateRequestDto) {
+        this.title = postUpdateRequestDto.getTitle();
+        this.content = postUpdateRequestDto.getContent();
+    }
 }

@@ -19,10 +19,10 @@ public class NotificationUpdateProcess {
         modelMapper.map(notificationUpdateRequestDto, accountToUpdate);
         if(!accountToUpdate.isEmailVerified()){
             accountToUpdate.setNotificationLikeOnMyPostByEmail(false);
-            accountToUpdate.setNotificationLikeOnMyReplyByEmail(false);
-            accountToUpdate.setNotificationReplyOnMyPostByEmail(false);
-            accountToUpdate.setNotificationReplyOnMyReplyByEmail(false);
-            accountToUpdate.setNotificationNewPostWithMyTagByEmail(false);
+            accountToUpdate.setNotificationLikeOnMyCommentByEmail(false);
+            accountToUpdate.setNotificationCommentOnMyPostByEmail(false);
+            accountToUpdate.setNotificationCommentOnMyCommentByEmail(false);
+            accountToUpdate.setNotificationNewPostWithMyInterestTagByEmail(false);
         }
         return accountToUpdate;
     }

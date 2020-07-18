@@ -32,10 +32,10 @@ public class SendingEmailVerificationEmailProcess {
         accountToSendEmail.increaseOrResetCountOfSendingEmailVerificationEmail();
         // 이메일 알림 설정 모두 false
         accountToSendEmail.setNotificationLikeOnMyPostByEmail(false);
-        accountToSendEmail.setNotificationLikeOnMyReplyByEmail(false);
-        accountToSendEmail.setNotificationReplyOnMyPostByEmail(false);
-        accountToSendEmail.setNotificationReplyOnMyReplyByEmail(false);
-        accountToSendEmail.setNotificationNewPostWithMyTagByEmail(false);
+        accountToSendEmail.setNotificationLikeOnMyCommentByEmail(false);
+        accountToSendEmail.setNotificationCommentOnMyPostByEmail(false);
+        accountToSendEmail.setNotificationCommentOnMyCommentByEmail(false);
+        accountToSendEmail.setNotificationNewPostWithMyInterestTagByEmail(false);
         return accountToSendEmail;
     }
 }

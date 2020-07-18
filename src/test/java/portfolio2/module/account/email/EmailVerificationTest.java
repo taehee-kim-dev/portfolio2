@@ -1,12 +1,9 @@
 package portfolio2.module.account.email;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
@@ -116,7 +113,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
         // 이메일 전송 1회
@@ -171,20 +168,20 @@ public class EmailVerificationTest extends ContainerBaseTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
         // 이메일 전송 1회
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
 
         // 이메일 알림 값 모두 true 확인
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -198,7 +195,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         // 처음 인증된 상태
         accountInDbToBeEmailVerified.setEmailFirstVerified(true);
         LocalDateTime beforeTokenGeneratedAt
-                = accountInDbToBeEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt();
+                = accountInDbToBeEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         // 상태값 저장
         accountRepository.save(accountInDbToBeEmailVerified);
 
@@ -235,7 +232,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         // 인증 대기 이메일 null로 됨
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
         // 토큰 발행 시간 존재
-        assertEquals(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt(),
+        assertEquals(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime(),
                 beforeTokenGeneratedAt);
         // 인증 이메일 전송 횟수 1회
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
@@ -243,13 +240,13 @@ public class EmailVerificationTest extends ContainerBaseTest {
         verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
 
         // 이메일 알림 값 모두 true 확인
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @SignUpAndLoggedInEmailNotVerified
@@ -298,7 +295,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNull(accountEmailVerified.getEmailVerificationToken());
         assertNull(accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 나중에 회원가입하고 로그인했던 계정 존재 확인
@@ -306,13 +303,13 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(account2);
 
         // 이메일 알림 값 모두 true 확인
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertTrue(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertTrue(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     // 잘못된 링크 - 로그아웃 상태
@@ -356,17 +353,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -408,17 +405,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -458,17 +455,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     // 내 계정으로 로그인 상태
@@ -510,17 +507,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -560,17 +557,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -608,17 +605,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -666,17 +663,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -721,17 +718,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 
@@ -773,17 +770,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @DisplayName("이메일 인증 - email 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -825,17 +822,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @DisplayName("이메일 인증 - token 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -877,17 +874,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @DisplayName("이메일 인증 - email, token 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -929,17 +926,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNotNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @DisplayName("이메일 인증 - 인증 대기중인 이메일은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
@@ -984,17 +981,17 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertNull(accountEmailVerified.getEmailVerificationToken());
         assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
 
-        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
-        assertFalse(accountEmailVerified.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(accountEmailVerified.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
 }

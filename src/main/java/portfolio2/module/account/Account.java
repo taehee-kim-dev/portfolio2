@@ -50,15 +50,15 @@ public class Account {
 
 
 
-    private boolean isEmailFirstVerified = false;
+    private boolean emailFirstVerified = false;
 
-    private boolean isEmailVerified = false;
+    private boolean emailVerified = false;
 
 
 
     private String emailVerificationToken;
 
-    private LocalDateTime firstCountOfSendingEmailVerificationEmailSetAt;
+    private LocalDateTime firstCountOfSendingEmailVerificationEmailSetDateTime;
 
     private int countOfSendingEmailVerificationEmail = 0;
 
@@ -96,36 +96,36 @@ public class Account {
 
 
 
-    private LocalDateTime joinedAt;
+    private LocalDateTime signUpDateTime;
 
 
 
 
     private boolean notificationLikeOnMyPostByWeb = true;
 
-    private boolean notificationLikeOnMyReplyByWeb = true;
+    private boolean notificationLikeOnMyCommentByWeb = true;
 
 
-    private boolean notificationReplyOnMyPostByWeb = true;
+    private boolean notificationCommentOnMyPostByWeb = true;
 
-    private boolean notificationReplyOnMyReplyByWeb = true;
+    private boolean notificationCommentOnMyCommentByWeb = true;
 
 
-    private boolean notificationNewPostWithMyTagByWeb = true;
+    private boolean notificationNewPostWithMyInterestTagByWeb = true;
 
 
 
     private boolean notificationLikeOnMyPostByEmail = false;
 
-    private boolean notificationLikeOnMyReplyByEmail = false;
+    private boolean notificationLikeOnMyCommentByEmail = false;
 
 
-    private boolean notificationReplyOnMyPostByEmail = false;
+    private boolean notificationCommentOnMyPostByEmail = false;
 
-    private boolean notificationReplyOnMyReplyByEmail = false;
+    private boolean notificationCommentOnMyCommentByEmail = false;
 
 
-    private boolean notificationNewPostWithMyTagByEmail = false;
+    private boolean notificationNewPostWithMyInterestTagByEmail = false;
 
 
     @ManyToMany
@@ -135,7 +135,7 @@ public class Account {
         // 인증 이메일을 이미 5번 보냈는가?
         if(this.countOfSendingEmailVerificationEmail == 5){
             // 보냈다면, 1번째 보냈을 때 보다 현재 12시간이 지났는가?
-            return this.firstCountOfSendingEmailVerificationEmailSetAt.isBefore(LocalDateTime.now().minusHours(12));
+            return this.firstCountOfSendingEmailVerificationEmailSetDateTime.isBefore(LocalDateTime.now().minusHours(12));
         }
         return true;
     }
@@ -152,7 +152,7 @@ public class Account {
             // 현재 회원가입 후 첫번째 또는 12시간 후 6번째 이메일 전송이라면,
             // 새로운 첫 번째 이메일 전송이 되는 것이므로,
             // 첫 번째 카운트 세팅 시간 새로 설정
-            firstCountOfSendingEmailVerificationEmailSetAt = LocalDateTime.now();
+            firstCountOfSendingEmailVerificationEmailSetDateTime = LocalDateTime.now();
             // 이메일 전송 카운트 1로 초기화
             countOfSendingEmailVerificationEmail = 1;
         }else{

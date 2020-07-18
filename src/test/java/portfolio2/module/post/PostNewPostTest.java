@@ -55,7 +55,7 @@ public class PostNewPostTest extends ContainerBaseTest {
         List<Post> allPost = postRepository.findAll();
         for(Post post : allPost){
             post.setAuthor(null);
-            post.getTag().clear();
+            post.getCurrentTag().clear();
             postRepository.save(post);
         }
         postRepository.deleteAll();
@@ -80,7 +80,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력(모두 새로운 태그)")
     @SignUpAndLoggedInEmailVerified
     @Test
-    void postNewPostWithAllNewTag() throws Exception{
+    void postNewPostWithAllCurrentTag() throws Exception{
 
         String titleOfNewPost = "Test title";
         String contentOfNewPost = "<p>Test content</p>";
@@ -92,6 +92,7 @@ public class PostNewPostTest extends ContainerBaseTest {
                 .param("tagTitleOnPost", tagOfNewPost)
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -111,15 +112,15 @@ public class PostNewPostTest extends ContainerBaseTest {
         for(String tagTitle : postedTag){
             Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
             assertNotNull(containedTagInPost);
-            assertTrue(savedNewPostInDb.getTag().contains(containedTagInPost));
+            assertTrue(savedNewPostInDb.getCurrentTag().contains(containedTagInPost));
         }
 
-        assertFalse(savedNewPostInDb.getTag().contains(testTag1));
-        assertFalse(savedNewPostInDb.getTag().contains(testTag2));
-        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
-        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
-        assertNotNull(firstWrittenTime);
-        assertEquals(firstWrittenTime, lastModifiedTime);
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag1));
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag2));
+        LocalDateTime firstWrittenDateTime = savedNewPostInDb.getFirstWrittenDateTime();
+        LocalDateTime lastModifiedDateTime = savedNewPostInDb.getLastModifiedDateTime();
+        assertNotNull(firstWrittenDateTime);
+        assertEquals(firstWrittenDateTime, lastModifiedDateTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 일부 기존 존재하는 태그")
@@ -157,12 +158,12 @@ public class PostNewPostTest extends ContainerBaseTest {
         for(String tagTitle : postedTag){
             Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
             assertNotNull(containedTagInPost);
-            assertTrue(savedNewPostInDb.getTag().contains(containedTagInPost));
+            assertTrue(savedNewPostInDb.getCurrentTag().contains(containedTagInPost));
         }
-        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
-        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
-        assertNotNull(firstWrittenTime);
-        assertEquals(firstWrittenTime, lastModifiedTime);
+        LocalDateTime firstWrittenDateTime = savedNewPostInDb.getFirstWrittenDateTime();
+        LocalDateTime lastModifiedDateTime = savedNewPostInDb.getLastModifiedDateTime();
+        assertNotNull(firstWrittenDateTime);
+        assertEquals(firstWrittenDateTime, lastModifiedDateTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 태그 입력 안했을 때")
@@ -190,7 +191,52 @@ public class PostNewPostTest extends ContainerBaseTest {
         assertEquals(contentOfNewPost, savedNewPostInDb.getContent());
         assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
 
-        assertTrue(savedNewPostInDb.getTag().isEmpty());
+        assertTrue(savedNewPostInDb.getCurrentTag().isEmpty());
+    }
+
+    @DisplayName("글 작성 POST 요청 - 정상 입력 - 내용 입력 안했을 때")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void postNewPostWithEmptyContent() throws Exception{
+
+        String titleOfNewPost = "This is test title.";
+        String contentOfNewPost = "";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
+
+        mockMvc.perform(post(POST_NEW_POST_URL)
+                .param("title", titleOfNewPost)
+                .param("content", contentOfNewPost)
+                .param("tagTitleOnPost", tagOfNewPost)
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
+        Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
+
+        assertEquals(titleOfNewPost, savedNewPostInDb.getTitle());
+        assertEquals(contentOfNewPost, savedNewPostInDb.getContent());
+        assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
+
+        Tag testTag1 = new Tag();
+        testTag1.setTitle("Test tag 1");
+        Tag testTag2 = new Tag();
+        testTag2.setTitle("Test tag 2");
+
+        String[] postedTag = tagOfNewPost.split(",");
+        for(String tagTitle : postedTag){
+            Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
+            assertNotNull(containedTagInPost);
+            assertTrue(savedNewPostInDb.getCurrentTag().contains(containedTagInPost));
+        }
+
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag1));
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag2));
+        LocalDateTime firstWrittenDateTime = savedNewPostInDb.getFirstWrittenDateTime();
+        LocalDateTime lastModifiedDateTime = savedNewPostInDb.getLastModifiedDateTime();
+        assertNotNull(firstWrittenDateTime);
+        assertEquals(firstWrittenDateTime, lastModifiedDateTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 제목 입력 안했을 때")
@@ -224,50 +270,6 @@ public class PostNewPostTest extends ContainerBaseTest {
         Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
         Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
         assertNull(savedNewPostInDb);
-    }
-
-    @DisplayName("글 작성 POST 요청 - 입력 에러 - 내용 입력 안했을 때")
-    @SignUpAndLoggedInEmailVerified
-    @Test
-    void postNewPostWithEmptyContent() throws Exception{
-
-        String titleOfNewPost = "This is test title.";
-        String contentOfNewPost = "";
-        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
-
-        mockMvc.perform(post(POST_NEW_POST_URL)
-                .param("title", titleOfNewPost)
-                .param("content", contentOfNewPost)
-                .param("tagTitleOnPost", tagOfNewPost)
-                .with(csrf()))  .andExpect(model().hasNoErrors())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
-
-        Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
-        Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
-
-        assertEquals(titleOfNewPost, savedNewPostInDb.getTitle());
-        assertEquals(contentOfNewPost, savedNewPostInDb.getContent());
-        assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
-
-        Tag testTag1 = new Tag();
-        testTag1.setTitle("Test tag 1");
-        Tag testTag2 = new Tag();
-        testTag2.setTitle("Test tag 2");
-
-        String[] postedTag = tagOfNewPost.split(",");
-        for(String tagTitle : postedTag){
-            Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
-            assertNotNull(containedTagInPost);
-            assertTrue(savedNewPostInDb.getTag().contains(containedTagInPost));
-        }
-
-        assertFalse(savedNewPostInDb.getTag().contains(testTag1));
-        assertFalse(savedNewPostInDb.getTag().contains(testTag2));
-        LocalDateTime firstWrittenTime = savedNewPostInDb.getFirstWrittenTime();
-        LocalDateTime lastModifiedTime = savedNewPostInDb.getLastModifiedTime();
-        assertNotNull(firstWrittenTime);
-        assertEquals(firstWrittenTime, lastModifiedTime);
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 제목과 내용 모두 입력 안했을 때")

@@ -1,12 +1,9 @@
 package portfolio2.module.account.setting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -63,15 +60,15 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
 
         mockMvc.perform(post(ACCOUNT_SETTING_NOTIFICATION_URL)
                 .param("notificationLikeOnMyPostByWeb", String.valueOf(false))
-                .param("notificationLikeOnMyReplyByWeb", String.valueOf(false))
-                .param("notificationReplyOnMyPostByWeb", String.valueOf(false))
-                .param("notificationReplyOnMyReplyByWeb", String.valueOf(false))
-                .param("notificationNewPostWithMyTagByWeb", String.valueOf(false))
+                .param("notificationLikeOnMyCommentByWeb", String.valueOf(false))
+                .param("notificationCommentOnMyPostByWeb", String.valueOf(false))
+                .param("notificationCommentOnMyCommentByWeb", String.valueOf(false))
+                .param("notificationNewPostWithMyInterestTagByWeb", String.valueOf(false))
                 .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
-                .param("notificationLikeOnMyReplyByEmail", String.valueOf(true))
-                .param("notificationReplyOnMyPostByEmail", String.valueOf(true))
-                .param("notificationReplyOnMyReplyByEmail", String.valueOf(true))
-                .param("notificationNewPostWithMyTagByEmail", String.valueOf(true))
+                .param("notificationLikeOnMyCommentByEmail", String.valueOf(true))
+                .param("notificationCommentOnMyPostByEmail", String.valueOf(true))
+                .param("notificationCommentOnMyCommentByEmail", String.valueOf(true))
+                .param("notificationNewPostWithMyInterestTagByEmail", String.valueOf(true))
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
@@ -82,20 +79,20 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(updatedAccount.isNotificationLikeOnMyPostByWeb());
-        assertFalse(updatedAccount.isNotificationLikeOnMyReplyByWeb());
+        assertFalse(updatedAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertFalse(updatedAccount.isNotificationReplyOnMyPostByWeb());
-        assertFalse(updatedAccount.isNotificationReplyOnMyReplyByWeb());
+        assertFalse(updatedAccount.isNotificationCommentOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationCommentOnMyCommentByWeb());
 
-        assertFalse(updatedAccount.isNotificationNewPostWithMyTagByWeb());
+        assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         assertFalse(updatedAccount.isNotificationLikeOnMyPostByEmail());
-        assertFalse(updatedAccount.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(updatedAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(updatedAccount.isNotificationReplyOnMyPostByEmail());
-        assertFalse(updatedAccount.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(updatedAccount.isNotificationCommentOnMyPostByEmail());
+        assertFalse(updatedAccount.isNotificationCommentOnMyCommentByEmail());
 
-        assertFalse(updatedAccount.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByEmail());
     }
 
     @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증된 상태")
@@ -109,15 +106,15 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
 
         mockMvc.perform(post(ACCOUNT_SETTING_NOTIFICATION_URL)
                 .param("notificationLikeOnMyPostByWeb", String.valueOf(false))
-                .param("notificationLikeOnMyReplyByWeb", String.valueOf(false))
-                .param("notificationReplyOnMyPostByWeb", String.valueOf(false))
-                .param("notificationReplyOnMyReplyByWeb", String.valueOf(false))
-                .param("notificationNewPostWithMyTagByWeb", String.valueOf(false))
+                .param("notificationLikeOnMyCommentByWeb", String.valueOf(false))
+                .param("notificationCommentOnMyPostByWeb", String.valueOf(false))
+                .param("notificationCommentOnMyCommentByWeb", String.valueOf(false))
+                .param("notificationNewPostWithMyInterestTagByWeb", String.valueOf(false))
                 .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
-                .param("notificationLikeOnMyReplyByEmail", String.valueOf(true))
-                .param("notificationReplyOnMyPostByEmail", String.valueOf(true))
-                .param("notificationReplyOnMyReplyByEmail", String.valueOf(true))
-                .param("notificationNewPostWithMyTagByEmail", String.valueOf(true))
+                .param("notificationLikeOnMyCommentByEmail", String.valueOf(true))
+                .param("notificationCommentOnMyPostByEmail", String.valueOf(true))
+                .param("notificationCommentOnMyCommentByEmail", String.valueOf(true))
+                .param("notificationNewPostWithMyInterestTagByEmail", String.valueOf(true))
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
@@ -128,19 +125,19 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertFalse(updatedAccount.isNotificationLikeOnMyPostByWeb());
-        assertFalse(updatedAccount.isNotificationLikeOnMyReplyByWeb());
+        assertFalse(updatedAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertFalse(updatedAccount.isNotificationReplyOnMyPostByWeb());
-        assertFalse(updatedAccount.isNotificationReplyOnMyReplyByWeb());
+        assertFalse(updatedAccount.isNotificationCommentOnMyPostByWeb());
+        assertFalse(updatedAccount.isNotificationCommentOnMyCommentByWeb());
 
-        assertFalse(updatedAccount.isNotificationNewPostWithMyTagByWeb());
+        assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         assertTrue(updatedAccount.isNotificationLikeOnMyPostByEmail());
-        assertTrue(updatedAccount.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(updatedAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(updatedAccount.isNotificationReplyOnMyPostByEmail());
-        assertTrue(updatedAccount.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(updatedAccount.isNotificationCommentOnMyPostByEmail());
+        assertTrue(updatedAccount.isNotificationCommentOnMyCommentByEmail());
 
-        assertTrue(updatedAccount.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(updatedAccount.isNotificationNewPostWithMyInterestTagByEmail());
     }
 }

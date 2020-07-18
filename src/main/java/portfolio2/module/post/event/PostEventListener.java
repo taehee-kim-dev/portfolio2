@@ -38,21 +38,28 @@ public class PostEventListener {
 
     @EventListener
     public void handlePostPostedEvent(PostPostedEvent postPostedEvent){
-        Post newPost = postRepository.findPostWithTagById(postPostedEvent.getPost().getId());
-        Iterable<Account> accounts = accountRepository.findAll(AccountPredicate.findByTag(newPost.getTag()));
-            accounts.forEach(account -> {
-                if(account != newPost.getAuthor()){
-                    Iterable<Tag> allTagInNewPostAndAccount
-                            = tagRepository.findAll(TagPredicate.findAllTagByAccountInterestTagAndPostTag(account.getInterestTag(), newPost.getTag()));
-                    if(account.isEmailVerified() && account.isNotificationNewPostWithMyTagByEmail()){
-                        emailSendingProcessForPost.sendNotificationEmailForNewPostWithInterestTag(account, newPost, allTagInNewPostAndAccount);
-                    }
+        switch (postPostedEvent.getPostEventType()){
+            case NEW:
+                Post newPost = postRepository.findPostWithCurrentTagById(postPostedEvent.getNewPost().getId());
+                Iterable<Account> accounts = accountRepository.findAll(AccountPredicate.findByTag(newPost.getCurrentTag()));
+                accounts.forEach(account -> {
+                    if(account != newPost.getAuthor()){
+                        Iterable<Tag> allTagInNewPostAndAccount
+                                = tagRepository.findAll(TagPredicate.findAllTagByAccountInterestTagAndPostTag(account.getInterestTag(), newPost.getCurrentTag()));
+                        if(account.isEmailVerified() && account.isNotificationNewPostWithMyInterestTagByEmail()){
+                            emailSendingProcessForPost.sendNotificationEmailForNewPostWithInterestTag(account, newPost, allTagInNewPostAndAccount);
+                        }
 
-                    if(account.isNotificationNewPostWithMyTagByWeb()){
-                        saveWebNotification(newPost, account, allTagInNewPostAndAccount);
+                        if(account.isNotificationNewPostWithMyInterestTagByWeb()){
+                            saveWebNotification(newPost, account, allTagInNewPostAndAccount);
+                        }
                     }
-                }
-            });
+                });
+                break;
+            case UPDATED:
+                // accountRepository.findAll(AccountPredicate.findByTag())
+        }
+
     }
 
     private void saveWebNotification(Post newPost, Account account, Iterable<Tag> allTagInNewPostAndAccount) {

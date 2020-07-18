@@ -66,8 +66,8 @@ public class ShowPostTest extends ContainerBaseTest {
         newPost.setTitle("This is test title.");
         newPost.setContent("This is test content.");
         LocalDateTime firstWrittenTime = LocalDateTime.now();
-        newPost.setFirstWrittenTime(firstWrittenTime);
-        newPost.setLastModifiedTime(firstWrittenTime);
+        newPost.setFirstWrittenDateTime(firstWrittenTime);
+        newPost.setLastModifiedDateTime(firstWrittenTime);
         postRepository.save(newPost);
     }
 
@@ -81,7 +81,7 @@ public class ShowPostTest extends ContainerBaseTest {
         List<Post> allPost = postRepository.findAll();
         for(Post post : allPost){
             post.setAuthor(null);
-            post.getTag().clear();
+            post.getCurrentTag().clear();
             postRepository.save(post);
         }
         postRepository.deleteAll();

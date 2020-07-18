@@ -25,7 +25,7 @@ public class SignUpProcess {
         newAccount.setNickname(signUpRequestDto.getNickname());
         newAccount.setPassword(signUpRequestDto.getPassword());
         newAccount.setEmailWaitingToBeVerified(signUpRequestDto.getEmail());
-        newAccount.setJoinedAt(LocalDateTime.now());
+        newAccount.setSignUpDateTime(LocalDateTime.now());
         return accountRepository.save(newAccount);
     }
 }

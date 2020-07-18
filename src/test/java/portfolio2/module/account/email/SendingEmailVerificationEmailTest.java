@@ -68,7 +68,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void notVerifiedEmailSendAgainSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
@@ -92,8 +92,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertFalse(accountAfterEmailSent.isEmailVerified());
         assertNotEquals(initialToken, accountAfterEmailSent.getEmailVerificationToken());
         assertNotNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
@@ -104,7 +104,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void notVerifiedEmailSendToNewEmailSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
@@ -130,8 +130,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertFalse(accountAfterEmailSent.isEmailVerified());
         assertNotEquals(initialToken, accountAfterEmailSent.getEmailVerificationToken());
         assertNotNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
@@ -142,7 +142,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void verifiedEmailSendAgainSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
@@ -167,8 +167,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertFalse(accountAfterEmailSent.isEmailVerified());
         assertNotEquals(initialToken, accountAfterEmailSent.getEmailVerificationToken());
         assertNotNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
@@ -181,7 +181,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void invalidFormatNewEmail() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
@@ -210,8 +210,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNull(accountAfterEmailSent.getEmailWaitingToBeVerified());
         assertTrue(accountAfterEmailSent.isEmailVerified());
         assertNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
@@ -222,7 +222,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void newEmailAlreadyExistsByOwnAccount() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
         String newEmail = TEST_EMAIL;
@@ -250,8 +250,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNull(accountAfterEmailSent.getEmailWaitingToBeVerified());
         assertTrue(accountAfterEmailSent.isEmailVerified());
         assertNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(1)).sendEmailVerificationEmail(any(Account.class));
@@ -264,7 +264,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
 
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
@@ -293,8 +293,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNull(accountAfterEmailSent.getEmailWaitingToBeVerified());
         assertTrue(accountAfterEmailSent.isEmailVerified());
         assertNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
-        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(1, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
@@ -306,7 +306,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void successFor5TimesIn12Hours() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String beforeToken = beforeTry.getEmailVerificationToken();
 
         for(int time = 2; time <= 5; time++){
@@ -332,7 +332,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             String afterToken = accountAfterEmailSent.getEmailVerificationToken();
             assertNotNull(afterToken);
             assertNotEquals(beforeToken, afterToken);
-            LocalDateTime afterTime = accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt();
+            LocalDateTime afterTime = accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
             assertNotNull(afterTime);
             assertEquals(beforeTime, afterTime);
             assertEquals(time, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
@@ -349,7 +349,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     void failFor6TimesIn12Hours() throws Exception{
 
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String beforeToken = beforeTry.getEmailVerificationToken();
 
         for(int time = 2; time <= 5; time++){
@@ -375,7 +375,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             String afterToken = accountAfterEmailSent.getEmailVerificationToken();
             assertNotNull(afterToken);
             assertNotEquals(beforeToken, afterToken);
-            LocalDateTime afterTime = accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt();
+            LocalDateTime afterTime = accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
             assertNotNull(afterTime);
             assertEquals(beforeTime, afterTime);
             assertEquals(time, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
@@ -404,7 +404,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals("new5@email.com", accountAfterEmailSent.getEmailWaitingToBeVerified());
         assertFalse(accountAfterEmailSent.isEmailVerified());
         assertNotNull(accountAfterEmailSent.getEmailVerificationToken());
-        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(5, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
         verify(emailSendingProcessForAccount, times(5)).sendEmailVerificationEmail(any(Account.class));
@@ -415,7 +415,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void successFor6TimesAfter12Hours() throws Exception {
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime beforeTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String beforeToken = beforeTry.getEmailVerificationToken();
 
         for (int time1 = 2; time1 <= 5; time1++) {
@@ -441,7 +441,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             String afterToken1 = accountAfterEmailSent1.getEmailVerificationToken();
             assertNotNull(afterToken1);
             assertNotEquals(beforeToken, afterToken1);
-            LocalDateTime afterTime1 = accountAfterEmailSent1.getFirstCountOfSendingEmailVerificationEmailSetAt();
+            LocalDateTime afterTime1 = accountAfterEmailSent1.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
             assertNotNull(afterTime1);
             assertEquals(beforeTime, afterTime1);
             assertEquals(time1, accountAfterEmailSent1.getCountOfSendingEmailVerificationEmail());
@@ -452,8 +452,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         }
 
         Account accountToTimeSet = accountRepository.findByUserId(TEST_USER_ID);
-        LocalDateTime fifthTime = accountToTimeSet.getFirstCountOfSendingEmailVerificationEmailSetAt();
-        accountToTimeSet.setFirstCountOfSendingEmailVerificationEmailSetAt(fifthTime.minusHours(12).minusMinutes(1));
+        LocalDateTime fifthTime = accountToTimeSet.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
+        accountToTimeSet.setFirstCountOfSendingEmailVerificationEmailSetDateTime(fifthTime.minusHours(12).minusMinutes(1));
         accountRepository.save(accountToTimeSet);
 
         // 6번 째 전송
@@ -479,7 +479,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         String afterToken2 = accountAfterEmailSent2.getEmailVerificationToken();
         assertNotNull(afterToken2);
         assertNotEquals(beforeToken, afterToken2);
-        LocalDateTime afterTime2 = accountAfterEmailSent2.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime afterTime2 = accountAfterEmailSent2.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         assertNotNull(afterTime2);
         assertNotEquals(beforeTime, afterTime2);
         assertEquals(1, accountAfterEmailSent2.getCountOfSendingEmailVerificationEmail());
@@ -511,7 +511,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
             String afterToken3 = accountAfterEmailSent3.getEmailVerificationToken();
             assertNotNull(afterToken3);
             assertNotEquals(beforeToken, afterToken3);
-            LocalDateTime afterTime3 = accountAfterEmailSent3.getFirstCountOfSendingEmailVerificationEmailSetAt();
+            LocalDateTime afterTime3 = accountAfterEmailSent3.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
             assertNotNull(afterTime3);
             assertEquals(beforeTime, afterTime3);
             assertEquals(time3 - 5, accountAfterEmailSent3.getCountOfSendingEmailVerificationEmail());
@@ -542,7 +542,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         String afterToken4 = accountAfterEmailSent4.getEmailVerificationToken();
         assertNotNull(afterToken4);
         assertEquals(beforeToken, afterToken4);
-        LocalDateTime afterTime4 = accountAfterEmailSent4.getFirstCountOfSendingEmailVerificationEmailSetAt();
+        LocalDateTime afterTime4 = accountAfterEmailSent4.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         assertNotNull(afterTime4);
         assertEquals(beforeTime, afterTime4);
         assertEquals(5, accountAfterEmailSent4.getCountOfSendingEmailVerificationEmail());

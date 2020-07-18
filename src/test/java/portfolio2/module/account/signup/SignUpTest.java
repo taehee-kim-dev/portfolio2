@@ -1,16 +1,12 @@
 package portfolio2.module.account.signup;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.*;
@@ -127,11 +123,11 @@ public class SignUpTest extends ContainerBaseTest {
         // 이메일 인증 토큰 값 존재 확인
         assertNotNull(newAccountInDb.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(newAccountInDb.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(newAccountInDb.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, newAccountInDb.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인
-        assertNotNull(newAccountInDb.getJoinedAt());
+        assertNotNull(newAccountInDb.getSignUpDateTime());
 
         // 비밀번호 찾기 토큰 null 확인
         assertNull(newAccountInDb.getShowPasswordUpdatePageToken());
@@ -144,22 +140,22 @@ public class SignUpTest extends ContainerBaseTest {
         assertNull(newAccountInDb.getProfileImage());
 
         // Web 알림 값 모두 true 확인
-        assertTrue(newAccountInDb.isNotificationReplyOnMyPostByWeb());
-        assertTrue(newAccountInDb.isNotificationReplyOnMyReplyByWeb());
+        assertTrue(newAccountInDb.isNotificationCommentOnMyPostByWeb());
+        assertTrue(newAccountInDb.isNotificationCommentOnMyCommentByWeb());
 
         assertTrue(newAccountInDb.isNotificationLikeOnMyPostByWeb());
-        assertTrue(newAccountInDb.isNotificationLikeOnMyReplyByWeb());
+        assertTrue(newAccountInDb.isNotificationLikeOnMyCommentByWeb());
 
-        assertTrue(newAccountInDb.isNotificationNewPostWithMyTagByWeb());
+        assertTrue(newAccountInDb.isNotificationNewPostWithMyInterestTagByWeb());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(newAccountInDb.isNotificationReplyOnMyPostByEmail());
-        assertFalse(newAccountInDb.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(newAccountInDb.isNotificationCommentOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(newAccountInDb.isNotificationLikeOnMyPostByEmail());
-        assertFalse(newAccountInDb.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(newAccountInDb.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(newAccountInDb.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(newAccountInDb.isNotificationNewPostWithMyInterestTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getInterestTag());

@@ -81,11 +81,11 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         // 이메일 인증 토큰 값 존재 확인
         assertNotNull(signedUpAccount.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, signedUpAccount.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인
-        assertNotNull(signedUpAccount.getJoinedAt());
+        assertNotNull(signedUpAccount.getSignUpDateTime());
 
         // 비밀번호 찾기 토큰 null 확인
         assertNull(signedUpAccount.getShowPasswordUpdatePageToken());
@@ -98,22 +98,22 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertNull(signedUpAccount.getProfileImage());
 
         // Web 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByWeb());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(signedUpAccount.isNotificationReplyOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertFalse(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(signedUpAccount.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
@@ -149,11 +149,11 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         // 이메일 인증 토큰 값 존재 확인
         assertNotNull(signedUpAccount.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, signedUpAccount.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인
-        assertNotNull(signedUpAccount.getJoinedAt());
+        assertNotNull(signedUpAccount.getSignUpDateTime());
 
         // 비밀번호 찾기 토큰 null 확인
         assertNull(signedUpAccount.getShowPasswordUpdatePageToken());
@@ -166,22 +166,22 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertNull(signedUpAccount.getProfileImage());
 
         // Web 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByWeb());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         // 이메일 알림 값 모두 false 확인
-        assertFalse(signedUpAccount.isNotificationReplyOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationReplyOnMyReplyByEmail());
+        assertFalse(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertFalse(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertFalse(signedUpAccount.isNotificationLikeOnMyReplyByEmail());
+        assertFalse(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertFalse(signedUpAccount.isNotificationNewPostWithMyTagByEmail());
+        assertFalse(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
@@ -217,11 +217,11 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         // 이메일 인증 토큰 값 null 확인
         assertNull(signedUpAccount.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, signedUpAccount.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인
-        assertNotNull(signedUpAccount.getJoinedAt());
+        assertNotNull(signedUpAccount.getSignUpDateTime());
 
         // 비밀번호 찾기 토큰 null 확인
         assertNull(signedUpAccount.getShowPasswordUpdatePageToken());
@@ -234,22 +234,22 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertNull(signedUpAccount.getProfileImage());
 
         // Web 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByWeb());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         // 이메일 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
@@ -285,11 +285,11 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         // 이메일 인증 토큰 값 null 확인
         assertNull(signedUpAccount.getEmailVerificationToken());
         // 이메일 인증 토큰 생성 시간 존재 확인
-        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetAt());
+        assertNotNull(signedUpAccount.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         // 이메일 인증 발송 횟수 1 확인
         assertEquals(1, signedUpAccount.getCountOfSendingEmailVerificationEmail());
         // 회원 가입 시간 존재 확인
-        assertNotNull(signedUpAccount.getJoinedAt());
+        assertNotNull(signedUpAccount.getSignUpDateTime());
 
         // 비밀번호 찾기 토큰 null 확인
         assertNull(signedUpAccount.getShowPasswordUpdatePageToken());
@@ -302,22 +302,22 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertNull(signedUpAccount.getProfileImage());
 
         // Web 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByWeb());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByWeb());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByWeb());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByWeb());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
 
         // 이메일 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationReplyOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationReplyOnMyReplyByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyReplyByEmail());
+        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyTagByEmail());
+        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());

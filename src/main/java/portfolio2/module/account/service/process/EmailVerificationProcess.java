@@ -31,10 +31,10 @@ public class EmailVerificationProcess {
         accountToBeVerified.setEmailWaitingToBeVerified(null);
         // 이메일 알림 설정 모두 true로 변경
         accountToBeVerified.setNotificationLikeOnMyPostByEmail(true);
-        accountToBeVerified.setNotificationLikeOnMyReplyByEmail(true);
-        accountToBeVerified.setNotificationReplyOnMyPostByEmail(true);
-        accountToBeVerified.setNotificationReplyOnMyReplyByEmail(true);
-        accountToBeVerified.setNotificationNewPostWithMyTagByEmail(true);
+        accountToBeVerified.setNotificationLikeOnMyCommentByEmail(true);
+        accountToBeVerified.setNotificationCommentOnMyPostByEmail(true);
+        accountToBeVerified.setNotificationCommentOnMyCommentByEmail(true);
+        accountToBeVerified.setNotificationNewPostWithMyInterestTagByEmail(true);
         // 인증한 계정 반환
         return accountToBeVerified;
     }

@@ -57,8 +57,8 @@ public class PostController {
         }else{
             model.addAttribute("isAuthor", sessionAccount.getUserId().equals(post.getAuthor().getUserId()));
         }
-        model.addAttribute("firstWrittenTime", post.getFirstWrittenTime());
-        model.addAttribute("tagOnPost", post.getTag().stream().map(Tag::getTitle).collect(Collectors.toList()));
+        model.addAttribute("firstWrittenTime", post.getFirstWrittenDateTime());
+        model.addAttribute("tagOnPost", post.getCurrentTag().stream().map(Tag::getTitle).collect(Collectors.toList()));
         return POST_VIEW_NAME;
     }
 
@@ -79,7 +79,7 @@ public class PostController {
             return POST_NEW_POST_FORM_VIEW_NAME;
         }
         Post savedNewPostInDb = postService.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);
-        postService.sendWebAndEmailNotification(savedNewPostInDb);
+        postService.sendWebAndEmailNotificationOfNewPost(savedNewPostInDb);
         return REDIRECT + POST_VIEW_URL + '/' + savedNewPostInDb.getId();
     }
 
@@ -99,7 +99,7 @@ public class PostController {
             model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 수정하고자 하는 글의 작성자 계정이 아닙니다.");
             return ERROR_VIEW_NAME;
         }
-        String tagTitleOnPost = post.getTag().stream()
+        String tagTitleOnPost = post.getCurrentTag().stream()
                 .map(Tag::getTitle)
                 .collect(Collectors.joining(","));
         PostUpdateRequestDto postUpdateRequestDto = PostUpdateRequestDto.builder()
@@ -121,6 +121,7 @@ public class PostController {
             model.addAttribute(postUpdateRequestDto);
             return POST_UPDATE_FORM_VIEW_NAME;
         }
+        postService.updatePost(postUpdateRequestDto);
         model.addAttribute("errorTitle", "에러");
         model.addAttribute("errorContent", "에러");
         return ERROR_VIEW_NAME;

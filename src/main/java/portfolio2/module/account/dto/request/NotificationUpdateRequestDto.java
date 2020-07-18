@@ -10,26 +10,26 @@ public class NotificationUpdateRequestDto {
 
     private boolean notificationLikeOnMyPostByWeb;
 
-    private boolean notificationLikeOnMyReplyByWeb;
+    private boolean notificationLikeOnMyCommentByWeb;
 
 
-    private boolean notificationReplyOnMyPostByWeb;
+    private boolean notificationCommentOnMyPostByWeb;
 
-    private boolean notificationReplyOnMyReplyByWeb;
+    private boolean notificationCommentOnMyCommentByWeb;
 
 
-    private boolean notificationNewPostWithMyTagByWeb;
+    private boolean notificationNewPostWithMyInterestTagByWeb;
 
 
     private boolean notificationLikeOnMyPostByEmail;
 
-    private boolean notificationLikeOnMyReplyByEmail;
+    private boolean notificationLikeOnMyCommentByEmail;
 
 
-    private boolean notificationReplyOnMyPostByEmail;
+    private boolean notificationCommentOnMyPostByEmail;
 
-    private boolean notificationReplyOnMyReplyByEmail;
+    private boolean notificationCommentOnMyCommentByEmail;
 
 
-    private boolean notificationNewPostWithMyTagByEmail;
+    private boolean notificationNewPostWithMyInterestTagByEmail;
 }

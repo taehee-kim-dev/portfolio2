@@ -26,7 +26,7 @@ public class Notification {
 
     private String link;
 
-    private boolean isChecked;
+    private boolean checked;
 
     @ManyToOne
     private Account account;

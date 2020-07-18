@@ -62,6 +62,13 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
         accountRepository.deleteAll();
     }
 
+    @DisplayName("테스트용")
+    @Test
+    void test() throws Exception{
+        Account account = accountRepository.findById(1L).orElse(null);
+        assertNull(account);
+    }
+
     @DisplayName("홈 화면 보여주기 - 로그아웃 상태")
     @Test
     void showHomeLoggedOut() throws Exception{

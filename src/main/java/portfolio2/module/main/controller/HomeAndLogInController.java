@@ -22,7 +22,6 @@ public class HomeAndLogInController {
     @GetMapping(HOME_URL)
     public String home(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-
         return HOME_VIEW_NAME;
     }
 
