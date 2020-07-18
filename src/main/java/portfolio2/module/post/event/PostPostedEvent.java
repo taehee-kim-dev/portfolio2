@@ -18,5 +18,5 @@ public class PostPostedEvent{
     @Enumerated(EnumType.STRING)
     private PostEventType postEventType;
 
-    private Post newPost;
+    private Post post;
 }

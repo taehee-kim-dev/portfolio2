@@ -9,27 +9,25 @@ import lombok.NoArgsConstructor;
 public class NotificationUpdateRequestDto {
 
     private boolean notificationLikeOnMyPostByWeb;
-
     private boolean notificationLikeOnMyCommentByWeb;
 
 
     private boolean notificationCommentOnMyPostByWeb;
-
     private boolean notificationCommentOnMyCommentByWeb;
 
 
     private boolean notificationNewPostWithMyInterestTagByWeb;
+    private boolean notificationMyInterestTagAddedToExistingPostByWeb;
 
 
     private boolean notificationLikeOnMyPostByEmail;
-
     private boolean notificationLikeOnMyCommentByEmail;
 
 
     private boolean notificationCommentOnMyPostByEmail;
-
     private boolean notificationCommentOnMyCommentByEmail;
 
 
     private boolean notificationNewPostWithMyInterestTagByEmail;
+    private boolean notificationMyInterestTagAddedToExistingPostByEmail;
 }

@@ -9,10 +9,9 @@ import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
 import portfolio2.module.account.Account;
 import portfolio2.module.post.Post;
+import portfolio2.module.post.event.PostEventType;
 import portfolio2.module.tag.Tag;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.CHECK_EMAIL_VERIFICATION_LINK_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_VIEW_URL;
 
 @RequiredArgsConstructor
@@ -23,17 +22,24 @@ public class EmailSendingProcessForPost {
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
 
-    public void sendNotificationEmailForNewPostWithInterestTag(Account account, Post newPost, Iterable<Tag> allTagInNewPostAndAccount) {
+    public void sendNotificationEmailForPostWithInterestTag(PostEventType postEventType, Account account, Post newPost, Iterable<Tag> allTagInNewPostAndAccount) {
         Context context = new Context();
+        String content = null;
+        if(postEventType == PostEventType.NEW){
+            content = "의 태그가 달린 새로운 게시물이 게시되었습니다!";
+        }else if(postEventType == PostEventType.UPDATED){
+            content = "의 태그가 기존 게시물에 추가되었습니다!";
+        }
         context.setVariable("nickname", account.getNickname());
         context.setVariable("userId", account.getUserId());
         context.setVariable("host", appProperties.getHost());
         context.setVariable("allTagInNewPostAndAccount", allTagInNewPostAndAccount);
+        context.setVariable("content", content);
         context.setVariable("post", newPost);
         context.setVariable("newPostLink", String.format(POST_VIEW_URL + "/%d", newPost.getId()));
 
         String message = templateEngine.process(
-                "email/email-content/notification-email-for-new-post-with-interest-tag", context);
+                "email/email-content/notification-email-for-post-with-interest-tag", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getVerifiedEmail())

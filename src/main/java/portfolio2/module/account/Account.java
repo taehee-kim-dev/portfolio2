@@ -102,34 +102,30 @@ public class Account {
 
 
     private boolean notificationLikeOnMyPostByWeb = true;
-
     private boolean notificationLikeOnMyCommentByWeb = true;
 
 
     private boolean notificationCommentOnMyPostByWeb = true;
-
     private boolean notificationCommentOnMyCommentByWeb = true;
 
 
     private boolean notificationNewPostWithMyInterestTagByWeb = true;
-
+    private boolean notificationMyInterestTagAddedToExistingPostByWeb = true;
 
 
     private boolean notificationLikeOnMyPostByEmail = false;
-
     private boolean notificationLikeOnMyCommentByEmail = false;
 
 
     private boolean notificationCommentOnMyPostByEmail = false;
-
     private boolean notificationCommentOnMyCommentByEmail = false;
 
 
     private boolean notificationNewPostWithMyInterestTagByEmail = false;
-
+    private boolean notificationMyInterestTagAddedToExistingPostByEmail = false;
 
     @ManyToMany
-    private List<Tag> interestTag = new ArrayList<>();
+    private List<Tag> interestTag = new LinkedList<>();
 
     public boolean canSendEmailVerificationEmail() {
         // 인증 이메일을 이미 5번 보냈는가?

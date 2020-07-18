@@ -182,6 +182,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -247,6 +248,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @SignUpAndLoggedInEmailNotVerified
@@ -310,6 +312,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertTrue(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     // 잘못된 링크 - 로그아웃 상태
@@ -364,6 +367,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -416,6 +420,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -466,6 +471,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     // 내 계정으로 로그인 상태
@@ -518,6 +524,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -568,6 +575,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -616,6 +624,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -674,6 +683,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -729,6 +739,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 
@@ -781,6 +792,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @DisplayName("이메일 인증 - email 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -833,6 +845,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @DisplayName("이메일 인증 - token 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -885,6 +898,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @DisplayName("이메일 인증 - email, token 파라미터가 null - 다른 계정으로 로그인 상태")
@@ -937,6 +951,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @DisplayName("이메일 인증 - 인증 대기중인 이메일은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
@@ -992,6 +1007,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
 }

@@ -9,6 +9,6 @@ import portfolio2.module.account.Account;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Post findByAuthor(Account authorAccount);
 
-    @EntityGraph(value = "Post.withTag", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Post.withCurrentTag", type = EntityGraph.EntityGraphType.FETCH)
     Post findPostWithCurrentTagById(Long id);
 }

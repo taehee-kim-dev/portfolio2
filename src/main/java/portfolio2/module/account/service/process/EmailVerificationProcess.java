@@ -35,6 +35,7 @@ public class EmailVerificationProcess {
         accountToBeVerified.setNotificationCommentOnMyPostByEmail(true);
         accountToBeVerified.setNotificationCommentOnMyCommentByEmail(true);
         accountToBeVerified.setNotificationNewPostWithMyInterestTagByEmail(true);
+        accountToBeVerified.setNotificationMyInterestTagAddedToExistingPostByEmail(true);
         // 인증한 계정 반환
         return accountToBeVerified;
     }

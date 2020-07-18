@@ -173,6 +173,7 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
+        assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         // 이메일 알림 값 모두 false 확인
         assertFalse(signedUpAccount.isNotificationCommentOnMyPostByEmail());
@@ -182,6 +183,7 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertFalse(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
@@ -241,15 +243,17 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
+        assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
-        // 이메일 알림 값 모두 true 확인
-        assertTrue(signedUpAccount.isNotificationCommentOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(signedUpAccount.isNotificationCommentOnMyPostByEmail());
+        assertFalse(signedUpAccount.isNotificationCommentOnMyCommentByEmail());
 
-        assertTrue(signedUpAccount.isNotificationLikeOnMyPostByEmail());
-        assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
+        assertFalse(signedUpAccount.isNotificationLikeOnMyPostByEmail());
+        assertFalse(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
-        assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());
@@ -309,6 +313,7 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByWeb());
 
         assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByWeb());
+        assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         // 이메일 알림 값 모두 true 확인
         assertTrue(signedUpAccount.isNotificationCommentOnMyPostByEmail());
@@ -318,6 +323,7 @@ public class SignUpProcessForTestTest extends ContainerBaseTest {
         assertTrue(signedUpAccount.isNotificationLikeOnMyCommentByEmail());
 
         assertTrue(signedUpAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(signedUpAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
 
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(signedUpAccount.getInterestTag());

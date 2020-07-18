@@ -116,14 +116,26 @@ public class PostController {
     public String updatePost(@SessionAccount Account sessionAccount,
                              @Valid @ModelAttribute PostUpdateRequestDto postUpdateRequestDto,
                              Errors errors, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        PostUpdateErrorType postUpdateErrorType =  postService.postUpdateErrorCheck(sessionAccount, postUpdateRequestDto);
+        if(postUpdateErrorType == PostUpdateErrorType.POST_NOT_FOUND){
+            model.addAttribute("errorTitle", "게시물 조회 에러");
+            model.addAttribute("errorContent", "존재하지 않는 게시물 입니다.");
+            return ERROR_VIEW_NAME;
+        }
+        if(postUpdateErrorType == PostUpdateErrorType.NOT_AUTHOR){
+            // post 작성자가 아니면,
+            model.addAttribute("errorTitle", "글 수정 권한 없음");
+            model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 수정하고자 하는 글의 작성자 계정이 아닙니다.");
+            return ERROR_VIEW_NAME;
+        }
         if (errors.hasErrors()) {
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute(postUpdateRequestDto);
             return POST_UPDATE_FORM_VIEW_NAME;
         }
-        postService.updatePost(postUpdateRequestDto);
-        model.addAttribute("errorTitle", "에러");
-        model.addAttribute("errorContent", "에러");
-        return ERROR_VIEW_NAME;
+        Post updatedPostInDb = postService.updatePost(postUpdateRequestDto);
+        postService.sendWebAndEmailNotificationOfUpdatedPost(updatedPostInDb);
+        return REDIRECT + POST_VIEW_URL + '/' + updatedPostInDb.getId();
     }
 }

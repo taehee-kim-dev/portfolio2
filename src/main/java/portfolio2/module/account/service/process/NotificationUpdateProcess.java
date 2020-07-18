@@ -23,6 +23,7 @@ public class NotificationUpdateProcess {
             accountToUpdate.setNotificationCommentOnMyPostByEmail(false);
             accountToUpdate.setNotificationCommentOnMyCommentByEmail(false);
             accountToUpdate.setNotificationNewPostWithMyInterestTagByEmail(false);
+            accountToUpdate.setNotificationMyInterestTagAddedToExistingPostByEmail(false);
         }
         return accountToUpdate;
     }

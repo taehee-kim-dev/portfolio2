@@ -4,12 +4,16 @@ import com.querydsl.core.types.Predicate;
 import portfolio2.module.tag.Tag;
 
 import java.util.List;
-import java.util.Set;
 
 public class AccountPredicate {
 
-    public static Predicate findByTag(List<Tag> postTag){
+    public static Predicate findAccountByTagOfNewPost(List<Tag> currentTagOfNewPost){
         QAccount accountToFind = QAccount.account;
-        return accountToFind.interestTag.any().in(postTag);
+        return accountToFind.interestTag.any().in(currentTagOfNewPost);
+    }
+
+    public static Predicate findAccountByOnlyNewTagOfUpdatedPost(List<Tag> onlyNewTag) {
+        QAccount accountToFind = QAccount.account;
+        return accountToFind.interestTag.any().in(onlyNewTag);
     }
 }

@@ -45,13 +45,13 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByWeb}" class="custom-control-input" id="notificationLikeOnMyPostByWeb">
+                                <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
                                 <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}" class="custom-control-input" id="notificationLikeOnMyPostByEmail"
                                        th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationLikeOnMyPostByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByWeb}" class="custom-control-input" id="notificationLikeOnMyPostByWeb">
-                                <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
                             </div>
                         </div>
 
@@ -61,13 +61,13 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationLikeOnMyCommentByWeb}" class="custom-control-input" id="notificationLikeOnMyCommentByWeb">
+                                <label class="custom-control-label" for="notificationLikeOnMyCommentByWeb">웹으로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
                                 <input type="checkbox" th:field="*{notificationLikeOnMyCommentByEmail}" class="custom-control-input" id="notificationLikeOnMyCommentByEmail"
                                        th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationLikeOnMyCommentByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyCommentByWeb}" class="custom-control-input" id="notificationLikeOnMyCommentByWeb">
-                                <label class="custom-control-label" for="notificationLikeOnMyCommentByWeb">웹으로 받기</label>
                             </div>
                         </div>
 
@@ -77,13 +77,13 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationCommentOnMyPostByWeb}" class="custom-control-input" id="notificationCommentOnMyPostByWeb">
+                                <label class="custom-control-label" for="notificationCommentOnMyPostByWeb">웹으로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
                                 <input type="checkbox" th:field="*{notificationCommentOnMyPostByEmail}" class="custom-control-input" id="notificationCommentOnMyPostByEmail"
                                        th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationCommentOnMyPostByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyPostByWeb}" class="custom-control-input" id="notificationCommentOnMyPostByWeb">
-                                <label class="custom-control-label" for="notificationCommentOnMyPostByWeb">웹으로 받기</label>
                             </div>
                         </div>
 
@@ -93,29 +93,44 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationCommentOnMyCommentByWeb}" class="custom-control-input" id="notificationCommentOnMyCommentByWeb">
+                                <label class="custom-control-label" for="notificationCommentOnMyCommentByWeb">웹으로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
                                 <input type="checkbox" th:field="*{notificationCommentOnMyCommentByEmail}" class="custom-control-input" id="notificationCommentOnMyCommentByEmail"
                                        th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
                                 <label class="custom-control-label" for="notificationCommentOnMyCommentByEmail">이메일로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyCommentByWeb}" class="custom-control-input" id="notificationCommentOnMyCommentByWeb">
-                                <label class="custom-control-label" for="notificationCommentOnMyCommentByWeb">웹으로 받기</label>
                             </div>
                         </div>
 
 
                         <div class="alert alert-light notification-description" role="alert">
-                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>의 게시물이 게시되었을 때</strong> 알림을 수신할 방법을 설정하세요.
+                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 태그된 새로운 게시물이 게시되었을 때</strong> 알림을 수신할 방법을 설정하세요.
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByEmail}" class="custom-control-input" id="myInterestTagNotificationByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="myInterestTagNotificationByEmail">이메일로 받기</label>
+                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByWeb}" class="custom-control-input" id="newPostWithMyInterestTagNotificationByWeb">
+                                <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByWeb">웹으로 받기</label>
                             </div>
                             <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByWeb}" class="custom-control-input" id="myInterestTagNotificationByWeb">
-                                <label class="custom-control-label" for="myInterestTagNotificationByWeb">웹으로 받기</label>
+                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByEmail}" class="custom-control-input" id="newPostWithMyInterestTagNotificationByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                                <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByEmail">이메일로 받기</label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-light notification-description" role="alert">
+                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 기존 게시물에 추가되었을 때</strong> 알림을 수신할 방법을 설정하세요.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByWeb}" class="custom-control-input" id="myInterestAddedToExistingPostNotificationByWeb">
+                                <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByWeb">웹으로 받기</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByEmail}" class="custom-control-input" id="myInterestAddedToExistingPostNotificationByEmail"
+                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                                <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByEmail">이메일로 받기</label>
                             </div>
                         </div>
 

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-    <title>TH 닉네임 변경 알림</title>
+    <title>TH 관심 태그 게시물 알림</title>
 </head>
 <body>
     <div style="font-size: 15px">
@@ -15,7 +15,7 @@
             <span th:if="${#bools.isFalse(tagStat.last)}">, </span>
         </span>
 
-        <p>의 태그가 달린 새로운 게시물이 게시되었습니다!</p>
+        <p th:text="${content}"></p>
 
         <p>아래의 링크를 클릭해 확인해 보세요.</p>
 

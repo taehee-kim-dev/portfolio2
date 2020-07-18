@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
+import portfolio2.module.post.controller.PostUpdateErrorType;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.event.PostEventType;
@@ -21,6 +22,17 @@ public class PostService {
 
     private final PostProcess postProcess;
     private final PostRepository postRepository;
+
+    public PostUpdateErrorType postUpdateErrorCheck(Account sessionAccount, PostUpdateRequestDto postUpdateRequestDto) {
+        Post postInDb = postRepository.findById(postUpdateRequestDto.getPostIdToUpdate()).orElse(null);
+        if(postInDb == null){
+            return PostUpdateErrorType.POST_NOT_FOUND;
+        }
+        if(!postInDb.getAuthor().getUserId().equals(sessionAccount.getUserId())){
+            return PostUpdateErrorType.NOT_AUTHOR;
+        }
+        return null;
+    }
 
     public Post saveNewPostWithTag(Account sessionAccount, PostNewPostRequestDto postRequestDto) {
         Post savedPostInDb = postProcess.saveNewPost(sessionAccount, postRequestDto);

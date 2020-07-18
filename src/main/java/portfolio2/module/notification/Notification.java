@@ -9,8 +9,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -32,7 +31,7 @@ public class Notification {
     private Account account;
 
     @ManyToMany
-    private Set<Tag> commonTag = new HashSet<>();
+    private List<Tag> commonTag = new LinkedList<>();
 
     private LocalDateTime createdDateTime;
 

@@ -20,6 +20,8 @@ import portfolio2.module.tag.TagPredicate;
 import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_VIEW_URL;
 
@@ -38,41 +40,65 @@ public class PostEventListener {
 
     @EventListener
     public void handlePostPostedEvent(PostPostedEvent postPostedEvent){
+        Post postInDb = postRepository.findPostWithCurrentTagById(postPostedEvent.getPost().getId());
         switch (postPostedEvent.getPostEventType()){
             case NEW:
-                Post newPost = postRepository.findPostWithCurrentTagById(postPostedEvent.getNewPost().getId());
-                Iterable<Account> accounts = accountRepository.findAll(AccountPredicate.findByTag(newPost.getCurrentTag()));
-                accounts.forEach(account -> {
-                    if(account != newPost.getAuthor()){
+                Iterable<Account> accountForNewPost = accountRepository.findAll(AccountPredicate.findAccountByTagOfNewPost(postInDb.getCurrentTag()));
+                accountForNewPost.forEach(account -> {
+                    if(account != postInDb.getAuthor()){
                         Iterable<Tag> allTagInNewPostAndAccount
-                                = tagRepository.findAll(TagPredicate.findAllTagByAccountInterestTagAndPostTag(account.getInterestTag(), newPost.getCurrentTag()));
+                                = tagRepository.findAll(TagPredicate.findAllTagByAccountInterestTagAndTagOfNewPost(account.getInterestTag(), postInDb.getCurrentTag()));
                         if(account.isEmailVerified() && account.isNotificationNewPostWithMyInterestTagByEmail()){
-                            emailSendingProcessForPost.sendNotificationEmailForNewPostWithInterestTag(account, newPost, allTagInNewPostAndAccount);
+                            emailSendingProcessForPost.sendNotificationEmailForPostWithInterestTag(
+                                    postPostedEvent.getPostEventType(), account, postInDb, allTagInNewPostAndAccount);
                         }
-
                         if(account.isNotificationNewPostWithMyInterestTagByWeb()){
-                            saveWebNotification(newPost, account, allTagInNewPostAndAccount);
+                            saveWebNotification(postPostedEvent.getPostEventType(), postInDb, account, allTagInNewPostAndAccount);
                         }
                     }
                 });
                 break;
             case UPDATED:
-                // accountRepository.findAll(AccountPredicate.findByTag())
+                Iterable<Tag> allTagOfOnlyNewTagOfUpdatedPostAndAccount
+                        = tagRepository.findAll(TagPredicate.findOnlyNewTagOfUpdatedPost(postInDb.getCurrentTag(), postInDb.getBeforeTag()));
+                List<Tag> onlyNewTag = new ArrayList<>();
+                allTagOfOnlyNewTagOfUpdatedPostAndAccount.forEach(onlyNewTag::add);
+                Iterable<Account> accountForUpdatedPost = accountRepository.findAll(
+                        AccountPredicate.findAccountByOnlyNewTagOfUpdatedPost(onlyNewTag)
+                );
+                accountForUpdatedPost.forEach(account -> {
+                    if(account != postInDb.getAuthor()){
+                        Iterable<Tag> onlyNewTagForAccount
+                                = tagRepository.findAll(TagPredicate.findAllTagOfOnlyNewTagOfUpdatedPostAndInterestTagOfAccount(
+                                onlyNewTag, account.getInterestTag()
+                        ));
+                        if(account.isEmailVerified() && account.isNotificationMyInterestTagAddedToExistingPostByEmail()){
+                            emailSendingProcessForPost.sendNotificationEmailForPostWithInterestTag(
+                                    postPostedEvent.getPostEventType(), account, postInDb, onlyNewTagForAccount);
+                        }
+                        if(account.isNotificationMyInterestTagAddedToExistingPostByWeb()){
+                            saveWebNotification(postPostedEvent.getPostEventType(), postInDb, account, onlyNewTagForAccount);
+                        }
+                    }
+                });
         }
-
     }
 
-    private void saveWebNotification(Post newPost, Account account, Iterable<Tag> allTagInNewPostAndAccount) {
+    private void saveWebNotification(PostEventType postEventType, Post post, Account account, Iterable<Tag> allTag) {
         Notification notification = new Notification();
-        notification.setTitle(newPost.getTitle());
-        notification.setLink(String.format(POST_VIEW_URL + "/%d", newPost.getId()));
+        if(postEventType == PostEventType.NEW){
+            notification.setNotificationType(NotificationType.NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED);
+        }else if(postEventType == PostEventType.UPDATED){
+            notification.setNotificationType(NotificationType.MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST);
+        }
+        notification.setTitle(post.getTitle());
+        notification.setLink(String.format(POST_VIEW_URL + "/%d", post.getId()));
         notification.setChecked(false);
         notification.setAccount(account);
-        allTagInNewPostAndAccount.forEach(tag -> {
+        allTag.forEach(tag -> {
             notification.getCommonTag().add(tag);
         });
         notification.setCreatedDateTime(LocalDateTime.now());
-        notification.setNotificationType(NotificationType.POST_WITH_MY_INTEREST_TAG_IS_POSTED);
         notificationRepository.save(notification);
     }
 }

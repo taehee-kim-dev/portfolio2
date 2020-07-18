@@ -62,7 +62,9 @@ public class PostProcess {
 
     public Post updateTagOfPost(Post postInDbToUpdate, PostUpdateRequestDto postUpdateRequestDto){
         // 태그 처리
-        postInDbToUpdate.setBeforeTag(postInDbToUpdate.getCurrentTag());
+        postInDbToUpdate.getBeforeTag().clear();
+        postInDbToUpdate.getBeforeTag().addAll(postInDbToUpdate.getCurrentTag());
+        postInDbToUpdate.getCurrentTag().clear();
         if (!postUpdateRequestDto.getTagTitleOnPost().isEmpty()){
             String[] tagArray = postUpdateRequestDto.getTagTitleOnPost().split(",");
             for(String tagTitle : tagArray){
@@ -82,23 +84,11 @@ public class PostProcess {
         return postInDbToUpdate;
     }
 
-    public List<Tag> findNewAddedTag(List<Tag> beforeTag, List<Tag> afterTag) {
-        List<Tag> newAddedTag = new ArrayList<>();
-        if(!beforeTag.isEmpty()){
-            for(Tag tag : afterTag){
-                if(!beforeTag.contains(tag)){
-                    newAddedTag.add(tag);
-                }
-            }
-        }
-        return newAddedTag;
-    }
-
     public void sendWebAndEmailNotificationAboutTag(Post post, PostEventType postEventType){
         if(!post.getCurrentTag().isEmpty()){
             PostPostedEvent postPostedEvent = new PostPostedEvent();
-            postPostedEvent.setNewPost(post);
-            postPostedEvent.setPostEventType(PostEventType.NEW);
+            postPostedEvent.setPost(post);
+            postPostedEvent.setPostEventType(postEventType);
             eventPublisher.publishEvent(postPostedEvent);
         }
     }

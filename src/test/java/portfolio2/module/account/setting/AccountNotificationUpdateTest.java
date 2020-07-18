@@ -64,11 +64,13 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
                 .param("notificationCommentOnMyPostByWeb", String.valueOf(false))
                 .param("notificationCommentOnMyCommentByWeb", String.valueOf(false))
                 .param("notificationNewPostWithMyInterestTagByWeb", String.valueOf(false))
+                .param("notificationMyInterestTagAddedToExistingPostByWeb", String.valueOf(false))
                 .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
                 .param("notificationLikeOnMyCommentByEmail", String.valueOf(true))
                 .param("notificationCommentOnMyPostByEmail", String.valueOf(true))
                 .param("notificationCommentOnMyCommentByEmail", String.valueOf(true))
                 .param("notificationNewPostWithMyInterestTagByEmail", String.valueOf(true))
+                .param("notificationMyInterestTagAddedToExistingPostByEmail", String.valueOf(true))
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
@@ -85,6 +87,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
         assertFalse(updatedAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByWeb());
+        assertFalse(updatedAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         assertFalse(updatedAccount.isNotificationLikeOnMyPostByEmail());
         assertFalse(updatedAccount.isNotificationLikeOnMyCommentByEmail());
@@ -93,6 +96,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
         assertFalse(updatedAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(updatedAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
     @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증된 상태")
@@ -110,11 +114,13 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
                 .param("notificationCommentOnMyPostByWeb", String.valueOf(false))
                 .param("notificationCommentOnMyCommentByWeb", String.valueOf(false))
                 .param("notificationNewPostWithMyInterestTagByWeb", String.valueOf(false))
+                .param("notificationMyInterestTagAddedToExistingPostByWeb", String.valueOf(false))
                 .param("notificationLikeOnMyPostByEmail", String.valueOf(true))
                 .param("notificationLikeOnMyCommentByEmail", String.valueOf(true))
                 .param("notificationCommentOnMyPostByEmail", String.valueOf(true))
                 .param("notificationCommentOnMyCommentByEmail", String.valueOf(true))
                 .param("notificationNewPostWithMyInterestTagByEmail", String.valueOf(true))
+                .param("notificationMyInterestTagAddedToExistingPostByEmail", String.valueOf(true))
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(flash().attributeExists("message"))
@@ -131,6 +137,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
         assertFalse(updatedAccount.isNotificationCommentOnMyCommentByWeb());
 
         assertFalse(updatedAccount.isNotificationNewPostWithMyInterestTagByWeb());
+        assertFalse(updatedAccount.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         assertTrue(updatedAccount.isNotificationLikeOnMyPostByEmail());
         assertTrue(updatedAccount.isNotificationLikeOnMyCommentByEmail());
@@ -139,5 +146,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
         assertTrue(updatedAccount.isNotificationCommentOnMyCommentByEmail());
 
         assertTrue(updatedAccount.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(updatedAccount.isNotificationMyInterestTagAddedToExistingPostByEmail());
+
     }
 }

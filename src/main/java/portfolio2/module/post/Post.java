@@ -35,10 +35,10 @@ public class Post {
     private String content;
 
     @ManyToMany
-    private List<Tag> currentTag = new ArrayList<>();
+    private List<Tag> currentTag = new LinkedList<>();
 
     @ManyToMany
-    private List<Tag> beforeTag = new ArrayList<>();
+    private List<Tag> beforeTag = new LinkedList<>();
 
     private LocalDateTime firstWrittenDateTime;
 
