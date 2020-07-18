@@ -8,9 +8,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 /*
@@ -131,7 +129,7 @@ public class Account {
 
 
     @ManyToMany
-    private Set<Tag> interestTag = new HashSet<>();
+    private List<Tag> interestTag = new ArrayList<>();
 
     public boolean canSendEmailVerificationEmail() {
         // 인증 이메일을 이미 5번 보냈는가?

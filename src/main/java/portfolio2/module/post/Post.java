@@ -9,8 +9,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -35,7 +34,7 @@ public class Post {
     private String content;
 
     @ManyToMany
-    private Set<Tag> tag  = new HashSet<>();
+    private List<Tag> tag = new ArrayList<>();
 
     private LocalDateTime firstWrittenTime;
 
