@@ -73,12 +73,12 @@
 
     function onAdd(e) {
         // 태그 추가 시
-        total_tag.push(e.detail.data.value)
+        total_tag.push(e.detail.data.value);
     }
 
     function onRemove(e) {
         // 태그 삭제 시
-        total_tag.splice(total_tag.indexOf(e.detail.data.value), 1)
+        total_tag.splice(total_tag.indexOf(e.detail.data.value), 1);
     }
 
     // The DOM element you wish to replace with Tagify
@@ -91,7 +91,6 @@
     new_tag.on("remove", onRemove);
 
     function submit_func(){
-        document.getElementById('total-tag-to-submit').value
         document.getElementById('total-tag-to-submit').value = total_tag.join();
         document.getElementById('post-form').submit();
     }

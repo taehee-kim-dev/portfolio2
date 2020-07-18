@@ -18,7 +18,12 @@
                     font-size: 24px; font-weight: bold">글 제목</td>
             </tr>
             <tr>
-                <td style="min-width:100px"><span>작성자 : </span></td><td style="vertical-align: middle" th:text="${post.getAuthor().getUserId()}">글 작성자 아이디</td>
+                <td style="min-width:100px"><span>작성자 : </span></td>
+                <td style="vertical-align: middle">
+                    <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
+                        작성자 닉네임(작성자 아이디)
+                    </a>
+                </td>
             </tr>
             <tr>
                 <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
