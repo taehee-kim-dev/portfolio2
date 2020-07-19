@@ -62,7 +62,7 @@ test {
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
-    library = "com.querydsl:querydsl-apt:4.2.2" // 사용할 AnnotationProcesoor 정의
+    library = "com.querydsl:querydsl-apt:4.2.2" // 사용할 AnnotationProcessor 정의
     jpa = true
     querydslSourcesDir = querydslDir
 }
