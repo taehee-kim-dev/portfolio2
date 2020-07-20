@@ -11,10 +11,7 @@ import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.config.CustomPrincipal;
-import portfolio2.module.account.config.LogInAndOutProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
+import portfolio2.module.account.config.*;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.PostService;
@@ -209,6 +206,56 @@ public class PostUpdateTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        Post updatedPost = postRepository.findById(savedPostId).orElse(null);
+        assertEquals(POST_TEST_TITLE, updatedPost.getTitle());
+        assertEquals(POST_TEST_CONTENT, updatedPost.getContent());
+        newTagStringList.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNull(tagInDb);
+        });
+        POST_TEST_TAG_STRING_LIST.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNotNull(tagInDb);
+            assertTrue(updatedPost.getCurrentTag().contains(tagInDb));
+        });
+        assertTrue(updatedPost.getBeforeTag().isEmpty());
+    }
+
+    @DisplayName("글 수정 요청 - 입력 에러 - 제목 입력 안했을 때")
+    @Test
+    void postUpdateWithEmptyTitleError() throws Exception{
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+        String newTitle = "";
+        String newContent = "new Content.";
+        List<String> newTagStringList = List.of("new tagTitle 1", "new tagTitle 2", "new tagTitle 3");
+        PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
+        postUpdateRequestDto.setPostIdToUpdate(savedPostId);
+        postUpdateRequestDto.setTitle(newTitle);
+        postUpdateRequestDto.setContent(newContent);
+        postUpdateRequestDto.setTagTitleOnPost(String.join(",", newTagStringList));
+
+        mockMvc.perform(post(POST_UPDATE_URL)
+                .param("postIdToUpdate", String.valueOf(postUpdateRequestDto.getPostIdToUpdate()))
+                .param("title", postUpdateRequestDto.getTitle())
+                .param("content", postUpdateRequestDto.getContent())
+                .param("tagTitleOnPost", postUpdateRequestDto.getTagTitleOnPost())
+                .with(csrf()))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("errorTitle"))
+                .andExpect(model().attributeDoesNotExist("errorContent"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "postUpdateRequestDto",
+                        "title",
+                        "emptyTitle"
+
+                ))
+                .andExpect(model().attributeExists("postUpdateRequestDto"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(POST_UPDATE_FORM_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Post updatedPost = postRepository.findById(savedPostId).orElse(null);
         assertEquals(POST_TEST_TITLE, updatedPost.getTitle());
