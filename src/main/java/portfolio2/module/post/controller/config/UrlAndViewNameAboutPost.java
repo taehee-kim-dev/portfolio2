@@ -11,4 +11,6 @@ public class UrlAndViewNameAboutPost {
 
     public static final String POST_UPDATE_URL = "/post-update";
     public static final String POST_UPDATE_FORM_VIEW_NAME = "/post/form/post-update-form";
+
+    public static final String POST_DELETE_URL = "/post-delete";
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.post.Post;
+import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.PostService;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ERROR_VIEW_NAME;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.HOME_URL;
 import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
@@ -52,6 +54,7 @@ public class PostController {
             return ERROR_VIEW_NAME;
         }
         model.addAttribute(post);
+        model.addAttribute(new PostDeleteRequestDto(post.getId()));
         if(sessionAccount == null){
             model.addAttribute("isAuthor", false);
         }else{
@@ -85,8 +88,7 @@ public class PostController {
 
     @GetMapping(POST_UPDATE_URL + "/{postId}")
     public String showPostUpdateForm(@SessionAccount Account sessionAccount,
-                                     @PathVariable("postId") Post post,
-                                     Model model){
+                                     @PathVariable("postId") Post post, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         if(post == null){
             model.addAttribute("errorTitle", "게시물 조회 에러");
@@ -117,13 +119,13 @@ public class PostController {
                              @Valid @ModelAttribute PostUpdateRequestDto postUpdateRequestDto,
                              Errors errors, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        PostUpdateErrorType postUpdateErrorType =  postService.postUpdateErrorCheck(sessionAccount, postUpdateRequestDto);
-        if(postUpdateErrorType == PostUpdateErrorType.POST_NOT_FOUND){
+        PostErrorType postErrorType =  postService.postUpdateErrorCheck(sessionAccount, postUpdateRequestDto);
+        if(postErrorType == PostErrorType.POST_NOT_FOUND){
             model.addAttribute("errorTitle", "게시물 조회 에러");
             model.addAttribute("errorContent", "존재하지 않는 게시물 입니다.");
             return ERROR_VIEW_NAME;
         }
-        if(postUpdateErrorType == PostUpdateErrorType.NOT_AUTHOR){
+        if(postErrorType == PostErrorType.NOT_AUTHOR){
             // post 작성자가 아니면,
             model.addAttribute("errorTitle", "글 수정 권한 없음");
             model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 수정하고자 하는 글의 작성자 계정이 아닙니다.");
@@ -137,5 +139,25 @@ public class PostController {
         Post updatedPostInDb = postService.updatePost(postUpdateRequestDto);
         postService.sendWebAndEmailNotificationOfUpdatedPost(updatedPostInDb);
         return REDIRECT + POST_VIEW_URL + '/' + updatedPostInDb.getId();
+    }
+
+    @PostMapping(POST_DELETE_URL)
+    public String deletePost(@SessionAccount Account sessionAccount,
+                             @Valid @ModelAttribute PostDeleteRequestDto postDeleteRequestDto, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        PostErrorType postErrorType =  postService.postDeleteErrorCheck(sessionAccount, postDeleteRequestDto);
+        if(postErrorType == PostErrorType.POST_NOT_FOUND){
+            model.addAttribute("errorTitle", "게시물 조회 에러");
+            model.addAttribute("errorContent", "존재하지 않는 게시물 입니다.");
+            return ERROR_VIEW_NAME;
+        }
+        if(postErrorType == PostErrorType.NOT_AUTHOR){
+            // post 작성자가 아니면,
+            model.addAttribute("errorTitle", "글 수정 권한 없음");
+            model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 수정하고자 하는 글의 작성자 계정이 아닙니다.");
+            return ERROR_VIEW_NAME;
+        }
+        postService.deletePost(postDeleteRequestDto);
+        return REDIRECT + HOME_URL;
     }
 }

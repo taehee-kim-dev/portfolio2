@@ -3,6 +3,11 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
+    <style>
+        form{
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 
@@ -39,20 +44,54 @@
         </table>
 
         <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{'/post-update/' + ${post.getId()}}"
-           style="width: 300px; margin-right: 50px">게시글  수정</a>
-        <a th:if="${isAuthor}" class="btn btn-danger" href="#" th:href="@{#}"
-              style="width: 300px">게시글 삭제</a>
+           style="width: 300px; margin-right: 50px">수정하기</a>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal" style="width: 300px">
+            삭제하기
+        </button>
 
+        <form id="delete-form" th:if="${isAuthor}" th:action="@{'/post-delete'}" th:object="${postDeleteRequestDto}" method="post" novalidate>
+            <input type="hidden" th:field="*{postIdToDelete}">
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="postDeleteModal" tabindex="-1" role="dialog" aria-labelledby="postDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postDeleteModalLabel">게시글 삭제</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    게시글을 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="delete_submit_func()">삭제</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
+<script th:replace="fragment.html :: date-time"></script>
 <script type="application/javascript">
     const input = document.querySelector('input[name=tag]');
     tagify = new Tagify(input);
+
+    function show_delete_confirm_modal(){
+        $('#postDeleteModal').modal("show");
+    }
+
+    function delete_submit_func(){
+        document.getElementById('delete-form').submit();
+    }
 </script>
-<script th:replace="fragment.html :: date-time"></script>
 </body>
 </html>

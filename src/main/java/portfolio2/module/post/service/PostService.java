@@ -6,14 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
-import portfolio2.module.post.controller.PostUpdateErrorType;
+import portfolio2.module.post.controller.PostErrorType;
+import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.event.PostEventType;
 import portfolio2.module.post.service.process.PostProcess;
-import portfolio2.module.tag.Tag;
-
-import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
@@ -23,13 +21,13 @@ public class PostService {
     private final PostProcess postProcess;
     private final PostRepository postRepository;
 
-    public PostUpdateErrorType postUpdateErrorCheck(Account sessionAccount, PostUpdateRequestDto postUpdateRequestDto) {
+    public PostErrorType postUpdateErrorCheck(Account sessionAccount, PostUpdateRequestDto postUpdateRequestDto) {
         Post postInDb = postRepository.findById(postUpdateRequestDto.getPostIdToUpdate()).orElse(null);
         if(postInDb == null){
-            return PostUpdateErrorType.POST_NOT_FOUND;
+            return PostErrorType.POST_NOT_FOUND;
         }
         if(!postInDb.getAuthor().getUserId().equals(sessionAccount.getUserId())){
-            return PostUpdateErrorType.NOT_AUTHOR;
+            return PostErrorType.NOT_AUTHOR;
         }
         return null;
     }
@@ -51,5 +49,20 @@ public class PostService {
 
     public void sendWebAndEmailNotificationOfUpdatedPost(Post updatedPost){
         postProcess.sendWebAndEmailNotificationAboutTag(updatedPost, PostEventType.UPDATED);
+    }
+
+    public PostErrorType postDeleteErrorCheck(Account sessionAccount, PostDeleteRequestDto postDeleteRequestDto) {
+        Post postInDb = postRepository.findById(postDeleteRequestDto.getPostIdToDelete()).orElse(null);
+        if(postInDb == null){
+            return PostErrorType.POST_NOT_FOUND;
+        }
+        if(!postInDb.getAuthor().getUserId().equals(sessionAccount.getUserId())){
+            return PostErrorType.NOT_AUTHOR;
+        }
+        return null;
+    }
+
+    public void deletePost(PostDeleteRequestDto postDeleteRequestDto) {
+        postRepository.deleteById(postDeleteRequestDto.getPostIdToDelete());
     }
 }
