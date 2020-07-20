@@ -121,7 +121,7 @@ public class PostController {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         PostErrorType postErrorType =  postService.postUpdateErrorCheck(sessionAccount, postUpdateRequestDto);
         if(postErrorType == PostErrorType.POST_NOT_FOUND){
-            model.addAttribute("errorTitle", "게시물 조회 에러");
+            model.addAttribute("errorTitle", "게시물 수정 에러");
             model.addAttribute("errorContent", "존재하지 않는 게시물 입니다.");
             return ERROR_VIEW_NAME;
         }
@@ -147,14 +147,14 @@ public class PostController {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         PostErrorType postErrorType =  postService.postDeleteErrorCheck(sessionAccount, postDeleteRequestDto);
         if(postErrorType == PostErrorType.POST_NOT_FOUND){
-            model.addAttribute("errorTitle", "게시물 조회 에러");
+            model.addAttribute("errorTitle", "게시물 삭제 에러");
             model.addAttribute("errorContent", "존재하지 않는 게시물 입니다.");
             return ERROR_VIEW_NAME;
         }
         if(postErrorType == PostErrorType.NOT_AUTHOR){
             // post 작성자가 아니면,
-            model.addAttribute("errorTitle", "글 수정 권한 없음");
-            model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 수정하고자 하는 글의 작성자 계정이 아닙니다.");
+            model.addAttribute("errorTitle", "글 삭제 권한 없음");
+            model.addAttribute("errorContent", "현재 로그인 되어있는 계정이 삭제하고자 하는 글의 작성자 계정이 아닙니다.");
             return ERROR_VIEW_NAME;
         }
         postService.deletePost(postDeleteRequestDto);

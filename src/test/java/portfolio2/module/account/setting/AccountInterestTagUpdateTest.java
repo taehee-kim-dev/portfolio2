@@ -50,11 +50,6 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
 
     @AfterEach
     void afterEach(){
-        List<Account> allAccount = accountRepository.findAll();
-        for(Account account : allAccount){
-            account.getInterestTag().clear();
-            accountRepository.save(account);
-        }
         tagRepository.deleteAll();
         accountRepository.deleteAll();
     }

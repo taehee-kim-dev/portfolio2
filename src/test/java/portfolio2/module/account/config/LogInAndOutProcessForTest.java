@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import portfolio2.module.account.Account;
 import portfolio2.module.account.service.AccountService;
 
 @RequiredArgsConstructor
@@ -34,5 +35,11 @@ public class LogInAndOutProcessForTest {
         CustomPrincipal customPrincipal
                 = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userId.equals(customPrincipal.getSessionAccount().getUserId());
+    }
+
+    public Account getSessionAccount(){
+        CustomPrincipal customPrincipal
+                = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return customPrincipal.getSessionAccount();
     }
 }

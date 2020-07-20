@@ -1,4 +1,4 @@
-package portfolio2.module.post.event.email;
+package portfolio2.module.post.service.process;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
 import portfolio2.module.account.Account;
 import portfolio2.module.post.Post;
-import portfolio2.module.post.event.PostEventType;
+import portfolio2.module.post.service.PostType;
 import portfolio2.module.tag.Tag;
 
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_VIEW_URL;
@@ -22,12 +22,12 @@ public class EmailSendingProcessForPost {
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
 
-    public void sendNotificationEmailForPostWithInterestTag(PostEventType postEventType, Account account, Post newPost, Iterable<Tag> allTagInNewPostAndAccount) {
+    public void sendNotificationEmailForPostWithInterestTag(PostType postType, Account account, Post newPost, Iterable<Tag> allTagInNewPostAndAccount) {
         Context context = new Context();
         String content = null;
-        if(postEventType == PostEventType.NEW){
+        if(postType == PostType.NEW){
             content = "의 태그가 달린 새로운 게시물이 게시되었습니다!";
-        }else if(postEventType == PostEventType.UPDATED){
+        }else if(postType == PostType.UPDATED){
             content = "의 태그가 기존 게시물에 추가되었습니다!";
         }
         context.setVariable("nickname", account.getNickname());

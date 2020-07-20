@@ -46,7 +46,7 @@
         <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{'/post-update/' + ${post.getId()}}"
            style="width: 300px; margin-right: 50px">수정하기</a>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal" style="width: 300px">
+        <button th:if="${isAuthor}" type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal" style="width: 300px">
             삭제하기
         </button>
 

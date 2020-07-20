@@ -10,7 +10,6 @@ import portfolio2.module.post.controller.PostErrorType;
 import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
-import portfolio2.module.post.event.PostEventType;
 import portfolio2.module.post.service.process.PostProcess;
 
 @Transactional
@@ -38,7 +37,7 @@ public class PostService {
     }
 
     public void sendWebAndEmailNotificationOfNewPost(Post newPost){
-        postProcess.sendWebAndEmailNotificationAboutTag(newPost, PostEventType.NEW);
+        postProcess.sendNotificationAboutNewPost(newPost);
     }
 
     public Post updatePost(PostUpdateRequestDto postUpdateRequestDto) {
@@ -48,7 +47,7 @@ public class PostService {
     }
 
     public void sendWebAndEmailNotificationOfUpdatedPost(Post updatedPost){
-        postProcess.sendWebAndEmailNotificationAboutTag(updatedPost, PostEventType.UPDATED);
+        postProcess.sendNotificationAboutUpdatedPost(updatedPost);
     }
 
     public PostErrorType postDeleteErrorCheck(Account sessionAccount, PostDeleteRequestDto postDeleteRequestDto) {

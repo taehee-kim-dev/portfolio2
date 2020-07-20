@@ -4,22 +4,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.post.service.process.EmailSendingProcessForPost;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,19 +45,11 @@ public class PostNewPostTest extends ContainerBaseTest {
     @Autowired
     private TagRepository tagRepository;
 
+    @MockBean
+    private EmailSendingProcessForPost emailSendingProcessForPost;
+
     @AfterEach
     void afterEach(){
-        List<Account> allAccount = accountRepository.findAll();
-        for(Account account : allAccount){
-            account.getInterestTag().clear();
-            accountRepository.save(account);
-        }
-        List<Post> allPost = postRepository.findAll();
-        for(Post post : allPost){
-            post.setAuthor(null);
-            post.getCurrentTag().clear();
-            postRepository.save(post);
-        }
         postRepository.deleteAll();
         tagRepository.deleteAll();
         accountRepository.deleteAll();

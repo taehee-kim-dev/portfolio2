@@ -46,9 +46,6 @@ public class ShowPostTest extends ContainerBaseTest {
     private PostRepository postRepository;
 
     @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
     @Autowired
@@ -73,19 +70,7 @@ public class ShowPostTest extends ContainerBaseTest {
 
     @AfterEach
     void afterEach(){
-        List<Account> allAccount = accountRepository.findAll();
-        for(Account account : allAccount){
-            account.getInterestTag().clear();
-            accountRepository.save(account);
-        }
-        List<Post> allPost = postRepository.findAll();
-        for(Post post : allPost){
-            post.setAuthor(null);
-            post.getCurrentTag().clear();
-            postRepository.save(post);
-        }
         postRepository.deleteAll();
-        tagRepository.deleteAll();
         accountRepository.deleteAll();
     }
 
