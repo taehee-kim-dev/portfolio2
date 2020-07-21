@@ -53,6 +53,26 @@
             width: 100%;
             font-size: 13px;
         }
+        #userNameAndNicknameDropdownMenu{
+            height: 70px;
+            padding-top: 6px;
+        }
+        .userDropdownMenu{
+            height: 43px;
+        }
+        .userAllDropdownMenu{
+            padding: 0;
+            width: 143px;
+        }
+        .userDropdownItem{
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+        #userIconArrow{
+            margin-left: 3px;
+            margin-right: 6px;
+            color: gray;
+        }
     </style>
     <title>TH</title>
 </th:block>
@@ -84,7 +104,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 20px;margin-right: 19px;padding-top: 10px">
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 20px;margin-right: 16px;padding-top: 10px">
                         <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer">
                         <span th:if="${allNotification.size() == 0}" class="text-dark">
                             <i class="far fa-bell fa-lg"></i>
@@ -137,7 +157,9 @@
                                                 <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">의 태그가 기존 게시물에 추가되었습니다!
                                                 </span>
                                                 <br>
-                                                <span class="d-inline-block text-truncate" style="font-weight: bold;max-width: 300px">"<span th:text="${notification.title}"></span>"</span>
+                                                <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>
+                                                <span class="d-inline-block text-truncate" style="font-weight: bold;max-width: 300px" th:text="${notification.title}"></span>
+                                                <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>
                                         </a>
                                     </div>
                                     <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 9px;right: 15px;" onclick="notificationOption3DotButtonClick()">
@@ -150,25 +172,38 @@
                         </div>
                 </li>
 
-                <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false" style="padding: 0px;margin-right: 4px">
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
+                    <div id="userIcon" onclick="userIconClick()" onmouseover="userIconMouseOver()" onmouseout="userIconMouseOut()" style="cursor: pointer">
                         <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
-                             width="39" height="39" class="rounded border bg-light"></svg>
+                                 width="39" height="39" class="rounded border bg-light"></svg>
                         <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"
-                             width="39" height="39" class="rounded border"/>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                        <h6 class="dropdown-header">
-                            <span sec:authentication="name">Username</span>
-                        </h6>
-                        <a class="dropdown-item" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>
-                        <a class="dropdown-item" th:href="@{'/account/post/' + ${#authentication.name}}">내 게시글</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" th:href="@{/account/setting/profile}">설정</a>
-                        <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                            <button class="dropdown-item" type="submit">로그아웃</button>
-                        </form>
+                                 width="39" height="39" class="rounded border"/>
+                        <span id="userIconArrow"><i class="fas fa-sort-down"></i></span>
+                    </div>
+                    <div id="userMenu" class="text-center" style="position:absolute;top: 52px;right: 14px;z-index: 10;display: none">
+                        <ul class="list-group">
+                            <li class="list-group-item userAllDropdownMenu" id="userNameAndNicknameDropdownMenu">
+                                <span class="d-inline-block text-truncate" style="max-width: 110px" sec:authentication="name" ></span>
+                                <br>
+                                <span class="d-inline-block text-truncate">(</span>
+                                <span class="d-inline-block text-truncate" style="max-width: 110px" th:text="${sessionAccount.nickname}"></span>
+                                <span class="d-inline-block text-truncate">)</span>
+                            </li>
+                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">
+                                <a class="dropdown-item userDropdownItem" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>
+                            </li>
+                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">
+                                <a class="dropdown-item userDropdownItem" th:href="@{'/account/post/' + ${#authentication.name}}">내 게시글</a>
+                            </li>
+                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">
+                                <a class="dropdown-item userDropdownItem" href="#" th:href="@{/account/setting/profile}">설정</a>
+                            </li>
+                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">
+                                <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item userDropdownItem" type="submit">로그아웃</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </li>
             </ul>
@@ -245,6 +280,31 @@
             }else if(notificationOptionList.style.display === ""){
                 notificationOptionList.style.display = "none";
             }
+        }
+    </script>
+    <script type="application/javascript">
+        const userIcon = document.getElementById("userIcon");
+        const userMenu = document.getElementById("userMenu");
+        window.addEventListener('click', function(e){
+            if (!userIcon.contains(e.target)
+                && !userMenu.contains(e.target)){
+                userMenu.style.display = "none";
+            }
+        });
+        function userIconClick(){
+            if (userMenu.style.display === "none") {
+                userMenu.style.display = "";
+            } else if (userMenu.style.display === "") {
+                userMenu.style.display = "none";
+            }
+        }
+
+        const userIconArrow = document.getElementById("userIconArrow");
+        function userIconMouseOver(){
+            userIconArrow.style.color = 'black';
+        }
+        function userIconMouseOut(){
+            userIconArrow.style.color = 'gray';
         }
     </script>
 </th:block>
