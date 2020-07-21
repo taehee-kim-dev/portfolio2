@@ -84,7 +84,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 20px;margin-right: 19px;padding-top: 9px">
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 20px;margin-right: 19px;padding-top: 10px">
                         <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer">
                         <span th:if="${allNotification.size() == 0}" class="text-dark">
                             <i class="far fa-bell fa-lg"></i>
@@ -94,7 +94,7 @@
                         </span>
                         </a>
 
-                        <div th:if="${allNotification.size() >= 1}" id="notificationOptionList" style="position: absolute; top: 92px; right: 16px;;z-index: 2;display: none">
+                        <div th:if="${allNotification.size() >= 1}" id="notificationOptionList" style="position: absolute; top: 92px; right: 16px;;z-index: 11;display: none">
                             <ul class="list-group">
                                 <li class="list-group-item notificationOptionContent">
                                     <form action="" method="post">
@@ -105,7 +105,13 @@
                             </ul>
                         </div>
 
-                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 1;top: 52px;right: 52px;display: none;max-height: 850px;overflow-y: auto">
+                        <div th:if="${allNotification.size() == 0}" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 52px;display: none;">
+                            <div class="card-body text-center text-muted" style="padding: 7px 21px">
+                                알림이 없습니다.
+                            </div>
+                        </div>
+
+                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 52px;display: none;max-height: 850px;overflow-y: auto">
                             <ul class="list-group">
                                 <li class="list-group-item notificationContent" th:each="notification : ${allNotification}">
                                     <div style="float: left;">
@@ -199,23 +205,38 @@
         const notificationOption3DotButton = document.getElementById("notificationOption3DotButton");
         const notificationOptionList = document.getElementById("notificationOptionList");
         window.addEventListener('click', function(e){
-            if (!notificationBell.contains(e.target)
-                && !notificationList.contains(e.target)
-                && !notificationOptionList.contains(e.target)){
-                notificationList.style.display = "none";
-                notificationOptionList.style.display = "none";
-            }
-            if (!notificationOption3DotButton.contains(e.target)
-                && !notificationOptionList.contains(e.target)){
-                notificationOptionList.style.display = "none";
+            if (notificationOption3DotButton !== null){
+                if (!notificationBell.contains(e.target)
+                    && !notificationList.contains(e.target)
+                    && !notificationOptionList.contains(e.target)){
+                    notificationList.style.display = "none";
+                    notificationOptionList.style.display = "none";
+                }
+                if (!notificationOption3DotButton.contains(e.target)
+                    && !notificationOptionList.contains(e.target)){
+                    notificationOptionList.style.display = "none";
+                }
+            }else{
+                if (!notificationBell.contains(e.target)
+                    && !notificationList.contains(e.target)){
+                    notificationList.style.display = "none";
+                }
             }
         });
         function notificationBellClick(){
-            if(notificationList.style.display === "none"){
-                notificationList.style.display = "";
-            }else if(notificationList.style.display === ""){
-                notificationList.style.display = "none";
-                notificationOptionList.style.display = "none";
+            if (notificationOption3DotButton !== null) {
+                if (notificationList.style.display === "none") {
+                    notificationList.style.display = "";
+                } else if (notificationList.style.display === "") {
+                    notificationList.style.display = "none";
+                    notificationOptionList.style.display = "none";
+                }
+            }else{
+                if (notificationList.style.display === "none") {
+                    notificationList.style.display = "";
+                } else if (notificationList.style.display === "") {
+                    notificationList.style.display = "none";
+                }
             }
         }
         function notificationOption3DotButtonClick(){

@@ -3,7 +3,7 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .list-group-item{
+        .profile-view-menu{
             width: 160px;
             padding: 7px;
         }
@@ -64,9 +64,9 @@
         <div class="row justify-content-center" style="margin-top: 40px">
             <div style="margin-left: auto; padding-top: 4px">
                 <div class="list-group" id="list-tab" role="tablist" style="text-align: center">
-                    <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">소개</a>
-                    <a th:if="${isOwner}" class="list-group-item list-group-item-action" id="list-myPost-list" data-toggle="list" href="#list-myPost" role="tab" aria-controls="myPost">내 게시글</a>
-                    <a th:if="${isOwner}" class="list-group-item list-group-item-action" id="list-myReply-list" data-toggle="list" href="#list-myReply" role="tab" aria-controls="myReply">내 댓글</a>
+                    <a class="profile-view-menu list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">소개</a>
+                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myPost-list" data-toggle="list" href="#list-myPost" role="tab" aria-controls="myPost">내 게시글</a>
+                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myReply-list" data-toggle="list" href="#list-myReply" role="tab" aria-controls="myReply">내 댓글</a>
                 </div>
             </div>
             <div style="width: 300px; margin-right: auto; text-align: center; margin-left: 85px">
