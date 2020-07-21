@@ -7,6 +7,9 @@
         form{
             display: inline;
         }
+        .tagify{
+            padding: 3px;
+        }
     </style>
 </head>
 <body>
@@ -15,14 +18,15 @@
 
 <div class="container">
 
-    <div id="post-view" style="text-align: center; margin-top: 100px">
+    <div id="post-view" style="margin-top: 100px">
         <table class="table table-bordered" style="margin: auto; width: 750px; margin-bottom: 35px">
             <tbody>
             <tr>
-                <td colspan="2" th:text="${post.getTitle()}" style="padding-top: 20px;padding-bottom: 20px;
-                    font-size: 24px; font-weight: bold">글 제목</td>
+                <td colspan="2" th:text="${post.getTitle()}" style="padding: 20px 40px 20px 40px;font-size: 24px; font-weight: bold">
+                    글 제목
+                </td>
             </tr>
-            <tr>
+            <tr style="text-align: center">
                 <td style="min-width:100px"><span>작성자 : </span></td>
                 <td style="vertical-align: middle">
                     <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
@@ -30,15 +34,15 @@
                     </a>
                 </td>
             </tr>
-            <tr>
+            <tr style="text-align: center">
                 <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
-            <tr>
+            <tr style="text-align: center">
                 <td style="min-width:100px;vertical-align: middle"><span>태그 : </span></td>
                 <td style="vertical-align: middle"><input name="tag" readonly th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
-                <td colspan="2" th:utext="${post.getContent()}" style="padding-top: 38px;padding-bottom: 22px">글 내용</td>
+                <td colspan="2" th:utext="${post.getContent()}" style="padding: 38px 40px 22px 40px;">글 내용</td>
             </tr>
             </tbody>
         </table>

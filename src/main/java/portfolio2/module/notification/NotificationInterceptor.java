@@ -13,6 +13,8 @@ import portfolio2.module.account.config.CustomPrincipal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
 
 @Component
@@ -26,8 +28,8 @@ public class NotificationInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof CustomPrincipal){
             Account sessionAccount = ((CustomPrincipal)(authentication.getPrincipal())).getSessionAccount();
-            Long count = notificationRepository.countByAccountAndChecked(sessionAccount, false);
-            modelAndView.addObject("notificationCount", count);
+            List<Notification> allNotification = notificationRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(sessionAccount, false);
+            modelAndView.addObject("allNotification", allNotification);
         }
 
     }
