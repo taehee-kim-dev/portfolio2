@@ -23,6 +23,8 @@ import portfolio2.module.post.service.process.EmailSendingProcessForPost;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,17 +76,22 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
     private Long savedPostId;
 
     private void timeVerificationOfSendingEmailNotification(int time){
-        verify(emailSendingProcessForPost, times(time)).sendNotificationEmailForPostWithInterestTag(
-                any(PostType.class), any(Account.class), any(Post.class), anyIterable());
+                verify(emailSendingProcessForPost, times(time)).sendNotificationEmailForPostWithInterestTag(
+                        any(PostType.class), any(Account.class), any(Post.class), anyIterable());
     }
 
     private void webNotificationVerification(String testUserId, List<String> tagStringList){
         Notification notification = notificationRepository.findNotificationByAccount_UserId(testUserId);
-        assertNotNull(notification);
-        tagStringList.forEach(tagTitle -> {
-            Tag tag = tagRepository.findByTitle(tagTitle);
-            assertTrue(notification.getCommonTag().contains(tag));
-        });
+        if(tagStringList.size() == 0){
+            assertNull(notification);
+        }else{
+            assertNotNull(notification);
+            assertEquals(tagStringList.size(), notification.getCommonTag().size());
+            tagStringList.forEach(tagTitle -> {
+                Tag tag = tagRepository.findByTitle(tagTitle);
+                assertTrue(notification.getCommonTag().contains(tag));
+            });
+        }
     }
 
     @BeforeEach
@@ -143,7 +150,7 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
     void authorAccountNotNotified() throws Exception{
         String titleOfNewPost = "Test title";
         String contentOfNewPost = "Test content";
-        String tagOfNewPost = "tag 1.,tag2.";
+        String tagOfNewPost = "tag 1.,tag 2.";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -152,8 +159,7 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
                 .with(csrf()));
 
         this.timeVerificationOfSendingEmailNotification(0);
-        Notification notification = notificationRepository.findNotificationByAccount_UserId(TEST_USER_ID);
-        assertNull(notification);
+        this.webNotificationVerification(TEST_USER_ID, new LinkedList<>());
     }
 
     @DisplayName("새 게시글의 태그를 관심태그로 갖고있는 계정에게 이메일과 웹 알림이 전송됨.")
@@ -161,7 +167,7 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
     void emailAndWebNotification() throws Exception{
         String titleOfNewPost = "Test title";
         String contentOfNewPost = "Test content";
-        String tagOfNewPost = "tag 1.,tag 11.,tag 111.";
+        String tagOfNewPost = "tag 1.,tag 2.,tag 11.,tag 22.,tag 111.,tag 222.";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -170,8 +176,8 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
                 .with(csrf()));
 
         this.timeVerificationOfSendingEmailNotification(2);
-        this.webNotificationVerification(TEST_USER_ID_1, List.of("tag 11."));
-        this.webNotificationVerification(TEST_USER_ID_2, List.of("tag 111."));
+        this.webNotificationVerification(TEST_USER_ID_1, List.of("tag 11.", "tag 22."));
+        this.webNotificationVerification(TEST_USER_ID_2, List.of("tag 111.", "tag 222."));
     }
 
     @DisplayName("새 게시글의 태그를 관심태그로 갖고있는 계정에게 이메일과 웹 알림이 전송됨. - 알림 설정한 계정에게만")
@@ -185,7 +191,7 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
 
         String titleOfNewPost = "Test title";
         String contentOfNewPost = "Test content";
-        String tagOfNewPost = "tag 1.,tag 11.,tag 111.";
+        String tagOfNewPost = "tag 1.,tag 2.,tag 11.,tag 22.,tag 111.,tag 222.";
 
         mockMvc.perform(post(POST_NEW_POST_URL)
                 .param("title", titleOfNewPost)
@@ -194,9 +200,8 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
                 .with(csrf()));
 
         this.timeVerificationOfSendingEmailNotification(1);
-        this.webNotificationVerification(TEST_USER_ID_1, List.of("tag 11."));
-        Notification notificationForTestUserId2 = notificationRepository.findNotificationByAccount_UserId(TEST_USER_ID_2);
-        assertNull(notificationForTestUserId2);
+        this.webNotificationVerification(TEST_USER_ID_1, List.of("tag 11.", "tag 22."));
+        this.webNotificationVerification(TEST_USER_ID_2, new ArrayList<>());
     }
 
 
