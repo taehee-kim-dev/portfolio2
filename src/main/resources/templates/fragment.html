@@ -29,6 +29,12 @@
         .modal-dialog{
             margin-top: 150px;
         }
+        #notificationOption3DotButton{
+            color: gray;
+        }
+        #notificationOption3DotButton:hover{
+            color: black;
+        }
     </style>
     <title>TH</title>
 </th:block>
@@ -75,7 +81,26 @@
                         right: 92px;
                         display: none">
                             <ul class="list-group">
-                                <li class="list-group-item">Cras justo odio</li>
+                                <li class="list-group-item">
+                                    <div
+                                    style="float: left">
+                                        content test.
+                                    </div>
+                                    <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 5px;right: 5px;" onclick="notificationOption3DotButtonClick()">
+                                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots-vertical" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div id="notificationOptionList" style="position: absolute; top: 34px; right: -86px;;z-index: 2">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <form action="" method="post">
+                                                    <button type="submit">알림 삭제</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
                                 <li class="list-group-item">Dapibus ac facilisis in</li>
                                 <li class="list-group-item">Morbi leo risus</li>
                                 <li class="list-group-item">Porta ac consectetur ac</li>
@@ -206,18 +231,35 @@
     <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
     <script type="application/javascript">
+        const notificationList = document.getElementById("notificationList");
+        const notificationBell = document.getElementById("notificationBell");
+        const notificationOption3DotButton = document.getElementById("notificationOption3DotButton");
+        const notificationOptionList = document.getElementById("notificationOptionList");
         window.addEventListener('click', function(e){
-            if (!document.getElementById("notificationBell").contains(e.target)
-                && !document.getElementById("notificationList").contains(e.target)){
+            if (!notificationBell.contains(e.target)
+                && !notificationList.contains(e.target)
+                && !notificationOptionList.contains(e.target)){
                 notificationList.style.display = "none";
+                notificationOptionList.style.display = "none";
+            }
+            if (!notificationOption3DotButton.contains(e.target)
+                && !notificationOptionList.contains(e.target)){
+                notificationOptionList.style.display = "none";
             }
         });
         function notificationBellClick(){
-            let notificationList = document.getElementById("notificationList");
             if(notificationList.style.display === "none"){
                 notificationList.style.display = "";
             }else if(notificationList.style.display === ""){
                 notificationList.style.display = "none";
+                notificationOptionList.style.display = "none";
+            }
+        }
+        function notificationOption3DotButtonClick(){
+            if(notificationOptionList.style.display === "none"){
+                notificationOptionList.style.display = "";
+            }else if(notificationOptionList.style.display === ""){
+                notificationOptionList.style.display = "none";
             }
         }
     </script>
