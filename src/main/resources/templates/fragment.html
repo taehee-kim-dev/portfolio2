@@ -35,6 +35,24 @@
         #notificationOption3DotButton:hover{
             color: black;
         }
+        .notificationContent{
+            width: 402px;
+            height: 131px;
+        }
+        .notificationLink{
+            text-align: left;
+            width: 350px;
+            height: 116px;
+        }
+        .notificationOptionContent{
+            padding: 3px;
+            width: 129px;
+            height: 41px;
+        }
+        .notificationOptionButton{
+            width: 100%;
+            font-size: 13px;
+        }
     </style>
     <title>TH</title>
 </th:block>
@@ -75,110 +93,55 @@
                             <i class="fas fa-bell fa-lg"></i><span class="badge badge-pill badge-danger" th:text="${allNotification.size()}"></span>
                         </span>
                         </a>
-                        <div id="notificationList" style="position: absolute;
-                        z-index: 1;
-                        top: 52px;
-                        right: 92px;
-                        display: none">
+
+                        <div th:if="${allNotification.size() >= 1}" id="notificationOptionList" style="position: absolute; top: 92px; right: 16px;;z-index: 2;display: none">
                             <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div
-                                    style="float: left">
-                                        content test.
+                                <li class="list-group-item notificationOptionContent">
+                                    <form action="" method="post">
+                                        <button id="notificationDeleteButton" type="button" class="btn btn-danger notificationOptionButton">알림 삭제</button>
+                                        <input type="hidden">
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 1;top: 52px;right: 52px;display: none;max-height: 850px;overflow-y: auto">
+                            <ul class="list-group">
+                                <li class="list-group-item notificationContent" th:each="notification : ${allNotification}">
+                                    <div style="float: left;">
+                                        <a th:href="@{${notification.link}}" class="btn btn-light notificationLink">
+                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||
+                                                            notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">
+                                                회원님의 관심 태그들 중,
+                                                </span>
+                                                <br>
+                                                <span class="d-inline-block text-truncate" style="max-width: 300px;">
+                                                    <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||
+                                                            notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"
+                                                          style="font-weight: bold" th:each="tag : ${notification.commonTag}">
+                                                    <span th:text="${tag.getTitle()}"></span>
+                                                    <span th:if="${#bools.isFalse(tagStat.last)}">,</span>
+                                                    </span>
+                                                </span>
+                                                <br>
+
+                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}">
+                                                의 태그가 포함된 게시물이 게시되었습니다!
+                                                </span>
+                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">의 태그가 기존 게시물에 추가되었습니다!
+                                                </span>
+                                                <br>
+                                                <span class="d-inline-block text-truncate" style="font-weight: bold;max-width: 300px">"<span th:text="${notification.title}"></span>"</span>
+                                        </a>
                                     </div>
-                                    <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 5px;right: 5px;" onclick="notificationOption3DotButtonClick()">
+                                    <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 9px;right: 15px;" onclick="notificationOption3DotButtonClick()">
                                         <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots-vertical" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                                         </svg>
                                     </div>
-                                    <div id="notificationOptionList" style="position: absolute; top: 34px; right: -86px;;z-index: 2">
-                                        <ul class="list-group">
-                                            <li class="list-group-item">
-                                                <form action="" method="post">
-                                                    <button type="submit">알림 삭제</button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </li>
-                                <li class="list-group-item">Dapibus ac facilisis in</li>
-                                <li class="list-group-item">Morbi leo risus</li>
-                                <li class="list-group-item">Porta ac consectetur ac</li>
-                                <li class="list-group-item">Vestibulum at eros</li>
                             </ul>
                         </div>
-
-
-
-<!--                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" style="margin-top: 8px;padding: 2px 14px 2px 14px;max-height: 849px;overflow-y: auto">-->
-<!--                            <ul class="list-group">-->
-<!--                                <li class="list-group-item">-->
-<!--                                    <div style="float: left">asdfasdf</div>-->
-<!--                                    <div>-->
-<!--                                        <button id="notificationDeleteButton"-->
-<!--                                                style="position: absolute;-->
-<!--                                        top: 6px;-->
-<!--                                        right: 1px;-->
-<!--                                        margin: 0;-->
-<!--                                        padding: 0;-->
-<!--                                        background: none;-->
-<!--                                        border: none"-->
-<!--                                        onclick="notificationDeleteButton()">-->
-<!--                                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots-vertical" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                                <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>-->
-<!--                                            </svg>-->
-<!--                                        </button>-->
-<!--                                    </div>-->
-<!--                                </li>-->
-<!--                                <li class="list-group-item">Dapibus ac facilisis in</li>-->
-<!--                                <li class="list-group-item">Morbi leo risus</li>-->
-<!--                                <li class="list-group-item">Porta ac consectetur ac</li>-->
-<!--                                <li class="list-group-item">Vestibulum at eros</li>-->
-<!--                            </ul>-->
-
-<!--                            <a class="dropdown-item card disabled" th:if="${allNotification.size() == 0}" href="#" style="padding: 0;margin-top: 6px; margin-bottom: 6px;">-->
-<!--                                <div class="card-body text-center text-muted" style="padding: 8px 10px 6px 10px;overflow: hidden;text-overflow: ellipsis;">-->
-<!--                                    알림 내역이 없습니다.-->
-<!--                                </div>-->
-<!--                            </a>-->
-
-<!--                            <div th:if="${allNotification.size() >= 1}" class="dropdown-item card" th:each="notification : ${allNotification}"-->
-<!--                                 style="padding: 0;margin-top: 6px; margin-bottom: 6px;">-->
-<!--                                <div style="float: left">-->
-<!--                                    <a class="btn btn-light text-left" th:href="@{${notification.link}}" style="width: 360px; padding: 8px 10px 6px 10px;overflow: hidden;text-overflow: ellipsis;position: relative">-->
-
-<!--                                    <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||-->
-<!--                                           notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">-->
-<!--                                        회원님의 관심 태그들 중,-->
-<!--                                    </span>-->
-<!--                                        <br>-->
-
-<!--                                        <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||-->
-<!--                                          notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"-->
-<!--                                              style="font-size: 15px; font-weight: bold" th:each="tag : ${notification.commonTag}">-->
-<!--                                        <span th:text="${tag.getTitle()}"></span>-->
-<!--                                        <span th:if="${#bools.isFalse(tagStat.last)}">,</span>-->
-<!--                                    </span>-->
-<!--                                        <br>-->
-
-<!--                                        <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}">-->
-<!--                                        의 태그가 포함된 게시물이 게시되었습니다!-->
-<!--                                    </span>-->
-<!--                                        <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">-->
-<!--                                        의 태그가 기존 게시물에 추가되었습니다!-->
-<!--                                    </span>-->
-<!--                                        <br>-->
-
-<!--                                        "<span th:text="${notification.title}"></span>"-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                                <div style="float: left">-->
-<!--                                    test-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-<!--                        </div>-->
                 </li>
 
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
