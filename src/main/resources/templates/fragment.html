@@ -90,31 +90,32 @@
         </button>
 
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav justify-content-end">
-                <li class="nav-item" sec:authorize="!isAuthenticated()">
+            <ul class="navbar-nav justify-content-end" style="margin-right: 64px;">
+                <li class="nav-item" sec:authorize="!isAuthenticated()" style="margin-right: 15px;">
                     <a class="nav-link" th:href="@{/login}">로그인</a>
                 </li>
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-top: 1px;margin-right: 7px;">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link btn btn-outline-info" type="button" th:href="@{/post-new-post}"
-                       style="padding-top: 6px;padding-bottom: 6px;margin-left: 17px;margin-right: 3px;">
+                       style="padding-top: 6px;padding-bottom: 6px;margin-right: 60px;">
                         <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 작성
                     </a>
                 </li>
 
-                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 20px;margin-right: 16px;padding-top: 10px">
-                        <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer">
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="padding-top: 10px">
+                        <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer;margin-right: 43px">
                         <span th:if="${allNotification.size() == 0}" class="text-dark">
                             <i class="far fa-bell fa-lg"></i>
                         </span>
                         <span th:if="${allNotification.size() >= 1}" class="text-danger">
-                            <i class="fas fa-bell fa-lg"></i><span class="badge badge-pill badge-danger" th:text="${allNotification.size()}"></span>
+                            <i class="fas fa-bell fa-lg"></i><span class="badge badge-pill badge-danger" th:text="${allNotification.size()}"
+                                                                   style="position: absolute;z-index: 5;top: 12px;right: 183px;"></span>
                         </span>
                         </a>
 
-                        <div th:if="${allNotification.size() >= 1}" id="notificationOptionList" style="position: absolute; top: 92px; right: 16px;;z-index: 11;display: none">
+                        <div th:if="${allNotification.size() >= 1}" id="notificationOptionList" style="position: absolute; top: 93px; right: 120px;;z-index: 11;display: none">
                             <ul class="list-group">
                                 <li class="list-group-item notificationOptionContent">
                                     <form action="" method="post">
@@ -125,13 +126,13 @@
                             </ul>
                         </div>
 
-                        <div th:if="${allNotification.size() == 0}" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 52px;display: none;">
+                        <div th:if="${allNotification.size() == 0}" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 158px;display: none;">
                             <div class="card-body text-center text-muted" style="padding: 7px 21px">
                                 알림이 없습니다.
                             </div>
                         </div>
 
-                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 52px;display: none;max-height: 850px;overflow-y: auto">
+                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right:145px;display: none;max-height: 850px;overflow-y: auto">
                             <ul class="list-group">
                                 <li class="list-group-item notificationContent" th:each="notification : ${allNotification}">
                                     <div style="float: left;">
@@ -162,25 +163,25 @@
                                                 <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>
                                         </a>
                                     </div>
-                                    <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 9px;right: 15px;" onclick="notificationOption3DotButtonClick()">
+                                    <div id="notificationOption3DotButton" style="position: absolute; cursor:pointer;top: 9px;right: 17px;" onclick="notificationOption3DotButtonClick()">
                                         <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots-vertical" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                                         </svg>
                                     </div>
-                                </li>
+                                </li>O
                             </ul>
                         </div>
                 </li>
 
                 <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 9px;">
-                    <div id="userIcon" onclick="userIconClick()" onmouseover="userIconMouseOver()" onmouseout="userIconMouseOut()" style="cursor: pointer">
+                    <div id="userIcon" onclick="userIconClick()" onmouseover="userIconMouseOver()" onmouseout="userIconMouseOut()" style="margin-right: 6px; cursor: pointer">
                         <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
                                  width="39" height="39" class="rounded border bg-light"></svg>
                         <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"
                                  width="39" height="39" class="rounded border"/>
                         <span id="userIconArrow"><i class="fas fa-sort-down"></i></span>
                     </div>
-                    <div id="userMenu" class="text-center" style="position:absolute;top: 52px;right: 14px;z-index: 10;display: none">
+                    <div id="userMenu" class="text-center" style="position:absolute;top: 52px;right: 82px;z-index: 10;display: none">
                         <ul class="list-group">
                             <li class="list-group-item userAllDropdownMenu" id="userNameAndNicknameDropdownMenu">
                                 <span class="d-inline-block text-truncate" style="max-width: 110px" sec:authentication="name" ></span>
@@ -208,10 +209,10 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav" style="margin-right: 14px">
+            <ul class="navbar-nav" style="margin-right: 28px">
                 <li class="nav-item">
                     <form th:action="@{/search/post}" class="form-inline" method="get">
-                        <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 14px"/>
+                        <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 30px"/>
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
                     </form>
                 </li>
