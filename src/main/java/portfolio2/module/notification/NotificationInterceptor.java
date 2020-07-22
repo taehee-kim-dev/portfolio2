@@ -28,8 +28,10 @@ public class NotificationInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof CustomPrincipal){
             Account sessionAccount = ((CustomPrincipal)(authentication.getPrincipal())).getSessionAccount();
-            List<Notification> allNotification = notificationRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(sessionAccount, false);
+            List<Notification> allNotification = notificationRepository.findByAccountOrderByCreatedDateTimeDesc(sessionAccount);
+            List<Notification> unCheckedNotification = notificationRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(sessionAccount, false);
             modelAndView.addObject("allNotification", allNotification);
+            modelAndView.addObject("unCheckedNotification", unCheckedNotification);
         }
 
     }

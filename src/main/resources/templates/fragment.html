@@ -127,26 +127,26 @@
 
                 <li class="nav-item" sec:authorize="isAuthenticated()" style="padding-top: 10px">
                         <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer;margin-right: 43px">
-                        <span th:if="${allNotification.size() == 0}" class="text-dark">
+                        <span th:if="${unCheckedNotification.size() == 0}" class="text-dark">
                             <i class="far fa-bell fa-lg"></i>
                         </span>
-                        <span th:if="${allNotification.size() >= 1}" class="text-danger">
-                            <i class="fas fa-bell fa-lg"></i><span id="notificationCountBadge" class="badge badge-pill badge-danger" th:text="${allNotification.size()}"
-                                                                   style="position: absolute;z-index: 5;top: 12px;right: 183px;"></span>
+                        <span th:if="${unCheckedNotification.size() >= 1}" class="text-danger">
+                            <i class="fas fa-bell fa-lg"></i><span id="notificationCountBadge" class="badge badge-pill badge-danger" th:text="${unCheckedNotification.size()}"
+                                                                   style="position: absolute;z-index: 5;top: 19px;right: 157px;"></span>
                         </span>
                         </a>
 
-                        <div th:if="${allNotification.size() == 0}" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 158px;display: none;">
+                        <div th:id="emptyNotificationMessageCard" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 139px;display: none;">
                             <div class="card-body text-center text-muted" style="padding: 7px 21px">
                                 알림이 없습니다.
                             </div>
                         </div>
 
-                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right:145px;display: none;max-height: 850px;overflow-y: auto">
+                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right:126px;display: none;max-height: 850px;overflow-y: auto">
                             <ul class="list-group">
                                 <li th:id="'notificationContent' + ${notification.id}" class="list-group-item notificationContent" th:each="notification : ${allNotification}">
                                     <div style="float: left;">
-                                        <a th:href="@{${notification.link}}" class="btn btn-light notificationLink">
+                                        <a th:href="@{${notification.link}}" class="btn btn-light notificationLink" th:classappend="${notification.checked} ? text-muted">
                                                 <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||
                                                             notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">
                                                 회원님의 관심 태그들 중,
@@ -189,7 +189,7 @@
                                  width="39" height="39" class="rounded border"/>
                         <span id="userIconArrow"><i class="fas fa-sort-down"></i></span>
                     </div>
-                    <div id="userMenu" class="text-center" style="position:absolute;top: 52px;right: 82px;z-index: 10;display: none">
+                    <div id="userMenu" class="text-center" style="position:absolute;top: 58px;right: 44px;z-index: 10;display: none">
                         <ul class="list-group">
                             <li class="list-group-item userAllDropdownMenu" id="userNameAndNicknameDropdownMenu">
                                 <span class="d-inline-block text-truncate" style="max-width: 110px" sec:authentication="name" ></span>
