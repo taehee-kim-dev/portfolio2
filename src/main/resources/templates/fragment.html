@@ -101,7 +101,7 @@
                             <i class="far fa-bell fa-lg"></i>
                         </span>
                         <span th:if="${allNotification.size() >= 1}" class="text-danger">
-                            <i class="fas fa-bell fa-lg"></i><span class="badge badge-pill badge-danger" th:text="${allNotification.size()}"
+                            <i class="fas fa-bell fa-lg"></i><span id="notificationCountBadge" class="badge badge-pill badge-danger" th:text="${allNotification.size()}"
                                                                    style="position: absolute;z-index: 5;top: 12px;right: 183px;"></span>
                         </span>
                         </a>
@@ -114,7 +114,7 @@
 
                         <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right:145px;display: none;max-height: 850px;overflow-y: auto">
                             <ul class="list-group">
-                                <li class="list-group-item notificationContent" th:each="notification : ${allNotification}">
+                                <li th:id="'notificationContent' + ${notification.id}" class="list-group-item notificationContent" th:each="notification : ${allNotification}">
                                     <div style="float: left;">
                                         <a th:href="@{${notification.link}}" class="btn btn-light notificationLink">
                                                 <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||
@@ -142,9 +142,9 @@
                                                 <span class="d-inline-block text-truncate" style="font-weight: bold;max-width: 300px" th:text="${notification.title}"></span>
                                                 <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>
                                         </a>
-                                    </div>
-                                    <div id="notificationDeleteButton" style="position: absolute; cursor:pointer;top: 9px;right: 20px;" onclick="notificationDelete()">
-                                        <i class="fas fa-times"></i>
+                                        <div id="notificationDeleteButton" th:onclick="'javascript:deleteNotification(' + ${notification.id} + ');'" style="position: absolute; cursor:pointer;top: 9px;right: 20px;" onclick="notificationDelete()">
+                                            <i class="fas fa-times"></i>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -214,9 +214,31 @@
     <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
     <script type="application/javascript">
+        function deleteNotification(notificationId) {
+            $.ajax({
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "/notification/delete",
+                data: JSON.stringify({'notificationIdToDelete': notificationId})
+                }).done(function () {
+                    $("#notificationContent" + notificationId).fadeOut(300,
+                        function(){
+                            $(this).remove();
+                        }
+                    );
+                    let currentNotificationCount = document.getElementById("notificationCountBadge").innerText;
+                    let count = parseInt(currentNotificationCount);
+                    document.getElementById("notificationCountBadge").innerText = count.toString(10);
+                });
+            }
+    </script>
+    <script type="application/javascript">
         const notificationList = document.getElementById("notificationList");
         const notificationBell = document.getElementById("notificationBell");
-        const notificationDeleteButton = document.getElementById("notificationDeleteButton");
         window.addEventListener('click', function(e){
             if(notificationList !== null){
                 if (!notificationBell.contains(e.target)
@@ -259,17 +281,18 @@
             userIconArrow.style.color = 'gray';
         }
     </script>
+    <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
+        $(function() {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
+    </script>
 </th:block>
 
-<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
-    $(function() {
-        var csrfToken = /*[[${_csrf.token}]]*/ null;
-        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-        });
-    });
-</script>
+
 
 <div th:fragment="setting-menu (currentMenu)" class="list-group" style="text-align: center; width: 160px; margin-right: 75px">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/account/setting/profile}">프로필</a>
