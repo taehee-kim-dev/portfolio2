@@ -52,6 +52,9 @@
             #logInButton{
                 margin-bottom: 8px;
             }
+            #logInErrorMessage{
+                font-size: 12px;
+            }
         }
 
         /* 초소형 핸드폰 */
@@ -82,7 +85,7 @@
         <h2 id="logInTitle" class="text-center">로그인</h2>
     </div>
 
-    <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+    <div id="logInErrorMessage" th:if="${param.error}" class="alert alert-danger text-center" role="alert">
         <p>아이디/이메일 또는 패스워드가 올바르지 않습니다.</p>
         <p id="errorBottomMessage">
             확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-password}">비밀번호 찾기</a>를 이용하세요.
