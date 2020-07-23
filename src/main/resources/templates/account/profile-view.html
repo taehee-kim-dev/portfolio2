@@ -3,17 +3,64 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .profile-view-menu{
-            width: 160px;
-            padding: 7px;
+        /*.profile-view-menu{*/
+        /*    width: 160px;*/
+        /*    padding: 7px;*/
+        /*}*/
+        /*.profile-list-content{*/
+        /*    font-size: 17px;*/
+        /*    padding-left: 40px;*/
+        /*}*/
+        /*td{*/
+        /*    padding-bottom: 15px;*/
+        /*}*/
+        /* 오직 데스크탑만 */
+        @media (min-width: 992px) {
+            #userIdAndNickname{
+                font-weight: bold;
+                font-size: 1.8rem;
+            }
+            .selfIntroduce{
+                display: inline;
+                font-size: 1.7rem;
+            }
         }
-        .profile-list-content{
-            font-size: 17px;
-            padding-left: 40px;
+
+        /* 데스크탑, 태블릿 */
+        @media (min-width: 576px){
+            #profileTopTable{
+                border-collapse: separate;
+                border-spacing: 0 13px;
+            }
         }
-        td{
-            padding-bottom: 15px;
+
+        /* 오직 태블릿만 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            .selfIntroduce{
+                display: inline;
+                font-size: 1.3rem;
+            }
         }
+
+        /* 태블릿, 핸드폰 */
+        @media (max-width: 991.98px){
+            #userIdAndNickname{
+                font-weight: bold;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* 오직 핸드폰만 */
+        @media (max-width: 575.98px) {
+            #profileTopTable{
+                margin-top: 5vw;
+            }
+            .selfIntroduce{
+                display: inline;
+                font-size: 1.2rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -21,90 +68,124 @@
 <div th:replace="fragment.html :: commonNav"></div>
 
 <div class="container">
-        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 50px">프로필</h2>
 
-        <div id="profile-top-container" style="margin: auto; text-align: center">
-
-            <div class="row justify-content-center">
-
-                <div style="text-align: center; margin-left: 0; width: 190px">
-                    <!-- Avatar -->
-                    <svg th:if="${#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                         th:data-jdenticon-value="${searchedAccount.userId}" width="131" height="131" ></svg>
-                    <img th:if="${!#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                         th:src="${searchedAccount.profileImage}"
-                         width="131" height="131"/>
-                </div>
-
-                <table style="text-align: center">
+    <h1 class="text-center my-5">프로필</h1>
+    <div class="row">
+        <div class="col-lg-8 col-md-10 col-11 mx-auto row">
+            <div class="col-md-4">
+                <!-- Avatar -->
+                <svg th:if="${#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                     th:data-jdenticon-value="${searchedAccount.userId}"
+                     width="100%" height="100%" ></svg>
+                <img th:if="${!#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                     th:src="${searchedAccount.profileImage}"
+                     width="100%" height="100%"/>
+            </div>
+            <div class="col-md-8 col-12 mx-auto my-md-0 d-flex">
+                <table id="profileTopTable" class="table table-borderless my-md-0 align-self-center">
                     <tbody>
-                        <tr>
-                            <td>닉네임 : </td><td th:text="${searchedAccount.nickname}" style="font-size: 27px">sampleNickname</td>
-                        </tr>
-                        <tr style="height: 56px;">
-                            <td>아이디 : </td><td th:text="${searchedAccount.userId}">sampleUserId</td>
-                        </tr>
-                        <tr style="height: 35px;" th:if="${!isOwner && !#strings.isEmpty(searchedAccount.bio)}">
-                            <td>한 줄 소개 : </td>
-                            <td th:text="${searchedAccount.bio}">sampleBio</td>
-                        </tr>
-                        <tr style="height: 35px;" th:if="${isOwner}">
-                            <td>한 줄 소개 : </td>
-                            <td th:if="${!#strings.isEmpty(searchedAccount.bio)}" th:text="${searchedAccount.bio}" style="width: 264px">sampleBio</td>
-                            <td th:if="${#strings.isEmpty(searchedAccount.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>
-                        </tr>
+                    <tr>
+                        <td id="userIdAndNickname" colspan="2" class="text-center">
+                             <span th:text="${searchedAccount.nickname}"></span> ( <span th:text="${searchedAccount.userId}"></span> )
+                        </td>
+                    </tr>
+                    <tr class="d-flex justify-content-center" th:if="${!isOwner}">
+                        <td th:if="${#strings.isEmpty(searchedAccount.bio)}"><div class="selfIntroduce">등록된 소개가 업습니다.</div></td>
+                        <td th:if="${!#strings.isEmpty(searchedAccount.bio)}"><div class="selfIntroduce" th:text="${searchedAccount.bio}">안녕하세요</div></td>
+                    </tr>
+                    <tr class="d-flex justify-content-center" th:if="${isOwner}">
+                        <td th:if="${!#strings.isEmpty(searchedAccount.bio)}"><div class="selfIntroduce" th:text="${searchedAccount.bio}">안녕하세요</div></td>
+                        <td th:if="${#strings.isEmpty(searchedAccount.bio)}"><div class="selfIntroduce">한 줄 소개를 등록해 보세요!</div></td>
+                    </tr>
                     </tbody>
                 </table>
-
-            </div>
-
-        </div>
-
-
-        <div class="row justify-content-center" style="margin-top: 40px">
-            <div style="margin-left: auto; padding-top: 4px">
-                <div class="list-group" id="list-tab" role="tablist" style="text-align: center">
-                    <a class="profile-view-menu list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">소개</a>
-                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myPost-list" data-toggle="list" href="#list-myPost" role="tab" aria-controls="myPost">내 게시글</a>
-                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myReply-list" data-toggle="list" href="#list-myReply" role="tab" aria-controls="myReply">내 댓글</a>
-                </div>
-            </div>
-            <div style="width: 300px; margin-right: auto; text-align: center; margin-left: 85px">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                        <table style="margin: auto; width: 250px">
-                            <tbody>
-                                <tr>
-                                    <td><i class="far fa-envelope fa-lg"></i></td>
-                                    <td th:if="${#bools.isTrue(searchedAccount.isEmailVerified())}"
-                                        th:text="${searchedAccount.verifiedEmail}" class="profile-list-content">email</td>
-                                    <td th:if="${#bools.isFalse(searchedAccount.isEmailVerified())}"
-                                        class="profile-list-content">인증된 메일이 없습니다.</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-suitcase fa-lg"></i></td>
-                                    <td th:if="${!#strings.isEmpty(searchedAccount.occupation)}"
-                                        th:text="${searchedAccount.occupation}" class="profile-list-content">occupation</td>
-                                    <td th:if="${#strings.isEmpty(searchedAccount.occupation)}"
-                                        class="profile-list-content">등록된 직업이 없습니다.</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="far fa-compass fa-lg"></i></td>
-                                    <td th:if="${!#strings.isEmpty(searchedAccount.location)}"
-                                        th:text="${searchedAccount.location}" class="profile-list-content">location</td>
-                                    <td th:if="${#strings.isEmpty(searchedAccount.location)}"
-                                        class="profile-list-content">등록된 지역이 없습니다.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a th:if="${isOwner}" class="btn btn-outline-primary" href="#" th:href="@{/account/setting/profile}"
-                        style="margin-top: 30px; margin-bottom: 20px; padding: 4px; width: 255px">프로필 수정</a>
-                    </div>
-                    <div th:if="${isOwner}" class="tab-pane fad" id="list-myPost" role="tabpanel" aria-labelledby="list-myPost-list">내 게시글 부분</div>
-                    <div th:if="${isOwner}" class="tab-pane fad" id="list-myReply" role="tabpanel" aria-labelledby="list-myReply-list">내 댓글 부분</div>
-                </div>
             </div>
         </div>
+    </div>
+<!--        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 50px">프로필</h2>-->
+
+<!--        <div id="profile-top-container" style="margin: auto; text-align: center">-->
+
+<!--            <div class="row justify-content-center">-->
+
+<!--                <div style="text-align: center; margin-left: 0; width: 190px">-->
+<!--                    &lt;!&ndash; Avatar &ndash;&gt;-->
+<!--                    <svg th:if="${#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"-->
+<!--                         th:data-jdenticon-value="${searchedAccount.userId}" width="131" height="131" ></svg>-->
+<!--                    <img th:if="${!#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"-->
+<!--                         th:src="${searchedAccount.profileImage}"-->
+<!--                         width="131" height="131"/>-->
+<!--                </div>-->
+
+<!--                <table style="text-align: center">-->
+<!--                    <tbody>-->
+<!--                        <tr>-->
+<!--                            <td>닉네임 : </td><td th:text="${searchedAccount.nickname}" style="font-size: 27px">sampleNickname</td>-->
+<!--                        </tr>-->
+<!--                        <tr style="height: 56px;">-->
+<!--                            <td>아이디 : </td><td th:text="${searchedAccount.userId}">sampleUserId</td>-->
+<!--                        </tr>-->
+<!--                        <tr style="height: 35px;" th:if="${!isOwner && !#strings.isEmpty(searchedAccount.bio)}">-->
+<!--                            <td>한 줄 소개 : </td>-->
+<!--                            <td th:text="${searchedAccount.bio}">sampleBio</td>-->
+<!--                        </tr>-->
+<!--                        <tr style="height: 35px;" th:if="${isOwner}">-->
+<!--                            <td>한 줄 소개 : </td>-->
+<!--                            <td th:if="${!#strings.isEmpty(searchedAccount.bio)}" th:text="${searchedAccount.bio}" style="width: 264px">sampleBio</td>-->
+<!--                            <td th:if="${#strings.isEmpty(searchedAccount.bio)}" style="width: 264px">한 줄 소개를 추가해 보세요!</td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+
+<!--            </div>-->
+
+<!--        </div>-->
+
+
+<!--        <div class="row justify-content-center" style="margin-top: 40px">-->
+<!--            <div style="margin-left: auto; padding-top: 4px">-->
+<!--                <div class="list-group" id="list-tab" role="tablist" style="text-align: center">-->
+<!--                    <a class="profile-view-menu list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">소개</a>-->
+<!--                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myPost-list" data-toggle="list" href="#list-myPost" role="tab" aria-controls="myPost">내 게시글</a>-->
+<!--                    <a th:if="${isOwner}" class="profile-view-menu list-group-item list-group-item-action" id="list-myReply-list" data-toggle="list" href="#list-myReply" role="tab" aria-controls="myReply">내 댓글</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div style="width: 300px; margin-right: auto; text-align: center; margin-left: 85px">-->
+<!--                <div class="tab-content" id="nav-tabContent">-->
+<!--                    <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">-->
+<!--                        <table style="margin: auto; width: 250px">-->
+<!--                            <tbody>-->
+<!--                                <tr>-->
+<!--                                    <td><i class="far fa-envelope fa-lg"></i></td>-->
+<!--                                    <td th:if="${#bools.isTrue(searchedAccount.isEmailVerified())}"-->
+<!--                                        th:text="${searchedAccount.verifiedEmail}" class="profile-list-content">email</td>-->
+<!--                                    <td th:if="${#bools.isFalse(searchedAccount.isEmailVerified())}"-->
+<!--                                        class="profile-list-content">인증된 메일이 없습니다.</td>-->
+<!--                                </tr>-->
+<!--                                <tr>-->
+<!--                                    <td><i class="fas fa-suitcase fa-lg"></i></td>-->
+<!--                                    <td th:if="${!#strings.isEmpty(searchedAccount.occupation)}"-->
+<!--                                        th:text="${searchedAccount.occupation}" class="profile-list-content">occupation</td>-->
+<!--                                    <td th:if="${#strings.isEmpty(searchedAccount.occupation)}"-->
+<!--                                        class="profile-list-content">등록된 직업이 없습니다.</td>-->
+<!--                                </tr>-->
+<!--                                <tr>-->
+<!--                                    <td><i class="far fa-compass fa-lg"></i></td>-->
+<!--                                    <td th:if="${!#strings.isEmpty(searchedAccount.location)}"-->
+<!--                                        th:text="${searchedAccount.location}" class="profile-list-content">location</td>-->
+<!--                                    <td th:if="${#strings.isEmpty(searchedAccount.location)}"-->
+<!--                                        class="profile-list-content">등록된 지역이 없습니다.</td>-->
+<!--                                </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                        <a th:if="${isOwner}" class="btn btn-outline-primary" href="#" th:href="@{/account/setting/profile}"-->
+<!--                        style="margin-top: 30px; margin-bottom: 20px; padding: 4px; width: 255px">프로필 수정</a>-->
+<!--                    </div>-->
+<!--                    <div th:if="${isOwner}" class="tab-pane fad" id="list-myPost" role="tabpanel" aria-labelledby="list-myPost-list">내 게시글 부분</div>-->
+<!--                    <div th:if="${isOwner}" class="tab-pane fad" id="list-myReply" role="tabpanel" aria-labelledby="list-myReply-list">내 댓글 부분</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
