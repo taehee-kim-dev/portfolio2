@@ -3,8 +3,163 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .notification-description{
-            padding-left: 0;
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #notificationSettingTitle {
+                margin-top: 62px;
+                margin-bottom: 23px;
+            }
+
+            #accountSettingMenu {
+                width: 153px;
+            }
+
+            #canNotUserEmailNotificationMessage {
+
+            }
+
+            #notificationSettingSuccessMessageOuter {
+                margin-bottom: 27px;
+                width: 486px;
+                padding-right: 38px;
+                padding-top: 15px;
+            }
+
+            #notificationSettingSuccessMessage {
+                margin-bottom: 18px;
+            }
+
+            #notificationSettingSuccessMessageCloseButton {
+                padding-top: 10px;
+            }
+
+            #notificationSettingForm {
+                width: 300px;
+                padding-left: 74px;
+            }
+
+            .notification-description{
+                padding-left: 0px;
+            }
+
+            #notificationSettingButton {
+                margin-top: 33px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            .notification-description{
+                padding-left: 0px;
+            }
+            #notificationSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 37px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #canNotUserEmailNotificationMessage{
+                margin-bottom: 38px;
+            }
+            #notificationSettingSuccessMessageOuter{
+                margin-bottom: 36px;
+                padding-right: 38px;
+                padding-top: 15px;
+            }
+            #notificationSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #notificationSettingSuccessMessageCloseButton{
+                padding-top: 10px;
+            }
+            #notificationSettingForm{
+                margin-top: 37px;
+            }
+            #notificationSettingButton{
+                margin-top: 41px;
+                width: 100%;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            .toggleSwitch{
+                text-align: center;
+                padding-left: 13px;
+            }
+            #notificationSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 37px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #canNotUserEmailNotificationMessage{
+                margin-bottom: 38px;
+            }
+            #notificationSettingSuccessMessageOuter{
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 43px;
+                padding-top: 15px;
+            }
+            #notificationSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #notificationSettingSuccessMessageCloseButton{
+                padding-top: 12px;
+            }
+            #notificationSettingForm{
+                margin-top: 14px;
+            }
+            #notificationSettingButton{
+                margin-top: 31px;
+                width: 100%;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            .custom-switch{
+                margin-bottom: 7px;
+            }
+            .notification-description{
+                margin-bottom: 1px;
+            }
+            .toggleSwitch{
+                text-align: center;
+                padding-left: 13px;
+            }
+            #notificationSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 37px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #canNotUserEmailNotificationMessage{
+                margin-bottom: 38px;
+            }
+            #notificationSettingSuccessMessageOuter{
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 43px;
+                padding-top: 15px;
+            }
+            #notificationSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #notificationSettingSuccessMessageCloseButton{
+                padding-top: 11px;
+            }
+            #notificationSettingForm{
+                margin-top: 14px;
+            }
+            #notificationSettingButton{
+                margin-top: 14px;
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -14,137 +169,159 @@
 
 <div class="container">
 
-        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 37px">알림 설정</h2>
-        <div class="row justify-content-center">
+    <h2 id="notificationSettingTitle" class="text-center">알림 설정</h2>
 
-            <div>
-                <div th:replace="fragment.html :: setting-menu(currentMenu='notification')"></div>
+    <div id="canNotUserEmailNotificationMessage" class="alert alert-danger text-center" role="alert"
+         th:if="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+        인증된 이메일이 없어, 이메일로 알림 받기 기능은 사용할 수 없습니다.
+    </div>
+
+    <div id="notificationSettingSuccessMessageOuter" th:if="${message}"
+         class="mx-auto col-md-9 col-sm-11 alert alert-info alert-dismissible fade show text-center" role="alert">
+        <span id="notificationSettingSuccessMessage" th:text="${message}">알림설정 저장 완료 메시지</span>
+        <button id="notificationSettingSuccessMessageCloseButton" type="button" class="close"
+                data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="row justify-content-center col-lg-6 col-md-9 mx-auto">
+
+        <div id="accountSettingMenu" class="col-lg-2 order-1"
+             th:insert="fragment.html :: setting-menu(currentMenu='notification')"></div>
+
+        <form id="notificationSettingForm" class="col-lg-10 order-2" th:action="@{/account/setting/notification}"
+              th:object="${notificationUpdateRequestDto}" method="post" novalidate>
+
+
+            <div class="alert alert-light notification-description" role="alert">
+                <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 좋아요를 눌렀을
+                    때</strong> 알림을 수신할 방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationLikeOnMyPostByWeb}" class="custom-control-input"
+                           id="notificationLikeOnMyPostByWeb">
+                    <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}"
+                           class="custom-control-input" id="notificationLikeOnMyPostByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="notificationLikeOnMyPostByEmail">이메일로 받기</label>
+                </div>
             </div>
 
-            <div>
 
-                <div class="alert alert-danger" role="alert" th:if="${#bools.isFalse(sessionAccount.isEmailVerified())}"
-                     style="padding-left: 32px;padding-top: 15px;">
-                    인증된 이메일이 없어, 이메일로 알림 받기 기능은 사용할 수 없습니다.
+            <div class="alert alert-light notification-description" role="alert">
+                <strong>누군가 <a href="#" th:href="@{'/account/comment/' + ${sessionAccount.userId}}">내 댓글</a>에 좋아요를
+                    눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationLikeOnMyCommentByWeb}"
+                           class="custom-control-input" id="notificationLikeOnMyCommentByWeb">
+                    <label class="custom-control-label" for="notificationLikeOnMyCommentByWeb">웹으로 받기</label>
                 </div>
-
-                <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
-                    style="margin-bottom: 33px; padding: 10px 46px 8px 21px;">
-                    <span th:text="${message}">알림설정 저장 완료 메시지</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="padding-top: 5px;padding-bottom: 0px;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationLikeOnMyCommentByEmail}"
+                           class="custom-control-input" id="notificationLikeOnMyCommentByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="notificationLikeOnMyCommentByEmail">이메일로 받기</label>
                 </div>
-
-                    <form th:action="@{/account/setting/notification}" th:object="${notificationUpdateRequestDto}" method="post" novalidate>
-
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByWeb}" class="custom-control-input" id="notificationLikeOnMyPostByWeb">
-                                <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}" class="custom-control-input" id="notificationLikeOnMyPostByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="notificationLikeOnMyPostByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{'/account/comment/' + ${sessionAccount.userId}}">내 댓글</a>에 좋아요를 눌렀을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyCommentByWeb}" class="custom-control-input" id="notificationLikeOnMyCommentByWeb">
-                                <label class="custom-control-label" for="notificationLikeOnMyCommentByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationLikeOnMyCommentByEmail}" class="custom-control-input" id="notificationLikeOnMyCommentByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="notificationLikeOnMyCommentByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyPostByWeb}" class="custom-control-input" id="notificationCommentOnMyPostByWeb">
-                                <label class="custom-control-label" for="notificationCommentOnMyPostByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyPostByEmail}" class="custom-control-input" id="notificationCommentOnMyPostByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="notificationCommentOnMyPostByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong>누군가 <a href="#" th:href="@{'/account/comment/' + ${sessionAccount.userId}}">내 댓글</a>에 댓글을 남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyCommentByWeb}" class="custom-control-input" id="notificationCommentOnMyCommentByWeb">
-                                <label class="custom-control-label" for="notificationCommentOnMyCommentByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationCommentOnMyCommentByEmail}" class="custom-control-input" id="notificationCommentOnMyCommentByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="notificationCommentOnMyCommentByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 태그된 새로운 게시물이 게시되었을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByWeb}" class="custom-control-input" id="newPostWithMyInterestTagNotificationByWeb">
-                                <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByEmail}" class="custom-control-input" id="newPostWithMyInterestTagNotificationByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-light notification-description" role="alert">
-                            <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 기존 게시물에 추가되었을 때</strong> 알림을 수신할 방법을 설정하세요.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByWeb}" class="custom-control-input" id="myInterestAddedToExistingPostNotificationByWeb">
-                                <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByWeb">웹으로 받기</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByEmail}" class="custom-control-input" id="myInterestAddedToExistingPostNotificationByEmail"
-                                       th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
-                                <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-
-
-
-                        <div class="form-group" style="margin-top: 40px">
-                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">저장하기</button>
-                        </div>
-                    </form>
-
-
             </div>
 
-        </div>
+
+            <div class="alert alert-light notification-description" role="alert">
+                <strong>누군가 <a href="#" th:href="@{'/account/post/' + ${sessionAccount.userId}}">내 게시글</a>에 댓글을 남겼을
+                    때</strong> 알림을 수신할 방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationCommentOnMyPostByWeb}"
+                           class="custom-control-input" id="notificationCommentOnMyPostByWeb">
+                    <label class="custom-control-label" for="notificationCommentOnMyPostByWeb">웹으로 받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationCommentOnMyPostByEmail}"
+                           class="custom-control-input" id="notificationCommentOnMyPostByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="notificationCommentOnMyPostByEmail">이메일로 받기</label>
+                </div>
+            </div>
+
+
+            <div class="alert alert-light notification-description" role="alert">
+                <strong>누군가 <a href="#" th:href="@{'/account/comment/' + ${sessionAccount.userId}}">내 댓글</a>에 댓글을
+                    남겼을 때</strong> 알림을 수신할 방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationCommentOnMyCommentByWeb}"
+                           class="custom-control-input" id="notificationCommentOnMyCommentByWeb">
+                    <label class="custom-control-label" for="notificationCommentOnMyCommentByWeb">웹으로 받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationCommentOnMyCommentByEmail}"
+                           class="custom-control-input" id="notificationCommentOnMyCommentByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="notificationCommentOnMyCommentByEmail">이메일로 받기</label>
+                </div>
+            </div>
+
+
+            <div class="alert alert-light notification-description" role="alert">
+                <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 태그된 새로운 게시물이 게시되었을 때</strong> 알림을
+                수신할 방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByWeb}"
+                           class="custom-control-input" id="newPostWithMyInterestTagNotificationByWeb">
+                    <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByWeb">웹으로
+                        받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByEmail}"
+                           class="custom-control-input" id="newPostWithMyInterestTagNotificationByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByEmail">이메일로
+                        받기</label>
+                </div>
+            </div>
+
+            <div class="alert alert-light notification-description" role="alert">
+                <strong><a href="#" th:href="@{/account/setting/tag}">관심있는 태그</a>가 기존 게시물에 추가되었을 때</strong> 알림을 수신할
+                방법을 설정하세요.
+            </div>
+            <div class="form-group toggleSwitch">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByWeb}"
+                           class="custom-control-input" id="myInterestAddedToExistingPostNotificationByWeb">
+                    <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByWeb">웹으로
+                        받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByEmail}"
+                           class="custom-control-input" id="myInterestAddedToExistingPostNotificationByEmail"
+                           th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
+                    <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByEmail">이메일로
+                        받기</label>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <button id="notificationSettingButton" class="btn btn-outline-primary" type="submit"
+                        aria-describedby="submitHelp">저장하기
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+
+</div>
 
 
 </div>

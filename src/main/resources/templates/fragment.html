@@ -203,7 +203,7 @@
 
 
 
-<div th:fragment="setting-menu (currentMenu)" id="profileSettingMenu" class="list-group text-center">
+<div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu" class="list-group text-center">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" th:href="@{/account/setting/profile}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" th:href="@{/account/setting/notification}">알림</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" th:href="@{/account/setting/tag}">관심 태그</a>
