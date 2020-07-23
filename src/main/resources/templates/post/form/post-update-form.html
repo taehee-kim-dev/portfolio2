@@ -5,50 +5,89 @@
     <link rel="stylesheet" href="/library/summernote/summernote-bs4.min.css" />
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
-        .form-group{
-            margin-bottom: 30px;
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #postTitle{
+                margin-top: 66px;
+                margin-bottom: 30px;
+            }
+            #titleInput{
+                margin-bottom: 26px;
+            }
+            #postButton{
+                margin-top: 26px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #postTitle{
+                margin-top: 45px;
+                margin-bottom: 27px;
+            }
+            #titleInput{
+                margin-bottom: 27px
+            }
+            #postButton{
+                margin-top: 23px;
+            }
+        }
+
+        /* 핸드폰 */
+        @media (max-width: 575.98px) and (max-width: 991.98px){
+            #postTitle{
+                margin-top: 27px;
+                margin-bottom: 21px;
+            }
+            #titleInput{
+                margin-bottom: 23px
+            }
+            #postButton{
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
-    <div>
-        <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 수정</h1>
-    </div>
-    <form id="post-form" class="needs-validation"  style="margin: auto; width: 750px"
-          th:action="@{/post-update}" th:object="${postUpdateRequestDto}" method="post" novalidate>
-        <input type="hidden" th:field="*{postIdToUpdate}">
-        <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
-        <div class="form-group">
-            <input type="text" th:field="*{title}" class="form-control"
-                   placeholder="글 제목 (50자 이내로 작성해 주세요)"
-                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
-            <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Post title Error</small>
+    <div class="postTitle">
+        <div>
+            <h1 id="postTitle" class="text-center">글 수정</h1>
         </div>
+        <form id="post-form" class="needs-validation mx-auto col-lg-7"
+              th:action="@{/post-update}" th:object="${postUpdateRequestDto}" method="post" novalidate>
+            <input type="hidden" th:field="*{postIdToUpdate}">
+            <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
+            <div class="form-group">
+                <input id="titleInput" type="text" th:field="*{title}" class="form-control"
+                       placeholder="글 제목 (50자 이내로 작성해 주세요)"
+                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Post title Error</small>
+            </div>
 
-        <div class="form-group">
+            <div class="form-group">
             <textarea id="post-content" type="textarea" th:field="*{content}" class="form-control"
                       th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''"></textarea>
-            <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Post content Error</small>
-        </div>
-        <div style="width: 750px">
-
-            <div class="alert alert-info" role="alert" style="width: 750px">
-                태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
-                <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Post content Error</small>
             </div>
-            <input id="tag" name="tag" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
-            <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
-        </div>
+            <div >
 
-        <div class="form-group" >
-            <button class="btn btn-success btn-block" type="button" onclick="submit_func()" style="margin-top: 22px"
-                    aria-describedby="submitHelp">수정 완료</button>
-        </div>
-    </form>
+                <div class="alert alert-info" role="alert" >
+                    태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
+                    <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
+                </div>
+                <input id="tag" name="tag" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
+                <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
+            </div>
+
+            <div class="form-group" >
+                <button id="postButton" class="btn btn-success btn-block" type="button" onclick="submit_func()"
+                        aria-describedby="submitHelp">수정 완료</button>
+            </div>
+        </form>
+    </div>
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
