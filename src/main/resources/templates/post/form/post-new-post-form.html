@@ -61,7 +61,7 @@
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
             <input id="titleInput" type="text" th:field="*{title}" class="form-control"
-                   placeholder="글 제목 (50자 이내로 작성해 주세요)"
+                   placeholder="글 제목 (50자 이내)"
                    th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Post title Error</small>
         </div>
