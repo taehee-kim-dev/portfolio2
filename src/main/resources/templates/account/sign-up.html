@@ -3,8 +3,48 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
-        .form-group{
-            margin-bottom: 30px;
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #signUpTitle{
+                margin-top: 62px;
+                margin-bottom: 24px;
+            }
+            #signUpButton{
+                margin-top: 28px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #signUpTitle{
+                margin-top: 62px;
+                margin-bottom: 24px;
+            }
+            #signUpButton{
+                margin-top: 28px;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #signUpTitle{
+                margin-top: 45px;
+                margin-bottom: 17px;
+            }
+            #signUpButton{
+                margin-top: 28px;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #signUpTitle{
+                margin-top: 45px;
+                margin-bottom: 17px;
+            }
+            #signUpButton{
+                margin-top: 28px;
+            }
         }
     </style>
 </head>
@@ -14,9 +54,9 @@
 
 <div class="container">
     <div>
-        <h2 id="title" class="text-center" style="margin-top: 85px;margin-bottom: 25px">계정 만들기</h2>
+        <h2 id="signUpTitle" class="text-center">계정 만들기</h2>
     </div>
-    <form id="sign-up-form" class="needs-validation" style="margin: auto; width: 350px" action="#"
+    <form id="signUpForm" class="needs-validation mx-auto col-lg-2 col-md-5" action="#"
           th:action="@{/sign-up}" th:object="${signUpRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
@@ -50,7 +90,7 @@
             <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
         </div>
 
-        <div id="password-input-div" class="form-group" style="margin-bottom: 35px">
+        <div id="password-input-div" class="form-group">
             <label for="password">비밀번호</label>
             <input id="password" type="password" th:field="*{password}" class="form-control"
                    aria-describedby="passwordHelp" placeholder="Password"
@@ -61,7 +101,7 @@
             <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
         </div>
         <div class="form-group" >
-            <button class="btn btn-primary btn-block" type="submit"
+            <button id="signUpButton" class="btn btn-primary btn-block" type="submit"
                     aria-describedby="submitHelp">가입하기</button>
         </div>
     </form>
