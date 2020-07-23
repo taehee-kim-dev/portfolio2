@@ -28,6 +28,9 @@
             .modal{
                 margin-top: 116px;
             }
+            #userIcon{
+                margin-right: 42px;
+            }
         }
 
         /* 태블릿, 핸드폰 */
@@ -82,6 +85,9 @@
             #mainSearchForm{
                 margin-top: 17px;
                 margin-bottom: 15px;
+            }
+            #emailVerificationAlertMessage{
+                font-size: 15px;
             }
         }
 
@@ -141,7 +147,7 @@
                 <li id="notificationBellOuter" class="nav-item active mr-lg-5 d-flex align-items-center order-lg-3 order-md-2 order-2" sec:authorize="isAuthenticated()">
                         <i id="ringBellFont" class="far fa-bell fa-lg text-dark" style="font-size: 29px"></i>
                 </li>
-                <li id="userIcon" class="nav-item dropdown mr-lg-4 order-lg-4 order-md-1 order-1"  sec:authorize="isAuthenticated()">
+                <li id="userIcon" class="nav-item dropdown order-lg-4 order-md-1 order-1"  sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle p-0" href="#" id="userIconImage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
                              width="100%" height="100%" class="rounded border bg-light"></svg>
@@ -169,7 +175,9 @@
         </div>
     </nav>
 
-
+    <div id="emailVerificationAlertMessage" sec:authorize="isAuthenticated()" class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && #bools.isFalse(sessionAccount.isEmailVerified())}">
+        <a th:href="@{/account/setting/account}" class="alert-link">이메일 인증</a>을 해야 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 서비스를 받으실 수 있습니다.
+    </div>
 
 </div>
 
@@ -195,12 +203,12 @@
 
 
 
-<div th:fragment="setting-menu (currentMenu)" class="list-group" style="text-align: center; width: 160px; margin-right: 75px">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/account/setting/profile}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" href="#" th:href="@{/account/setting/notification}">알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" href="#" th:href="@{/account/setting/tag}">관심 태그</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/account/setting/password}">패스워드</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/account/setting/account}">계정</a>
+<div th:fragment="setting-menu (currentMenu)" id="profileSettingMenu" class="list-group text-center">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" th:href="@{/account/setting/profile}">프로필</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" th:href="@{/account/setting/notification}">알림</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" th:href="@{/account/setting/tag}">관심 태그</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active"th:href="@{/account/setting/password}">패스워드</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
 </div>
 
 <div th:fragment="date-time">
