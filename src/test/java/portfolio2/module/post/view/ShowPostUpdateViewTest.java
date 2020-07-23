@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ERROR_VIEW_NAME;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_FORM_VIEW_NAME;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_URL;
@@ -101,8 +101,8 @@ public class ShowPostUpdateViewTest extends ContainerBaseTest {
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
         mockMvc.perform(get(POST_UPDATE_URL + '/' + savedPostId))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeDoesNotExist("errorTitle"))
-                .andExpect(model().attributeDoesNotExist("errorContent"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(model().attributeExists("postUpdateRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POST_UPDATE_FORM_VIEW_NAME))
@@ -114,8 +114,8 @@ public class ShowPostUpdateViewTest extends ContainerBaseTest {
     void notLoggedInError() throws Exception{
         mockMvc.perform(get(POST_UPDATE_URL + '/' + (savedPostId + 1)))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attribute("errorTitle", "게시물 조회 에러"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attribute(ERROR_TITLE, "게시물 조회 에러"))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("postUpdateRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW_NAME))
@@ -131,8 +131,8 @@ public class ShowPostUpdateViewTest extends ContainerBaseTest {
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
         mockMvc.perform(get(POST_UPDATE_URL + '/' + savedPostId))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attribute("errorTitle", "글 수정 권한 없음"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attribute(ERROR_TITLE, "글 수정 권한 없음"))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("postUpdateRequestDto"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW_NAME))

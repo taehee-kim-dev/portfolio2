@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @MockMvcTest
@@ -368,7 +369,8 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
                         .with(csrf()))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeDoesNotExist("cannotSendError"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_ACCOUNT_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -478,11 +480,12 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("cannotSendError"))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("accountNicknameUpdateRequestDto"))
                 .andExpect(flash().attributeCount(0))
                 .andExpect(status().isOk())
-                .andExpect(view().name(CANNOT_SEND_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME));
+                .andExpect(view().name(ERROR_VIEW_NAME));
 
         Account accountAfterEmailSent = accountRepository.findByUserId(TEST_USER_ID);
         assertNull(accountAfterEmailSent.getVerifiedEmail());
@@ -614,11 +617,12 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
                 .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("cannotSendError"))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("accountNicknameUpdateRequestDto"))
                 .andExpect(flash().attributeCount(0))
                 .andExpect(status().isOk())
-                .andExpect(view().name(CANNOT_SEND_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME));
+                .andExpect(view().name(ERROR_VIEW_NAME));
 
         Account accountAfterEmailSent4 = accountRepository.findByUserId(TEST_USER_ID);
         assertNull(accountAfterEmailSent4.getVerifiedEmail());

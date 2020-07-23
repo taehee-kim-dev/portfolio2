@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @MockMvcTest
@@ -77,8 +78,8 @@ public class ProfileShowTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("errorTitle"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
                 .andExpect(view().name(ERROR_VIEW_NAME))
@@ -128,9 +129,9 @@ public class ProfileShowTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("errorTitle"))
+                .andExpect(model().attributeExists(ERROR_TITLE))
                 .andExpect(model().attributeDoesNotExist("searchedAccount"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist("isOwner"))
                 .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));

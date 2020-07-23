@@ -33,8 +33,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.ERROR_VIEW_NAME;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.HOME_URL;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
@@ -111,8 +111,8 @@ public class PostDeleteTest extends ContainerBaseTest {
                         .param("postIdToDelete", String.valueOf(postDeleteRequestDto.getPostIdToDelete()))
                         .with(csrf()))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeDoesNotExist("errorTitle"))
-                .andExpect(model().attributeDoesNotExist("errorContent"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(HOME_URL))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -140,8 +140,8 @@ public class PostDeleteTest extends ContainerBaseTest {
                 .param("postIdToDelete", String.valueOf(postDeleteRequestDto.getPostIdToDelete()))
                 .with(csrf()))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attribute("errorTitle", "게시물 삭제 에러"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attribute(ERROR_TITLE, "게시물 삭제 에러"))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -175,8 +175,8 @@ public class PostDeleteTest extends ContainerBaseTest {
                 .param("postIdToDelete", String.valueOf(postDeleteRequestDto.getPostIdToDelete()))
                 .with(csrf()))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attribute("errorTitle", "글 삭제 권한 없음"))
-                .andExpect(model().attributeExists("errorContent"))
+                .andExpect(model().attribute(ERROR_TITLE, "글 삭제 권한 없음"))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));

@@ -17,7 +17,8 @@ import portfolio2.module.account.validator.ShowUpdatePasswordPageRequestDtoValid
 import javax.validation.Valid;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.ERROR_VIEW_NAME;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @Controller
@@ -44,8 +45,9 @@ public class CheckShowPasswordUpdatePageLinkController {
 
         if(errors.hasErrors()){
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-            model.addAttribute("invalidLinkError", "invalidLinkError");
-            return INVALID_EMAIL_LINK_ERROR_VIEW_NAME;
+            model.addAttribute(ERROR_TITLE, "링크 에러");
+            model.addAttribute(ERROR_CONTENT, "유효하지 않은 링크입니다.");
+            return ERROR_VIEW_NAME;
         }
 
         // 정상 링크

@@ -22,7 +22,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.ERROR_VIEW_NAME;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @RequiredArgsConstructor
@@ -239,9 +240,9 @@ public class AccountSettingController {
         }
 
         if (!accountSettingService.canSendEmailVerificationEmail(sessionAccount)){
-            model.addAttribute("cannotSendError",
-                    "이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.");
-            return CANNOT_SEND_EMAIL_VERIFICATION_EMAIL_ERROR_VIEW_NAME;
+            model.addAttribute(ERROR_TITLE, "인증 이메일 전송 에러");
+            model.addAttribute(ERROR_CONTENT, "이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.");
+            return ERROR_VIEW_NAME;
         }
 
         accountSettingService.updateAccountEmailAndSession(sessionAccount, accountEmailUpdateRequestDto);

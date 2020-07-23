@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @MockMvcTest
@@ -82,7 +83,8 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         // 유효 링크 인증
         mockMvc.perform(get(validShowPasswordUpdatePageLink))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_PASSWORD_URL))
@@ -115,7 +117,8 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         // 유효 링크 인증
         mockMvc.perform(get(validShowPasswordUpdatePageLink))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_PASSWORD_URL))
@@ -158,7 +161,8 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         // 유효 링크 인증
         mockMvc.perform(get(validShowPasswordUpdatePageLink))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeDoesNotExist("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(ACCOUNT_SETTING_PASSWORD_URL))
@@ -201,8 +205,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -238,8 +243,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -271,8 +277,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(unauthenticated());
 
@@ -307,8 +314,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -342,8 +350,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -373,8 +382,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
@@ -415,8 +425,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -455,8 +466,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -491,8 +503,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         mockMvc.perform(get(invalidEmailLink))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -525,8 +538,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
                 .param("token", accountInDbToShowPasswordUpdatePage.getShowPasswordUpdatePageToken()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -559,8 +573,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
                 .param("token", (String)null))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -593,8 +608,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
                 .param("token", (String)null))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
@@ -627,8 +643,9 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
                 .param("token", "abcde"))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("invalidLinkError"))
-                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(authenticated().withUsername(TEST_USER_ID_2));
 
