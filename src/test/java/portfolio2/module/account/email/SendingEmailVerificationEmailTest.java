@@ -348,6 +348,43 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }
 
+    @DisplayName("다른사람이 인증 대기중인 이메일로 이메일 변경 - 2명")
+    @Test
+    void updateToEmailWaitingToBeVerified() throws Exception{
+        Account account1 = new Account();
+        account1.setUserId(TEST_USER_ID_1);
+        account1.setEmailWaitingToBeVerified(TEST_EMAIL_2);
+        Account account2 = new Account();
+        account2.setUserId(TEST_USER_ID_2);
+        account2.setEmailWaitingToBeVerified(TEST_EMAIL_2);
+        accountRepository.save(account1);
+        accountRepository.save(account2);
+
+        signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
+        AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
+        accountEmailUpdateRequestDto.setEmail(TEST_EMAIL_2);
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
+                        .param("email", accountEmailUpdateRequestDto.getEmail())
+                        .with(csrf()))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist("cannotSendError"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(ACCOUNT_SETTING_ACCOUNT_URL))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account account1InDb = accountRepository.findByUserId(TEST_USER_ID_1);
+        assertEquals(TEST_EMAIL_2, account1InDb.getEmailWaitingToBeVerified());
+
+        Account account2InDb = accountRepository.findByUserId(TEST_USER_ID_2);
+        assertEquals(TEST_EMAIL_2, account2InDb.getEmailWaitingToBeVerified());
+
+        Account accountInDb = accountRepository.findByUserId(TEST_USER_ID);
+        assertNotNull(accountInDb.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL_2, account1InDb.getEmailWaitingToBeVerified());
+        assertNull(accountInDb.getVerifiedEmail());
+    }
+
     // 12시간동안 5회까지 성공
     @DisplayName("12시간동안 5회 전송 성공")
     @SignUpAndLoggedInEmailVerified

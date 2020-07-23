@@ -26,25 +26,16 @@ public class EmailVerificationRequestDtoValidator implements Validator {
 
         EmailVerificationRequestDto emailVerificationRequestDto = (EmailVerificationRequestDto)o;
 
-        if(emailVerificationRequestDto.getUserId() == null || emailVerificationRequestDto.getEmail() == null || emailVerificationRequestDto.getToken() == null){
-            errors.rejectValue("email", "invalidLink", "잘못된 링크");
-            return;
-        }
-
         // 통과 조건
         // 링크의 이메일이 가입된 회원들의 인증 대기중인 이메일 중에 있어야 하고,
         // 그 이메일 계정에 있는 토큰값과 링크의 토큰이 같아야 한다.
         // 위의 조건이 아니면 모두 유효하지 않은 링크이다.
 
-        Account checkAccount = accountRepository.findByUserIdAndEmailWaitingToBeVerified(emailVerificationRequestDto.getUserId(), emailVerificationRequestDto.getEmail());
+        Account checkAccount = accountRepository.findByUserIdAndEmailWaitingToBeVerifiedAndEmailVerificationToken(
+                emailVerificationRequestDto.getUserId(), emailVerificationRequestDto.getEmail(), emailVerificationRequestDto.getToken());
 
         if(checkAccount == null){
             errors.rejectValue("email", "invalidLink", "해당 계정 없음.");
-        }else if(checkAccount.getEmailVerificationToken() == null) {
-            errors.rejectValue("email", "invalidLink", "해당 계정은 존재하나, 토큰값이 null");
-        }else if(!checkAccount.getEmailVerificationToken().equals(emailVerificationRequestDto.getToken())){
-            errors.rejectValue("token", "invalidLink", "해당 계정은 존재하나, 토큰값이 일치하지 않음.");
         }
-
     }
 }

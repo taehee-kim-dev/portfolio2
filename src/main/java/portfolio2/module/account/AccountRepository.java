@@ -20,7 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Queryds
 
     boolean existsByEmailWaitingToBeVerified(String email);
 
-    Account findByUserIdAndEmailWaitingToBeVerified(String userId, String email);
+    Account findByUserIdAndEmailWaitingToBeVerifiedAndEmailVerificationToken(String userId, String email, String token);
 
-    List<Account> findAllByEmailWaitingToBeVerified(String email);
+    List<Account> findAllByEmailWaitingToBeVerifiedAndUserIdNot(String email, String userId);
 }

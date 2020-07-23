@@ -6,6 +6,8 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.dto.request.EmailVerificationRequestDto;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class EmailVerificationProcess {
@@ -14,10 +16,17 @@ public class EmailVerificationProcess {
 
     // 이메일 인증 처리
     public Account verifyEmail(EmailVerificationRequestDto emailVerificationRequestDto) {
-        // 아이디와 인증 대기중인 이메일로 해당 계정 찾음.
+
+        List<Account> otherAccount = accountRepository.findAllByEmailWaitingToBeVerifiedAndUserIdNot(
+                emailVerificationRequestDto.getEmail(), emailVerificationRequestDto.getUserId()
+        );
+
+        otherAccount.forEach(account -> {
+            account.setEmailWaitingToBeVerified(null);
+        });
+
         Account accountToBeVerified
-                = accountRepository.findByUserIdAndEmailWaitingToBeVerified(
-                        emailVerificationRequestDto.getUserId(), emailVerificationRequestDto.getEmail());
+                = accountRepository.findByUserId(emailVerificationRequestDto.getUserId());
         
         // 인증 대기중인 이메일 주소를 인증된 이메일 주소로 설정
          accountToBeVerified.setVerifiedEmail(accountToBeVerified.getEmailWaitingToBeVerified());

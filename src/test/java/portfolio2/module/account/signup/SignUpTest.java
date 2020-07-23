@@ -45,7 +45,7 @@ public class SignUpTest extends ContainerBaseTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEmailNotVerifiedProcessForTest;
 
     @AfterEach
     void afterEach(){
@@ -276,7 +276,7 @@ public class SignUpTest extends ContainerBaseTest {
     @Test
     void signUpUserIdAlreadyExistsError() throws Exception{
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -382,7 +382,7 @@ public class SignUpTest extends ContainerBaseTest {
     @Test
     void signUpNicknameAlreadyExistsError() throws Exception{
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "testUserId1")
@@ -434,11 +434,11 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
-    @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 에러")
+    @DisplayName("회원가입 POST 요청 - 인증 대기중인 이메일로 존재하는 email 성공")
     @Test
     void signUpEmailAlreadyExistsAsEmailWaitingToBeVerifiedError() throws Exception{
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertEquals(TEST_EMAIL, existingAccount.getEmailWaitingToBeVerified());
         mockMvc.perform(post(SIGN_UP_URL)
@@ -448,19 +448,14 @@ public class SignUpTest extends ContainerBaseTest {
                 .param("password", "12345678")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrorCode(
-                        "signUpRequestDto",
-                        "email",
-                        "emailAlreadyExists"))
-                .andExpect(model().attributeExists("signUpRequestDto"))
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(model().attributeDoesNotExist("email"))
-                .andExpect(view().name(SIGN_UP_VIEW_NAME))
-                .andExpect(unauthenticated());
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("email"))
+                .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_1));
 
         assertTrue(accountRepository.existsByUserId(TEST_USER_ID));
-        assertFalse(accountRepository.existsByUserId(TEST_USER_ID_1));
+        assertTrue(accountRepository.existsByUserId(TEST_USER_ID_1));
 
 
     }
@@ -469,7 +464,7 @@ public class SignUpTest extends ContainerBaseTest {
     @Test
     void signUpEmailAlreadyExistsAsVerifiedEmailError() throws Exception{
 
-        Account existingAccount = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account existingAccount = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         existingAccount.setVerifiedEmail(TEST_EMAIL);
         accountRepository.save(existingAccount);
 

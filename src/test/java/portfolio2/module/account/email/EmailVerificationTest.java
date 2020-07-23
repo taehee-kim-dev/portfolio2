@@ -13,8 +13,13 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
+import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
+import portfolio2.module.account.dto.request.EmailVerificationRequestDto;
+import portfolio2.module.account.service.AccountSettingService;
+import portfolio2.module.account.service.EmailVerificationService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,7 +55,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEmailNotVerifiedProcessForTest;
 
     @Autowired
     private SignUpAndLogInEmailNotVerifiedProcessForTest signUpAndLogInEmailNotVerifiedProcessForTest;
@@ -326,7 +331,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void inValidUserIdWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -380,7 +385,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void inValidEmailWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -435,7 +440,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void inValidTokenWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -489,7 +494,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void inValidLinkWithLogOut() throws Exception{
 
         // 회원가입 후 로그아웃
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         // 로그아웃 확인
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
@@ -864,7 +869,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void inValidTokenWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -920,7 +925,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     @Test
     void inValidLinkWithLogInByNotOwnAccount() throws Exception{
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -973,7 +978,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void userIdParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -1027,7 +1032,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -1081,7 +1086,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void tokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -1135,7 +1140,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void emailAndTokenParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -1189,7 +1194,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void allParameterNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
@@ -1243,7 +1248,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
-                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         accountInDbToBeEmailVerified.setEmailVerificationToken(null);
         accountRepository.save(accountInDbToBeEmailVerified);
@@ -1293,6 +1298,110 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
         assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
+    @DisplayName("JPA 테스트")
+    @Test
+    public void jpaTest() throws Exception{
+        Account account1 = new Account();
+        account1.setUserId(TEST_USER_ID);
+        account1.setEmailWaitingToBeVerified(TEST_EMAIL);
+        Account account2 = new Account();
+        account2.setUserId(TEST_USER_ID_1);
+        account2.setEmailWaitingToBeVerified(TEST_EMAIL_1);
+        Account account3 = new Account();
+        account3.setUserId(TEST_USER_ID_2);
+        account3.setEmailWaitingToBeVerified(TEST_EMAIL_2);
+        accountRepository.save(account1);
+        accountRepository.save(account2);
+        accountRepository.save(account3);
+
+        List<Account> accounts = accountRepository.findAllByEmailWaitingToBeVerifiedAndUserIdNot(TEST_EMAIL, TEST_USER_ID);
+//        System.out.println("***");
+//        System.out.println(accounts != null);
+//        System.out.println(accounts.isEmpty());
+//        System.out.println(accounts.size());
+//        System.out.println(accounts.getClass().getName());
+
+        Account testAccount = accountRepository.findByUserId("testUser4");
+//        System.out.println("***");
+//        System.out.println(testAccount == null);
+    }
+
+    @DisplayName("이메일 인증 시, 해당 이메일로 인증 대기중인 다른 모든 계정에서 해당 이메일 대기 삭제 - 2개의 계정")
+    @Test
+    void deleteWaitingEmailInformationOfOtherAccount() throws Exception{
+        Account account1 = new Account();
+        account1.setUserId(TEST_USER_ID_1);
+        account1.setEmailWaitingToBeVerified(TEST_EMAIL);
+        Account account2 = new Account();
+        account2.setUserId(TEST_USER_ID_2);
+        account2.setEmailWaitingToBeVerified(TEST_EMAIL);
+        accountRepository.save(account1);
+        accountRepository.save(account2);
+
+        Account account = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
+        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
+        emailVerificationRequestDto.setUserId(account.getUserId());
+        emailVerificationRequestDto.setEmail(account.getEmailWaitingToBeVerified());
+        emailVerificationRequestDto.setToken(account.getEmailVerificationToken());
+
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                        .param("userId", emailVerificationRequestDto.getUserId())
+                        .param("email", emailVerificationRequestDto.getEmail())
+                        .param("token", emailVerificationRequestDto.getToken()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().isOk())
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account account1InDb = accountRepository.findByUserId(TEST_USER_ID_1);
+        Account account2InDb = accountRepository.findByUserId(TEST_USER_ID_2);
+        Account accountInDb = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(account1InDb.getEmailWaitingToBeVerified());
+        assertNull(account2InDb.getEmailWaitingToBeVerified());
+
+        assertEquals(TEST_EMAIL, account.getVerifiedEmail());
+        assertNull(accountInDb.getEmailWaitingToBeVerified());
+        assertNull(accountInDb.getEmailVerificationToken());
+        assertTrue(accountInDb.isEmailVerified());
+        assertTrue(accountInDb.isEmailFirstVerified());
+    }
+
+    @DisplayName("이메일 인증 시, 해당 이메일로 인증 대기중인 다른 모든 계정에서 해당 이메일 대기 삭제 - 1개의 계정")
+    @Test
+    void deleteWaitingEmailInformationOfOtherOneAccount() throws Exception{
+        Account account1 = new Account();
+        account1.setUserId(TEST_USER_ID_1);
+        account1.setEmailWaitingToBeVerified(TEST_EMAIL);
+        accountRepository.save(account1);
+
+        Account account = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
+        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
+        emailVerificationRequestDto.setUserId(account.getUserId());
+        emailVerificationRequestDto.setEmail(account.getEmailWaitingToBeVerified());
+        emailVerificationRequestDto.setToken(account.getEmailVerificationToken());
+
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", emailVerificationRequestDto.getUserId())
+                .param("email", emailVerificationRequestDto.getEmail())
+                .param("token", emailVerificationRequestDto.getToken()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().isOk())
+                .andExpect(view().name(EMAIL_VERIFICATION_SUCCESS_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account account1InDb = accountRepository.findByUserId(TEST_USER_ID_1);
+        Account accountInDb = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(account1InDb.getEmailWaitingToBeVerified());
+
+        assertEquals(TEST_EMAIL, account.getVerifiedEmail());
+        assertNull(accountInDb.getEmailWaitingToBeVerified());
+        assertNull(accountInDb.getEmailVerificationToken());
+        assertTrue(accountInDb.isEmailVerified());
+        assertTrue(accountInDb.isEmailFirstVerified());
     }
 
 }

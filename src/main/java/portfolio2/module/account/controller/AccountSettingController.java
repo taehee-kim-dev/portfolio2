@@ -223,7 +223,7 @@ public class AccountSettingController {
 
     // 이메일 변경
     @PostMapping(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
-    public String updateAccountNickname(@SessionAccount Account sessionAccount,
+    public String updateAccountEmail(@SessionAccount Account sessionAccount,
                                         @Valid @ModelAttribute AccountEmailUpdateRequestDto accountEmailUpdateRequestDto,
                                         Errors errors, Model model,
                                         RedirectAttributes redirectAttributes){
