@@ -40,6 +40,7 @@ public class SignUpAndLoggedInEmailVerifiedSecurityContextFactory implements Wit
         Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
 
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto();
+        emailVerificationRequestDto.setUserId(TEST_USER_ID);
         emailVerificationRequestDto.setEmail(TEST_EMAIL);
         emailVerificationRequestDto.setToken(signedUpAccount.getEmailVerificationToken());
         emailVerificationService.verifyEmailAndUpdateSessionIfLoggedInByEmailVerifiedAccount

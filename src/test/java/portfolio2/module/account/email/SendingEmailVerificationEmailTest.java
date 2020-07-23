@@ -220,7 +220,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
 
-        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
+        verify(emailSendingProcessForAccount, times(3)).sendEmailVerificationEmail(any(Account.class));
     }
 
     // 입력 에러
