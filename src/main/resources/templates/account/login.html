@@ -2,33 +2,100 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #errorBottomMessage{
+                margin-bottom: 2px;
+            }
+            #logInTitle{
+                margin-top: 91px;
+                margin-bottom: 15px;
+            }
+            #loginForm{
+                margin-top: 12px;
+            }
+            #logInButton{
+                margin-bottom: 8px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #errorBottomMessage{
+                margin-bottom: 2px;
+            }
+            #logInTitle{
+                margin-top: 91px;
+                margin-bottom: 15px;
+            }
+            #loginForm{
+                margin-top: 12px;
+            }
+            #logInButton{
+                margin-bottom: 8px;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #errorBottomMessage{
+                margin-bottom: 2px;
+            }
+            #logInTitle{
+                margin-top: 39px;
+                margin-bottom: 15px;
+            }
+            #loginForm{
+                margin-top: 12px;
+            }
+            #logInButton{
+                margin-bottom: 8px;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #errorBottomMessage{
+                margin-bottom: 2px;
+            }
+            #logInTitle{
+                margin-top: 53px;
+                margin-bottom: 15px;
+            }
+            #loginForm{
+                margin-top: 12px;
+            }
+            #logInButton{
+                margin-bottom: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <div th:replace="fragment.html :: commonNav"></div>
 
-<div class="container justify-content-center">
+<div class="container">
 
     <div>
-        <h2 id="title" class="text-center" style="margin-top: 90px;margin-bottom: 23px">로그인</h2>
+        <h2 id="logInTitle" class="text-center">로그인</h2>
     </div>
 
     <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
-
         <p>아이디/이메일 또는 패스워드가 올바르지 않습니다.</p>
-        <p style="margin-bottom: 0px;">
+        <p id="errorBottomMessage">
             확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-password}">비밀번호 찾기</a>를 이용하세요.
         </p>
     </div>
 
-    <form id="login-form" style="width: 350px; margin: auto; margin-top: 22px; " action="#"
-          th:action="@{/login}" method="post" novalidate>
+    <form id="loginForm" class="mx-auto col-lg-2 col-md-6" th:action="@{/login}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
-        <div class="form-group" style="margin-bottom: 14px">
+        <div class="form-group" >
             <label for="username">아이디 또는 이메일</label>
             <input id="username" name="username" type="text" class="form-control"
                    placeholder="ID or Email" aria-describedby="usernameHelp" autofocus required>
-            <small id="usernameHelp" class="form-text text-muted" style="margin-top: 10px">
+            <small id="usernameHelp" class="form-text text-muted">
                 인증되지 않은 이메일로는 로그인할 수 업습니다.
             </small>
         </div>
@@ -37,7 +104,7 @@
             <label for="password">비밀번호</label>
             <input id="password" name="password" type="password" class="form-control"
                    aria-describedby="passwordHelp" placeholder="Password" required>
-            <small id="passwordHelp" class="form-text text-muted" style="margin-top: 10px">
+            <small id="passwordHelp" class="form-text text-muted">
                 비밀번호가 기억나지 않는다면, <a href="#" th:href="@{/find-password}">비밀번호 찾기</a>를 이용하세요.
             </small>
         </div>
@@ -48,9 +115,9 @@
         </div>
 
         <div class="form-group" >
-            <button class="btn btn-primary btn-block" type="submit"
+            <button id="logInButton" class="btn btn-primary btn-block" type="submit"
                     aria-describedby="submitHelp">로그인</button>
-            <small id="submitHelp" class="form-text text-muted" style="margin-top: 10px;">
+            <small id="submitHelp" class="form-text text-muted text-center">
                 아직 계정이 없으시다면, <a href="#" th:href="@{/sign-up}">회원가입</a>을 해보세요!
             </small>
         </div>

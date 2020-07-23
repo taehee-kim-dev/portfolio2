@@ -49,14 +49,12 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
+    <div th:replace="fragment.html :: commonNav"></div>
     <div>
         <h1 id="postTitle" class="text-center">글 작성</h1>
     </div>
-    <form id="post-form" class="needs-validation mx-auto col-lg-7"
+    <form id="post-form" class="needs-validation mx-auto col-lg-4 col-md-10"
           th:action="@{/post-new-post}" th:object="${postNewPostRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
@@ -91,6 +89,7 @@
 <script th:replace="fragment.html :: commonJavaScript"></script>
 <script src="/library/summernote/summernote-bs4.min.js"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
+<script th:replace="fragment.html :: ajax-csrf-header"></script>
 <script type="application/javascript">
     let total_tag = []
 

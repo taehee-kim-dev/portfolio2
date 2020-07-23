@@ -14,87 +14,10 @@
     <link rel="stylesheet" href="/library/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
     <style>
-        /*.container{*/
-        /*    max-width: 100%;*/
-        /*    padding: 0;*/
-        /*}*/
-        /*html{*/
-        /*    padding-bottom: 100px;*/
-        /*}*/
-        /*.list-group-item{*/
-        /*    width: 160px;*/
-        /*    height: 40px;*/
-        /*    padding: 7px;*/
-        /*}*/
-        /*.modal-dialog{*/
-        /*    margin-top: 150px;*/
-        /*}*/
-        /*#notificationDeleteButton{*/
-        /*    color: gray;*/
-        /*}*/
-        /*#notificationDeleteButton:hover{*/
-        /*    color: black;*/
-        /*}*/
-        /*.notificationContent{*/
-        /*    width: 402px;*/
-        /*    height: 131px;*/
-        /*}*/
-        /*.notificationLink{*/
-        /*    text-align: left;*/
-        /*    width: 350px;*/
-        /*    height: 116px;*/
-        /*}*/
-        /*#userNameAndNicknameDropdownMenu{*/
-        /*    height: 70px;*/
-        /*    padding-top: 6px;*/
-        /*}*/
-        /*.userDropdownMenu{*/
-        /*    height: 43px;*/
-        /*}*/
-        /*.userAllDropdownMenu{*/
-        /*    padding: 0;*/
-        /*    width: 143px;*/
-        /*}*/
-        /*.userDropdownItem{*/
-        /*    padding-top: 9px;*/
-        /*    padding-bottom: 9px;*/
-        /*}*/
-        /*#userIconArrow{*/
-        /*    margin-left: 3px;*/
-        /*    margin-right: 6px;*/
-        /*    color: gray;*/
-        /*}*/
-        /*@media (min-width: 992px) {*/
-        /*    #mainBrandTitle{*/
-        /*        margin-left: 34px;*/
-        /*    }*/
-        /*}*/
-        /*@media (min-width: 576px) and (max-width: 991.98px) {*/
-        /*    #mainBrandTitle{*/
-        /*        margin-bottom: 2px;*/
-        /*        margin-left: 7px;*/
-        /*    }*/
-        /*    #signUpButton{*/
-        /*        margin-top: -3px;*/
-        /*    }*/
-        /*    #mainSearch{*/
-        /*        margin-top: 6px;*/
-        /*        margin-bottom: 14px;*/
-        /*    }*/
-        /*}*/
-        /*@media (max-width: 575.98px) {*/
-        /*    #mainBrandTitle{*/
-        /*        margin-bottom: 2px;*/
-        /*        margin-left: 7px;*/
-        /*    }*/
-        /*    #signUpButton{*/
-        /*        margin-top: -3px;*/
-        /*    }*/
-        /*    #mainSearch{*/
-        /*        margin-bottom: 6px;*/
-        /*    }*/
-        /*}*/
-
+        .container{
+            max-width: 100%;
+            padding: 0;
+        }
         /* 오직 데스크탑만 */
         @media (min-width: 992px) {
             #userIconImage{
@@ -149,6 +72,17 @@
                 width: 191px;
                 font-size: 18px;
             }
+            #mainLogInButton{
+                margin-top: 6px;
+                margin-bottom: 1px;
+            }
+            #mainSignUpLink{
+                padding: 0;
+            }
+            #mainSearchForm{
+                margin-top: 17px;
+                margin-bottom: 15px;
+            }
         }
 
         /* 오직 핸드폰만 */
@@ -161,12 +95,25 @@
             }
             #mainSearchButton{
                 width: 100%;
+                margin-top: 17px;
+                margin-bottom: 15px;
             }
             #userDropdownMenu{
                 margin-left: auto;
                 margin-right: auto;
                 width: 178px;
                 font-size: 17px;
+            }
+            #mainLogInButton{
+                margin-top: 6px;
+                margin-bottom: 1px;
+            }
+            #mainSignUpLink{
+                padding: 0;
+            }
+            #mainSearchForm{
+                margin-top: 17px;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -182,11 +129,11 @@
 
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-0">
-                <li class="nav-item active mr-lg-4 d-flex align-items-center" sec:authorize="!isAuthenticated()">
+                <li id="mainLogInButton" class="nav-item active mr-lg-4 d-flex align-items-center justify-content-center" sec:authorize="!isAuthenticated()">
                     <a class="nav-link " th:href="@{/login}">로그인</a>
                 </li>
-                <li class="nav-item active mr-lg-5 d-flex align-items-center" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
+                <li id="mainSignUpButton" class="nav-item active mr-lg-5 d-flex align-items-center justify-content-center" sec:authorize="!isAuthenticated()">
+                    <a id="mainSignUpLink" class="nav-link" th:href="@{/sign-up}">회원가입</a>
                 </li>
                 <li class="nav-item active mr-lg-5  d-flex align-items-center order-lg-2 order-md-3 order-3" sec:authorize="isAuthenticated()">
                     <a id="postNewPostButton"  class="nav-link btn btn-outline-info p-2" th:href="@{/post-new-post}">게시글 작성</a>
@@ -194,7 +141,7 @@
                 <li id="notificationBellOuter" class="nav-item active mr-lg-5 d-flex align-items-center order-lg-3 order-md-2 order-2" sec:authorize="isAuthenticated()">
                         <i id="ringBellFont" class="far fa-bell fa-lg text-dark" style="font-size: 29px"></i>
                 </li>
-                <li id="userIcon" class="nav-item dropdown mr-lg-4 order-lg-4 order-md-1 order-1">
+                <li id="userIcon" class="nav-item dropdown mr-lg-4 order-lg-4 order-md-1 order-1"  sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle p-0" href="#" id="userIconImage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
                              width="100%" height="100%" class="rounded border bg-light"></svg>
@@ -202,8 +149,8 @@
                              width="100%" height="100%" class="rounded border"/>
                     </a>
                     <div id="userDropdownMenu" class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="userIconImage">
-                        <span id="userIdOfUserIcon" class="dropdown-item-text" sec:authentication="name"></span>
-                        <span id="userNicknameOfUserIcon" class="dropdown-item-text">( <span th:text="${sessionAccount.nickname}"></span> )</span>
+                        <span  class="dropdown-item-text" th:text="${sessionAccount.nickname}"></span>
+                        <span id="userNicknameOfUserIcon" class="dropdown-item-text"  sec:authentication="name"></span>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>
                         <a class="dropdown-item" th:href="@{#}">내 게시글</a>
@@ -215,7 +162,7 @@
                     </div>
                 </li>
             </ul>
-            <form id="mainSearchForm" class="form-inline my-2 my-lg-0 order-lg-1 order-md-4 order-4">
+            <form id="mainSearchForm" class="form-inline my-lg-0 order-lg-1 order-md-4 order-4">
                 <input class="form-control mr-md-3" type="search" aria-label="Search" placeholder="Search">
                 <button id="mainSearchButton" class="btn btn-outline-success my-2 my-sm-0 mr-lg-5" type="submit">검색</button>
             </form>
@@ -223,142 +170,6 @@
     </nav>
 
 
-
-
-
-<!--    <nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--        &lt;!&ndash; 타임리프로 랜더링 할 때, href에 들어갈 값을 "@{/}" 값으로 바꿔준다. &ndash;&gt;-->
-<!--        &lt;!&ndash; 타임리프가 알아서 경로 등 치환해줘서 편함. &ndash;&gt;-->
-<!--        &lt;!&ndash; 타임리프로 랜더링 하지 않을 때는 순수 href값을 사용&ndash;&gt;-->
-<!--        &lt;!&ndash; 사실 타임리프로 랜더링 되지 않을 때, 순수 HTML을 사용할 때 사용할 값을 href="#"와 같이 줘야 한다. &ndash;&gt;-->
-<!--        <a id="mainBrandTitle" class="navbar-brand" href="/" th:href="@{/}" style="font-size: 30px">TH</a>-->
-
-<!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--            <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-
-<!--        <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">-->
-<!--            <ul id="mainNavBar" class="navbar-nav justify-content-end" style="margin-right: 30px;">-->
-<!--                <li class="nav-item" sec:authorize="!isAuthenticated()" style="margin-left: 5px;margin-right: 15px;">-->
-<!--                    <a class="nav-link" th:href="@{/login}">로그인</a>-->
-<!--                </li>-->
-<!--                <li id="signUpButton" class="nav-item" sec:authorize="!isAuthenticated()" style="margin-left: 5px;">-->
-<!--                    <a class="nav-link" th:href="@{/sign-up}">회원가입</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item" sec:authorize="isAuthenticated()">-->
-<!--                    <a class="nav-link btn btn-outline-info" type="button" th:href="@{/post-new-post}"-->
-<!--                       style="padding-top: 6px;padding-bottom: 6px;margin-right: 60px;">-->
-<!--                        <i class="fas fa-plus" style="padding-right: 2px"></i> 게시글 작성-->
-<!--                    </a>-->
-<!--                </li>-->
-
-<!--                <li class="nav-item" sec:authorize="isAuthenticated()" style="padding-top: 10px">-->
-<!--                        <a id="notificationBell" href="javascript:notificationBellClick();" style="cursor: pointer;margin-right: 43px">-->
-<!--                        <span th:if="${unCheckedNotification.size() == 0}" class="text-dark">-->
-<!--                            <i class="far fa-bell fa-lg"></i>-->
-<!--                        </span>-->
-<!--                        <span th:if="${unCheckedNotification.size() >= 1}" class="text-danger">-->
-<!--                            <i class="fas fa-bell fa-lg"></i><span id="notificationCountBadge" class="badge badge-pill badge-danger" th:text="${unCheckedNotification.size()}"-->
-<!--                                                                   style="position: absolute;z-index: 5;top: 19px;right: 157px;"></span>-->
-<!--                        </span>-->
-<!--                        </a>-->
-
-<!--                        <div th:id="emptyNotificationMessageCard" class="card" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right: 139px;display: none;">-->
-<!--                            <div class="card-body text-center text-muted" style="padding: 7px 21px">-->
-<!--                                알림이 없습니다.-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div th:if="${allNotification.size() >= 1}" id="notificationList" style="position: absolute;z-index: 10;top: 52px;right:126px;display: none;max-height: 850px;overflow-y: auto">-->
-<!--                            <ul class="list-group">-->
-<!--                                <li th:id="'notificationContent' + ${notification.id}" class="list-group-item notificationContent" th:each="notification : ${allNotification}">-->
-<!--                                    <div style="float: left;">-->
-<!--                                        <a th:href="@{${notification.link}}" class="btn btn-light notificationLink" th:classappend="${notification.checked} ? text-muted">-->
-<!--                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||-->
-<!--                                                            notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">-->
-<!--                                                회원님의 관심 태그들 중,-->
-<!--                                                </span>-->
-<!--                                                <br>-->
-<!--                                                <span class="d-inline-block text-truncate" style="max-width: 300px;">-->
-<!--                                                    <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||-->
-<!--                                                            notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"-->
-<!--                                                          style="font-weight: bold" th:each="tag : ${notification.commonTag}">-->
-<!--                                                    <span th:text="${tag.getTitle()}"></span>-->
-<!--                                                    <span th:if="${#bools.isFalse(tagStat.last)}">,</span>-->
-<!--                                                    </span>-->
-<!--                                                </span>-->
-<!--                                                <br>-->
-
-<!--                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}">-->
-<!--                                                의 태그가 포함된 게시물이 게시되었습니다!-->
-<!--                                                </span>-->
-<!--                                                <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">의 태그가 기존 게시물에 추가되었습니다!-->
-<!--                                                </span>-->
-<!--                                                <br>-->
-<!--                                                <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>-->
-<!--                                                <span class="d-inline-block text-truncate" style="font-weight: bold;max-width: 300px" th:text="${notification.title}"></span>-->
-<!--                                                <span class="d-inline-block text-truncate" style="font-weight: bold">"</span>-->
-<!--                                        </a>-->
-<!--                                        <div id="notificationDeleteButton" th:onclick="'javascript:deleteNotification(' + ${notification.id} + ');'" style="position: absolute; cursor:pointer;top: 9px;right: 20px;" onclick="notificationDelete()">-->
-<!--                                            <i class="fas fa-times"></i>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                </li>-->
-
-<!--                <li class="nav-item" sec:authorize="isAuthenticated()" style="margin-left: 9px;">-->
-<!--                    <div id="userIcon" onclick="userIconClick()" onmouseover="userIconMouseOver()" onmouseout="userIconMouseOut()" style="margin-right: 6px; cursor: pointer">-->
-<!--                        <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"-->
-<!--                                 width="39" height="39" class="rounded border bg-light"></svg>-->
-<!--                        <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"-->
-<!--                                 width="39" height="39" class="rounded border"/>-->
-<!--                        <span id="userIconArrow"><i class="fas fa-sort-down"></i></span>-->
-<!--                    </div>-->
-<!--                    <div id="userMenu" class="text-center" style="position:absolute;top: 58px;right: 44px;z-index: 10;display: none">-->
-<!--                        <ul class="list-group">-->
-<!--                            <li class="list-group-item userAllDropdownMenu" id="userNameAndNicknameDropdownMenu">-->
-<!--                                <span class="d-inline-block text-truncate" style="max-width: 110px" sec:authentication="name" ></span>-->
-<!--                                <br>-->
-<!--                                <span class="d-inline-block text-truncate">(</span>-->
-<!--                                <span class="d-inline-block text-truncate" style="max-width: 110px" th:text="${sessionAccount.nickname}"></span>-->
-<!--                                <span class="d-inline-block text-truncate">)</span>-->
-<!--                            </li>-->
-<!--                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">-->
-<!--                                <a class="dropdown-item userDropdownItem" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>-->
-<!--                            </li>-->
-<!--                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">-->
-<!--                                <a class="dropdown-item userDropdownItem" th:href="@{'/account/post/' + ${#authentication.name}}">내 게시글</a>-->
-<!--                            </li>-->
-<!--                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">-->
-<!--                                <a class="dropdown-item userDropdownItem" href="#" th:href="@{/account/setting/profile}">설정</a>-->
-<!--                            </li>-->
-<!--                            <li class="list-group-item userDropdownMenu userAllDropdownMenu">-->
-<!--                                <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">-->
-<!--                                    <button class="dropdown-item userDropdownItem" type="submit">로그아웃</button>-->
-<!--                                </form>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--            </ul>-->
-
-<!--            <ul id="mainSearch" class="navbar-nav" style="margin-left: 2px; margin-right: 28px">-->
-<!--                <li class="nav-item">-->
-<!--                    <form th:action="@{/search/post}" class="form-inline" method="get">-->
-<!--                        <input class="form-control" name="keyword" type="search" aria-label="Search" style="width: 170px;margin-right: 30px"/>-->
-<!--                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>-->
-<!--                    </form>-->
-<!--                </li>-->
-<!--            </ul>-->
-
-<!--        </div>-->
-<!--    </nav>-->
-
-<!--    <div sec:authorize="isAuthenticated()" class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && #bools.isFalse(sessionAccount.isEmailVerified())}">-->
-<!--        <a href="#" th:href="@{/account/setting/account}" class="alert-link">이메일 인증</a>을 해야 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 서비스를 받으실 수 있습니다.-->
-<!--    </div>-->
 
 </div>
 
@@ -370,84 +181,17 @@
     <script src="/library/jquery/jquery-3.5.1.min.js"></script>
     <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
-    <script type="application/javascript">
-        function deleteNotification(notificationId) {
-            $.ajax({
-                autocomplete: {
-                    enabled: true,
-                    rightKey: true,
-                },
-                contentType: "application/json; charset=utf-8",
-                method: "POST",
-                url: "/notification/delete",
-                data: JSON.stringify({'notificationIdToDelete': notificationId})
-                }).done(function () {
-                    $("#notificationContent" + notificationId).fadeOut(300,
-                        function(){
-                            $(this).remove();
-                        }
-                    );
-                    let currentNotificationCount = document.getElementById("notificationCountBadge").innerText;
-                    let count = parseInt(currentNotificationCount);
-                    document.getElementById("notificationCountBadge").innerText = count.toString(10);
-                });
-            }
-    </script>
-    <script type="application/javascript">
-        const notificationList = document.getElementById("notificationList");
-        const notificationBell = document.getElementById("notificationBellOuter");
-        window.addEventListener('click', function(e){
-            if(notificationList !== null){
-                if (!notificationBell.contains(e.target)
-                    && !notificationList.contains(e.target)){
-                    notificationList.style.display = "none";
-            }
-        }});
-        function notificationBellClick(){
-            if (notificationList.style.display === "none") {
-                notificationList.style.display = "";
-            } else if (notificationList.style.display === "") {
-                notificationList.style.display = "none";
-            }
-        }
-    </script>
-    <script type="application/javascript">
-        const userIcon = document.getElementById("userIcon");
-        const userMenu = document.getElementById("userMenu");
-        window.addEventListener('click', function(e){
-            if(userMenu !== null){
-                if (!userIcon.contains(e.target)
-                    && !userMenu.contains(e.target)){
-                    userMenu.style.display = "none";
-                }
-            }
-        });
-        function userIconClick(){
-            if (userMenu.style.display === "none") {
-                userMenu.style.display = "";
-            } else if (userMenu.style.display === "") {
-                userMenu.style.display = "none";
-            }
-        }
-
-        const userIconArrow = document.getElementById("userIconArrow");
-        function userIconMouseOver(){
-            userIconArrow.style.color = 'black';
-        }
-        function userIconMouseOut(){
-            userIconArrow.style.color = 'gray';
-        }
-    </script>
-    <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
-        $(function() {
-            var csrfToken = /*[[${_csrf.token}]]*/ null;
-            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-            $(document).ajaxSend(function (e, xhr, options) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            });
-        });
-    </script>
 </th:block>
+
+<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
 
 
 

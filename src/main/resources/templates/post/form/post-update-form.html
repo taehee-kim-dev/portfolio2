@@ -49,14 +49,13 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragment.html :: commonNav"></div>
 <div class="container">
+    <div th:replace="fragment.html :: commonNav"></div>
     <div class="postTitle">
         <div>
             <h1 id="postTitle" class="text-center">글 수정</h1>
         </div>
-        <form id="post-form" class="needs-validation mx-auto col-lg-7"
+        <form id="post-form" class="needs-validation mx-auto col-lg-4 col-md-10"
               th:action="@{/post-update}" th:object="${postUpdateRequestDto}" method="post" novalidate>
             <input type="hidden" th:field="*{postIdToUpdate}">
             <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->

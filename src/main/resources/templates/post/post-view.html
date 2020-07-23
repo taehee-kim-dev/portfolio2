@@ -93,7 +93,7 @@
         }
 
         /* 초소형 핸드폰 */
-        @media (max-width: 340px) {
+        @media (max-width: 339.98px) {
             #postView {
                 margin-top: 43px;
             }
@@ -126,13 +126,11 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
+    <div th:replace="fragment.html :: commonNav"></div>
 
     <div id="postView">
-        <table id="postViewTable" class="table table-bordered mx-auto col-lg-7 col-md-10 col-12">
+        <table id="postViewTable" class="table table-bordered mx-auto col-lg-4 col-md-8 col-11">
             <tbody>
             <tr>
                 <td id="postTitle" colspan="2" th:text="${post.getTitle()}">
