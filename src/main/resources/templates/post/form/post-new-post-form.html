@@ -5,8 +5,46 @@
     <link rel="stylesheet" href="/library/summernote/summernote-bs4.min.css" />
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
-        .form-group{
-            margin-bottom: 30px;
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #postTitle{
+                margin-top: 66px;
+                margin-bottom: 30px;
+            }
+            #titleInput{
+                margin-bottom: 26px;
+            }
+            #postButton{
+                margin-top: 26px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #postTitle{
+                margin-top: 45px;
+                margin-bottom: 27px;
+            }
+            #titleInput{
+                margin-bottom: 27px
+            }
+            #postButton{
+                margin-top: 23px;
+            }
+        }
+
+        /* 핸드폰 */
+        @media (max-width: 575.98px) and (max-width: 991.98px){
+            #postTitle{
+                margin-top: 27px;
+                margin-bottom: 21px;
+            }
+            #titleInput{
+                margin-bottom: 23px
+            }
+            #postButton{
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -16,13 +54,13 @@
 
 <div class="container">
     <div>
-        <h1 id="pageTitle" class="text-center" style="margin-top: 65px;margin-bottom: 33px">글 작성</h1>
+        <h1 id="postTitle" class="text-center">글 작성</h1>
     </div>
-    <form id="post-form" class="needs-validation"  style="margin: auto; width: 750px"
+    <form id="post-form" class="needs-validation mx-auto col-lg-7"
           th:action="@{/post-new-post}" th:object="${postNewPostRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
-            <input type="text" th:field="*{title}" class="form-control"
+            <input id="titleInput" type="text" th:field="*{title}" class="form-control"
                    placeholder="글 제목 (50자 이내로 작성해 주세요)"
                    th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Post title Error</small>
@@ -33,9 +71,9 @@
                       th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''"></textarea>
             <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Post content Error</small>
         </div>
-        <div style="width: 750px">
+        <div>
 
-            <div class="alert alert-info" role="alert" style="width: 750px">
+            <div class="alert alert-info" role="alert">
                 태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
                 <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
             </div>
@@ -44,7 +82,7 @@
         </div>
 
         <div class="form-group" >
-            <button class="btn btn-primary btn-block" type="button" onclick="submit_func()" style="margin-top: 22px"
+            <button id="postButton" class="btn btn-primary btn-block" type="button" onclick="submit_func()"
                     aria-describedby="submitHelp">글 작성하기</button>
         </div>
     </form>

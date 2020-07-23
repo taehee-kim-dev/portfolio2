@@ -4,11 +4,76 @@
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
-        form{
-            display: inline;
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #postView{
+                margin-top: 100px;
+            }
+            #postTitle{
+                padding: 24px 38px;
+            }
+            #postViewTable{
+                margin-bottom: 42px;
+            }
+            #postContent{
+                padding: 30px 50px;
+            }
+            #modifyButton{
+                width: 270px;
+                margin-right: 59px;
+            }
+            #deleteButton{
+                width: 270px;
+            }
         }
-        .tagify{
-            padding: 3px;
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #postView{
+                margin-top: 74px
+            }
+            #postTitle{
+                padding: 24px 38px;
+            }
+            #postViewTable{
+                margin-bottom: 42px;
+            }
+            #postContent{
+                padding: 30px 50px;
+            }
+            #modifyButton{
+                width: 236px;
+                margin-right: 42px;
+            }
+            #deleteButton{
+                width: 236px;
+            }
+        }
+
+        /* 핸드폰 */
+        @media (max-width: 575.98px) and (max-width: 991.98px){
+            #postView{
+                margin-top: 43px;
+            }
+            #postTitle{
+                padding: 14px 17px;
+            }
+            #postViewTable{
+                margin-bottom: 23px;
+            }
+            .tableTitle{
+                width: 82px;
+            }
+            #postContent{
+                padding: 26px 28px;
+            }
+            #modifyButton{
+                width: 138px;
+                margin-right: 19px;
+            }
+            #deleteButton{
+                width: 138px;
+            }
         }
     </style>
 </head>
@@ -18,16 +83,16 @@
 
 <div class="container">
 
-    <div id="post-view" style="margin-top: 100px">
-        <table class="table table-bordered" style="margin: auto; width: 750px; margin-bottom: 35px">
+    <div id="postView">
+        <table id="postViewTable" class="table table-bordered mx-auto col-lg-7 col-md-10 col-12">
             <tbody>
             <tr>
-                <td colspan="2" th:text="${post.getTitle()}" style="padding: 20px 40px 20px 40px;font-size: 24px; font-weight: bold">
+                <td id="postTitle" colspan="2" th:text="${post.getTitle()}">
                     글 제목
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td style="min-width:100px"><span>작성자 : </span></td>
+                <td class="tableTitle"><span>작성자 : </span></td>
                 <td style="vertical-align: middle">
                     <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
                         작성자 닉네임(작성자 아이디)
@@ -35,23 +100,22 @@
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td style="min-width:100px"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
+                <td class="tableTitle"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
             <tr style="text-align: center">
-                <td style="min-width:100px;vertical-align: middle"><span>태그 : </span></td>
+                <td class="tableTitle" style="vertical-align: middle"><span>태그 : </span></td>
                 <td style="vertical-align: middle"><input name="tag" readonly th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
-                <td colspan="2" th:utext="${post.getContent()}" style="padding: 38px 40px 22px 40px;">글 내용</td>
+                <td id="postContent" colspan="2" th:utext="${post.getContent()}">글 내용</td>
             </tr>
             </tbody>
         </table>
 
-        <div class="text-center" style="margin: 0">
-            <a th:if="${isAuthor}" class="btn btn-primary" href="#" th:href="@{'/post-update/' + ${post.getId()}}"
-               style="width: 300px; margin-right: 50px">수정하기</a>
+        <div class="text-center mx-auto">
+            <a id="modifyButton" th:if="${isAuthor}" class="btn btn-primary" th:href="@{'/post-update/' + ${post.getId()}}">수정하기</a>
             <!-- Button trigger modal -->
-            <button th:if="${isAuthor}" type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal" style="width: 300px">
+            <button id="deleteButton" th:if="${isAuthor}" type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal">
                 삭제하기
             </button>
         </div>
