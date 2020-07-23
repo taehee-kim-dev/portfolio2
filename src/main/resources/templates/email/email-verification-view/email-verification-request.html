@@ -2,6 +2,117 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #outerBox{
+
+            }
+            #emailVerificationRequestTitle{
+                margin-top: 64px;
+            }
+            #emailVerificationRequestNotice{
+                margin-top: 36px;
+                margin-bottom: 34px;
+            }
+            #line1{
+                margin-bottom: 9px;
+            }
+            #line2{
+
+            }
+            #line3{
+                margin-top: 22px;
+                margin-bottom: 30px;
+            }
+            #accountEmailSettingButton{
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #outerBox{
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #emailVerificationRequestTitle{
+                margin-top: 57px;
+            }
+            #emailVerificationRequestNotice{
+                margin-top: 31px;
+                margin-bottom: 32px;
+            }
+            #line1{
+                margin-bottom: 6px;
+            }
+            #line2{
+
+            }
+            #line3{
+                margin-top: 23px;
+                margin-bottom: 30px;
+            }
+            #accountEmailSettingButton{
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #outerBox{
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #emailVerificationRequestTitle{
+                margin-top: 43px;
+            }
+            #emailVerificationRequestNotice{
+                margin-top: 27px;
+                margin-bottom: 27px;
+            }
+            #line1{
+                margin-bottom: 6px;
+            }
+            #line2{
+
+            }
+            #line3{
+                margin-top: 21px;
+                margin-bottom: 25px;
+            }
+            #accountEmailSettingButton{
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #outerBox{
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #emailVerificationRequestTitle{
+                margin-top: 39px;
+            }
+            #emailVerificationRequestNotice{
+                margin-top: 27px;
+                margin-bottom: 27px;
+            }
+            #line1{
+                margin-bottom: 6px;
+            }
+            #line2{
+
+            }
+            #line3{
+                margin-top: 22px;
+                margin-bottom: 19px;
+            }
+            #accountEmailSettingButton{
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -9,19 +120,18 @@
 
 <div class="container">
 
-    <div class="text-center">
+    <div id="outerBox" class="text-center">
 
-        <h1 style="margin-top: 100px">이메일 인증 이메일이 발송되었습니다.</h1>
+        <h3 id="emailVerificationRequestTitle">이메일 인증 이메일이 발송되었습니다.</h3>
 
-        <h3 style="margin-top: 30px">이메일 인증을 해야 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 서비스를 받으실 수 있습니다.</h3>
+        <h4 id="emailVerificationRequestNotice">이메일 인증을 해야 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 서비스를 받으실 수 있습니다.</h4>
 
         <div>
-            <p style="margin-top: 40px; margin-bottom: 10px;">회원님의 이메일 : </p>
-            <p class="lead" th:text="${email}" style="margin-bottom: 31px;">your@email.com</p>
-            <p class="lead" style="margin-bottom: 33px;">이메일이 도착하지 않는다면, 아래의 버튼을 눌러 이메일을 변경하거나 인증 메일을 다시 보내세요.</p>
-            <a class="btn btn-outline-info" th:href="@{/account/setting/account}">계정 이메일 설정</a>
+            <p id="line1">회원님의 이메일 : </p>
+            <p id="line2" class="lead font-weight-bold" th:text="${email}">your@email.com</p>
+            <p id="line3" class="lead">이메일이 도착하지 않는다면, 아래의 버튼을 눌러 이메일을 변경하거나 인증 메일을 다시 보내세요.</p>
+            <a id="accountEmailSettingButton" class="btn btn-outline-info" th:href="@{/account/setting/account}">계정 이메일 설정</a>
         </div>
-
 
     </div>
 
