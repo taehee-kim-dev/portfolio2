@@ -2,6 +2,149 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #title{
+                margin-top: 78px;
+            }
+            #line1{
+                margin-top: 31px;
+            }
+            #line2{
+                margin-top: 14px;
+            }
+            #line3{
+
+            }
+            #line4{
+                margin-top: 31px;
+                margin-bottom: 19px;
+            }
+            #line5{
+
+            }
+            #line6{
+
+            }
+            #line7{
+                margin-top: 31px;
+                margin-bottom: 19px;
+            }
+            #line8{
+
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #title{
+                margin-top: 78px;
+            }
+            #line1{
+                margin-top: 31px;
+            }
+            #line2{
+                margin-top: 14px;
+            }
+            #line3{
+
+            }
+            #line4{
+                margin-top: 31px;
+                margin-bottom: 18px;
+            }
+            #line5{
+
+            }
+            #line6{
+
+            }
+            #line7{
+                margin-top: 31px;
+                margin-bottom: 18px;
+            }
+            #line8{
+
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #outerBox{
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #title{
+                margin-top: 56px;
+            }
+            #line1{
+                margin-top: 31px;
+            }
+            #line2{
+                margin-top: 14px;
+            }
+            #line3{
+
+            }
+            #line4{
+                margin-top: 17px;
+                margin-bottom: 14px;
+            }
+            #line5{
+
+            }
+            #line6{
+
+            }
+            #line7{
+                margin-top: 17px;
+                margin-bottom: 14px;
+            }
+            #line8{
+
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #outerBox{
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #title{
+                margin-top: 56px;
+            }
+            #line1{
+                margin-top: 31px;
+            }
+            #line2{
+                margin-top: 14px;
+            }
+            #line3{
+
+            }
+            #line4{
+                margin-top: 27px;
+                margin-bottom: 17px;
+            }
+            #line5{
+
+            }
+            #line6{
+
+            }
+            #line7{
+                margin-top: 27px;
+                margin-bottom: 17px;
+            }
+            #line8{
+
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -9,19 +152,17 @@
 
 <div class="container">
 
-    <div class="notification text-center" th:if="${invalidLinkError == null}" style="margin-top:90px">
-        <h3 style="margin-bottom: 30px;">TH 이메일 인증 성공</h3>
-        <h2><span th:text="${nickname}">nickname</span>(<span th:text="${userId}">userId</span>)님의 이메일(<span th:text="${email}">email</span>)이 인증되었습니다!</h2>
-        <div th:if="${isEmailVerifiedAccountLoggedIn}">
-            <div style="margin-top: 40px"><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
+    <div id="outerBox" class="notification text-center" th:if="${invalidLinkError == null}">
+        <h3 id="title">TH 이메일 인증 성공</h3>
+        <h5 id="line1"><span th:text="${nickname}">nickname</span>(<span th:text="${userId}">userId</span>)님의 이메일(<span th:text="${email}">email</span>)이 인증되었습니다!</h5>
+        <div id="line2" th:if="${isEmailVerifiedAccountLoggedIn}"><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
+        <div id="line3" th:if="${sessionAccount != null && !isEmailVerifiedAccountLoggedIn}">
+            <h5 id="line4">해당 계정으로 로그인하여 이용해 주세요.</h5>
+            <div id="line5"><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
         </div>
-        <div th:if="${sessionAccount != null && !isEmailVerifiedAccountLoggedIn}">
-            <h3 style="margin-top: 30px; margin-bottom: 30px">해당 계정으로 로그인하여 이용해 주세요.</h3>
-            <div><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
-        </div>
-        <div th:if="${sessionAccount == null}">
-            <h3 style="margin-top: 30px; margin-bottom: 30px">로그인하여 이용해 주세요.</h3>
-            <div><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
+        <div id="line6" th:if="${sessionAccount == null}">
+            <h5 id="line7" >로그인하여 이용해 주세요.</h5>
+            <div id="line8"><small class="text-info">이제부터 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 TH의 다양한 서비스를 이용하실 수 있습니다.</small></div>
         </div>
     </div>
 

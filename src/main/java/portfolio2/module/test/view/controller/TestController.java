@@ -14,7 +14,10 @@ public class TestController {
     @GetMapping("/test-view")
     public String viewTest(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        model.addAttribute("email", sessionAccount.getEmailWaitingToBeVerified());
-        return "email/email-verification-view/email-verification-request";
+        model.addAttribute("nickname", "인뚜기");
+        model.addAttribute("userId", "shineb523");
+        model.addAttribute("email", "shineb523@gmail.com");
+        model.addAttribute("isEmailVerifiedAccountLoggedIn", false);
+        return "email/email-verification-view/email-verification-success";
     }
 }
