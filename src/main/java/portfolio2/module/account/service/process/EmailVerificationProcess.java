@@ -14,12 +14,13 @@ public class EmailVerificationProcess {
 
     // 이메일 인증 처리
     public Account verifyEmail(EmailVerificationRequestDto emailVerificationRequestDto) {
-        // 인증 대기중인 이메일로 해당 계정 찾음.
+        // 아이디와 인증 대기중인 이메일로 해당 계정 찾음.
         Account accountToBeVerified
-                = accountRepository.findByEmailWaitingToBeVerified(emailVerificationRequestDto.getEmail());
+                = accountRepository.findByUserIdAndEmailWaitingToBeVerified(
+                        emailVerificationRequestDto.getUserId(), emailVerificationRequestDto.getEmail());
         
         // 인증 대기중인 이메일 주소를 인증된 이메일 주소로 설정
-        accountToBeVerified.setVerifiedEmail(accountToBeVerified.getEmailWaitingToBeVerified());
+         accountToBeVerified.setVerifiedEmail(accountToBeVerified.getEmailWaitingToBeVerified());
         // 이메일 인증되었음으로 설정.
         accountToBeVerified.setEmailVerified(true);
         // 최초로 인증된 이메일 이력이 없다면, 해당 이력 있음으로 설정.

@@ -45,10 +45,10 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEmailNotVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
+    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
+    private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
@@ -147,6 +147,54 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
 
         AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
         String newEmail = "new@email.com";
+        accountEmailUpdateRequestDto.setEmail(newEmail);
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
+                .param("email", accountEmailUpdateRequestDto.getEmail())
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeDoesNotExist("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attributeCount(1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(ACCOUNT_SETTING_ACCOUNT_URL))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account accountAfterEmailSent = accountRepository.findByUserId(TEST_USER_ID);
+        assertNull(accountAfterEmailSent.getVerifiedEmail());
+        assertEquals(newEmail, accountAfterEmailSent.getEmailWaitingToBeVerified());
+        assertFalse(accountAfterEmailSent.isEmailVerified());
+        assertNotEquals(initialToken, accountAfterEmailSent.getEmailVerificationToken());
+        assertNotNull(accountAfterEmailSent.getEmailVerificationToken());
+        assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
+
+        verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
+    }
+
+    @DisplayName("인증 대기중인 이메일 - 모든 입력 정상 - 1회 성공")
+    @Test
+    void emailWaitingToBeVerifiedSuccess() throws Exception{
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+        Account testUser2 = accountRepository.findByUserId(TEST_USER_ID_2);
+        assertFalse(testUser2.isEmailVerified());
+        assertEquals(TEST_EMAIL_2, testUser2.getEmailWaitingToBeVerified());
+        assertNull(testUser2.getVerifiedEmail());
+        logInAndOutProcessForTest.logOut();
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
+        LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
+        String initialToken = beforeTry.getEmailVerificationToken();
+
+        AccountEmailUpdateRequestDto accountEmailUpdateRequestDto = new AccountEmailUpdateRequestDto();
+        String newEmail = TEST_EMAIL_2;
         accountEmailUpdateRequestDto.setEmail(newEmail);
         mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_EMAIL_URL)
                 .param("email", accountEmailUpdateRequestDto.getEmail())

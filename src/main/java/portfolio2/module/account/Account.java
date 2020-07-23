@@ -41,7 +41,7 @@ public class Account {
     @Column(unique = true)
     private String verifiedEmail;
 
-    @Column(unique = true)
+
     private String emailWaitingToBeVerified;
 
 

@@ -26,7 +26,8 @@ public class EmailSendingProcessForAccount {
         context.setVariable("userId", account.getUserId());
         context.setVariable("host", appProperties.getHost());
         context.setVariable("emailVerificationLink", CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + account.getEmailWaitingToBeVerified() +
+                "?userId=" + account.getUserId() +
+                "&email=" + account.getEmailWaitingToBeVerified() +
                 "&token=" + account.getEmailVerificationToken());
 
         String message = templateEngine.process("email/email-content/email-for-email-verification", context);

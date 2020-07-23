@@ -3,6 +3,205 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #accountSettingTitle {
+                margin-top: 62px;
+                margin-bottom: 23px;
+            }
+
+            #accountSettingMenu {
+                width: 153px;
+            }
+
+            #accountSettingSuccessMessageOuter {
+                margin-bottom: 27px;
+                width: 486px;
+                padding-right: 38px;
+                padding-top: 15px;
+            }
+
+            #accountSettingSuccessMessage {
+                margin-bottom: 18px;
+            }
+
+            #accountSettingSuccessMessageCloseButton {
+                padding-top: 10px;
+            }
+
+            #accountSettingForm {
+                padding-left: 74px;
+            }
+
+            #nicknameSettingForm {
+            }
+
+            #nicknameSettingButton {
+            }
+
+            #emailSettingForm {
+                margin-top: 28px;
+            }
+
+            #emailSettingButton {
+            }
+
+            #dividerLine{
+                margin-top: 43px;
+                margin-bottom: 43px;
+            }
+
+            #accountDeleteButton{
+                width: 100%;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #accountSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 36px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #accountSettingSuccessMessageOuter{
+                margin-bottom: 36px;
+                padding-right: 49px;
+                padding-top: 15px;
+            }
+            #accountSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #accountSettingSuccessMessageCloseButton{
+                padding-top: 10px;
+            }
+            #accountSettingForm{
+                margin-top: 37px;
+            }
+            #nicknameSettingForm {
+            }
+
+            #nicknameSettingButton {
+                margin-top: 26px;
+            }
+
+            #emailSettingForm {
+                margin-top: 28px;
+            }
+
+            #emailSettingButton {
+                margin-top: 23px;
+            }
+
+            #dividerLine{
+                margin-top: 43px;
+                margin-bottom: 43px;
+            }
+
+            #accountDeleteButton{
+                width: 100%;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #accountSettingTitle{
+                margin-top: 54px;
+                margin-bottom: 37px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #accountSettingSuccessMessageOuter{
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 45px;
+                padding-top: 15px;
+            }
+            #accountSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #accountSettingSuccessMessageCloseButton{
+                padding-top: 12px;
+            }
+            #accountSettingForm{
+                margin-top: 25px;
+            }
+            #nicknameSettingForm {
+            }
+
+            #nicknameSettingButton {
+                margin-top: 20px;
+            }
+
+            #emailSettingForm {
+                margin-top: 28px;
+                margin-bottom: 14px;
+            }
+
+            #emailSettingButton {
+            }
+
+            #dividerLine{
+                margin-top: 47px;
+                margin-bottom: 43px;
+            }
+
+            #accountDeleteButton{
+                width: 100%;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #accountSettingTitle{
+                margin-top: 47px;
+                margin-bottom: 35px;
+            }
+            #accountSettingMenu{
+                margin-bottom: 11px;
+            }
+            #accountSettingSuccessMessageOuter{
+                font-size: 14px;
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 46px;
+                padding-top: 15px;
+            }
+            #accountSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #accountSettingSuccessMessageCloseButton{
+                padding-top: 11px;
+            }
+            #accountSettingForm{
+                margin-top: 30px;
+            }
+            #nicknameSettingForm {
+            }
+
+            #nicknameSettingButton {
+                margin-top: 20px;
+            }
+
+            #emailSettingForm {
+                margin-top: 28px;
+                margin-bottom: 14px;
+            }
+
+            #emailSettingButton {
+            }
+
+            #dividerLine{
+                margin-top: 47px;
+                margin-bottom: 43px;
+            }
+
+            #accountDeleteButton{
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -11,84 +210,78 @@
 
 <div class="container">
 
-        <h2 style="text-align: center; margin-top: 75px; margin-bottom: 47px">계정 정보 변경</h2>
-        <div class="row justify-content-center">
+    <h2 id="accountSettingTitle" class="text-center">계정 정보 변경</h2>
 
-            <div>
-                <div th:replace="fragment.html :: setting-menu(currentMenu='account')"></div>
-            </div>
+    <div id="accountSettingSuccessMessageOuter" th:if="${message}"
+         class="mx-auto col-md-9 col-sm-11 alert alert-info alert-dismissible fade show text-center" role="alert">
+        <span id="accountSettingSuccessMessage" th:text="${message}">계정 정보 변경 완료 메시지</span>
+        <button id="accountSettingSuccessMessageCloseButton" type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
-            <div>
+    <div class="row justify-content-center col-lg-6 col-md-9 mx-auto">
 
-                <div th:if="${message}" class="alert alert-info alert-dismissible fade show text-center" role="alert"
-                    style="margin-bottom: 20px; padding: 10px 46px 8px 21px;">
-                    <span th:text="${message}">계정 정보 변경 완료 메시지</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="padding-top: 5px;padding-bottom: 0px;">
-                        <span aria-hidden="true">&times;</span>
+        <div id="accountSettingMenu" class="col-lg-2 order-1"
+             th:insert="fragment.html :: setting-menu(currentMenu='account')"></div>
+
+        <div id="accountSettingForm" class="col-lg-4 order-2">
+            <form id="nicknameSettingForm" th:action="@{/account/setting/account/nickname}" th:object="${accountNicknameUpdateRequestDto}" method="post" novalidate>
+
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
+                           placeholder="Nickname" aria-describedby="nicknameHelp"
+                           th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : ''">
+                    <small id="nicknameHelp" class="form-text text-muted">
+                        공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력해 주세요. 이후 변경할 수 있습니다.
+                    </small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}"
+                           th:errors="*{nickname}">Nickname Error</small>
+                </div>
+
+                <div class="form-group">
+                    <button id="nicknameSettingButton" class="btn btn-primary btn-block" type="submit"
+                            aria-describedby="submitHelp">닉네임 변경하기
                     </button>
                 </div>
+            </form>
 
+            <form id="emailSettingForm" th:action="@{/account/setting/account/email}"
+                  th:object="${accountEmailUpdateRequestDto}" method="post" novalidate>
 
-
-                <form style="width: 315px;"
-                      th:action="@{/account/setting/account/nickname}" th:object="${accountNicknameUpdateRequestDto}" method="post" novalidate>
-
-                    <div class="form-group" style="margin-bottom: 12px">
-                        <label for="nickname">닉네임</label>
-                        <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-                               placeholder="Nickname" aria-describedby="nicknameHelp"
-                               th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : ''">
-                        <small id="nicknameHelp" class="form-text text-muted">
-                            공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력해 주세요. 이후 변경할 수 있습니다.
-                        </small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input id="email" type="text" th:field="*{email}" class="form-control"
+                           placeholder="Email" aria-describedby="emailHelp"
+                           th:classappend="${#fields.hasErrors('email') || #bools.isFalse(sessionAccount.isEmailVerified())} ? 'is-invalid' : 'is-valid'">
+                    <div th:if="${#bools.isTrue(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}"
+                         class="valid-feedback">
+                        인증이 완료된 이메일 입니다.
                     </div>
-
-
-                    <div class="form-group" >
-                        <button class="btn btn-primary btn-block" type="submit"
-                                aria-describedby="submitHelp">닉네임 변경하기</button>
+                    <div th:if="${#bools.isFalse(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}"
+                         class="invalid-feedback">
+                        아직 인증되지 않은 이메일 입니다.
                     </div>
-                </form>
-
-                <form style="width: 315px;"
-                      th:action="@{/account/setting/account/email}" th:object="${accountEmailUpdateRequestDto}" method="post" novalidate>
-
-                    <div class="form-group" style="margin-bottom: 13px">
-                        <label for="email">이메일</label>
-                        <input id="email" type="text" th:field="*{email}" class="form-control"
-                               placeholder="Email" aria-describedby="emailHelp"
-                               th:classappend="${#fields.hasErrors('email') || #bools.isFalse(sessionAccount.isEmailVerified())} ? 'is-invalid' : 'is-valid'">
-                        <div th:if="${#bools.isTrue(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}" class="valid-feedback">
-                            인증이 완료된 이메일 입니다.
-                        </div>
-                        <div th:if="${#bools.isFalse(sessionAccount.isEmailVerified()) && !#fields.hasErrors('email')}" class="invalid-feedback">
-                            아직 인증되지 않은 이메일 입니다.
-                        </div>
-                        <small id="emailHelp" class="form-text text-muted" style="margin-top: 6px">
-                            이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.
-                        </small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
-                    </div>
-
-
-                    <div class="form-group" >
-                        <button class="btn btn-primary btn-block" type="submit"
-                                aria-describedby="submitHelp">인증 이메일 보내기</button>
-                    </div>
-                </form>
-
-                <div class="dropdown-divider" style="margin-top: 40px;margin-bottom: 40px"></div>
-                <p class="text-danger" style="margin-top: 35px">계정 삭제</p>
-                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-bottom: 30px">
-                            이 계정은 삭제할 수 없습니다.
+                    <small id="emailHelp" class="form-text text-muted">
+                        이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.
+                    </small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+                        Error</small>
                 </div>
-                <button class="btn btn-outline-danger disabled">계정 삭제</button>
 
-            </div>
+                <div class="form-group">
+                    <button id="emailSettingButton" class="btn btn-primary btn-block" type="submit"
+                            aria-describedby="submitHelp">인증 이메일 보내기
+                    </button>
+                </div>
+            </form>
 
+            <div id="dividerLine" class="dropdown-divider"></div>
+            <button id="accountDeleteButton" class="btn btn-outline-danger disabled">계정 삭제</button>
         </div>
+    </div>
 
 
 </div>

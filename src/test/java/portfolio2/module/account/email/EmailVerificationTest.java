@@ -83,7 +83,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 이메일 인증 링크
         String emailVerificationLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -138,7 +139,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 이메일 인증 링크
         String emailVerificationLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -203,7 +205,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
         // 이후에 링크 발급받은 상태
         // 이메일 인증 링크
         String validLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -271,7 +274,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
         Account accountInDbToBeEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
 
         String validLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -317,6 +321,60 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
     // 잘못된 링크 - 로그아웃 상태
 
+    @DisplayName("이메일 인증 -  아이디가 틀린 경우 - 로그아웃 상태")
+    @Test
+    void inValidUserIdWithLogOut() throws Exception{
+
+        // 회원가입 후 로그아웃
+        Account accountInDbToBeEmailVerified = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+
+        // 로그아웃 확인
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        // 링크
+        String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
+                "?userId=" + "invalid" +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
+
+        // 유효 링크 인증
+        mockMvc.perform(get(invalidEmailLink))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(unauthenticated());
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
     @DisplayName("이메일 인증 -  이메일이 틀린 경우 - 로그아웃 상태")
     @Test
     void inValidEmailWithLogOut() throws Exception{
@@ -329,7 +387,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + "notValid@email.com" +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + "notValid@email.com" +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -382,7 +441,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken() + 'd';
 
         // 유효 링크 인증
@@ -476,6 +536,58 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
     // 내 계정으로 로그인 상태
 
+    @DisplayName("이메일 인증 -  아이디가 틀린 경우 - 내 계정으로 로그인 상태")
+    @Test
+    void inValidUserIdWithLogInByOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        // 링크
+        String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
+                "?userId=" + "invalid" +
+                "&email=" + accountInDbToBeEmailVerified.getUserId() +
+                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
+
+        // 유효 링크 인증
+        mockMvc.perform(get(invalidEmailLink))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
     @DisplayName("이메일 인증 -  이메일이 틀린 경우 - 내 계정으로 로그인 상태")
     @Test
     void inValidEmailWithLogInByOwnAccount() throws Exception{
@@ -486,7 +598,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + "notValid@email.com" +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + "notValid@email.com" +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -537,7 +650,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken() + 'd';
 
         // 유효 링크 인증
@@ -632,6 +746,63 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
     @DisplayName("이메일 인증 -  이메일이 틀린 경우 - 다른 계정으로 로그인 상태")
     @Test
+    void inValidUserIdWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInDefault();
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 링크
+        String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
+                "?userId=" + "invalid" +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
+
+        // 유효 링크 인증
+        mockMvc.perform(get(invalidEmailLink))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
+    @DisplayName("이메일 인증 -  이메일이 틀린 경우 - 다른 계정으로 로그인 상태")
+    @Test
     void inValidEmailWithLogInByNotOwnAccount() throws Exception{
 
         Account accountInDbToBeEmailVerified
@@ -645,7 +816,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 링크
         String invalidEmailLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + "notValid@email.com" +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + "notValid@email.com" +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken();
 
         // 유효 링크 인증
@@ -701,7 +873,8 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
 
         String invalidTokenLink = CHECK_EMAIL_VERIFICATION_LINK_URL +
-                "?email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
+                "?userId=" + accountInDbToBeEmailVerified.getUserId() +
+                "&email=" + accountInDbToBeEmailVerified.getEmailWaitingToBeVerified() +
                 "&token=" + accountInDbToBeEmailVerified.getEmailVerificationToken() + 'd';
 
         // 유효 링크 인증
@@ -795,6 +968,60 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
+    @DisplayName("이메일 인증 - userId 파라미터가 null - 다른 계정으로 로그인 상태")
+    @Test
+    void userIdParameterNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", (String) null)
+                .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
+                .param("token", accountInDbToBeEmailVerified.getEmailVerificationToken()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
     @DisplayName("이메일 인증 - email 파라미터가 null - 다른 계정으로 로그인 상태")
     @Test
     void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
@@ -810,6 +1037,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 유효 링크 인증
         mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", accountInDbToBeEmailVerified.getUserId())
                 .param("email", (String) null)
                 .param("token", accountInDbToBeEmailVerified.getEmailVerificationToken()))
                 .andExpect(status().isOk())
@@ -863,6 +1091,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 유효 링크 인증
         mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", accountInDbToBeEmailVerified.getUserId())
                 .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
                 .param("token", (String) null))
                 .andExpect(status().isOk())
@@ -916,6 +1145,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 유효 링크 인증
         mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", accountInDbToBeEmailVerified.getUserId())
                 .param("email", (String) null)
                 .param("token", (String) null))
                 .andExpect(status().isOk())
@@ -954,7 +1184,61 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
-    @DisplayName("이메일 인증 - 인증 대기중인 이메일은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
+    @DisplayName("이메일 인증 - 모든 파라미터가 null - 다른 계정으로 로그인 상태")
+    @Test
+    void allParameterNullWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", (String) null)
+                .param("email", (String) null)
+                .param("token", (String) null))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("invalidLinkError"))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(INVALID_EMAIL_LINK_ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
+    @DisplayName("이메일 인증 - 해당 계정은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
     @Test
     void accountTokenNullWithLogInByNotOwnAccount() throws Exception{
 
@@ -972,6 +1256,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
         // 유효 링크 인증
         mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", accountInDbToBeEmailVerified.getUserId())
                 .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
                 .param("token", "abcde"))
                 .andExpect(status().isOk())

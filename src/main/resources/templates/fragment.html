@@ -159,7 +159,7 @@
                         <span id="userNicknameOfUserIcon" class="dropdown-item-text"  sec:authentication="name"></span>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>
-                        <a class="dropdown-item" th:href="@{#}">내 게시글</a>
+                        <a class="dropdown-item disabled" th:href="@{#}">내 게시글</a>
                         <a class="dropdown-item" th:href="@{/account/setting/profile}">설정</a>
                         <div class="dropdown-divider"></div>
                         <form class="form-inline" th:action="@{/logout}" method="post">
