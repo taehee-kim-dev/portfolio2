@@ -7,7 +7,7 @@
         @media (min-width: 992px) {
             #profileSettingTitle{
                 margin-top: 62px;
-                margin-bottom: 47px;
+                margin-bottom: 23px;
             }
             #profileSettingMenu{
                 width: 153px;
@@ -29,10 +29,9 @@
                 margin-top: 33px;
             }
             #profileSettingSuccessMessageOuter{
-                width: 300px;
-                margin-left: 40px;
-                margin-right: 40px;
-                padding-right: 47px;
+                margin-bottom: 27px;
+                width: 486px;
+                padding-right: 38px;
                 padding-top: 15px;
             }
             #profileSettingSuccessMessage{
@@ -57,14 +56,149 @@
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
+            #profileSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 37px;
+            }
+            #profileSettingMenu{
+                margin-bottom: 44px;
+            }
+            #profileSettingForm{
+                margin-top: 37px;
+            }
+            #imageFileSelectLabel{
+                padding-right: 79px;
+            }
+            #cut-button{
+                margin-top: 14px;
+                margin-bottom: 14px;
+            }
+            #confirm-button{
+            }
+            #profileSettingButton{
+                margin-top: 41px;
+            }
+            #profileSettingSuccessMessageOuter{
+                margin-bottom: 27px;
+                padding-right: 38px;
+                padding-top: 15px;
+            }
+            #profileSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #profileSettingSuccessMessageCloseButton{
+                padding-top: 10px;
+            }
+            #imageSetting{
+            }
+            #current-profile-image{
+            }
+            #reset-button{
+                margin-top: 13px;
+                margin-bottom: 18px;
+            }
+            #imageSetterHeader{
+                margin-bottom: 23px;
+            }
         }
 
         /* 핸드폰 일반 */
         @media (min-width: 340px) and (max-width: 575.98px) {
+            #profileSettingTitle{
+                margin-top: 59px;
+                margin-bottom: 37px;
+            }
+            #profileSettingMenu{
+                margin-bottom: 44px;
+            }
+            #profileSettingForm{
+                margin-top: 37px;
+            }
+            #imageFileSelectLabel{
+                padding-right: 89px;
+            }
+            #cut-button{
+                margin-top: 14px;
+                margin-bottom: 14px;
+            }
+            #confirm-button{
+            }
+            #profileSettingButton{
+                margin-top: 34px;
+            }
+            #profileSettingSuccessMessageOuter{
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 43px;
+                padding-top: 15px;
+            }
+            #profileSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #profileSettingSuccessMessageCloseButton{
+                padding-top: 12px;
+            }
+            #imageSetting{
+            }
+            #current-profile-image{
+            }
+            #reset-button{
+                margin-top: 13px;
+                margin-bottom: 18px;
+            }
+            #imageSetterHeader{
+                margin-bottom: 23px;
+            }
         }
 
         /* 초소형 핸드폰 */
         @media (max-width: 339.98px) {
+            #profileSettingTitle{
+                margin-top: 40px;
+                margin-bottom: 30px;
+            }
+            #profileSettingMenu{
+                margin-bottom: 35px;
+            }
+            #profileSettingForm{
+                margin-top: 37px;
+            }
+            #imageFileSelectLabel{
+                padding-right: 92px;
+            }
+            #cut-button{
+                margin-top: 14px;
+                margin-bottom: 14px;
+            }
+            #confirm-button{
+            }
+            #profileSettingButton{
+                margin-top: 34px;
+            }
+            #profileSettingSuccessMessageOuter{
+                width: 89%;
+                margin-bottom: 27px;
+                padding-right: 43px;
+                padding-top: 15px;
+                font-size: 15px;
+            }
+            #profileSettingSuccessMessage{
+                margin-bottom: 18px;
+            }
+            #profileSettingSuccessMessageCloseButton{
+                padding-top: 11px;
+            }
+            #imageSetting{
+            }
+            #current-profile-image{
+            }
+            #reset-button{
+                margin-top: 13px;
+                margin-bottom: 18px;
+            }
+            #imageSetterHeader{
+                margin-bottom: 23px;
+            }
         }
     </style>
     <link rel="stylesheet" href="/library/cropper/cropperjs-master/dist/cropper.min.css">
@@ -73,17 +207,18 @@
 <div class="container">
     <div th:replace="fragment.html :: commonNav"></div>
     <h2 id="profileSettingTitle" class="text-center">프로필 수정</h2>
-    <div class="row col-lg-6 mx-auto">
 
-        <div class="col-lg-2" th:insert="fragment.html :: setting-menu(currentMenu='profile')"></div>
+    <div id="profileSettingSuccessMessageOuter" th:if="${message}" class="col-md-9 col-sm-11 alert alert-info alert-dismissible fade show mx-auto text-center" role="alert">
+        <span id="profileSettingSuccessMessage" th:text="${message}">프로필 수정 완료 메시지</span>
+        <button id="profileSettingSuccessMessageCloseButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="row col-lg-6 col-md-9 mx-auto">
 
-        <div class="col-lg-6">
-            <div id="profileSettingSuccessMessageOuter" th:if="${message}" class="alert alert-info alert-dismissible fade show mx-auto text-center" role="alert">
-                <span id="profileSettingSuccessMessage" th:text="${message}">프로필 수정 완료 메시지</span>
-                <button id="profileSettingSuccessMessageCloseButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        <div class="col-lg-2 order-lg-1 order-1" th:insert="fragment.html :: setting-menu(currentMenu='profile')"></div>
+
+        <div class="col-lg-6 order-lg-2 order-3">
             <form id="profileSettingForm" class="mx-auto" th:action="@{/account/setting/profile}" th:object="${profileUpdateRequestDto}" method="post" novalidate>
                 <div class="form-group">
                     <label for="bio">한 줄 소개</label>
@@ -135,7 +270,7 @@
                 </div>
             </form>
         </div>
-        <div id="imageSetting" class="card text-center col-lg-4">
+        <div id="imageSetting" class="card text-center col-lg-4 order-2 order-lg-3">
             <div id="imageSetterHeader" class="card-header">
                 프로필 이미지
             </div>
