@@ -2,6 +2,39 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #errorTitle{
+                margin-top: 59px;
+                margin-bottom: 11px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #errorTitle{
+                margin-top: 63px;
+                margin-bottom: 18px;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #errorTitle{
+                margin-top: 47px;
+                margin-bottom: 18px;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #errorTitle{
+                margin-top: 38px;
+                margin-bottom: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -9,8 +42,8 @@
 
 <div class="container">
 
-    <div class="notification py-5 text-center">
-        <p class="lead" style="margin-top: 10px; margin-bottom: 35px" th:text="${errorTitle}">에러 제목</p>
+    <div class="notification text-center">
+        <p id="errorTitle" class="lead" th:text="${errorTitle}">에러 제목</p>
         <div class="alert alert-danger" role="alert" th:text="${errorContent}">
             에러 내용
         </div>

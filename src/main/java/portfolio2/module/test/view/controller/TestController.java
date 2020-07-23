@@ -14,10 +14,8 @@ public class TestController {
     @GetMapping("/test-view")
     public String viewTest(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        model.addAttribute("nickname", "인뚜기");
-        model.addAttribute("userId", "shineb523");
-        model.addAttribute("email", "shineb523@gmail.com");
-        model.addAttribute("isEmailVerifiedAccountLoggedIn", false);
-        return "email/email-verification-view/email-verification-success";
+        model.addAttribute("errorTitle", "인증 이메일 전송 에러");
+        model.addAttribute("errorContent", "이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.");
+        return "error/error-view.html";
     }
 }
