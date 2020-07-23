@@ -6,99 +6,122 @@
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
-            #postView{
+            #postView {
                 margin-top: 100px;
             }
-            #postTitle{
+
+            #postTitle {
                 padding: 24px 38px;
             }
-            #postViewTable{
+
+            #postViewTable {
                 margin-bottom: 42px;
             }
-            #postContent{
+
+            #postContent {
                 padding: 30px 50px;
             }
-            #modifyButton{
+
+            #modifyButton {
                 width: 270px;
                 margin-right: 59px;
             }
-            #deleteButton{
+
+            #deleteButton {
                 width: 270px;
             }
         }
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
-            #postView{
+            #postView {
                 margin-top: 74px
             }
-            #postTitle{
+
+            #postTitle {
                 padding: 24px 38px;
             }
-            #postViewTable{
+
+            #postViewTable {
                 margin-bottom: 42px;
             }
-            #postContent{
+
+            #postContent {
                 padding: 30px 50px;
             }
-            #modifyButton{
+
+            #modifyButton {
                 width: 236px;
                 margin-right: 42px;
             }
-            #deleteButton{
+
+            #deleteButton {
                 width: 236px;
             }
         }
 
         /* 핸드폰 일반 */
-        @media (max-width: 575.98px) and (max-width: 340px){
-            #postView{
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #postView {
                 margin-top: 43px;
             }
-            #postTitle{
+
+            #postTitle {
                 padding: 14px 17px;
             }
-            #postViewTable{
+
+            #postViewTable {
                 margin-bottom: 23px;
             }
-            .tableTitle{
+
+            .tableTitle {
                 width: 82px;
             }
-            #postContent{
+
+            #postContent {
                 padding: 26px 28px;
             }
-            #modifyButton{
+
+            #modifyButton {
                 width: 138px;
                 margin-right: 19px;
             }
-            #deleteButton{
+
+            #deleteButton {
                 width: 138px;
             }
+        }
 
-            /* 초소형 핸드폰 */
-            @media (max-width: 575.98px) and (max-width: 340px){
-                #postView{
-                    margin-top: 43px;
-                }
-                #postTitle{
-                    padding: 14px 17px;
-                }
-                #postViewTable{
-                    margin-bottom: 23px;
-                }
-                .tableTitle{
-                    width: 82px;
-                }
-                #postContent{
-                    padding: 26px 28px;
-                }
-                #modifyButton{
-                    width: 121px;
-                    margin-right: 18px;
-                }
-                #deleteButton{
-                    width: 121px;
-                }
+        /* 초소형 핸드폰 */
+        @media (max-width: 340px) {
+            #postView {
+                margin-top: 43px;
+            }
+
+            #postTitle {
+                padding: 14px 17px;
+            }
+
+            #postViewTable {
+                margin-bottom: 23px;
+            }
+
+            .tableTitle {
+                width: 82px;
+            }
+
+            #postContent {
+                padding: 26px 28px;
+            }
+
+            #modifyButton {
+                width: 121px;
+                margin-right: 18px;
+            }
+
+            #deleteButton {
+                width: 121px;
+            }
         }
     </style>
 </head>
@@ -119,17 +142,20 @@
             <tr style="text-align: center">
                 <td class="tableTitle"><span>작성자 : </span></td>
                 <td style="vertical-align: middle">
-                    <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
+                    <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}"
+                       th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
                         작성자 닉네임(작성자 아이디)
                     </a>
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle"><span>작성일 : </span></td><td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
+                <td class="tableTitle"><span>작성일 : </span></td>
+                <td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
             <tr style="text-align: center">
                 <td class="tableTitle" style="vertical-align: middle"><span>태그 : </span></td>
-                <td style="vertical-align: middle"><input name="tag" readonly th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
+                <td style="vertical-align: middle"><input name="tag" readonly
+                                                          th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
                 <td id="postContent" colspan="2" th:utext="${post.getContent()}">글 내용</td>
@@ -138,20 +164,24 @@
         </table>
 
         <div class="text-center mx-auto">
-            <a id="modifyButton" th:if="${isAuthor}" class="btn btn-primary" th:href="@{'/post-update/' + ${post.getId()}}">수정하기</a>
+            <a id="modifyButton" th:if="${isAuthor}" class="btn btn-primary"
+               th:href="@{'/post-update/' + ${post.getId()}}">수정하기</a>
             <!-- Button trigger modal -->
-            <button id="deleteButton" th:if="${isAuthor}" type="button" class="btn btn-danger" onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal">
+            <button id="deleteButton" th:if="${isAuthor}" type="button" class="btn btn-danger"
+                    onclick="show_delete_confirm_modal()" data-toggle="modal" data-target="#postDeleteModal">
                 삭제하기
             </button>
         </div>
 
-        <form id="delete-form" th:if="${isAuthor}" th:action="@{'/post-delete'}" th:object="${postDeleteRequestDto}" method="post" novalidate>
+        <form id="delete-form" th:if="${isAuthor}" th:action="@{'/post-delete'}" th:object="${postDeleteRequestDto}"
+              method="post" novalidate>
             <input type="hidden" th:field="*{postIdToDelete}">
         </form>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="postDeleteModal" tabindex="-1" role="dialog" aria-labelledby="postDeleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="postDeleteModal" tabindex="-1" role="dialog" aria-labelledby="postDeleteModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -180,11 +210,11 @@
     const input = document.querySelector('input[name=tag]');
     tagify = new Tagify(input);
 
-    function show_delete_confirm_modal(){
+    function show_delete_confirm_modal() {
         $('#postDeleteModal').modal("show");
     }
 
-    function delete_submit_func(){
+    function delete_submit_func() {
         document.getElementById('delete-form').submit();
     }
 </script>
