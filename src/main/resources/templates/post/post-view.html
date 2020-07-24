@@ -6,20 +6,22 @@
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
-            #postView {
+            #postViewTable {
+                width: 710px !important;
                 margin-top: 80px;
+                margin-bottom: 42px;
             }
 
             #postTitle {
                 padding: 24px 38px;
             }
 
-            #postViewTable {
-                margin-bottom: 42px;
-            }
-
             #postContent {
                 padding: 30px 50px;
+            }
+
+            #buttonBox{
+
             }
 
             #modifyButton {
@@ -34,20 +36,22 @@
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
-            #postView {
-                margin-top: 74px
+            #postViewTable {
+                width: 600px !important;
+                margin-top: 74px;
+                margin-bottom: 42px;
             }
 
             #postTitle {
                 padding: 24px 38px;
             }
 
-            #postViewTable {
-                margin-bottom: 42px;
-            }
-
             #postContent {
                 padding: 30px 50px;
+            }
+
+            #buttonBox{
+
             }
 
             #modifyButton {
@@ -62,16 +66,15 @@
 
         /* 핸드폰 일반 */
         @media (min-width: 340px) and (max-width: 575.98px) {
-            #postView {
+            #postViewTable {
+                width: 90%;
+                min-width: 343px !important;
                 margin-top: 43px;
+                margin-bottom: 23px;
             }
 
             #postTitle {
                 padding: 14px 17px;
-            }
-
-            #postViewTable {
-                margin-bottom: 23px;
             }
 
             .tableTitle {
@@ -80,6 +83,10 @@
 
             #postContent {
                 padding: 26px 28px;
+            }
+
+            #buttonBox{
+
             }
 
             #modifyButton {
@@ -94,16 +101,15 @@
 
         /* 초소형 핸드폰 */
         @media (max-width: 339.98px) {
-            #postView {
+            #postViewTable {
+                width: 90%;
+                min-width: 293px !important;
                 margin-top: 43px;
+                margin-bottom: 23px;
             }
 
             #postTitle {
                 padding: 14px 17px;
-            }
-
-            #postViewTable {
-                margin-bottom: 23px;
             }
 
             .tableTitle {
@@ -112,6 +118,10 @@
 
             #postContent {
                 padding: 26px 28px;
+            }
+
+            #buttonBox{
+                width: 293px !important;
             }
 
             #modifyButton {
@@ -129,7 +139,6 @@
 <div class="container">
     <div th:replace="fragment.html :: commonNav"></div>
 
-    <div id="postView">
         <table id="postViewTable" class="table table-bordered mx-auto col-lg-4 col-md-8 col-11">
             <tbody>
             <tr>
@@ -161,7 +170,7 @@
             </tbody>
         </table>
 
-        <div class="text-center mx-auto">
+        <div id="buttonBox" class="text-center mx-auto">
             <a id="modifyButton" th:if="${isAuthor}" class="btn btn-primary"
                th:href="@{'/post-update/' + ${post.getId()}}">수정하기</a>
             <!-- Button trigger modal -->
@@ -175,7 +184,6 @@
               method="post" novalidate>
             <input type="hidden" th:field="*{postIdToDelete}">
         </form>
-    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="postDeleteModal" tabindex="-1" role="dialog" aria-labelledby="postDeleteModalLabel"

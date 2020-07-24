@@ -11,6 +11,9 @@
                 margin-top: 66px;
                 margin-bottom: 30px;
             }
+            #post-form{
+                width: 711px !important;
+            }
             #titleInput{
                 margin-bottom: 26px;
             }
@@ -25,6 +28,9 @@
                 margin-top: 45px;
                 margin-bottom: 27px;
             }
+            #post-form{
+                width: 640px !important;
+            }
             #titleInput{
                 margin-bottom: 27px
             }
@@ -33,11 +39,14 @@
             }
         }
 
-        /* 핸드폰 */
-        @media (max-width: 575.98px) and (max-width: 991.98px){
+        /* 핸드폰 일반 */
+        @media (max-width: 575.98px){
             #postTitle{
                 margin-top: 27px;
                 margin-bottom: 21px;
+            }
+            #post-form{
+                width: 90% !important;
             }
             #titleInput{
                 margin-bottom: 23px
@@ -54,7 +63,7 @@
     <div>
         <h1 id="postTitle" class="text-center">글 작성</h1>
     </div>
-    <form id="post-form" class="needs-validation mx-auto col-lg-4 col-md-10"
+    <form id="post-form" class="needs-validation mx-auto"
           th:action="@{/post-new-post}" th:object="${postNewPostRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
