@@ -21,23 +21,22 @@
             }
 
             #buttonBox{
-
+                width: 710px !important;
             }
-
             #modifyButton {
-                width: 270px;
-                margin-right: 59px;
+                width: 40% !important;
+                margin-right: 6.5% !important;
             }
 
             #deleteButton {
-                width: 270px;
+                width: 40% !important;
             }
         }
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
             #postViewTable {
-                width: 600px !important;
+                width: 517px !important;
                 margin-top: 74px;
                 margin-bottom: 42px;
             }
@@ -51,16 +50,16 @@
             }
 
             #buttonBox{
-
+                width: 517px !important;
             }
 
             #modifyButton {
-                width: 236px;
-                margin-right: 42px;
+                width: 40% !important;
+                margin-right: 6.5% !important;
             }
 
             #deleteButton {
-                width: 236px;
+                width: 40% !important;
             }
         }
 
@@ -85,17 +84,13 @@
                 padding: 26px 28px;
             }
 
-            #buttonBox{
-
-            }
-
             #modifyButton {
-                width: 138px;
-                margin-right: 19px;
+                width: 34% !important;
+                margin-right: 6.5% !important;
             }
 
             #deleteButton {
-                width: 138px;
+                width: 34% !important;
             }
         }
 
@@ -125,14 +120,15 @@
             }
 
             #modifyButton {
-                width: 121px;
-                margin-right: 18px;
+                width: 34% !important;
+                margin-right: 6.5% !important;
             }
 
             #deleteButton {
-                width: 121px;
+                width: 34% !important;
             }
         }
+
     </style>
 </head>
 <body>
@@ -147,8 +143,8 @@
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle"><span>작성자 : </span></td>
-                <td style="vertical-align: middle">
+                <td class="tableTitle align-middle"><span>작성자 : </span></td>
+                <td class="align-middle">
                     <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}"
                        th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
                         작성자 닉네임(작성자 아이디)
@@ -156,12 +152,12 @@
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle"><span>작성일 : </span></td>
-                <td style="vertical-align: middle" class="date-weekday-time" th:text="${firstWrittenTime}">글 작성 날짜</td>
+                <td class="tableTitle align-middle"><span>작성일 : </span></td>
+                <td class="date-weekday-time align-middle" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle" style="vertical-align: middle"><span>태그 : </span></td>
-                <td style="vertical-align: middle"><input name="tag" readonly
+                <td class="tableTitle align-middle"><span>태그 : </span></td>
+                <td class="align-middle"><input name="tag" readonly
                                                           th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
