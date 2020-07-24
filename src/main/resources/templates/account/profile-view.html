@@ -10,6 +10,9 @@
                 margin-top: 69px;
                 margin-bottom: 33px;
             }
+            #profileTopDiv{
+                width: 650px !important;
+            }
             #userIdAndNickname{
                 font-weight: bold;
                 font-size: 20px;
@@ -20,21 +23,26 @@
                 display: inline;
                 font-size: 16px;
             }
-            #profileBottomTable{
+            #profileBottomTableOuterDiv{
+                width: 320px !important;
                 margin-top: 42px;
                 font-size: 16px;
             }
             #profileEditButton{
+                width: 100%;
                 font-size: 16px;
                 margin-top: 16px;
             }
         }
 
         /* 태블릿 */
-        @media (min-width: 576px) and (max-width: 991.98px) {
+        @media (min-width: 768px) and (max-width: 991.98px) {
             #profileTitle{
                 margin-top: 69px;
                 margin-bottom: 33px;
+            }
+            #profileTopDiv{
+                width: 532px !important;
             }
             #userIdAndNickname{
                 font-weight: bold;
@@ -46,18 +54,53 @@
                 display: inline;
                 font-size: 16px;
             }
-            #profileBottomTable{
+            #profileBottomTableOuterDiv{
+                width: 384px !important;
                 margin-top: 42px;
                 font-size: 16px;
             }
             #profileEditButton{
                 font-size: 16px;
                 margin-top: 13px;
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 767.98px){
+            #profileTitle{
+                margin-top: 69px;
+                margin-bottom: 33px;
+            }
+            #profileTopTable{
+                margin-top: 27px !important;
+            }
+            #profileTopDiv{
+                width: 532px !important;
+            }
+            #userIdAndNickname{
+                font-weight: bold;
+                font-size: 20px;
+                padding-top: 0px;
+                padding-bottom: 6px;
+            }
+            .selfIntroduce{
+                display: inline;
+                font-size: 16px;
+            }
+            #profileBottomTableOuterDiv{
+                width: 384px !important;
+                margin-top: 0px;
+                font-size: 16px;
+            }
+            #profileEditButton{
+                font-size: 16px;
+                margin-top: 13px;
+                width: 100%;
             }
         }
 
         /* 핸드폰 */
-        @media (max-width: 575.98px) and (max-width: 991.98px){
+        @media (max-width: 575.98px){
             #profileTopTable{
                 border-collapse: separate;
                 border-spacing: 0 0px;
@@ -66,9 +109,13 @@
                 margin-top: 39px;
                 margin-bottom: 26px;
             }
+            #profileTopDiv{
+                width: 90% !important;
+            }
             #userIdAndNickname{
                 font-weight: bold;
                 font-size: 22px;
+                padding-top: 5px;
                 padding-bottom: 3px;
             }
             #profileTopTable{
@@ -81,13 +128,15 @@
             .selfIntroduceTd{
                 padding-top: 0px;
             }
-            #profileBottomTable{
+            #profileBottomTableOuterDiv{
+                width: 90% !important;
                 margin-top: 1px;
                 font-size: 18px;
             }
             #profileEditButton{
                 font-size: 18px;
                 margin-top: 18px;
+                width: 100%;
             }
             .profileTableIcon{
                 font-size: 23px;
@@ -104,7 +153,7 @@
 
     <h1 id="profileTitle" class="text-center">프로필</h1>
     <div class="row">
-        <div class="col-lg-4 col-md-8 col-11 mx-auto row">
+        <div id="profileTopDiv" class="mx-auto row">
             <div class="col-lg-5 col-md-5">
                 <!-- Avatar -->
                 <svg th:if="${#strings.isEmpty(searchedAccount.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
@@ -137,32 +186,32 @@
             </div>
         </div>
     </div>
-    <table id="profileBottomTable" class="table col-lg-2 col-md-6 col-11 mx-auto">
-        <tbody>
-        <tr>
-            <th scope="row" class="text-right pr-0"><i class="far fa-envelope profileTableIcon"></i></th>
-            <td th:if="${#bools.isTrue(searchedAccount.isEmailVerified())}"
-                th:text="${searchedAccount.verifiedEmail}" class="text-center pl-0">emailId@email.com</td>
-            <td th:if="${#bools.isFalse(searchedAccount.isEmailVerified())}"
-                class="text-center pl-0">인증된 메일이 없습니다.</td>
-        </tr>
-        <tr>
-            <th scope="row" class="text-right pr-0"><i class="fas fa-suitcase profileTableIcon"></i></th>
-            <td th:if="${!#strings.isEmpty(searchedAccount.occupation)}"
-                th:text="${searchedAccount.occupation}" class="text-center pl-0">대학생</td>
-            <td th:if="${#strings.isEmpty(searchedAccount.occupation)}"
-                class="text-center pl-0">등록된 직업이 없습니다.</td>
-        </tr>
-        <tr class="border-bottom">
-            <th scope="row" class="text-right pr-0"><i class="far fa-compass profileTableIcon"></i></th>
-            <td th:if="${!#strings.isEmpty(searchedAccount.location)}"
-                th:text="${searchedAccount.location}" class="text-center pl-0">인천 연수구</td>
-            <td th:if="${#strings.isEmpty(searchedAccount.location)}"
-                class="text-center pl-0">등록된 지역이 없습니다.</td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="text-center mx-auto col-11">
+    <div id="profileBottomTableOuterDiv" class="mx-auto">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th scope="row" class="text-right pr-0"><i class="far fa-envelope profileTableIcon"></i></th>
+                <td th:if="${#bools.isTrue(searchedAccount.isEmailVerified())}"
+                    th:text="${searchedAccount.verifiedEmail}" class="text-center pl-0">emailId@email.com</td>
+                <td th:if="${#bools.isFalse(searchedAccount.isEmailVerified())}"
+                    class="text-center pl-0">인증된 메일이 없습니다.</td>
+            </tr>
+            <tr>
+                <th scope="row" class="text-right pr-0"><i class="fas fa-suitcase profileTableIcon"></i></th>
+                <td th:if="${!#strings.isEmpty(searchedAccount.occupation)}"
+                    th:text="${searchedAccount.occupation}" class="text-center pl-0">대학생</td>
+                <td th:if="${#strings.isEmpty(searchedAccount.occupation)}"
+                    class="text-center pl-0">등록된 직업이 없습니다.</td>
+            </tr>
+            <tr class="border-bottom">
+                <th scope="row" class="text-right pr-0"><i class="far fa-compass profileTableIcon"></i></th>
+                <td th:if="${!#strings.isEmpty(searchedAccount.location)}"
+                    th:text="${searchedAccount.location}" class="text-center pl-0">인천 연수구</td>
+                <td th:if="${#strings.isEmpty(searchedAccount.location)}"
+                    class="text-center pl-0">등록된 지역이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
         <a id="profileEditButton" th:if="${isOwner}" class="btn btn-outline-primary" th:href="@{/account/setting/profile}">프로필 수정</a>
     </div>
 
