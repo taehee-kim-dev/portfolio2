@@ -10,6 +10,9 @@
                 margin-top: 62px;
                 margin-bottom: 23px;
             }
+            #outerBox{
+                width: 1067px !important;
+            }
             #accountSettingMenu {
                 width: 153px;
             }
@@ -28,6 +31,9 @@
                 margin-top: 59px;
                 margin-bottom: 37px;
             }
+            #outerBox{
+                width: 576px !important;
+            }
             #accountSettingMenu{
                 margin-bottom: 11px;
             }
@@ -44,6 +50,9 @@
             #interestTagSettingTitle{
                 margin-top: 51px;
                 margin-bottom: 37px;
+            }
+            #outerBox{
+                width: 90% !important;
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
@@ -62,6 +71,9 @@
             #interestTagSettingTitle{
                 margin-top: 45px;
                 margin-bottom: 33px;
+            }
+            #outerBox{
+                width: 90% !important;
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
@@ -83,7 +95,7 @@
 <div class="container">
 
         <h2 id="interestTagSettingTitle" class="text-center">관심 태그 설정</h2>
-        <div class="row justify-content-center col-lg-6 col-md-9 mx-auto">
+        <div id="outerBox" class="row justify-content-center mx-auto">
 
             <div id="accountSettingMenu" class="col-lg-2 order-1"
                  th:insert="fragment.html :: setting-menu(currentMenu='tag')"></div>
