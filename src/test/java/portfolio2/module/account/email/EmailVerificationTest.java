@@ -1047,6 +1047,61 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
+    @DisplayName("이메일 인증 - userId 파라미터가 공백 문자열 - 다른 계정으로 로그인 상태")
+    @Test
+    void userIdParameterEmptyStringWithLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", "")
+                .param("email", accountInDbToBeEmailVerified.getEmailWaitingToBeVerified())
+                .param("token", accountInDbToBeEmailVerified.getEmailVerificationToken()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
     @DisplayName("이메일 인증 - email 파라미터가 null - 다른 계정으로 로그인 상태")
     @Test
     void emailParameterNullWithLogInByNotOwnAccount() throws Exception{
@@ -1266,6 +1321,62 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
         assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
+
+    @DisplayName("이메일 인증 - 모든 파라미터가 공백 문자열 - 다른 계정으로 로그인 상태")
+    @Test
+    void allParameterEmptyStringLogInByNotOwnAccount() throws Exception{
+
+        Account accountInDbToBeEmailVerified
+                = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+
+        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
+
+        signUpAndLogInEmailNotVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
+
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID_2));
+
+        // 유효 링크 인증
+        mockMvc.perform(get(CHECK_EMAIL_VERIFICATION_LINK_URL)
+                .param("userId", "")
+                .param("email", "")
+                .param("token", ""))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(model().attributeDoesNotExist("isEmailVerifiedAccountLoggedIn"))
+                .andExpect(model().attributeDoesNotExist("nickname"))
+                .andExpect(model().attributeDoesNotExist("userId"))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(ERROR_VIEW_NAME))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(authenticated().withUsername(TEST_USER_ID_2));
+
+        // 이메일 인증 확인
+        Account accountEmailVerified = accountRepository.findByUserId(TEST_USER_ID);
+
+        assertNull(accountEmailVerified.getVerifiedEmail());
+
+        assertFalse(accountEmailVerified.isEmailVerified());
+        assertFalse(accountEmailVerified.isEmailFirstVerified());
+
+        assertNotNull(accountEmailVerified.getEmailVerificationToken());
+        assertEquals(TEST_EMAIL, accountEmailVerified.getEmailWaitingToBeVerified());
+
+        assertNotNull(accountEmailVerified.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        assertEquals(1, accountEmailVerified.getCountOfSendingEmailVerificationEmail());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountEmailVerified.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(accountEmailVerified.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
+    }
+
 
     @DisplayName("이메일 인증 - 해당 계정은 있지만, 해당 계정의 토큰값이 null - 다른 계정으로 로그인 상태")
     @Test

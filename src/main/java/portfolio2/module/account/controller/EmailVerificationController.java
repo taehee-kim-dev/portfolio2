@@ -43,7 +43,7 @@ public class EmailVerificationController {
                                              Errors errors,
                                              Model model){
 
-        if(errors.hasErrors() || emailVerificationRequestDto == null){
+        if(errors.hasErrors()){
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
             model.addAttribute(ERROR_TITLE, "링크 에러");
             model.addAttribute(ERROR_CONTENT, "유효하지 않은 링크입니다.");
