@@ -34,6 +34,9 @@
             #mainSearchButton{
                 margin-left: 16px !important;
             }
+            #brandTitle{
+                margin-left: 24px !important;
+            }
         }
 
         /* 태블릿, 핸드폰 */
@@ -65,6 +68,15 @@
             .modal{
                 margin-top: 83px;
             }
+            #brandTitle {
+                margin-left: 16px !important;
+            }
+            #mainNavBar{
+                padding-top: 20px;
+            }
+            #navbarSupportedContent{
+                margin-top: 10px !important;
+            }
             #postNewPostButton{
                 width: 272px;
                 margin: auto;
@@ -77,6 +89,9 @@
                 margin-right: auto;
                 width: 191px;
                 font-size: 18px;
+            }
+            #notificationBellOuter{
+                padding-bottom: 13px;
             }
             #mainLogInButton{
                 margin-top: 6px;
@@ -101,6 +116,18 @@
         @media (max-width: 575.98px) {
             .modal{
                 margin-top: 65px;
+            }
+            #brandTitle {
+                margin-left: 16px !important;
+            }
+            #mainNavBar{
+                padding-top: 20px;
+            }
+            #navbarSupportedContent{
+                margin-top: 10px !important;
+            }
+            #notificationBellOuter{
+                padding-bottom: 13px;
             }
             #postNewPostButton{
                 width: 100%;
@@ -128,13 +155,14 @@
                 margin-bottom: 15px;
             }
         }
+
     </style>
     <title>TH</title>
 </th:block>
 
 <div th:fragment="commonNav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <h1><a id="brandTitle" class="navbar-brand ml-lg-4" th:href="@{/}" style="font-size: 33px">TH</a></h1>
+    <nav id="mainNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
+        <h1><a id="brandTitle" class="navbar-brand" th:href="@{/}" style="font-size: 33px">TH</a></h1>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
