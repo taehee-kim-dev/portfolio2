@@ -14,7 +14,6 @@
             }
             #loginForm{
                 margin-top: 12px;
-                width: 325px !important;
             }
             #logInButton{
                 margin-bottom: 8px;
@@ -32,7 +31,6 @@
             }
             #loginForm{
                 margin-top: 12px;
-                width: 342px !important;
             }
             #logInButton{
                 margin-bottom: 8px;
@@ -50,8 +48,7 @@
             }
             #loginForm{
                 margin-top: 12px;
-                max-width: 342px !important;
-                width: 90% !important;
+                max-width: 342px;
             }
             #logInButton{
                 margin-bottom: 8px;
@@ -72,7 +69,6 @@
             }
             #loginForm{
                 margin-top: 12px;
-                width: 90% !important;
             }
             #logInButton{
                 margin-bottom: 8px;
@@ -97,7 +93,8 @@
         </p>
     </div>
 
-    <form id="loginForm" class="mx-auto" th:action="@{/login}" method="post" novalidate>
+    <form id="loginForm" class="mx-auto" th:action="@{/login}" method="post" novalidate
+          style="width: 90%; max-width: 320px;">
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group" >
             <label for="username">아이디 또는 이메일</label>
