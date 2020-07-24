@@ -9,6 +9,9 @@
                 margin-top: 62px;
                 margin-bottom: 24px;
             }
+            #signUpForm{
+                width: 320px !important;
+            }
             #signUpButton{
                 margin-top: 28px;
             }
@@ -19,6 +22,9 @@
             #signUpTitle{
                 margin-top: 62px;
                 margin-bottom: 24px;
+            }
+            #signUpForm{
+                width: 320px !important;
             }
             #signUpButton{
                 margin-top: 28px;
@@ -31,6 +37,9 @@
                 margin-top: 45px;
                 margin-bottom: 17px;
             }
+            #signUpForm{
+                width: 90% !important;
+            }
             #signUpButton{
                 margin-top: 28px;
             }
@@ -41,6 +50,9 @@
             #signUpTitle{
                 margin-top: 45px;
                 margin-bottom: 17px;
+            }
+            #signUpForm{
+                width: 90% !important;
             }
             #signUpButton{
                 margin-top: 28px;
@@ -56,7 +68,7 @@
     <div>
         <h2 id="signUpTitle" class="text-center">계정 만들기</h2>
     </div>
-    <form id="signUpForm" class="needs-validation mx-auto col-lg-2 col-md-5" action="#"
+    <form id="signUpForm" class="needs-validation mx-auto"
           th:action="@{/sign-up}" th:object="${signUpRequestDto}" method="post" novalidate>
         <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
         <div class="form-group">
