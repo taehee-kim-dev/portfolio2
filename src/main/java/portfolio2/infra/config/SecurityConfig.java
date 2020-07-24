@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // 인증 없이 POST, GET 요청 허용
-                .mvcMatchers(HOME_URL, LOGIN_URL, SIGN_UP_URL, FIND_PASSWORD_URL, "test-view").permitAll()
+                .mvcMatchers(HOME_URL, LOGIN_URL, SIGN_UP_URL, FIND_PASSWORD_URL, "/test-view/**").permitAll()
                 // GET 요청만 허용
                 .mvcMatchers(HttpMethod.GET, "/account/profile-view/*", CHECK_EMAIL_VERIFICATION_LINK_URL,
                         CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL, "/post-view/*").permitAll()

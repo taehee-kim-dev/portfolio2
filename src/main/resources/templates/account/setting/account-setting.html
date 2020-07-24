@@ -10,6 +10,11 @@
                 margin-bottom: 23px;
             }
 
+            #outerBox{
+                width: 940px !important;
+            }
+
+
             #accountSettingMenu {
                 width: 153px;
             }
@@ -30,7 +35,8 @@
             }
 
             #accountSettingForm {
-                padding-left: 74px;
+                width: 300px;
+                margin-left: 58px;
             }
 
             #nicknameSettingForm {
@@ -64,6 +70,9 @@
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
+            }
+            #outerBox{
+                width: 517px !important;
             }
             #accountSettingSuccessMessageOuter{
                 margin-bottom: 36px;
@@ -113,6 +122,10 @@
             #accountSettingMenu{
                 margin-bottom: 11px;
             }
+            #outerBox{
+                width: 90% !important;
+                max-width: 517px !important;
+            }
             #accountSettingSuccessMessageOuter{
                 width: 89%;
                 margin-bottom: 27px;
@@ -161,6 +174,9 @@
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
+            }
+            #outerBox{
+                width: 90% !important;
             }
             #accountSettingSuccessMessageOuter{
                 font-size: 14px;
@@ -221,7 +237,7 @@
         </button>
     </div>
 
-    <div class="row justify-content-center col-lg-6 col-md-9 mx-auto">
+    <div id="outerBox" class="row justify-content-center mx-auto">
 
         <div id="accountSettingMenu" class="col-lg-2 order-1"
              th:insert="fragment.html :: setting-menu(currentMenu='account')"></div>
