@@ -9,9 +9,16 @@
                 margin-top: 62px;
                 margin-bottom: 23px;
             }
+            .toggleSwitch{
+                padding-left: 10px;
+            }
 
             #accountSettingMenu {
-                width: 153px;
+                width: 153px !important;
+            }
+
+            #outerBox{
+                width: 1067px !important;
             }
 
             #canNotUserEmailNotificationMessage {
@@ -34,7 +41,7 @@
             }
 
             #notificationSettingForm {
-                width: 300px;
+                width: 738px !important;
                 padding-left: 74px;
             }
 
@@ -49,12 +56,15 @@
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
-            .notification-description{
-                padding-left: 0px;
-            }
             #notificationSettingTitle{
                 margin-top: 59px;
                 margin-bottom: 37px;
+            }
+            #outerBox{
+                width: 576px !important;
+            }
+            .toggleSwitch{
+                text-align: center;
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
@@ -86,11 +96,13 @@
         @media (min-width: 340px) and (max-width: 575.98px) {
             .toggleSwitch{
                 text-align: center;
-                padding-left: 13px;
             }
             #notificationSettingTitle{
                 margin-top: 59px;
                 margin-bottom: 37px;
+            }
+            #outerBox{
+                width: 90% !important;
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
@@ -129,11 +141,13 @@
             }
             .toggleSwitch{
                 text-align: center;
-                padding-left: 13px;
             }
             #notificationSettingTitle{
                 margin-top: 59px;
                 margin-bottom: 37px;
+            }
+            #outerBox{
+                width: 90% !important;
             }
             #accountSettingMenu{
                 margin-bottom: 11px;
@@ -161,6 +175,9 @@
                 width: 100%;
             }
         }
+        .rightSwitch{
+            margin-right: 0 !important;
+        }
     </style>
 </head>
 <body>
@@ -184,12 +201,12 @@
         </button>
     </div>
 
-    <div class="row justify-content-center col-lg-6 col-md-9 mx-auto">
+    <div id="outerBox" class="row justify-content-center mx-auto">
 
         <div id="accountSettingMenu" class="col-lg-2 order-1"
              th:insert="fragment.html :: setting-menu(currentMenu='notification')"></div>
 
-        <form id="notificationSettingForm" class="col-lg-10 order-2" th:action="@{/account/setting/notification}"
+        <form id="notificationSettingForm" class="order-2" th:action="@{/account/setting/notification}"
               th:object="${notificationUpdateRequestDto}" method="post" novalidate>
 
 
@@ -203,7 +220,7 @@
                            id="notificationLikeOnMyPostByWeb">
                     <label class="custom-control-label" for="notificationLikeOnMyPostByWeb">웹으로 받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationLikeOnMyPostByEmail}"
                            class="custom-control-input" id="notificationLikeOnMyPostByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
@@ -222,7 +239,7 @@
                            class="custom-control-input" id="notificationLikeOnMyCommentByWeb">
                     <label class="custom-control-label" for="notificationLikeOnMyCommentByWeb">웹으로 받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationLikeOnMyCommentByEmail}"
                            class="custom-control-input" id="notificationLikeOnMyCommentByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
@@ -241,7 +258,7 @@
                            class="custom-control-input" id="notificationCommentOnMyPostByWeb">
                     <label class="custom-control-label" for="notificationCommentOnMyPostByWeb">웹으로 받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationCommentOnMyPostByEmail}"
                            class="custom-control-input" id="notificationCommentOnMyPostByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
@@ -260,7 +277,7 @@
                            class="custom-control-input" id="notificationCommentOnMyCommentByWeb">
                     <label class="custom-control-label" for="notificationCommentOnMyCommentByWeb">웹으로 받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationCommentOnMyCommentByEmail}"
                            class="custom-control-input" id="notificationCommentOnMyCommentByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
@@ -280,7 +297,7 @@
                     <label class="custom-control-label" for="newPostWithMyInterestTagNotificationByWeb">웹으로
                         받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationNewPostWithMyInterestTagByEmail}"
                            class="custom-control-input" id="newPostWithMyInterestTagNotificationByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
@@ -300,7 +317,7 @@
                     <label class="custom-control-label" for="myInterestAddedToExistingPostNotificationByWeb">웹으로
                         받기</label>
                 </div>
-                <div class="custom-control custom-switch custom-control-inline">
+                <div class="custom-control custom-switch rightSwitch custom-control-inline">
                     <input type="checkbox" th:field="*{notificationMyInterestTagAddedToExistingPostByEmail}"
                            class="custom-control-input" id="myInterestAddedToExistingPostNotificationByEmail"
                            th:disabled="${#bools.isFalse(sessionAccount.isEmailVerified())}">
