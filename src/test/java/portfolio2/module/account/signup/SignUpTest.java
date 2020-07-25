@@ -76,7 +76,7 @@ public class SignUpTest extends ContainerBaseTest {
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 비로그인 상태")
     @Test
-    void allValidFieldsSignUpWithoutLogIn() throws Exception{
+    void allValidFieldsSignUpWithoutLogIn1() throws Exception{
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)
@@ -114,6 +114,96 @@ public class SignUpTest extends ContainerBaseTest {
         // 비밀번호 암호화 확인
         assertTrue(passwordEncoder.matches(signUpRequestDto.getPassword(), newAccountInDb.getPassword()));
         
+        // 인증 대기 이메일 값 일치 확인
+        assertEquals(signUpRequestDto.getEmail(), newAccountInDb.getEmailWaitingToBeVerified());
+        // 이메일 처음 인증 상태 false 확인
+        assertFalse(newAccountInDb.isEmailFirstVerified());
+        // 이메일 인증 상태 false 확인
+        assertFalse(newAccountInDb.isEmailVerified());
+        // 이메일 인증 토큰 값 존재 확인
+        assertNotNull(newAccountInDb.getEmailVerificationToken());
+        // 이메일 인증 토큰 생성 시간 존재 확인
+        assertNotNull(newAccountInDb.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
+        // 이메일 인증 발송 횟수 1 확인
+        assertEquals(1, newAccountInDb.getCountOfSendingEmailVerificationEmail());
+        // 회원 가입 시간 존재 확인
+        assertNotNull(newAccountInDb.getSignUpDateTime());
+
+        // 비밀번호 찾기 토큰 null 확인
+        assertNull(newAccountInDb.getShowPasswordUpdatePageToken());
+
+
+        // 프로필 값 모두 null 확인
+        assertNull(newAccountInDb.getBio());
+        assertNull(newAccountInDb.getOccupation());
+        assertNull(newAccountInDb.getLocation());
+        assertNull(newAccountInDb.getProfileImage());
+
+        // Web 알림 값 모두 true 확인
+        assertTrue(newAccountInDb.isNotificationCommentOnMyPostByWeb());
+        assertTrue(newAccountInDb.isNotificationCommentOnMyCommentByWeb());
+
+        assertTrue(newAccountInDb.isNotificationLikeOnMyPostByWeb());
+        assertTrue(newAccountInDb.isNotificationLikeOnMyCommentByWeb());
+
+        assertTrue(newAccountInDb.isNotificationNewPostWithMyInterestTagByWeb());
+
+        // 이메일 알림 값 모두 false 확인
+        assertFalse(newAccountInDb.isNotificationCommentOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationCommentOnMyCommentByEmail());
+
+        assertFalse(newAccountInDb.isNotificationLikeOnMyPostByEmail());
+        assertFalse(newAccountInDb.isNotificationLikeOnMyCommentByEmail());
+
+        assertFalse(newAccountInDb.isNotificationNewPostWithMyInterestTagByEmail());
+
+        // 태그, 포스트 초기 값 존재 확인
+        assertNotNull(newAccountInDb.getInterestTag());
+    }
+
+    @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 비로그인 상태")
+    @Test
+    void allValidFieldsSignUpWithoutLogIn2() throws Exception{
+
+        final String userId = "user_-id.";
+        final String nickname = "test_Nick-name.";
+        final String password = "sdflkAS._-LK%$&^%{}32094";
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .userId(userId)
+                .nickname(nickname)
+                .email(TEST_EMAIL)
+                .password(password)
+                .build();
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", userId)
+                .param("nickname", nickname)
+                .param("email", signUpRequestDto.getEmail())
+                .param("password", signUpRequestDto.getPassword())
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("email"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(view().name(EMAIL_VERIFICATION_REQUEST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(userId));
+
+        // 이메일 인증 이메일 1회 발송 확인
+        verify(emailService, times(1)).sendEmail(any(EmailMessage.class));
+
+
+        Account newAccountInDb = accountRepository.findByUserId(signUpRequestDto.getUserId());
+
+        // 아이디, 닉네임 확인
+        assertEquals(signUpRequestDto.getUserId(), newAccountInDb.getUserId());
+        assertEquals(signUpRequestDto.getNickname(), newAccountInDb.getNickname());
+
+        // 인증된 메일 null 확인
+        assertNull(newAccountInDb.getVerifiedEmail());
+
+        // 비밀번호 암호화 확인
+        assertTrue(passwordEncoder.matches(signUpRequestDto.getPassword(), newAccountInDb.getPassword()));
+
         // 인증 대기 이메일 값 일치 확인
         assertEquals(signUpRequestDto.getEmail(), newAccountInDb.getEmailWaitingToBeVerified());
         // 이메일 처음 인증 상태 false 확인
@@ -208,7 +298,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "userId",
-                        "tooShortUserId"))
+                        "invalidFormatUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -224,7 +314,7 @@ public class SignUpTest extends ContainerBaseTest {
     void signUpTooLongUserIdError() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", "abcdeabcdeabcdeabcdeab")
+                .param("userId", "abcdeabcdeabcdeabcdea")
                 .param("nickname", TEST_NICKNAME)
                 .param("email", TEST_EMAIL)
                 .param("password", TEST_PASSWORD)
@@ -234,7 +324,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "userId",
-                        "tooLongUserId"))
+                        "invalidFormatUserId"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -245,12 +335,90 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
     }
 
-    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 userId 에러")
+    @DisplayName("회원가입 POST 요청 - 공백문자 userId 에러1")
     @Test
-    void signUpInvalidFormatUserIdError() throws Exception{
+    void signUpInvalidWhiteSpaceOfUserIdError1() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", "sdf df")
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "invalidFormatUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 공백문자 userId 에러2")
+    @Test
+    void signUpInvalidWhiteSpaceOfUserIdError2() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", "sdf\tdf")
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "invalidFormatUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 공백문자 userId 에러2")
+    @Test
+    void signUpInvalidWhiteSpaceOfUserIdError3() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", "sdf\ndf")
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "userId",
+                        "invalidFormatUserId"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        // 가입되지 않음 확인
+        assertFalse(accountRepository.existsByNickname(TEST_NICKNAME));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 특수문자 userId 에러")
+    @Test
+    void signUpInvalidSpecialCharacterOfUserIdError() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", "sdf%df")
                 .param("nickname", TEST_NICKNAME)
                 .param("email", TEST_EMAIL)
                 .param("password", TEST_PASSWORD)
@@ -309,7 +477,7 @@ public class SignUpTest extends ContainerBaseTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
-                .param("nickname", "ab")
+                .param("nickname", "a")
                 .param("email", TEST_EMAIL)
                 .param("password", TEST_PASSWORD)
                 .with(csrf()))
@@ -318,7 +486,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "nickname",
-                        "tooShortNickname"))
+                        "invalidFormatNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -334,7 +502,7 @@ public class SignUpTest extends ContainerBaseTest {
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
-                .param("nickname", "testNicknametestNicknametestNickname")
+                .param("nickname", "abcdeabcdeabcdeabcdea")
                 .param("email", TEST_EMAIL)
                 .param("password", TEST_PASSWORD)
                 .with(csrf()))
@@ -343,7 +511,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "nickname",
-                        "tooLongNickname"))
+                        "invalidFormatNickname"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -353,13 +521,88 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
-    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 nickname 에러")
+    @DisplayName("회원가입 POST 요청 - 공백문자 nickname 에러1")
     @Test
-    void signUpInvalidFormatNicknameError() throws Exception{
+    void signUpWhiteSpaceNicknameError1() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
                 .param("nickname", "testNi ckname")
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 공백문자 nickname 에러2")
+    @Test
+    void signUpWhiteSpaceNicknameError2() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", "testNickname\t")
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 공백문자 nickname 에러3")
+    @Test
+    void signUpWhiteSpaceNicknameError3() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", "testNickname\n")
+                .param("email", TEST_EMAIL)
+                .param("password", TEST_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 특수문자 nickname 에러")
+    @Test
+    void signUpSpecialCharacterNicknameError() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", "testNi&ckname")
                 .param("email", TEST_EMAIL)
                 .param("password", TEST_PASSWORD)
                 .with(csrf()))
@@ -508,7 +751,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "password",
-                        "tooShortPassword"))
+                        "invalidFormatPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -526,14 +769,14 @@ public class SignUpTest extends ContainerBaseTest {
                 .param("userId", TEST_USER_ID)
                 .param("nickname", TEST_NICKNAME)
                 .param("email", TEST_EMAIL)
-                .param("password", "12345678123456781234567812345678")
+                .param("password", "123456789012345678901234567890123456789012345678901")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "password",
-                        "tooLongPassword"))
+                        "invalidFormatPassword"))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeDoesNotExist("email"))
@@ -543,9 +786,9 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
-    @DisplayName("회원가입 POST 요청 - 형식에 맞지 않는 password 에러")
+    @DisplayName("회원가입 POST 요청 - 공백 password 에러1")
     @Test
-    void signUpInvalidFormatPasswordError() throws Exception{
+    void signUpInvalidWhiteSpacePasswordError1() throws Exception{
 
         mockMvc.perform(post(SIGN_UP_URL)
                 .param("userId", TEST_USER_ID)
@@ -568,21 +811,71 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
     }
 
+    @DisplayName("회원가입 POST 요청 - 공백 password2 에러")
+    @Test
+    void signUpInvalidWhiteSpacePasswordError2() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", "12345678\t")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "invalidFormatPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
+    @DisplayName("회원가입 POST 요청 - 공백 password 에러3")
+    @Test
+    void signUpInvalidWhiteSpacePasswordError3() throws Exception{
+
+        mockMvc.perform(post(SIGN_UP_URL)
+                .param("userId", TEST_USER_ID)
+                .param("nickname", TEST_NICKNAME)
+                .param("email", TEST_EMAIL)
+                .param("password", "12345678\n")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "signUpRequestDto",
+                        "password",
+                        "invalidFormatPassword"))
+                .andExpect(model().attributeExists("signUpRequestDto"))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist("email"))
+                .andExpect(view().name(SIGN_UP_VIEW_NAME))
+                .andExpect(unauthenticated());
+
+        assertFalse(accountRepository.existsByUserId(TEST_USER_ID));
+    }
+
     @DisplayName("입력 에러 모두 각각 출력")
     @Test
     void displayAllErrorCodes() throws Exception{
         mockMvc.perform(post(SIGN_UP_URL)
-                .param("userId", "aa")
+                .param("userId", "a a")
                 .param("nickname", TEST_NICKNAME)
                 .param("email", "asdfasdf@email")
-                .param("password", "1234567812345678123456781234567")
+                .param("password", "12345 67812345678123456781234567")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "userId",
-                        "tooShortUserId"))
+                        "invalidFormatUserId"))
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "email",
@@ -590,7 +883,7 @@ public class SignUpTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "signUpRequestDto",
                         "password",
-                        "tooLongPassword"))
+                        "invalidFormatPassword"))
                 .andExpect(model().attributeErrorCount("signUpRequestDto", 3))
                 .andExpect(model().attributeExists("signUpRequestDto"))
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
