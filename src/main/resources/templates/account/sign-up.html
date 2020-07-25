@@ -76,30 +76,24 @@
             <label for="user-id">아이디</label>
             <input id="user-id" type="text" th:field="*{userId}" class="form-control"
                    placeholder="ID" aria-describedby="userIdHelp"
-                th:classappend="${#fields.hasErrors('userId')} ? 'is-invalid' : ''">
-            <small id="userIdHelp" class="form-text text-muted">
-                공백없이 영문자와 숫자로만 5자 이상 20자 이내로 입력해 주세요.
-            </small>
+                th:classappend="${(#fields.hasErrors('userId') ? 'is-invalid' : '')
+                 + (#fields.hasAnyErrors() && !#fields.hasErrors('userId') ? 'is-valid' : '')}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">ID Error</small>
         </div>
         <div class="form-group">
             <label for="nickname">닉네임</label>
             <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
                    placeholder="Nickname" aria-describedby="nicknameHelp"
-                   th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : ''">
-            <small id="nicknameHelp" class="form-text text-muted">
-                공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력해 주세요. 이후 변경할 수 있습니다.
-            </small>
+                   th:classappend="${(#fields.hasErrors('nickname') ? 'is-invalid' : '')
+                   + (#fields.hasAnyErrors() && !#fields.hasErrors('nickname') ? 'is-valid' : '')}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
         </div>
         <div class="form-group">
             <label for="email">이메일</label>
             <input id="email" type="email" th:field="*{email}" class="form-control"
                    placeholder="your@email.com" aria-describedby="emailHelp"
-                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
-            <small id="emailHelp" class="form-text text-muted">
-                이메일은 이후 변경할 수 있습니다.
-            </small>
+                   th:classappend="${(#fields.hasErrors('email') ? 'is-invalid' : '')
+                   + (#fields.hasAnyErrors() && !#fields.hasErrors('email') ? 'is-valid' : '')}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
         </div>
 
@@ -107,10 +101,8 @@
             <label for="password">비밀번호</label>
             <input id="password" type="password" th:field="*{password}" class="form-control"
                    aria-describedby="passwordHelp" placeholder="Password"
-                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
-            <small id="passwordHelp" class="form-text text-muted">
-                8자 이상 30자 이내로 입력해 주세요. <br>영문자, 숫자, 특수문자를 사용할 수 있으며 공백은 사용할 수 없습니다.
-            </small>
+                   th:classappend="${(#fields.hasErrors('password') ? 'is-invalid' : '')
+                   + (#fields.hasAnyErrors() && !#fields.hasErrors('password') ? 'is-valid' : '')}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
         </div>
         <div class="form-group" >
