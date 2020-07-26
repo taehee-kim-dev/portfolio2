@@ -218,6 +218,13 @@
                 font-size: 20px;
             }
         }
+        #userId, #nickname{
+            display: inline-block;
+            text-align: left;
+        }
+        #userId{
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -238,14 +245,14 @@
                      th:src="${searchedAccount.profileImage}"
                      width="100%" height="100%"/>
             </div>
-            <div id="profileTopOuterBox" class="mx-auto my-md-0 d-flex">
+            <div id="profileTopOuterBox" class="mx-auto my-md-0 d-flex" style="word-break: break-all">
                 <table id="profileTopTable" class="table table-borderless my-md-0 align-self-center">
                     <tbody>
                     <tr>
                         <td id="userIdAndNickname" colspan="2" class="text-center">
-                            <span th:text="${searchedAccount.nickname}"></span>
+                            <span id="userId" th:text="${searchedAccount.nickname}"></span>
                             <br>
-                            <span th:text="${searchedAccount.userId}"></span>
+                            <span id="nickname" th:text="${searchedAccount.userId}"></span>
                         </td>
                     </tr>
                     <tr class="d-flex justify-content-center" th:if="${!isOwner}">
@@ -265,25 +272,25 @@
         <table class="table">
             <tbody>
             <tr>
-                <th scope="row" class="text-right pr-0"><i class="far fa-envelope profileTableIcon"></i></th>
+                <th scope="row" class="text-center"><i class="far fa-envelope profileTableIcon"></i></th>
                 <td th:if="${#bools.isTrue(searchedAccount.isEmailVerified())}"
-                    th:text="${searchedAccount.verifiedEmail}" class="text-center pl-0">emailId@email.com</td>
+                    th:text="${searchedAccount.verifiedEmail}" class="text-center">emailId@email.com</td>
                 <td th:if="${#bools.isFalse(searchedAccount.isEmailVerified())}"
-                    class="text-center pl-0">인증된 메일이 없습니다.</td>
+                    class="text-center">인증된 메일이 없습니다.</td>
             </tr>
             <tr>
-                <th scope="row" class="text-right pr-0"><i class="fas fa-suitcase profileTableIcon"></i></th>
+                <th scope="row" class="text-center"><i class="fas fa-suitcase profileTableIcon"></i></th>
                 <td th:if="${!#strings.isEmpty(searchedAccount.occupation)}"
-                    th:text="${searchedAccount.occupation}" class="text-center pl-0">대학생</td>
+                    th:text="${searchedAccount.occupation}" class="text-center">대학생</td>
                 <td th:if="${#strings.isEmpty(searchedAccount.occupation)}"
-                    class="text-center pl-0">등록된 직업이 없습니다.</td>
+                    class="text-center">등록된 직업이 없습니다.</td>
             </tr>
             <tr class="border-bottom">
-                <th scope="row" class="text-right pr-0"><i class="far fa-compass profileTableIcon"></i></th>
+                <th scope="row" class="text-center"><i class="far fa-compass profileTableIcon"></i></th>
                 <td th:if="${!#strings.isEmpty(searchedAccount.location)}"
-                    th:text="${searchedAccount.location}" class="text-center pl-0">인천 연수구</td>
+                    th:text="${searchedAccount.location}" class="text-center">인천 연수구</td>
                 <td th:if="${#strings.isEmpty(searchedAccount.location)}"
-                    class="text-center pl-0">등록된 지역이 없습니다.</td>
+                    class="text-center">등록된 지역이 없습니다.</td>
             </tr>
             </tbody>
         </table>
