@@ -135,7 +135,7 @@ public class AccountSettingController {
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
     public ResponseEntity addTag(@SessionAccount Account sessionAccount,
-                                         @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto, Errors errors){
+                                 @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto, Errors errors){
         if (errors.hasFieldErrors("tagTitle")){
             return ResponseEntity.badRequest().build();
         }
@@ -146,8 +146,10 @@ public class AccountSettingController {
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
     public ResponseEntity removeTag(@SessionAccount Account sessionAccount,
-                                    @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto){
-
+                                    @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto, Errors errors){
+        if (errors.hasFieldErrors("tagTitle")){
+            return ResponseEntity.badRequest().build();
+        }
         boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);
 
         if(!result){

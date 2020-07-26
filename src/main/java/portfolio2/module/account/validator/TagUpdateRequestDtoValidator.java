@@ -13,8 +13,6 @@ import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 @RequiredArgsConstructor
 public class TagUpdateRequestDtoValidator implements Validator {
 
-    private final AccountRepository accountRepository;
-
     @Override
     public boolean supports(Class<?> aClass) {
         return aClass.isAssignableFrom(TagUpdateRequestDto.class);
@@ -25,7 +23,7 @@ public class TagUpdateRequestDtoValidator implements Validator {
 
         TagUpdateRequestDto tagUpdateRequestDto = (TagUpdateRequestDto)o;
 
-        String tagPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>?]{0,20}$";
+        String tagPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>? ]{0,20}$";
 
         if(!(tagUpdateRequestDto.getTagTitle().matches(tagPattern))){
             errors.rejectValue("tagTitle", "invalidFormatTagTitle",

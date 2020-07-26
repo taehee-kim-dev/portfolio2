@@ -132,9 +132,8 @@
 
     // initialize Tagify on the above input node reference
     const new_tag = new Tagify(input, {
-        pattern             : /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\)_+\-=\[\];',./{}|:"<>?]{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "20"
-        editTags            : 1,
-        placeholder         : "태그를 입력하세요"
+        pattern             : /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\)_+\-=\[\];',./{}|:"<>? ]{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "20"
+        editTags            : 1
     })
 
     new_tag.on("add", onAdd);

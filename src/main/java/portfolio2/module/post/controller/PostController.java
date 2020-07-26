@@ -1,6 +1,7 @@
 package portfolio2.module.post.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -78,6 +79,11 @@ public class PostController {
                                   Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            if (errors.hasFieldErrors("tagTitleOnPost")){
+                model.addAttribute(ERROR_TITLE, "요청 에러");
+                model.addAttribute(ERROR_CONTENT, "잘못된 접근입니다.");
+                return ERROR_VIEW_NAME;
+            }
             model.addAttribute(postNewPostRequestDto);
             return POST_NEW_POST_FORM_VIEW_NAME;
         }
@@ -132,7 +138,11 @@ public class PostController {
             return ERROR_VIEW_NAME;
         }
         if (errors.hasErrors()) {
-            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            if (errors.hasFieldErrors("tagTitleOnPost")){
+                model.addAttribute(ERROR_TITLE, "요청 에러");
+                model.addAttribute(ERROR_CONTENT, "잘못된 접근입니다.");
+                return ERROR_VIEW_NAME;
+            }
             model.addAttribute(postUpdateRequestDto);
             return POST_UPDATE_FORM_VIEW_NAME;
         }

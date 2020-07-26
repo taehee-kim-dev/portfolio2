@@ -360,4 +360,53 @@ public class PostUpdateTest extends ContainerBaseTest {
         });
         assertTrue(updatedPost.getBeforeTag().isEmpty());
     }
+
+    @DisplayName("글 수정 요청 - 입력 에러 - 태그 형식 에러")
+    @Test
+    void postUpdateWithInvalidFormatTagTitleOnPostError() throws Exception{
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+        String newTitle = "asdfASF";
+        String newContent = "new Content.";
+        List<String> newTagStringList = List.of("new ta\rgTitle 1", "new tagTitle 2", "new tagTitle 3");
+        PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
+        postUpdateRequestDto.setPostIdToUpdate(savedPostId);
+        postUpdateRequestDto.setTitle(newTitle);
+        postUpdateRequestDto.setContent(newContent);
+        postUpdateRequestDto.setTagTitleOnPost(String.join(",", newTagStringList));
+
+        mockMvc.perform(post(POST_UPDATE_URL)
+                .param("postIdToUpdate", String.valueOf(postUpdateRequestDto.getPostIdToUpdate()))
+                .param("title", postUpdateRequestDto.getTitle())
+                .param("content", postUpdateRequestDto.getContent())
+                .param("tagTitleOnPost", postUpdateRequestDto.getTagTitleOnPost())
+                .with(csrf()))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "postUpdateRequestDto",
+                        "tagTitleOnPost",
+                        "invalidFormatTagTitleOnPost"
+                ))
+                .andExpect(model().attributeExists("postUpdateRequestDto"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists(ERROR_TITLE))
+                .andExpect(model().attributeExists(ERROR_CONTENT))
+                .andExpect(view().name(ERROR_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Post updatedPost = postRepository.findById(savedPostId).orElse(null);
+        assertEquals(POST_TEST_TITLE, updatedPost.getTitle());
+        assertEquals(POST_TEST_CONTENT, updatedPost.getContent());
+        newTagStringList.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNull(tagInDb);
+        });
+        POST_TEST_TAG_STRING_LIST.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNotNull(tagInDb);
+            assertTrue(updatedPost.getCurrentTag().contains(tagInDb));
+        });
+        assertTrue(updatedPost.getBeforeTag().isEmpty());
+    }
 }

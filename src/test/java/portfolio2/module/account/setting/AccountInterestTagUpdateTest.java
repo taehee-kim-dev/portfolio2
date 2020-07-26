@@ -153,7 +153,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     @DisplayName("태그 추가하기 - 태그 정규식 에러")
     @SignUpAndLoggedInEmailNotVerified
     @Test
-    void invalidTagFormatError() throws Exception{
+    void invalidTagFormatAddError() throws Exception{
 
         String newTagTitleToAdd = "newTag\tTitleToAdd";
 
@@ -228,6 +228,38 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
         mockMvc.perform(post(ACCOUNT_SETTING_TAG_URL + "/remove")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"tagTitle\":\"notExistingTagTitle\"}")
+                .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account tagNotRemovedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertTrue(tagNotRemovedAccount.getInterestTag().contains(existingTagInDb));
+
+        Tag notRemovedTag = tagRepository.findByTitle(existingTagTitle);
+        assertNotNull(notRemovedTag);
+    }
+
+    @DisplayName("태그 정규식에 어긋나는 태그 삭제 요청 오륲")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void removeInvalidFormatTagTitleError() throws Exception{
+
+        Account existingAccount = accountRepository.findByUserId(TEST_USER_ID);
+
+        String existingTagTitle = "existing\nTagTitle";
+        Tag existingTag = new Tag();
+        existingTag.setTitle(existingTagTitle);
+        Tag existingTagInDb = tagRepository.save(existingTag);
+
+        existingAccount.getInterestTag().add(existingTag);
+        accountRepository.save(existingAccount);
+
+        TagUpdateRequestDto tagUpdateRequestDto = new TagUpdateRequestDto();
+        tagUpdateRequestDto.setTagTitle(existingTagTitle);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_TAG_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"tagTitle\":\"" + existingTagTitle + "\"}")
                 .with(csrf()))
                 .andExpect(status().isBadRequest())
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
