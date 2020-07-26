@@ -115,6 +115,52 @@ public class PostNewPostTest extends ContainerBaseTest {
         assertEquals(firstWrittenDateTime, lastModifiedDateTime);
     }
 
+    @DisplayName("글 작성 POST 요청 - 특수문자 테스트 - 모두 정상 입력(모두 새로운 태그)")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void postNewPostWithSpecialCharacter() throws Exception{
+
+        String titleOfNewPost = "Test 3#title";
+        String contentOfNewPost = "<p>Test content</p>";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
+
+        mockMvc.perform(post(POST_NEW_POST_URL)
+                .param("title", titleOfNewPost)
+                .param("content", contentOfNewPost)
+                .param("tagTitleOnPost", tagOfNewPost)
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
+        Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
+
+        assertEquals(titleOfNewPost, savedNewPostInDb.getTitle());
+        assertEquals(contentOfNewPost, savedNewPostInDb.getContent());
+        assertEquals(authorAccountInDb, savedNewPostInDb.getAuthor());
+
+        Tag testTag1 = new Tag();
+        testTag1.setTitle("Test tag 1");
+        Tag testTag2 = new Tag();
+        testTag2.setTitle("Test tag 2");
+
+        String[] postedTag = tagOfNewPost.split(",");
+        for(String tagTitle : postedTag){
+            Tag containedTagInPost = tagRepository.findByTitle(tagTitle);
+            assertNotNull(containedTagInPost);
+            assertTrue(savedNewPostInDb.getCurrentTag().contains(containedTagInPost));
+        }
+
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag1));
+        assertFalse(savedNewPostInDb.getCurrentTag().contains(testTag2));
+        LocalDateTime firstWrittenDateTime = savedNewPostInDb.getFirstWrittenDateTime();
+        LocalDateTime lastModifiedDateTime = savedNewPostInDb.getLastModifiedDateTime();
+        assertNotNull(firstWrittenDateTime);
+        assertEquals(firstWrittenDateTime, lastModifiedDateTime);
+    }
+
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 일부 기존 존재하는 태그")
     @SignUpAndLoggedInEmailVerified
     @Test
@@ -251,6 +297,39 @@ public class PostNewPostTest extends ContainerBaseTest {
                         "postNewPostRequestDto",
                         "title",
                         "emptyTitle"
+
+                ))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("postNewPostRequestDto"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(POST_NEW_POST_FORM_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account authorAccountInDb = accountRepository.findByUserId(TEST_USER_ID);
+        Post savedNewPostInDb = postRepository.findByAuthor(authorAccountInDb);
+        assertNull(savedNewPostInDb);
+    }
+
+    @DisplayName("글 작성 POST 요청 - 입력 에러 - 스페이스 외 공백문자 제목")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void postNewPostWithWhiteSpaceTitle() throws Exception{
+
+        String titleOfNewPost = "aslkd\tjwA";
+        String contentOfNewPost = "<p>This is test content.</p>";
+        String tagOfNewPost = "Test tag 1,Test tag 2,Test tag 3";
+
+        mockMvc.perform(post(POST_NEW_POST_URL)
+                .param("title", titleOfNewPost)
+                .param("content", contentOfNewPost)
+                .param("tagTitleOnPost", tagOfNewPost)
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "postNewPostRequestDto",
+                        "title",
+                        "invalidTitle"
 
                 ))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))

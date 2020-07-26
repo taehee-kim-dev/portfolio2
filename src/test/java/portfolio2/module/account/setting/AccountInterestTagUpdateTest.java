@@ -1,6 +1,8 @@
 package portfolio2.module.account.setting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.exception.BadRequestException;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.infra.ContainerBaseTest;
@@ -145,6 +148,27 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
 
         Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
         assertTrue(updatedAccount.getInterestTag().contains(existingTagInDb));
+    }
+
+    @DisplayName("태그 추가하기 - 태그 정규식 에러")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void invalidTagFormatError() throws Exception{
+
+        String newTagTitleToAdd = "newTag\tTitleToAdd";
+
+        TagUpdateRequestDto tagUpdateRequestDto = new TagUpdateRequestDto();
+        tagUpdateRequestDto.setTagTitle(newTagTitleToAdd);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_TAG_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagUpdateRequestDto))
+                .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Tag tag = tagRepository.findByTitle(newTagTitleToAdd);
+        assertNull(tag);
     }
 
 

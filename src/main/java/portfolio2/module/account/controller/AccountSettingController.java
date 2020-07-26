@@ -3,6 +3,7 @@ package portfolio2.module.account.controller;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -13,10 +14,7 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.account.dto.request.*;
 import portfolio2.module.account.service.AccountSettingService;
-import portfolio2.module.account.validator.AccountEmailUpdateRequestDtoValidator;
-import portfolio2.module.account.validator.AccountNicknameUpdateRequestDtoValidator;
-import portfolio2.module.account.validator.PasswordUpdateRequestDtoValidator;
-import portfolio2.module.account.validator.ProfileUpdateRequestDtoValidator;
+import portfolio2.module.account.validator.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,6 +29,7 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 public class AccountSettingController {
 
     private final ProfileUpdateRequestDtoValidator profileUpdateRequestDtoValidator;
+    private final TagUpdateRequestDtoValidator tagUpdateRequestDtoValidator;
     private final PasswordUpdateRequestDtoValidator passwordUpdateRequestDtoValidator;
     private final AccountNicknameUpdateRequestDtoValidator accountNicknameUpdateRequestDtoValidator;
     private final AccountEmailUpdateRequestDtoValidator accountEmailUpdateRequestDtoValidator;
@@ -42,6 +41,11 @@ public class AccountSettingController {
     @InitBinder("profileUpdateRequestDto")
     public void initBinderForProfileUpdateRequestDto(WebDataBinder webDataBinder){
         webDataBinder.addValidators(profileUpdateRequestDtoValidator);
+    }
+
+    @InitBinder("tagUpdateRequestDto")
+    public void initBinderForTagUpdateRequestDto(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(tagUpdateRequestDtoValidator);
     }
 
     @InitBinder("passwordUpdateRequestDto")
@@ -131,7 +135,10 @@ public class AccountSettingController {
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/add")
     public ResponseEntity addTag(@SessionAccount Account sessionAccount,
-                                         @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+                                         @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto, Errors errors){
+        if (errors.hasFieldErrors("tagTitle")){
+            return ResponseEntity.badRequest().build();
+        }
         accountSettingService.addInterestTagToAccount(sessionAccount, tagUpdateRequestDto);
         return ResponseEntity.ok().build();
     }
@@ -139,7 +146,7 @@ public class AccountSettingController {
     @ResponseBody
     @PostMapping(ACCOUNT_SETTING_TAG_URL + "/remove")
     public ResponseEntity removeTag(@SessionAccount Account sessionAccount,
-                                    @RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+                                    @RequestBody @Valid TagUpdateRequestDto tagUpdateRequestDto){
 
         boolean result = accountSettingService.removeTagFromAccount(sessionAccount, tagUpdateRequestDto);
 

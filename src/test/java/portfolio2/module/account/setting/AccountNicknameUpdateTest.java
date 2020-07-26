@@ -215,13 +215,13 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
 
-    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임1 - 이메일 인증 된 상태")
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 한글자음 - 이메일 인증 된 상태")
     @SignUpAndLoggedInEmailVerified
     @Test
-    void invalidFormatNicknameError1() throws Exception{
+    void invalidFormatNicknameError4() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
                 = new AccountNicknameUpdateRequestDto();
-        String newNickname = "newNick%name";
+        String newNickname = "newNickㅋame";
         accountNicknameUpdateRequestDto.setNickname(newNickname);
 
         mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
@@ -251,13 +251,121 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
 
-    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임2 - 이메일 인증 된 상태")
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 한글모음 - 이메일 인증 된 상태")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void invalidFormatNicknameError5() throws Exception{
+        AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
+                = new AccountNicknameUpdateRequestDto();
+        String newNickname = "newNickㅕame";
+        accountNicknameUpdateRequestDto.setNickname(newNickname);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+                .param("nickname", accountNicknameUpdateRequestDto.getNickname())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "accountNicknameUpdateRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeExists("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
+        assertNotEquals(newNickname, notUpdatedAccount.getNickname());
+        assertNull(notUpdatedAccount.getNicknameBeforeUpdate());
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임2 - 공백문자 - 이메일 인증 된 상태")
     @SignUpAndLoggedInEmailVerified
     @Test
     void invalidFormatNicknameError2() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
                 = new AccountNicknameUpdateRequestDto();
         String newNickname = "newNick name";
+        accountNicknameUpdateRequestDto.setNickname(newNickname);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+                .param("nickname", accountNicknameUpdateRequestDto.getNickname())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "accountNicknameUpdateRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeExists("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
+        assertNotEquals(newNickname, notUpdatedAccount.getNickname());
+        assertNull(notUpdatedAccount.getNicknameBeforeUpdate());
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 공백문자 - 이메일 인증 된 상태")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void invalidFormatNicknameError3() throws Exception{
+        AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
+                = new AccountNicknameUpdateRequestDto();
+        String newNickname = "newNick\name";
+        accountNicknameUpdateRequestDto.setNickname(newNickname);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)
+                .param("nickname", accountNicknameUpdateRequestDto.getNickname())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "accountNicknameUpdateRequestDto",
+                        "nickname",
+                        "invalidFormatNickname"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("accountNicknameUpdateRequestDto"))
+                .andExpect(model().attributeExists("accountEmailUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACCOUNT_SETTING_ACCOUNT_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        verify(emailSendingProcessForAccount, times(0)).sendNicknameUpdateNotificationEmail(any(Account.class));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(TEST_NICKNAME, notUpdatedAccount.getNickname());
+        assertNotEquals(newNickname, notUpdatedAccount.getNickname());
+        assertNull(notUpdatedAccount.getNicknameBeforeUpdate());
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("입력 에러 - 형식에 맞지않는 닉네임1 - 특수문자 - 이메일 인증 된 상태")
+    @SignUpAndLoggedInEmailVerified
+    @Test
+    void invalidFormatNicknameError1() throws Exception{
+        AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
+                = new AccountNicknameUpdateRequestDto();
+        String newNickname = "newNick%name";
         accountNicknameUpdateRequestDto.setNickname(newNickname);
 
         mockMvc.perform(post(ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL)

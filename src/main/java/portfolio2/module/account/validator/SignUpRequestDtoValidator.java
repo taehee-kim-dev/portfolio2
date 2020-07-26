@@ -18,6 +18,20 @@ public class SignUpRequestDtoValidator implements Validator {
         return aClass.isAssignableFrom(SignUpRequestDto.class);
     }
 
+
+    /**
+     * regex에서 escape는 backslash('\')를 맨 앞에 붙여서 한다.
+     * 그런데, Java의 String에서 예를들어 \t를 "\t"로 쓰면 그냥 tab이 되어버린다.
+     * 따라서 Java의 String으로 "\t"라는 문자열을 regex expression으로 표현하려면
+     * "\t" 문자열 자체를 표현해야 하는데, 그러려면 "\\t"로 써야한다.
+     * 즉,
+     * Java String = "\\t" -> "\t"로 표현됨 -> regex expression에 \t를 전달할 수 있음.
+     * "\\"를 표현하고 싶으면 각 backslash를 escape 해 줘야 한다.
+     * 그래야 각 backslash가 문자열로 표현되기 때문이다.
+     * 즉,
+     * Java String = "\\\\" -> "\\"로 표현됨 -> regex expression에 \\를 전달할 수 있음.
+     * */
+
     @Override
     public void validate(Object o, Errors errors) {
 

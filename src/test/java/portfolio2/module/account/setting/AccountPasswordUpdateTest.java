@@ -101,7 +101,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         beforeAccount.setEmailVerified(true);
         accountRepository.save(beforeAccount);
 
-        String newPassword = "ChangedPassword#!@$$^_)+";
+        String newPassword = "aA톁ㅍㅒ3#!@$$^_)+";
         PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
         passwordUpdateRequestDto.setNewPassword(newPassword);
         passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);
@@ -207,16 +207,56 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
 
-    @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치")
+    @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치1")
     @SignUpAndLoggedInEmailNotVerified
     @Test
-    void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
+    void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError1() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
         beforeAccount.setVerifiedEmail(beforeAccount.getEmailWaitingToBeVerified());
         beforeAccount.setEmailVerified(true);
         accountRepository.save(beforeAccount);
 
         String newPassword = "updated Password";
+        PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
+        passwordUpdateRequestDto.setNewPassword(newPassword);
+        passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PASSWORD_URL)
+                .param("newPassword", passwordUpdateRequestDto.getNewPassword())
+                .param("newPasswordConfirm", passwordUpdateRequestDto.getNewPasswordConfirm())
+                .with(csrf()))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "passwordUpdateRequestDto",
+                        "newPassword",
+                        "invalidFormatNewPassword"
+                ))
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("passwordUpdateRequestDto"))
+                .andExpect(view().name(ACCOUNT_SETTING_PASSWORD_VIEW_NAME))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeCount(0))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account notUpdatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertFalse(passwordEncoder.matches(newPassword, notUpdatedAccount.getPassword()));
+        assertTrue(passwordEncoder.matches(TEST_PASSWORD, notUpdatedAccount.getPassword()));
+        verify(emailSendingProcessForAccount, times(0))
+                .sendPasswordUpdateNotificationEmail(any(Account.class));
+        assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
+    }
+
+    @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치2")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError2() throws Exception{
+        Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
+        beforeAccount.setVerifiedEmail(beforeAccount.getEmailWaitingToBeVerified());
+        beforeAccount.setEmailVerified(true);
+        accountRepository.save(beforeAccount);
+
+        String newPassword = "updated\tPassword";
         PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
         passwordUpdateRequestDto.setNewPassword(newPassword);
         passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);

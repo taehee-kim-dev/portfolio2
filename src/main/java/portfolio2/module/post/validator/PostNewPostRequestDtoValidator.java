@@ -18,9 +18,11 @@ public class PostNewPostRequestDtoValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         PostNewPostRequestDto postNewPostRequestDto = (PostNewPostRequestDto)target;
-
+        String postTitlePattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>? ]{1,50}$";
         if(postNewPostRequestDto.getTitle().length() == 0){
             errors.rejectValue("title", "emptyTitle","제목을 작성해 주세요.");
+        }else if(!(postNewPostRequestDto.getTitle().matches(postTitlePattern))){
+            errors.rejectValue("title", "invalidTitle", "50자 이내의 문자, 숫자만 사용 가능합니다.");
         }
     }
 }

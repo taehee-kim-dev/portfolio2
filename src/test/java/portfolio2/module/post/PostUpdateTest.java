@@ -135,6 +135,47 @@ public class PostUpdateTest extends ContainerBaseTest {
         });
     }
 
+    @DisplayName("정상 업데이트 - 특수문자")
+    @Test
+    void updateSuccessWithSpecialCharacter() throws Exception{
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+        String newTitle = "new t*2Yitle.";
+        String newContent = "new Content.";
+        List<String> newTagStringList = List.of("new tagTitle 1", "new tagTitle 2", "new tagTitle 3");
+        PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
+        postUpdateRequestDto.setPostIdToUpdate(savedPostId);
+        postUpdateRequestDto.setTitle(newTitle);
+        postUpdateRequestDto.setContent(newContent);
+        postUpdateRequestDto.setTagTitleOnPost(String.join(",", newTagStringList));
+
+        mockMvc.perform(post(POST_UPDATE_URL)
+                .param("postIdToUpdate", String.valueOf(postUpdateRequestDto.getPostIdToUpdate()))
+                .param("title", postUpdateRequestDto.getTitle())
+                .param("content", postUpdateRequestDto.getContent())
+                .param("tagTitleOnPost", postUpdateRequestDto.getTagTitleOnPost())
+                .with(csrf()))
+                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(POST_VIEW_URL + '/' + savedPostId))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Post updatedPost = postRepository.findById(savedPostId).orElse(null);
+        assertEquals(newTitle, updatedPost.getTitle());
+        assertEquals(newContent, updatedPost.getContent());
+        newTagStringList.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNotNull(tagInDb);
+            assertTrue(updatedPost.getCurrentTag().contains(tagInDb));
+        });
+        POST_TEST_TAG_STRING_LIST.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNotNull(tagInDb);
+            assertTrue(updatedPost.getBeforeTag().contains(tagInDb));
+        });
+    }
+
 
     @DisplayName("존재하지 않는 게시물 에러")
     @Test
@@ -250,6 +291,55 @@ public class PostUpdateTest extends ContainerBaseTest {
                         "postUpdateRequestDto",
                         "title",
                         "emptyTitle"
+                ))
+                .andExpect(model().attributeExists("postUpdateRequestDto"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(POST_UPDATE_FORM_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Post updatedPost = postRepository.findById(savedPostId).orElse(null);
+        assertEquals(POST_TEST_TITLE, updatedPost.getTitle());
+        assertEquals(POST_TEST_CONTENT, updatedPost.getContent());
+        newTagStringList.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNull(tagInDb);
+        });
+        POST_TEST_TAG_STRING_LIST.forEach(tagTitle -> {
+            Tag tagInDb = tagRepository.findByTitle(tagTitle);
+            assertNotNull(tagInDb);
+            assertTrue(updatedPost.getCurrentTag().contains(tagInDb));
+        });
+        assertTrue(updatedPost.getBeforeTag().isEmpty());
+    }
+
+    @DisplayName("글 수정 요청 - 입력 에러 - 스페이스 외의 공백문자")
+    @Test
+    void postUpdateWithWhiteSpaceTitleError() throws Exception{
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+        String newTitle = "asdf\nASF";
+        String newContent = "new Content.";
+        List<String> newTagStringList = List.of("new tagTitle 1", "new tagTitle 2", "new tagTitle 3");
+        PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
+        postUpdateRequestDto.setPostIdToUpdate(savedPostId);
+        postUpdateRequestDto.setTitle(newTitle);
+        postUpdateRequestDto.setContent(newContent);
+        postUpdateRequestDto.setTagTitleOnPost(String.join(",", newTagStringList));
+
+        mockMvc.perform(post(POST_UPDATE_URL)
+                .param("postIdToUpdate", String.valueOf(postUpdateRequestDto.getPostIdToUpdate()))
+                .param("title", postUpdateRequestDto.getTitle())
+                .param("content", postUpdateRequestDto.getContent())
+                .param("tagTitleOnPost", postUpdateRequestDto.getTagTitleOnPost())
+                .with(csrf()))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeDoesNotExist(ERROR_TITLE))
+                .andExpect(model().attributeDoesNotExist(ERROR_CONTENT))
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "postUpdateRequestDto",
+                        "title",
+                        "invalidTitle"
                 ))
                 .andExpect(model().attributeExists("postUpdateRequestDto"))
                 .andExpect(status().isOk())

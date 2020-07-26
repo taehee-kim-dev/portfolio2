@@ -61,10 +61,10 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     @SignUpAndLoggedInEmailNotVerified
     @Test
     void updateProfileSuccess1() throws Exception{
-        String sampleBio = "sampleBio";
-        String sampleLocation = "sampleLocation";
-        String sampleOccupation = "sampleOccupatio";
-        String sampleProfileImage = "sampleProfileImage";
+        String sampleBio = "aB3^ ";
+        String sampleLocation = "aB3^ ";
+        String sampleOccupation = "aB3^ ";
+        String sampleProfileImage = "aB3^ ";
 
         mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", sampleBio)
@@ -137,7 +137,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "profileUpdateRequestDto",
                         "bio",
-                        "tooLongBio"))
+                        "invalidBio"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
                 .andExpect(flash().attributeCount(0))
@@ -151,12 +151,12 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
         assertNotEquals(sampleProfileImage, updatedAccount.getProfileImage());
     }
 
-    @DisplayName("프로필 업데이트 - 너무 긴 지역 에러")
+    @DisplayName("프로필 업데이트 - 자기소개 스페이스 외의 공백문자 에러")
     @SignUpAndLoggedInEmailNotVerified
     @Test
-    void tooLongLocationError() throws Exception{
-        String sampleBio = "sampleBio";
-        String sampleLocation = "abcdeabcdeabcdea";
+    void whiteSpaceErrorOfBio() throws Exception{
+        String sampleBio = "asdfa\tsdf";
+        String sampleLocation = "sampleLocation";
         String sampleOccupation = "sampleOccupation";
         String sampleProfileImage = "sampleProfileImage";
 
@@ -170,8 +170,8 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode(
                         "profileUpdateRequestDto",
-                        "location",
-                        "tooLongLocation"))
+                        "bio",
+                        "invalidBio"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
                 .andExpect(flash().attributeCount(0))
@@ -205,7 +205,109 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "profileUpdateRequestDto",
                         "occupation",
-                        "tooLongOccupation"))
+                        "invalidOccupation"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertNotEquals(sampleBio, updatedAccount.getBio());
+        assertNotEquals(sampleLocation, updatedAccount.getLocation());
+        assertNotEquals(sampleOccupation, updatedAccount.getOccupation());
+        assertNotEquals(sampleProfileImage, updatedAccount.getProfileImage());
+    }
+
+    @DisplayName("프로필 업데이트 - 스페이스 외의 공백문자 직업 에러")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void whiteSpaceErrorOfOccupation() throws Exception{
+        String sampleBio = "sampleBio";
+        String sampleLocation = "sampleLocation";
+        String sampleOccupation = "abcde\ncdea";
+        String sampleProfileImage = "sampleProfileImage";
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
+                .param("bio", sampleBio)
+                .param("location", sampleLocation)
+                .param("occupation", sampleOccupation)
+                .param("profileImage", sampleProfileImage)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "profileUpdateRequestDto",
+                        "occupation",
+                        "invalidOccupation"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertNotEquals(sampleBio, updatedAccount.getBio());
+        assertNotEquals(sampleLocation, updatedAccount.getLocation());
+        assertNotEquals(sampleOccupation, updatedAccount.getOccupation());
+        assertNotEquals(sampleProfileImage, updatedAccount.getProfileImage());
+    }
+
+    @DisplayName("프로필 업데이트 - 너무 긴 지역 에러")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void tooLongLocationError() throws Exception{
+        String sampleBio = "sampleBio";
+        String sampleLocation = "abcdeabcdeabcdea";
+        String sampleOccupation = "sampleOccupation";
+        String sampleProfileImage = "sampleProfileImage";
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
+                .param("bio", sampleBio)
+                .param("location", sampleLocation)
+                .param("occupation", sampleOccupation)
+                .param("profileImage", sampleProfileImage)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "profileUpdateRequestDto",
+                        "location",
+                        "invalidLocation"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("profileUpdateRequestDto"))
+                .andExpect(flash().attributeCount(0))
+                .andExpect(view().name(ACCOUNT_SETTING_PROFILE_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertNotEquals(sampleBio, updatedAccount.getBio());
+        assertNotEquals(sampleLocation, updatedAccount.getLocation());
+        assertNotEquals(sampleOccupation, updatedAccount.getOccupation());
+        assertNotEquals(sampleProfileImage, updatedAccount.getProfileImage());
+    }
+
+    @DisplayName("프로필 업데이트 - 스페이스 외의 공백문자 지역 에러")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void whiteSpaceErrorOfLocation() throws Exception{
+        String sampleBio = "sampleBio";
+        String sampleLocation = "as\tgbc";
+        String sampleOccupation = "sampleOccupation";
+        String sampleProfileImage = "sampleProfileImage";
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
+                .param("bio", sampleBio)
+                .param("location", sampleLocation)
+                .param("occupation", sampleOccupation)
+                .param("profileImage", sampleProfileImage)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "profileUpdateRequestDto",
+                        "location",
+                        "invalidLocation"))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
                 .andExpect(flash().attributeCount(0))
@@ -238,12 +340,12 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrorCode(
                         "profileUpdateRequestDto",
-                        "location",
-                        "tooLongLocation"))
+                        "occupation",
+                        "invalidOccupation"))
                 .andExpect(model().attributeHasFieldErrorCode(
                         "profileUpdateRequestDto",
-                        "occupation",
-                        "tooLongOccupation"))
+                        "location",
+                        "invalidLocation"))
                 .andExpect(model().attributeErrorCount("profileUpdateRequestDto", 2))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("profileUpdateRequestDto"))
