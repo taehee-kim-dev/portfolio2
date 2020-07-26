@@ -18,18 +18,20 @@ public class ProfileUpdateRequestDtoValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
 
+        String bioPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>? ]{0,30}$";
+        String occupationAndLocationPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>? ]{0,15}$";
         ProfileUpdateRequestDto profileUpdateRequestDto = (ProfileUpdateRequestDto)o;
 
-        if(profileUpdateRequestDto.getBio().length() > 30){
-            errors.rejectValue("bio", "tooLongBio", "30자 이내여야 합니다.");
+        if(!(profileUpdateRequestDto.getBio().matches(bioPattern))){
+            errors.rejectValue("bio", "invalidBio", "30자 이내의 문자, 숫자만 사용 가능합니다.");
         }
 
-        if(profileUpdateRequestDto.getOccupation().length() > 15){
-            errors.rejectValue("occupation", "tooLongOccupation", "15자 이내여야 합니다.");
+        if(!(profileUpdateRequestDto.getOccupation().matches(occupationAndLocationPattern))){
+            errors.rejectValue("occupation", "invalidOccupation", "15자 이내의 문자, 숫자만 사용 가능합니다.");
         }
 
-        if(profileUpdateRequestDto.getLocation().length() > 15){
-            errors.rejectValue("location", "tooLongLocation", "15자 이내여야 합니다.");
+        if(!(profileUpdateRequestDto.getLocation().matches(occupationAndLocationPattern))){
+            errors.rejectValue("location", "invalidLocation", "15자 이내의 문자, 숫자만 사용 가능합니다.");
         }
         
     }

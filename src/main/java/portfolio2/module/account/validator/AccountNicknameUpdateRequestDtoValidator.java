@@ -24,7 +24,7 @@ public class AccountNicknameUpdateRequestDtoValidator implements Validator {
 
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto = (AccountNicknameUpdateRequestDto)o;
 
-        String nicknamePattern = "^[a-zA-Z가-힣0-9-_.]{2,20}$";
+        String nicknamePattern = "^[a-zA-Z가-힣0-9\\-_.]{2,20}$";
 
         String nickname = accountNicknameUpdateRequestDto.getNickname();
 

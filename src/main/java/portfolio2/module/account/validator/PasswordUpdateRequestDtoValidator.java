@@ -20,11 +20,11 @@ public class PasswordUpdateRequestDtoValidator implements Validator {
 
         PasswordUpdateRequestDto passwordUpdateRequestDto = (PasswordUpdateRequestDto)o;
 
-        String passwordPattern = "^[\\S0-9]{8,50}$";
+        String passwordPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>?]{8,50}$";
 
         if(!(passwordUpdateRequestDto.getNewPassword().matches(passwordPattern))){
             errors.rejectValue("newPassword", "invalidFormatNewPassword",
-                    "8~50자의 공백을 제외한 문자, 숫자만 사용 가능합니다.");
+                    "8~50자의 영문, 한글, 숫자와 특수문자만 사용 가능합니다.");
         }
 
         if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())) {

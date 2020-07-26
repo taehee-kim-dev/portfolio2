@@ -23,10 +23,10 @@ public class SignUpRequestDtoValidator implements Validator {
 
         SignUpRequestDto signUpRequestDto = (SignUpRequestDto)o;
 
-        String userIdPattern = "^[a-z0-9-_.]{3,20}$";
-        String nicknamePattern = "^[a-zA-Z가-힣0-9-_.]{2,20}$";
-        String emailPattern = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-        String passwordPattern = "^[\\S0-9]{8,50}$";
+        String userIdPattern = "^[a-z0-9\\-_.]{3,20}$";
+        String nicknamePattern = "^[a-zA-Z가-힣0-9\\-_.]{2,20}$";
+        String emailPattern = "^[\\w!#$%&’*+/=?`{|}~^\\-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        String passwordPattern = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\\\)_+\\-=\\[\\];',./{}|:\"<>?]{8,50}$";
 
 
         String userId = signUpRequestDto.getUserId();
