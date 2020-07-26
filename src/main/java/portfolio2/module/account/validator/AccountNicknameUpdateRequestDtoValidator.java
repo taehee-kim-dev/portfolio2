@@ -24,18 +24,16 @@ public class AccountNicknameUpdateRequestDtoValidator implements Validator {
 
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto = (AccountNicknameUpdateRequestDto)o;
 
-        String nicknamePattern = "^[a-zA-Z가-힣0-9]+$";
+        String nicknamePattern = "^[a-zA-Z가-힣0-9-_.]{2,20}$";
 
         String nickname = accountNicknameUpdateRequestDto.getNickname();
 
-        if(nickname.length() < 3){
-            errors.rejectValue("nickname", "tooShortNickname", "닉네임은 3자 이상이어야 합니다.");
-        }else if(nickname.length() >15){
-            errors.rejectValue("nickname", "tooLongNickname", "닉네임은 15자 이내여야 합니다.");
-        }else if(!(nickname.matches(nicknamePattern))){
-            errors.rejectValue("nickname", "invalidFormatNickname", "형식에 맞지 않는 닉네임 입니다.");
+        if(!(nickname.matches(nicknamePattern))){
+            errors.rejectValue("nickname", "invalidFormatNickname",
+                    "2~20자의 영문, 한글(단순 모음, 자음 제외), 숫자와 특수문자 (-), (_), (.)만 사용 가능합니다.");
         }else if(accountRepository.existsByNickname(nickname)){
-            errors.rejectValue("nickname", "nicknameAlreadyExists", "이미 사용중인 닉네임 입니다.");
+            errors.rejectValue("nickname", "nicknameAlreadyExists",
+                    "이미 사용중인 닉네임 입니다.");
         }
         
     }

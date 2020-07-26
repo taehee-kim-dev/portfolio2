@@ -249,10 +249,7 @@
                     <label for="nickname">닉네임</label>
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
                            placeholder="Nickname" aria-describedby="nicknameHelp"
-                           th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : ''">
-                    <small id="nicknameHelp" class="form-text text-muted">
-                        공백없이 문자와 숫자로만 3자 이상 15자 이내로 입력해 주세요. 이후 변경할 수 있습니다.
-                    </small>
+                           th:classappend="${#fields.hasErrors('nickname')} ? 'is-invalid' : 'is-valid'">
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}"
                            th:errors="*{nickname}">Nickname Error</small>
                 </div>
@@ -284,7 +281,7 @@
                     <div th:if="${#bools.isFalse(sessionAccount.isEmailVerified()) && sessionAccount.emailWaitingToBeVerified == null
                                     && !#fields.hasErrors('email')}"
                          class="invalid-feedback">
-                        인증 대기중인 이메일이 없습니다.
+                        기존에 인증 대기중이었던 이메일을 다른 계정에서 인증하였습니다.
                     </div>
                     <small id="emailHelp" class="form-text text-muted">
                         이메일 인증 이메일은 12시간동안 5번까지만 보낼 수 있습니다.
