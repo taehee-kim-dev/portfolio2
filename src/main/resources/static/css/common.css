@@ -97,7 +97,7 @@
 }
 
 /* 오직 핸드폰만 */
-@media (min-width: 340px) and (max-width: 575.98px) {
+@media (max-width: 575.98px) {
     .modal{
         margin-top: 65px;
     }
@@ -147,4 +147,8 @@
 
 #userIdOfUserIcon #userNicknameOfUserIcon{
     overflow:hidden;word-wrap:break-word;
+}
+
+#userDropdownMenu{
+    word-break: break-all;
 }
