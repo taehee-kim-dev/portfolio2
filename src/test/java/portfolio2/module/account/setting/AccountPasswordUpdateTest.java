@@ -289,7 +289,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
 
-    // 비정상 비밀번호 - 확인 비밀번호 불일치하면 비정상 비밀번호에 대한 에러문구만 띄움
+    // 비정상 비밀번호 - 확인 비밀번호 불일치하면 둘다 에러문구 띄움
     @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 불일치")
     @SignUpAndLoggedInEmailNotVerified
     @Test
@@ -314,7 +314,12 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
                         "newPassword",
                         "invalidFormatNewPassword"
                 ))
-                .andExpect(model().errorCount(1))
+                .andExpect(model().attributeHasFieldErrorCode(
+                        "passwordUpdateRequestDto",
+                        "newPasswordConfirm",
+                        "notSamePassword"
+                ))
+                .andExpect(model().errorCount(2))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("passwordUpdateRequestDto"))
                 .andExpect(view().name(ACCOUNT_SETTING_PASSWORD_VIEW_NAME))

@@ -25,7 +25,9 @@ public class PasswordUpdateRequestDtoValidator implements Validator {
         if(!(passwordUpdateRequestDto.getNewPassword().matches(passwordPattern))){
             errors.rejectValue("newPassword", "invalidFormatNewPassword",
                     "8~50자의 공백을 제외한 문자, 숫자만 사용 가능합니다.");
-        }else if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())) {
+        }
+
+        if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())) {
             errors.rejectValue("newPasswordConfirm", "notSamePassword", "위의 비밀번호와 같지 않습니다.");
         }
         

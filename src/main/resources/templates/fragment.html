@@ -113,7 +113,7 @@
         }
 
         /* 오직 핸드폰만 */
-        @media (max-width: 575.98px) {
+        @media (min-width: 340px) and (max-width: 575.98px) {
             .modal{
                 margin-top: 65px;
             }
@@ -210,7 +210,7 @@
                     </div>
                 </li>
             </ul>
-            <form id="mainSearchForm" class="form-inline my-lg-0 order-lg-1 order-md-4 order-4">
+            <form th:action="@{#}" method="get" id="mainSearchForm" class="form-inline my-lg-0 order-lg-1 order-md-4 order-4">
                 <input class="form-control" type="search" aria-label="Search" placeholder="Search">
                 <button id="mainSearchButton" class="btn btn-outline-success my-2 my-sm-0 mr-lg-5" type="submit">검색</button>
             </form>
