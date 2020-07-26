@@ -132,7 +132,7 @@
             <h6 id="line1">회원님의 이메일 : </h6>
             <h6 id="line2" class="font-weight-bold" th:text="${email}">your@email.com</h6>
             <h6 id="line3" >이메일이 도착하지 않는다면, 아래의 버튼을 눌러 이메일을 변경하거나 인증 메일을 다시 보내세요.</h6>
-            <h6 id="accountEmailSettingButton" class="btn btn-outline-info" th:href="@{/account/setting/account}">계정 이메일 설정</h6>
+            <a id="accountEmailSettingButton" class="btn btn-outline-info" th:href="@{/account/setting/account}">계정 이메일 설정</a>
         </div>
 
     </div>

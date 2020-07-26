@@ -5,28 +5,18 @@
     <title>TH 관심 태그 게시물 알림</title>
 </head>
 <body>
-    <div style="font-size: 15px">
-        <p>안녕하세요, <span th:text="${nickname}">sampleNickname</span>(<span th:text="${userId}">sampleUserId</span>)님!</p>
+    <p>안녕하세요, <span style="font-weight: bold" th:text="${nickname}">nickname</span>(<span style="font-weight: bold" th:text="${userId}">userId</span>)님!</p>
+    <p>회원님의 관심 태그들 중,</p>
 
-        <p>회원님의 관심 태그들 중,</p>
+    <span style="font-weight: bold" th:each="tag : ${allTagInNewPostAndAccount}">
+        <span th:text="${tag.getTitle()}"></span>
+        <span th:if="${#bools.isFalse(tagStat.last)}">, </span>
+    </span>
 
-        <span style="font-size: 14px; font-weight: bold" th:each="tag : ${allTagInNewPostAndAccount}">
-            <span th:text="${tag.getTitle()}"></span>
-            <span th:if="${#bools.isFalse(tagStat.last)}">, </span>
-        </span>
-
-        <p th:text="${content}"></p>
-
-        <p>아래의 링크를 클릭해 확인해 보세요.</p>
-
-        <div style="margin-top: 6px">
-            <bold><a th:href="${host + newPostLink}" th:text="${post.getTitle()}"></a></bold>
-        </div>
-
-        <div style="margin-top: 15px;">
-            <a th:href="${host}">TH 가기</a>
-        </div>
-    </div>
+    <p th:text="${content}"></p>
+    <p>아래의 링크를 클릭해 확인해 보세요.</p>
+    <p style="font-weight: bold"><a th:href="${host + newPostLink}" th:text="${post.getTitle()}"></a></p>
+    <p><a th:href="${host}">TH 가기</a></p>
     <footer>
         <small>TH&copy; 2020</small>
     </footer>

@@ -23,6 +23,7 @@ public class EmailVerificationProcess {
 
         otherAccount.forEach(account -> {
             account.setEmailWaitingToBeVerified(null);
+            account.setEmailVerificationToken(null);
         });
 
         Account accountToBeVerified

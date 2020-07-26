@@ -237,6 +237,7 @@ public class SignUpTest extends ContainerBaseTest {
         assertTrue(newAccountInDb.isNotificationLikeOnMyCommentByWeb());
 
         assertTrue(newAccountInDb.isNotificationNewPostWithMyInterestTagByWeb());
+        assertTrue(newAccountInDb.isNotificationMyInterestTagAddedToExistingPostByWeb());
 
         // 이메일 알림 값 모두 false 확인
         assertFalse(newAccountInDb.isNotificationCommentOnMyPostByEmail());
@@ -246,7 +247,7 @@ public class SignUpTest extends ContainerBaseTest {
         assertFalse(newAccountInDb.isNotificationLikeOnMyCommentByEmail());
 
         assertFalse(newAccountInDb.isNotificationNewPostWithMyInterestTagByEmail());
-
+        assertFalse(newAccountInDb.isNotificationMyInterestTagAddedToExistingPostByEmail());
         // 태그, 포스트 초기 값 존재 확인
         assertNotNull(newAccountInDb.getInterestTag());
     }

@@ -36,6 +36,7 @@ public class SendingEmailVerificationEmailProcess {
         accountToSendEmail.setNotificationCommentOnMyPostByEmail(false);
         accountToSendEmail.setNotificationCommentOnMyCommentByEmail(false);
         accountToSendEmail.setNotificationNewPostWithMyInterestTagByEmail(false);
+        accountToSendEmail.setNotificationMyInterestTagAddedToExistingPostByEmail(false);
         return accountToSendEmail;
     }
 }

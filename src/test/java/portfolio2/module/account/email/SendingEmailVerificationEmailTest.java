@@ -143,6 +143,12 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     @Test
     void verifiedEmailSendAgainSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
+        assertTrue(beforeTry.isNotificationLikeOnMyPostByEmail());
+        assertTrue(beforeTry.isNotificationLikeOnMyCommentByEmail());
+        assertTrue(beforeTry.isNotificationCommentOnMyPostByEmail());
+        assertTrue(beforeTry.isNotificationCommentOnMyCommentByEmail());
+        assertTrue(beforeTry.isNotificationNewPostWithMyInterestTagByEmail());
+        assertTrue(beforeTry.isNotificationMyInterestTagAddedToExistingPostByEmail());
         LocalDateTime initialTime = beforeTry.getFirstCountOfSendingEmailVerificationEmailSetDateTime();
         String initialToken = beforeTry.getEmailVerificationToken();
 
@@ -171,6 +177,12 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
         assertNotNull(accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(initialTime, accountAfterEmailSent.getFirstCountOfSendingEmailVerificationEmailSetDateTime());
         assertEquals(2, accountAfterEmailSent.getCountOfSendingEmailVerificationEmail());
+        assertFalse(accountAfterEmailSent.isNotificationLikeOnMyPostByEmail());
+        assertFalse(accountAfterEmailSent.isNotificationLikeOnMyCommentByEmail());
+        assertFalse(accountAfterEmailSent.isNotificationCommentOnMyPostByEmail());
+        assertFalse(accountAfterEmailSent.isNotificationCommentOnMyCommentByEmail());
+        assertFalse(accountAfterEmailSent.isNotificationNewPostWithMyInterestTagByEmail());
+        assertFalse(accountAfterEmailSent.isNotificationMyInterestTagAddedToExistingPostByEmail());
 
         verify(emailSendingProcessForAccount, times(2)).sendEmailVerificationEmail(any(Account.class));
     }

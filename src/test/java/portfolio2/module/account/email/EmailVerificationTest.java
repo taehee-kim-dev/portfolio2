@@ -1496,7 +1496,9 @@ public class EmailVerificationTest extends ContainerBaseTest {
         Account accountInDb = accountRepository.findByUserId(TEST_USER_ID);
 
         assertNull(account1InDb.getEmailWaitingToBeVerified());
+        assertNull(account1InDb.getEmailVerificationToken());
         assertNull(account2InDb.getEmailWaitingToBeVerified());
+        assertNull(account2InDb.getEmailVerificationToken());
 
         assertEquals(TEST_EMAIL, account.getVerifiedEmail());
         assertNull(accountInDb.getEmailWaitingToBeVerified());
@@ -1532,6 +1534,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         Account accountInDb = accountRepository.findByUserId(TEST_USER_ID);
 
         assertNull(account1InDb.getEmailWaitingToBeVerified());
+        assertNull(account1InDb.getEmailVerificationToken());
 
         assertEquals(TEST_EMAIL, account.getVerifiedEmail());
         assertNull(accountInDb.getEmailWaitingToBeVerified());
