@@ -20,12 +20,11 @@ public class PasswordUpdateRequestDtoValidator implements Validator {
 
         PasswordUpdateRequestDto passwordUpdateRequestDto = (PasswordUpdateRequestDto)o;
 
-        if(passwordUpdateRequestDto.getNewPassword().length() < 8){
-            errors.rejectValue("newPassword", "tooShortNewPassword", "비밀번호는 8자 이상이어야 합니다.");
-        }else if(passwordUpdateRequestDto.getNewPassword().length() >30){
-            errors.rejectValue("newPassword", "tooLongNewPassword", "비밀번호는 30자 이내여야 합니다.");
-        }else if((passwordUpdateRequestDto.getNewPassword().contains(" "))){
-            errors.rejectValue("newPassword", "invalidFormatNewPassword", "비밀번호에 공백은 포함될 수 없습니다.");
+        String passwordPattern = "^[\\S0-9]{8,50}$";
+
+        if(!(passwordUpdateRequestDto.getNewPassword().matches(passwordPattern))){
+            errors.rejectValue("newPassword", "invalidFormatNewPassword",
+                    "8~50자의 공백을 제외한 문자, 숫자만 사용 가능합니다.");
         }else if(!passwordUpdateRequestDto.getNewPassword().equals(passwordUpdateRequestDto.getNewPasswordConfirm())) {
             errors.rejectValue("newPasswordConfirm", "notSamePassword", "위의 비밀번호와 같지 않습니다.");
         }

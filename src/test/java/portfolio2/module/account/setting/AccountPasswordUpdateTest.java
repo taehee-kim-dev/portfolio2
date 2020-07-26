@@ -101,7 +101,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         beforeAccount.setEmailVerified(true);
         accountRepository.save(beforeAccount);
 
-        String newPassword = "ChangedPassword";
+        String newPassword = "ChangedPassword#!@$$^_)+";
         PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
         passwordUpdateRequestDto.setNewPassword(newPassword);
         passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);
@@ -136,7 +136,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         beforeAccount.setEmailVerified(true);
         accountRepository.save(beforeAccount);
 
-        String newPassword = "ab";
+        String newPassword = "1234567";
         PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
         passwordUpdateRequestDto.setNewPassword(newPassword);
         passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);
@@ -149,7 +149,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                        "passwordUpdateRequestDto",
                         "newPassword",
-                        "tooShortNewPassword"
+                        "invalidFormatNewPassword"
                 ))
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
@@ -176,7 +176,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         beforeAccount.setEmailVerified(true);
         accountRepository.save(beforeAccount);
 
-        String newPassword = "asdfgasdfgasdfgasdfgasdfgasdfga";
+        String newPassword = "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdea";
         PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
         passwordUpdateRequestDto.setNewPassword(newPassword);
         passwordUpdateRequestDto.setNewPasswordConfirm(newPassword);
@@ -189,7 +189,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
                 .andExpect(model().attributeHasFieldErrorCode(
                         "passwordUpdateRequestDto",
                         "newPassword",
-                        "tooLongNewPassword"
+                        "invalidFormatNewPassword"
                 ))
                 .andExpect(model().errorCount(1))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
@@ -207,10 +207,10 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
         assertNull(notUpdatedAccount.getShowPasswordUpdatePageToken());
     }
 
-    @DisplayName("형식에 맞지 않는 비밀번호 - 비밀번호 확인 일치")
+    @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치")
     @SignUpAndLoggedInEmailNotVerified
     @Test
-    void invalidFormatNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
+    void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
         beforeAccount.setVerifiedEmail(beforeAccount.getEmailWaitingToBeVerified());
         beforeAccount.setEmailVerified(true);
@@ -290,7 +290,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     }
 
     // 비정상 비밀번호 - 확인 비밀번호 불일치하면 비정상 비밀번호에 대한 에러문구만 띄움
-    @DisplayName("형식에 맞지 않는 비밀번호 - 비밀번호 확인 불일치")
+    @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 불일치")
     @SignUpAndLoggedInEmailNotVerified
     @Test
     void invalidFormatNewPasswordAndIncorrectNewPasswordConfirmError() throws Exception{
