@@ -57,14 +57,43 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
 
     // 모두 정상 입력
 
-    @DisplayName("프로필 업데이트 - 모두 정상 입력")
+    @DisplayName("프로필 업데이트 - 모두 정상 입력1")
     @SignUpAndLoggedInEmailNotVerified
     @Test
-    void updateProfileSuccess() throws Exception{
+    void updateProfileSuccess1() throws Exception{
         String sampleBio = "sampleBio";
         String sampleLocation = "sampleLocation";
-        String sampleOccupation = "sampleOccupation";
+        String sampleOccupation = "sampleOccupatio";
         String sampleProfileImage = "sampleProfileImage";
+
+        mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
+                .param("bio", sampleBio)
+                .param("location", sampleLocation)
+                .param("occupation", sampleOccupation)
+                .param("profileImage", sampleProfileImage)
+                .with(csrf()))
+                .andExpect(model().hasNoErrors())
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attributeCount(1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(ACCOUNT_SETTING_PROFILE_URL))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+
+        Account updatedAccount = accountRepository.findByUserId(TEST_USER_ID);
+        assertEquals(sampleBio, updatedAccount.getBio());
+        assertEquals(sampleLocation, updatedAccount.getLocation());
+        assertEquals(sampleOccupation, updatedAccount.getOccupation());
+        assertEquals(sampleProfileImage, updatedAccount.getProfileImage());
+    }
+
+    @DisplayName("프로필 업데이트 - 모두 정상 입력2")
+    @SignUpAndLoggedInEmailNotVerified
+    @Test
+    void updateProfileSuccess2() throws Exception{
+        String sampleBio = "sS %^&$#@#$";
+        String sampleLocation = "sA 29#$%";
+        String sampleOccupation = "sA 29#$%";
+        String sampleProfileImage = "sA 29#$%";
 
         mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
                 .param("bio", sampleBio)
@@ -92,7 +121,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     @SignUpAndLoggedInEmailNotVerified
     @Test
     void tooLongBioError() throws Exception{
-        String sampleBio = "sampleBiosampleBiosampleBiosampleBiosampleBio";
+        String sampleBio = "abcdeabcdeabcdeabcdeabcdeabcdea";
         String sampleLocation = "sampleLocation";
         String sampleOccupation = "sampleOccupation";
         String sampleProfileImage = "sampleProfileImage";
@@ -127,7 +156,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     @Test
     void tooLongLocationError() throws Exception{
         String sampleBio = "sampleBio";
-        String sampleLocation = "sampleLocationsampleLocationsampleLocation";
+        String sampleLocation = "abcdeabcdeabcdea";
         String sampleOccupation = "sampleOccupation";
         String sampleProfileImage = "sampleProfileImage";
 
@@ -162,7 +191,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     void tooLongOccupationError() throws Exception{
         String sampleBio = "sampleBio";
         String sampleLocation = "sampleLocation";
-        String sampleOccupation = "sampleOccupationsampleOccupation";
+        String sampleOccupation = "abcdeabcdeabcdea";
         String sampleProfileImage = "sampleProfileImage";
 
         mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)
@@ -195,8 +224,8 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     @Test
     void showAllErrorCodes() throws Exception{
         String sampleBio = "sampleBio";
-        String sampleLocation = "sampleLocationsampleLocationsampleLocation";
-        String sampleOccupation = "sampleOccupationsampleOccupation";
+        String sampleLocation = "abcdeabcdeabcdea";
+        String sampleOccupation = "abcdeabcdeabcdea";
         String sampleProfileImage = "sampleProfileImage";
 
         mockMvc.perform(post(ACCOUNT_SETTING_PROFILE_URL)

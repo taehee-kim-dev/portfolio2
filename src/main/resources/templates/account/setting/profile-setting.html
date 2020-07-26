@@ -235,10 +235,9 @@
                 <div class="form-group">
                     <label for="bio">한 줄 소개</label>
                     <input id="bio" type="text" th:field="*{bio}" class="form-control"
-                           placeholder="안녕하세요!" aria-describedby="bioHelp" required>
-                    <small id="bioHelp" class="form-text text-muted">
-                        35자 이내로 입력해 주세요.
-                    </small>
+                           placeholder="안녕하세요!" aria-describedby="bioHelp"
+                           th:classappend="${(#fields.hasErrors('bio') ? 'is-invalid' : '')
+                 + (#fields.hasAnyErrors() && !#fields.hasErrors('bio') ? 'is-valid' : '')}">
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">
                         bio error
                     </small>
@@ -247,10 +246,9 @@
                 <div class="form-group">
                     <label for="occupation">직업</label>
                     <input id="occupation" type="text" th:field="*{occupation}" class="form-control"
-                           placeholder="대학생" aria-describedby="occupationHelp" required>
-                    <small id="occupationHelp" class="form-text text-muted">
-                        20자 이내로 입력해 주세요.
-                    </small>
+                           placeholder="개발자" aria-describedby="occupationHelp"
+                           th:classappend="${(#fields.hasErrors('occupation') ? 'is-invalid' : '')
+                 + (#fields.hasAnyErrors() && !#fields.hasErrors('occupation') ? 'is-valid' : '')}">
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}"
                            th:errors="*{occupation}">
                         occupation error
@@ -260,11 +258,9 @@
                 <div class="form-group">
                     <label for="location">지역</label>
                     <input id="location" type="text" th:field="*{location}" class="form-control"
-                           placeholder="서울특별시 강남구"
-                           aria-describedby="locationdHelp" required>
-                    <small id="locationHelp" class="form-text text-muted">
-                        20자 이내로 입력해 주세요.
-                    </small>
+                           placeholder="인천광역시 연수구" aria-describedby="locationdHelp"
+                           th:classappend="${(#fields.hasErrors('location') ? 'is-invalid' : '')
+                 + (#fields.hasAnyErrors() && !#fields.hasErrors('location') ? 'is-valid' : '')}">
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('location')}"
                            th:errors="*{location}">
                         location error
