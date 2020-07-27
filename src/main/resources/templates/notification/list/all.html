@@ -19,7 +19,7 @@
             }
 
             .notificationCard {
-                margin-bottom: 20px;
+                margin-bottom: 13px;
             }
         }
 
@@ -76,7 +76,10 @@
                     <p class="card-text" th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">
                         위의 관심 태그가 추가된 글이 있습니다.
                     </p>
-                    <a th:href="@{notification.link}" type="button" class="btn btn-light">"<span th:text="${notification.title}"></span>"</a>
+                    <p class="card-text">
+                        아래의 링크를 클릭해 확인해 보세요!
+                    </p>
+                    <a th:href="@{'/notification/link-visit/' + ${notification.id}}" type="button" class="btn btn-light">"<span th:text="${notification.title}"></span>"</a>
                 </div>
                 <div class="card-footer text-muted time-before" th:text="${notification.getCreatedDateTime()}">
                     2 days ago
@@ -89,6 +92,6 @@
 </div>
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
-<script th:replace="fragments.html :: date-time"></script>
+<script th:replace="fragment.html :: date-time"></script>
 </body>
 </html>
