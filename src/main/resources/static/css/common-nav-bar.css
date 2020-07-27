@@ -1,0 +1,198 @@
+.container{
+    max-width: 100%;
+    padding: 0;
+}
+
+.mainLogInAndSignUpLink{
+    margin-left: auto;
+    color: black;
+}
+.mainLogInAndSignUpLink:hover{
+    color: black;
+}
+
+#mainSignUpLink{
+    margin-left: 0;
+}
+
+#userIconDropDown{
+    display: inline-block;
+}
+#userIconDropDown>a{
+    color: black;
+}
+
+#mainSearchButton{
+    background: none;
+    border: none;
+    margin: 0 0 0 14px;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* 데스크탑*/
+@media (min-width: 992px) {
+    #mainNavBarBrandTitle{
+        font-weight: 600;
+        font-size: 33px;
+        margin-left: 12px;
+    }
+    .mainLogInAndSignUpLink{
+        margin-left: auto;
+        font-size: 21px;
+        color: black;
+    }
+    .mainLogInAndSignUpLink:hover{
+        color: black;
+    }
+    #mainLogInLink{
+        margin-left: 40px;
+    }
+    #mainSignUpLink{
+        margin-right: 0;
+    }
+    #userIconDropDown{
+        margin-right: 25px;
+        width: 58px;
+        height: 58px;
+    }
+    #notificationBellOuterDiv{
+        padding-top: 4px;
+        margin-left: 64px;
+        margin-right: 64px;
+    }
+    #emptyNotificationBellIcon{
+        font-size: 29px;
+    }
+    #mainSearchForm{
+        margin-left: auto;
+        margin-right: 0;
+    }
+}
+
+/* 태블릿 */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    #mainNavBarBrandTitle{
+        font-weight: 600;
+        font-size: 33px;
+        margin-left: 6px;
+    }
+    .mainLogInAndSignUpLink{
+        margin-left: auto;
+        font-size: 21px;
+        color: black;
+    }
+    .mainLogInAndSignUpLink:hover{
+        color: black;
+    }
+    #mainLogInLink{
+        margin-left: 23px;
+    }
+    #mainSignUpLink{
+        margin-right: 0;
+        padding-right: 8px;
+    }
+    #userIconDropDown{
+        margin-right: 20px;
+        width: 58px;
+        height: 58px;
+    }
+    #notificationBellOuterDiv{
+        padding-top: 4px;
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+    #emptyNotificationBellIcon{
+        font-size: 29px;
+    }
+    #mainSearchForm{
+        margin-left: auto;
+        margin-right: 0;
+    }
+}
+
+/* 핸드폰 일반 */
+@media (min-width: 340px) and (max-width: 575.98px) {
+    #mainNavBarBrandTitle{
+        font-weight: 600;
+        font-size: 29px;
+        margin-left: 2px;
+    }
+    .mainLogInAndSignUpLink{
+        margin-left: auto;
+        font-size: 17px;
+        color: black;
+    }
+    .mainLogInAndSignUpLink:hover{
+        color: black;
+    }
+    #mainSignUpLink{
+        padding-right: 2px;
+        padding-left: 0;
+    }
+    #mainLogInLink{
+        padding-right: 14px;
+    }
+    #userIconDropDown{
+        margin-right: 15px;
+        width: 58px;
+        height: 58px;
+    }
+    #notificationBellOuterDiv{
+        padding-top: 4px;
+        margin-right: 31px;
+        margin-left: auto;
+    }
+    #emptyNotificationBellIcon{
+        font-size: 29px;
+    }
+    #mainSearchForm{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 10px;
+    }
+}
+
+/* 초소형 핸드폰 */
+@media (max-width: 339.98px) {
+    #mainNavBarBrandTitle{
+        font-weight: 600;
+        font-size: 29px;
+        margin-left: 0;
+    }
+    .mainLogInAndSignUpLink{
+        margin-left: auto;
+        font-size: 17px;
+        color: black;
+    }
+    .mainLogInAndSignUpLink:hover{
+        color: black;
+    }
+    #mainSignUpLink{
+        padding-right: 0;
+        padding-left: 0;
+    }
+    #mainLogInLink{
+        padding-right: 14px;
+    }
+    #userIconDropDown{
+        margin-right: 14px;
+        width: 58px;
+        height: 58px;
+    }
+    #notificationBellOuterDiv{
+        padding-top: 4px;
+        margin-right: 31px;
+        margin-left: auto;
+    }
+    #emptyNotificationBellIcon{
+        font-size: 29px;
+    }
+    #mainSearchForm{
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 11px;
+    }
+}

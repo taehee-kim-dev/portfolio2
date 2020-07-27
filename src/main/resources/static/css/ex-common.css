@@ -12,7 +12,7 @@
     .modal{
         margin-top: 79px;
     }
-    #userIcon{
+    #userIconDropDown{
         margin-right: 42px;
     }
     #mainSearchButton{
@@ -28,7 +28,7 @@
     #brandTitle{
         margin-left: 1px;
     }
-    #userIcon{
+    #userIconDropDown{
         text-align: center;
     }
     #userIconImage{
@@ -42,7 +42,7 @@
         text-align: center;
         height: 76px;
     }
-    #ringBellFont{
+    #emptyNotificationBellIcon{
         margin: auto;
     }
 }
@@ -77,7 +77,7 @@
     #notificationBellOuter{
         padding-bottom: 13px;
     }
-    #mainLogInButton{
+    #mainLogInLink{
         margin-top: 6px;
         margin-bottom: 1px;
     }
@@ -132,7 +132,7 @@
         width: 178px;
         font-size: 17px;
     }
-    #mainLogInButton{
+    #mainLogInLink{
         margin-top: 6px;
         margin-bottom: 1px;
     }

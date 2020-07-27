@@ -3,11 +3,13 @@
 <head>
     <th:block th:replace="fragment.html :: commonHead"></th:block>
     <style>
+        #signUpTitle{
+            margin-bottom: 3px;
+        }
         /* 데스크탑*/
         @media (min-width: 992px) {
             #signUpTitle{
                 margin-top: 62px;
-                margin-bottom: 24px;
             }
             #signUpForm{
                 width: 325px !important;
@@ -21,7 +23,6 @@
         @media (min-width: 576px) and (max-width: 991.98px) {
             #signUpTitle{
                 margin-top: 62px;
-                margin-bottom: 24px;
             }
             #signUpForm{
                 width: 342px !important;
@@ -35,7 +36,6 @@
         @media (min-width: 340px) and (max-width: 575.98px) {
             #signUpTitle{
                 margin-top: 45px;
-                margin-bottom: 17px;
             }
             #signUpForm{
                 max-width: 342px !important;
@@ -50,7 +50,6 @@
         @media (max-width: 339.98px) {
             #signUpTitle{
                 margin-top: 45px;
-                margin-bottom: 17px;
             }
             #signUpForm{
                 width: 90% !important;
