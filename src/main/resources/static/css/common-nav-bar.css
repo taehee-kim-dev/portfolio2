@@ -23,11 +23,8 @@
 }
 
 #mainSearchButton{
-    background: none;
-    border: none;
     margin: 0 0 0 14px;
     padding: 0;
-    cursor: pointer;
 }
 
 /* 데스크탑*/
@@ -56,10 +53,13 @@
         width: 58px;
         height: 58px;
     }
-    #notificationBellOuterDiv{
+    #postNewPostLink{
+        margin-left: 50px;
+    }
+    #notificationBellLink{
         padding-top: 4px;
-        margin-left: 64px;
-        margin-right: 64px;
+        margin-left: 30px;
+        margin-right: 30px;
     }
     #emptyNotificationBellIcon{
         font-size: 29px;
@@ -97,10 +97,13 @@
         width: 58px;
         height: 58px;
     }
-    #notificationBellOuterDiv{
+    #postNewPostLink{
+        margin-left: 40px;
+    }
+    #notificationBellLink{
         padding-top: 4px;
-        margin-left: 50px;
-        margin-right: 50px;
+        margin-left: 25px;
+        margin-right: 25px;
     }
     #emptyNotificationBellIcon{
         font-size: 29px;
@@ -138,10 +141,13 @@
         width: 58px;
         height: 58px;
     }
-    #notificationBellOuterDiv{
-        padding-top: 4px;
-        margin-right: 31px;
+    #postNewPostLink{
         margin-left: auto;
+    }
+    #notificationBellLink{
+        padding-top: 4px;
+        margin-left: 30px;
+        margin-right: 30px;
     }
     #emptyNotificationBellIcon{
         font-size: 29px;
@@ -181,16 +187,19 @@
         width: 58px;
         height: 58px;
     }
-    #notificationBellOuterDiv{
-        padding-top: 4px;
-        margin-right: 31px;
+    #postNewPostLink{
         margin-left: auto;
+    }
+    #notificationBellLink{
+        padding-top: 4px;
+        margin-left: 30px;
+        margin-right: 30px;
     }
     #emptyNotificationBellIcon{
         font-size: 29px;
     }
     #mainSearchForm{
-        width: 90%;
+        width: 95%;
         margin-left: auto;
         margin-right: auto;
         padding-top: 11px;

@@ -32,9 +32,13 @@
             </div>
         </form>
 
-        <div sec:authorize="isAuthenticated()" id="notificationBellOuterDiv" class="order-sm-3 order-2" style="display: inline-block">
+        <a th:href="@{/post-new-post}" sec:authorize="isAuthenticated()" id="postNewPostLink" class="order-sm-3 order-2">
+            <i class="fas fa-pencil-alt fa-lg text-dark" style="margin:0;padding: 0"></i>
+        </a>
+
+        <a th:href="@{#}" sec:authorize="isAuthenticated()" id="notificationBellLink" class="order-sm-4 order-3">
             <i id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="margin:0;padding:0"></i>
-        </div>
+        </a>
 
         <a sec:authorize="!isAuthenticated()"
            id="mainLogInLink" class="nav-link mainLogInAndSignUpLink order-sm-3 order-2" th:href="@{/login}">로그인</a>
