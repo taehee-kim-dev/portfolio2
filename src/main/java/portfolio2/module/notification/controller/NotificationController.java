@@ -43,10 +43,10 @@ public class NotificationController {
         return NOTIFICATION_LIST_ALL_VIEW_NAME;
     }
 
-    @GetMapping(NOTIFICATION_LINK_VISIT_URL + "{notificationId}")
+    @GetMapping(NOTIFICATION_LINK_VISIT_URL + "/{notificationId}")
     public String visitLink(@SessionAccount Account sessionAccount,
                             @PathVariable("notificationId") Notification notification, Model model){
-        notification.setLinkVisited(true);
+        notificationService.linkVisitCheck(notification);
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         return REDIRECT + notification.getLink();
     }

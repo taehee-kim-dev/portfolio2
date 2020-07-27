@@ -28,4 +28,8 @@ public class NotificationService {
         });
         return allNotification;
     }
+
+    public void linkVisitCheck(Notification notification) {
+        notification.setLinkVisited(true);
+    }
 }

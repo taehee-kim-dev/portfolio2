@@ -52,7 +52,7 @@
         <div id="allNotificationListOuterDiv" class="col-lg-9">
 
             <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${allNotification}"
-                 class="card text-center notificationCard">
+                 class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
                      class="card-header">
                     관심 태그가 포함된 새로운 글 알림
@@ -79,9 +79,11 @@
                     <p class="card-text">
                         아래의 링크를 클릭해 확인해 보세요!
                     </p>
-                    <a th:href="@{'/notification/link-visit/' + ${notification.id}}" type="button" class="btn btn-light">"<span th:text="${notification.title}"></span>"</a>
+                    <a th:href="@{'/notification/link-visit/' + ${notification.id}}" type="button" class="btn btn-light" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
+                        "<span th:text="${notification.title}"></span>"
+                    </a>
                 </div>
-                <div class="card-footer text-muted time-before" th:text="${notification.getCreatedDateTime()}">
+                <div class="card-footer time-before" th:text="${notification.getCreatedDateTime()}" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : 'text-primary'}">
                     2 days ago
                 </div>
             </div>
