@@ -7,13 +7,18 @@
         /* 데스크탑*/
         @media (min-width: 992px) {
             #postViewTable {
-                width: 710px !important;
+                width: 90%;
+                max-width: 710px;
                 margin-top: 80px;
                 margin-bottom: 42px;
             }
 
             #postTitle {
                 padding: 24px 38px;
+            }
+
+            table .tableTitle{
+                width: 100px;
             }
 
             #postContent {
@@ -36,13 +41,18 @@
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
             #postViewTable {
-                width: 517px !important;
+                width: 90%;
+                max-width: 517px;
                 margin-top: 74px;
                 margin-bottom: 42px;
             }
 
             #postTitle {
                 padding: 24px 38px;
+            }
+
+            .tableTitle{
+                width: 100px;
             }
 
             #postContent {
@@ -67,7 +77,7 @@
         @media (min-width: 340px) and (max-width: 575.98px) {
             #postViewTable {
                 width: 90%;
-                min-width: 343px !important;
+                max-width: 343px;
                 margin-top: 43px;
                 margin-bottom: 23px;
             }
@@ -98,7 +108,7 @@
         @media (max-width: 339.98px) {
             #postViewTable {
                 width: 90%;
-                min-width: 293px !important;
+                max-width: 293px;
                 margin-top: 43px;
                 margin-bottom: 23px;
             }
@@ -135,7 +145,7 @@
 <div class="container">
     <div th:replace="fragment.html :: commonNav"></div>
 
-        <table id="postViewTable" class="table table-bordered mx-auto col-lg-4 col-md-8 col-11">
+        <table id="postViewTable" class="table table-bordered mx-auto" style="table-layout: auto; word-break: break-all">
             <tbody>
             <tr>
                 <td id="postTitle" colspan="2" th:text="${post.getTitle()}">
@@ -143,7 +153,7 @@
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle align-middle"><span>작성자 : </span></td>
+                <td class="tableTitle align-middle"><span>작성자</span></td>
                 <td class="align-middle">
                     <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}"
                        th:text="${post.getAuthor().getNickname() + ' (' + post.getAuthor().getUserId() + ')'}">
@@ -152,11 +162,11 @@
                 </td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle align-middle"><span>작성일 : </span></td>
+                <td class="tableTitle align-middle"><span>작성일</span></td>
                 <td class="date-weekday-time align-middle" th:text="${firstWrittenTime}">글 작성 날짜</td>
             </tr>
             <tr style="text-align: center">
-                <td class="tableTitle align-middle"><span>태그 : </span></td>
+                <td class="tableTitle align-middle"><span>태그</span></td>
                 <td class="align-middle"><input name="tag" readonly
                                                           th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>

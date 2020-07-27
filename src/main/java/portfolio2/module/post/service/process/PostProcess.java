@@ -143,7 +143,6 @@ public class PostProcess {
         }
         notification.setTitle(post.getTitle());
         notification.setLink(String.format(POST_VIEW_URL + "/%d", post.getId()));
-        notification.setChecked(false);
         notification.setAccount(account);
         allTag.forEach(tag -> {
             notification.getCommonTag().add(tag);

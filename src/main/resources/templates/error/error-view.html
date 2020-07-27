@@ -37,11 +37,9 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
 
+    <div th:replace="fragment.html :: commonNav"></div>
     <div id="outerBox" class="text-center">
         <p id="errorTitle" class="lead" th:text="${errorTitle}">에러 제목</p>
         <div class="alert alert-danger" role="alert" th:text="${errorContent}">

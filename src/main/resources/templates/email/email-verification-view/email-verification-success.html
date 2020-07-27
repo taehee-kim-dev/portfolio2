@@ -152,10 +152,9 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
+
+    <div th:replace="fragment.html :: commonNav"></div>
 
     <div id="outerBox" class="notification text-center" th:if="${invalidLinkError == null}">
         <h3 id="title">TH 이메일 인증 성공</h3>

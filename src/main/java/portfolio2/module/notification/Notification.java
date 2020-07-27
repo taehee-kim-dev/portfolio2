@@ -21,11 +21,16 @@ public class Notification {
     @Id @GeneratedValue
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
+
     private String title;
 
     private String link;
 
-    private boolean checked;
+    private boolean ringBellChecked = false;
+
+    private boolean linkVisited = false;
 
     @ManyToOne
     private Account account;
@@ -34,7 +39,4 @@ public class Notification {
     private List<Tag> commonTag = new LinkedList<>();
 
     private LocalDateTime createdDateTime;
-
-    @Enumerated(EnumType.STRING)
-    private NotificationType notificationType;
 }

@@ -36,8 +36,12 @@
             <i class="fas fa-pencil-alt fa-lg text-dark" style="margin:0;padding: 0"></i>
         </a>
 
-        <a th:href="@{#}" sec:authorize="isAuthenticated()" id="notificationBellLink" class="order-sm-4 order-3">
-            <i id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="margin:0;padding:0"></i>
+        <a th:href="@{/notification/list/all}" sec:authorize="isAuthenticated()" id="notificationBellLink" class="order-sm-4 order-3">
+            <i th:if="${ringBellUncheckedCount == 0}" id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="margin:0;padding:0"></i>
+            <div th:if="${ringBellUncheckedCount > 0}" style="display: inline-block">
+                <i id="notEmptyNotificationBellIcon" class="far fa-bell fa-lg text-danger" style="margin:0;padding:0"></i>
+                <span class="badge badge-pill badge-danger" style="z-index: 2;position: relative" th:text="${ringBellUncheckedCount}">30</span>
+            </div>
         </a>
 
         <a sec:authorize="!isAuthenticated()"
@@ -90,12 +94,18 @@
 </script>
 
 
-<div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu" class="list-group text-center">
+<div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu" class="col-lg-2 order-1 list-group text-center p-0">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" th:href="@{/account/setting/profile}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" th:href="@{/account/setting/notification}">알림</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" th:href="@{/account/setting/tag}">관심 태그</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active"th:href="@{/account/setting/password}">패스워드</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
+</div>
+
+<div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="col-lg-2 list-group text-center p-0">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">전체 알림</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">안읽은 알림</a>
+    <a class="list-group-item list-group-item-action list-group-item-dark" th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">읽은 알림</a>
 </div>
 
 <div th:fragment="date-time">
@@ -105,6 +115,9 @@
             moment.locale('ko');
             $(".date-weekday-time").text(function(index, dateTime) {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
+            });
+            $(".time-before").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
             });
         })
     </script>

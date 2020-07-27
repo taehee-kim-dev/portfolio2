@@ -35,7 +35,6 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_URL;
 
 @MockMvcTest
@@ -85,7 +84,7 @@ public class PostUpdateNotificationTest extends ContainerBaseTest {
     }
 
     private void webNotificationVerification(String testUserId, List<String> tagStringList){
-        Notification notification = notificationRepository.findNotificationByAccount_UserId(testUserId);
+        Notification notification = notificationRepository.findByAccount_UserId(testUserId);
         if(tagStringList.size() == 0){
             assertNull(notification);
         }else{

@@ -91,15 +91,14 @@
 </head>
 <body>
 
-<div th:replace="fragment.html :: commonNav"></div>
-
 <div class="container">
+
+    <div th:replace="fragment.html :: commonNav"></div>
 
         <h2 id="interestTagSettingTitle" class="text-center">관심 태그 설정</h2>
         <div id="outerBox" class="row justify-content-center mx-auto">
 
-            <div id="accountSettingMenu" class="col-lg-2 order-1"
-                 th:insert="fragment.html :: setting-menu(currentMenu='tag')"></div>
+            <div th:replace="fragment.html :: setting-menu(currentMenu='tag')"></div>
 
             <div id="tagSettingInput" class="col-lg-6 order-2">
                 <div id="interestTagSettingNotice" class="alert alert-info" role="alert">

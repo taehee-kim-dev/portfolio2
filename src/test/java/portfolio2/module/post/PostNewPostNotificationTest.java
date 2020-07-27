@@ -81,7 +81,7 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
     }
 
     private void webNotificationVerification(String testUserId, List<String> tagStringList){
-        Notification notification = notificationRepository.findNotificationByAccount_UserId(testUserId);
+        Notification notification = notificationRepository.findByAccount_UserId(testUserId);
         if(tagStringList.size() == 0){
             assertNull(notification);
         }else{
