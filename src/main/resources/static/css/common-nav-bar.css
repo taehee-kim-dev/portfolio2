@@ -27,6 +27,11 @@
     padding: 0;
 }
 
+.badge{
+    top: -15px;
+    right: 20px;
+}
+
 #emptyNotificationBellIcon, #notEmptyNotificationBellIcon{
     font-size: 29px;
 }
@@ -62,8 +67,14 @@
     }
     #notificationBellLink{
         padding-top: 4px;
+    }
+    #emptyNotificationBellIcon{
         margin-left: 30px;
         margin-right: 30px;
+    }
+    #notEmptyNotificationBellIconDiv{
+        margin-left: 30px;
+        margin-right: 11px;
     }
     #mainSearchForm{
         margin-left: auto;
@@ -103,8 +114,14 @@
     }
     #notificationBellLink{
         padding-top: 4px;
+    }
+    #emptyNotificationBellIcon{
         margin-left: 25px;
         margin-right: 25px;
+    }
+    #notEmptyNotificationBellIconDiv{
+        margin-left: 25px;
+        margin-right: 4px;
     }
     #mainSearchForm{
         margin-left: auto;
@@ -144,8 +161,14 @@
     }
     #notificationBellLink{
         padding-top: 4px;
+    }
+    #emptyNotificationBellIcon{
         margin-left: 30px;
         margin-right: 30px;
+    }
+    #notEmptyNotificationBellIconDiv{
+        margin-left: 30px;
+        margin-right: 11px;
     }
     #mainSearchForm{
         width: 80%;
@@ -187,8 +210,14 @@
     }
     #notificationBellLink{
         padding-top: 4px;
+    }
+    #emptyNotificationBellIcon{
         margin-left: 30px;
         margin-right: 30px;
+    }
+    #notEmptyNotificationBellIconDiv{
+        margin-left: 30px;
+        margin-right: 11px;
     }
     #mainSearchForm{
         width: 95%;

@@ -37,9 +37,9 @@
         </a>
 
         <a th:href="@{/notification/list/all}" sec:authorize="isAuthenticated()" id="notificationBellLink" class="order-sm-4 order-3">
-            <i th:if="${ringBellUncheckedCount == 0}" id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="margin:0;padding:0"></i>
-            <div th:if="${ringBellUncheckedCount > 0}" style="display: inline-block">
-                <i id="notEmptyNotificationBellIcon" class="far fa-bell fa-lg text-danger" style="margin:0;padding:0"></i>
+            <i th:if="${ringBellUncheckedCount == 0}" id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="padding:0"></i>
+            <div id="notEmptyNotificationBellIconDiv" th:if="${ringBellUncheckedCount > 0}" style="display: inline-block">
+                <i id="notEmptyNotificationBellIcon" class="fas fa-bell fa-lg text-danger" style="margin:0;padding:0"></i>
                 <span class="badge badge-pill badge-danger" style="z-index: 2;position: relative" th:text="${ringBellUncheckedCount}">30</span>
             </div>
         </a>
