@@ -11,6 +11,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@NamedEntityGraph(
+        name = "Notification.withCommonTag",
+        attributeNodes = @NamedAttributeNode("commonTag")
+)
 @Entity
 @Getter
 @Setter

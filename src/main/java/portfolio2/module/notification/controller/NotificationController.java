@@ -9,7 +9,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
-import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 import portfolio2.module.notification.Notification;
 import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
 import portfolio2.module.notification.service.NotificationService;
@@ -35,12 +34,28 @@ public class NotificationController {
         webDataBinder.addValidators(notificationDeleteRequestDtoValidator);
     }
 
-    @GetMapping(NOTIFICATION_LIST_ALL_URL)
-    public String showNotificationList(@SessionAccount Account sessionAccount, Model model){
+    @GetMapping(ALL_NOTIFICATION_LIST_URL)
+    public String showALLNotificationList(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         List<Notification> allNotification = notificationService.ringBellCheck(sessionAccount);
         model.addAttribute("allNotification", allNotification);
-        return NOTIFICATION_LIST_ALL_VIEW_NAME;
+        return ALL_NOTIFICATION_LIST_VIEW_NAME;
+    }
+
+    @GetMapping(LINK_UNVISITED_NOTIFICATION_LIST_URL)
+    public String showLinkUnvisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        List<Notification> linkUnvisitedNotification = notificationService.getLinkUnvisitedNotification(sessionAccount);
+        model.addAttribute("linkUnvisitedNotification", linkUnvisitedNotification);
+        return LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME;
+    }
+
+    @GetMapping(LINK_VISITED_NOTIFICATION_LIST_URL)
+    public String showLinkVisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        List<Notification> linkVisitedNotification = notificationService.getLinkVisitedNotification(sessionAccount);
+        model.addAttribute("linkVisitedNotification", linkVisitedNotification);
+        return LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
 
     @GetMapping(NOTIFICATION_LINK_VISIT_URL + "/{notificationId}")

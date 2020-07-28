@@ -21,6 +21,14 @@
             .notificationCard {
                 margin-bottom: 13px;
             }
+            .notificationDeleteButton{
+                display: inline;
+                position: absolute;
+                cursor: pointer;
+                z-index: 2;
+                top: 12px;
+                right: 21px;
+            }
         }
 
         /* 태블릿 */
@@ -51,11 +59,21 @@
 
         <div id="allNotificationListOuterDiv" class="col-lg-9">
 
+            <div th:if="${allNotification.isEmpty()}" class="card">
+                <div class="card-body text-muted text-center">
+                    알림이 없습니다.
+                </div>
+            </div>
+
             <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${allNotification}"
                  class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
-                     class="card-header">
+                     class="card-header" style="position: relative">
                     관심 태그가 포함된 새로운 글 알림
+                    <div class="notificationDeleteButton"
+                         th:onclick="'javascript:deleteNotification(' + ${notification.id} + ');'">
+                        <i class="fas fa-times"></i>
+                    </div>
                 </div>
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"
                      class="card-header">
@@ -95,5 +113,26 @@
 <footer th:replace="fragment.html :: commonFooter"></footer>
 <script th:replace="fragment.html :: commonJavaScript"></script>
 <script th:replace="fragment.html :: date-time"></script>
+<script th:replace="fragment.html :: ajax-csrf-header"></script>
+<script type="application/javascript">
+    function deleteNotification(notificationId) {
+        $.ajax({
+            autocomplete: {
+                enabled: true,
+                rightKey: true,
+            },
+            contentType: "application/json; charset=utf-8",
+            method: "POST",
+            url: "/notification/delete",
+            data: JSON.stringify({'notificationIdToDelete': notificationId})
+        }).done(function () {
+            $("#notificationCard" + notificationId).fadeOut(300,
+                function () {
+                    $(this).remove();
+                }
+            );
+        });
+    }
+</script>
 </body>
 </html>
