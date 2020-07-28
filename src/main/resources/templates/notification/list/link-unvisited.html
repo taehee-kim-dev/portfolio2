@@ -40,17 +40,126 @@
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
+            #notificationListTitle {
+                margin-top: 37px;
+                margin-bottom: 24px;
+            }
 
+            #menuBox{
+                width: 220px;
+                margin-bottom: 26px;
+            }
+
+            #changAllToLinkVisitedForm{
+                margin-top: 15px;
+            }
+            #deleteAllLinkVisitedForm{
+                margin-top: 10px;
+            }
+
+            .formButton{
+                width: 100%;
+            }
+
+            #linkUnvisitedNotificationListOuterDiv {
+                width: 560px;
+            }
+
+            .notificationCard {
+                margin-bottom: 18px;
+            }
+            .notificationDeleteButton{
+                display: inline;
+                position: absolute;
+                cursor: pointer;
+                z-index: 2;
+                top: 12px;
+                right: 21px;
+            }
         }
 
         /* 핸드폰 일반 */
         @media (min-width: 340px) and (max-width: 575.98px) {
+            #notificationListTitle {
+                margin-top: 33px;
+                margin-bottom: 22px;
+            }
 
+            #menuBox{
+                width: 220px;
+                margin-bottom: 26px;
+            }
+
+            #changAllToLinkVisitedForm{
+                margin-top: 15px;
+            }
+            #deleteAllLinkVisitedForm{
+                margin-top: 10px;
+            }
+
+            .formButton{
+                width: 100%;
+            }
+
+            #linkUnvisitedNotificationListOuterDiv {
+                width: 560px;
+            }
+
+            .notificationCard {
+                margin-bottom: 18px;
+            }
+            .notificationDeleteButton{
+                display: inline;
+                position: absolute;
+                cursor: pointer;
+                z-index: 2;
+                top: 12px;
+                right: 21px;
+            }
         }
 
         /* 초소형 핸드폰 */
         @media (max-width: 339.98px) {
+            #notificationListTitle {
+                margin-top: 27px;
+                margin-bottom: 22px;
+            }
 
+            #menuBox{
+                width: 220px;
+                margin-bottom: 26px;
+            }
+
+            #changAllToLinkVisitedForm{
+                margin-top: 15px;
+            }
+            #deleteAllLinkVisitedForm{
+                margin-top: 10px;
+            }
+
+            .formButton{
+                width: 100%;
+            }
+
+            #linkUnvisitedNotificationListOuterDiv {
+                width: 560px;
+            }
+
+            .notificationCard {
+                margin-bottom: 18px;
+            }
+
+            .notificationCardHeader{
+                padding-top: 41px;
+            }
+            .notificationDeleteButton{
+                display: inline;
+                position: absolute;
+                cursor: pointer;
+                z-index: 2;
+                top: 12px;
+                right: 21px;
+            }
         }
     </style>
 </head>
@@ -66,11 +175,11 @@
             <div th:replace="fragment.html :: notification-list (currentMenu='link-unvisited')"></div>
             <form id="changAllToLinkVisitedForm" th:action="@{/notification/change-all-to-link-visited}" method="post">
                 <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_UNVISITED}">
-                <button type="submit" class="btn btn-warning">모두 읽음으로 전환</button>
+                <button type="submit" class="btn btn-warning formButton">모두 읽음으로 전환</button>
             </form>
             <form id="deleteAllLinkVisitedForm" th:action="@{/notification/delete-all-link-visited}" method="post">
                 <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_UNVISITED}">
-                <button type="submit" class="btn btn-danger">읽은 알림 모두 삭제</button>
+                <button type="submit" class="btn btn-danger formButton">읽은 알림 모두 삭제</button>
             </form>
         </div>
 
@@ -78,7 +187,7 @@
 
             <div th:if="${linkUnvisitedNotification.isEmpty()}" class="card">
                 <div class="card-body text-muted text-center">
-                    알림이 없습니다.
+                    안읽은 알림이 없습니다.
                 </div>
             </div>
 
@@ -93,7 +202,7 @@
                     </div>
                 </div>
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"
-                     class="card-header">
+                     class="card-header notificationCardHeader">
                     관심 태그가 추가된 글 알림
                 </div>
                 <div class="card-body">
