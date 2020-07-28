@@ -21,7 +21,7 @@ public class NotificationService {
 
     public List<Notification> ringBellCheck(Account sessionAccount) {
         Account account = accountRepository.findByUserId(sessionAccount.getUserId());
-        List<Notification> allNotification = notificationRepository.findByAccount(account);
+        List<Notification> allNotification = notificationRepository.findByAccountOrderByCreatedDateTimeDesc(account);
         allNotification.forEach(notification -> {
             notification.setRingBellChecked(true);
         });
@@ -33,14 +33,25 @@ public class NotificationService {
     }
 
     public List<Notification> getLinkUnvisitedNotification(Account sessionAccount) {
-        return notificationRepository.findByAccountAndLinkVisited(sessionAccount, false);
+        return notificationRepository.findByAccountAndLinkVisitedOrderByCreatedDateTimeDesc(sessionAccount, false);
     }
 
     public List<Notification> getLinkVisitedNotification(Account sessionAccount) {
-        return notificationRepository.findByAccountAndLinkVisited(sessionAccount, true);
+        return notificationRepository.findByAccountAndLinkVisitedOrderByCreatedDateTimeDesc(sessionAccount, true);
     }
 
     public void deleteNotification(NotificationDeleteRequestDto notificationDeleteRequestDto) {
         notificationRepository.deleteById(notificationDeleteRequestDto.getNotificationIdToDelete());
+    }
+
+    public void changeAllToLinkVisited(Account sessionAccount) {
+        List<Notification> linkUnvisitedNotification = this.getLinkUnvisitedNotification(sessionAccount);
+        linkUnvisitedNotification.forEach(notification -> {
+            notification.setLinkVisited(true);
+        });
+    }
+
+    public void deleteAllLinkVisited(Account sessionAccount) {
+        notificationRepository.deleteAllByAccountAndLinkVisited(sessionAccount, true);
     }
 }

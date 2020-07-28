@@ -21,7 +21,7 @@
                 margin-top: 10px;
             }
 
-            #allNotificationListOuterDiv {
+            #linkUnvisitedNotificationListOuterDiv {
                 margin-left: 40px;
             }
 
@@ -62,28 +62,27 @@
     <h2 id="notificationListTitle" class="text-center">알림</h2>
 
     <div id="outerBox" class="row justify-content-center mx-auto">
-
         <div id="menuBox" class="col-lg-2" style="display: inline-block">
-            <div th:replace="fragment.html :: notification-list (currentMenu='all')"></div>
+            <div th:replace="fragment.html :: notification-list (currentMenu='link-unvisited')"></div>
             <form id="changAllToLinkVisitedForm" th:action="@{/notification/change-all-to-link-visited}" method="post">
-                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).ALL}">
+                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_UNVISITED}">
                 <button type="submit" class="btn btn-warning">모두 읽음으로 전환</button>
             </form>
             <form id="deleteAllLinkVisitedForm" th:action="@{/notification/delete-all-link-visited}" method="post">
-                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).ALL}">
+                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_UNVISITED}">
                 <button type="submit" class="btn btn-danger">읽은 알림 모두 삭제</button>
             </form>
         </div>
 
-        <div id="allNotificationListOuterDiv" class="col-lg-9">
+        <div id="linkUnvisitedNotificationListOuterDiv" class="col-lg-9">
 
-            <div th:if="${allNotification.isEmpty()}" class="card">
+            <div th:if="${linkUnvisitedNotification.isEmpty()}" class="card">
                 <div class="card-body text-muted text-center">
                     알림이 없습니다.
                 </div>
             </div>
 
-            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${allNotification}"
+            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${linkUnvisitedNotification}"
                  class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
                      class="card-header" style="position: relative">

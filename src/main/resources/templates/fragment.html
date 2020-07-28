@@ -102,7 +102,7 @@
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
 </div>
 
-<div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="col-lg-2 list-group text-center p-0">
+<div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="list-group text-center p-0">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">전체 알림</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">안읽은 알림</a>
     <a class="list-group-item list-group-item-action list-group-item-dark" th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">읽은 알림</a>

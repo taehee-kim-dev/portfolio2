@@ -26,7 +26,7 @@ public class NotificationInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof CustomPrincipal){
             Account sessionAccount = ((CustomPrincipal)(authentication.getPrincipal())).getSessionAccount();
-            Long ringBellUncheckedCount = notificationRepository.countByAccountAndRingBellCheckedOrderByCreatedDateTimeDesc(sessionAccount, false);
+            Long ringBellUncheckedCount = notificationRepository.countByAccountAndRingBellChecked(sessionAccount, false);
             modelAndView.addObject("ringBellUncheckedCount", ringBellUncheckedCount);
         }
 
