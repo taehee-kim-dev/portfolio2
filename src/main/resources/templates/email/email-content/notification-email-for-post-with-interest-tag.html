@@ -15,7 +15,7 @@
 
     <p th:text="${content}"></p>
     <p>아래의 링크를 클릭해 확인해 보세요.</p>
-    <p style="font-weight: bold"><a th:href="${host + newPostLink}" th:text="${post.getTitle()}"></a></p>
+    <p style="font-weight: bold"><a th:href="${host + newPostLink}" th:text='|"${post.title}"|'></a></p>
     <p><a th:href="${host}">TH 가기</a></p>
     <footer>
         <small>TH&copy; 2020</small>
