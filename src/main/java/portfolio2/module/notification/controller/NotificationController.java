@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 import java.util.List;
 
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.notification.config.UrlAndViewNameAboutNotification.*;
 
@@ -62,8 +62,13 @@ public class NotificationController {
     @GetMapping(NOTIFICATION_LINK_VISIT_URL + "/{notificationId}")
     public String visitLink(@SessionAccount Account sessionAccount,
                             @PathVariable("notificationId") Notification notification, Model model){
+        if(!sessionAccount.getUserId().equals(notification.getAccount().getUserId())){
+            model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+            model.addAttribute(ERROR_TITLE, "접근 오류");
+            model.addAttribute(ERROR_CONTENT, "잘못된 접근입니다.");
+            return ERROR_VIEW_NAME;
+        }
         notificationService.linkVisitCheck(notification);
-        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         return REDIRECT + notification.getLink();
     }
 
