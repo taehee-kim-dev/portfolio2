@@ -1,4 +1,4 @@
-package portfolio2.module.notification.config;
+package portfolio2.module.notification.controller.config;
 
 public class UrlAndViewNameAboutNotification {
     public static final String ALL_NOTIFICATION_LIST_URL = "/notification/list/all";

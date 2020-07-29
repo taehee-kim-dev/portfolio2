@@ -12,7 +12,6 @@ import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -22,10 +21,10 @@ import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
-import static portfolio2.module.notification.config.UrlAndViewNameAboutNotification.*;
+import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
 
 @MockMvcTest
-public class NotificationListShowTest {
+public class NotificationGetTest {
 
     @Autowired
     private MockMvc mockMvc;

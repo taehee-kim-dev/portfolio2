@@ -36,10 +36,6 @@ public class NotificationService {
         return notificationRepository.findByAccountAndLinkVisitedOrderByCreatedDateTimeDesc(sessionAccount, true);
     }
 
-    public void deleteNotification(NotificationDeleteRequestDto notificationDeleteRequestDto) {
-        notificationRepository.deleteById(notificationDeleteRequestDto.getNotificationIdToDelete());
-    }
-
     public void changeAllToLinkVisited(Account sessionAccount) {
         List<Notification> linkUnvisitedNotification = this.getLinkUnvisitedNotification(sessionAccount);
         linkUnvisitedNotification.forEach(notification -> notification.setLinkVisited(true));
@@ -47,5 +43,9 @@ public class NotificationService {
 
     public void deleteAllLinkVisited(Account sessionAccount) {
         notificationRepository.deleteAllByAccountAndLinkVisited(sessionAccount, true);
+    }
+
+    public void deleteNotification(NotificationDeleteRequestDto notificationDeleteRequestDto) {
+        notificationRepository.deleteById(notificationDeleteRequestDto.getNotificationIdToDelete());
     }
 }

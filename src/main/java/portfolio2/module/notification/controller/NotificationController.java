@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.notification.Notification;
-import portfolio2.module.notification.ViewMenuType;
 import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
 import portfolio2.module.notification.service.NotificationService;
 import portfolio2.module.notification.validator.NotificationDeleteRequestDtoValidator;
@@ -21,7 +20,7 @@ import java.util.List;
 
 import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
 import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
-import static portfolio2.module.notification.config.UrlAndViewNameAboutNotification.*;
+import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -74,27 +73,16 @@ public class NotificationController {
 
     @PostMapping(CHANGE_ALL_LINK_UNVISITED_NOTIFICATION_TO_VISITED_URL)
     public String changeAllToLinkVisited(@SessionAccount Account sessionAccount,
-                                         @RequestParam ViewMenuType viewMenuType){
+                                         @RequestParam String currentUrl){
         notificationService.changeAllToLinkVisited(sessionAccount);
-        return getRedirectUrl(viewMenuType);
+        return REDIRECT + currentUrl;
     }
 
     @PostMapping(DELETE_ALL_LINK_VISITED_NOTIFICATION_URL)
     public String deleteAllLinkVisited(@SessionAccount Account sessionAccount,
-                                       @RequestParam ViewMenuType viewMenuType){
+                                       @RequestParam String currentUrl){
         notificationService.deleteAllLinkVisited(sessionAccount);
-        return getRedirectUrl(viewMenuType);
-    }
-
-    private String getRedirectUrl(@RequestParam ViewMenuType viewMenuType) {
-        switch (viewMenuType) {
-            case LINK_UNVISITED:
-                return REDIRECT + LINK_UNVISITED_NOTIFICATION_LIST_URL;
-            case LINK_VISITED:
-                return REDIRECT + LINK_VISITED_NOTIFICATION_LIST_URL;
-            default:
-                return REDIRECT + ALL_NOTIFICATION_LIST_URL;
-        }
+        return REDIRECT + currentUrl;
     }
 
     @ResponseBody

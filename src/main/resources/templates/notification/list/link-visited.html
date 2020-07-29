@@ -14,12 +14,21 @@
                 width: 990px;
             }
 
+            #menuBox{
+                width: 182px;
+            }
+
             #changAllToLinkVisitedForm{
                 margin-top: 15px;
             }
             #deleteAllLinkVisitedForm{
                 margin-top: 10px;
             }
+
+            .formButton{
+                width: 100%;
+            }
+
 
             #linkVisitedNotificationListOuterDiv {
                 margin-left: 40px;
@@ -46,8 +55,12 @@
             }
 
             #menuBox{
-                width: 220px;
+                width: 182px;
                 margin-bottom: 26px;
+            }
+
+            #outerBox {
+                width: 90%;
             }
 
             #changAllToLinkVisitedForm{
@@ -62,7 +75,6 @@
             }
 
             #linkVisitedNotificationListOuterDiv {
-                width: 560px;
             }
 
             .notificationCard {
@@ -86,7 +98,7 @@
             }
 
             #menuBox{
-                width: 220px;
+                width: 182px;
                 margin-bottom: 26px;
             }
 
@@ -126,7 +138,7 @@
             }
 
             #menuBox{
-                width: 220px;
+                width: 182px;
                 margin-bottom: 26px;
             }
 
@@ -171,19 +183,19 @@
     <h2 id="notificationListTitle" class="text-center">알림</h2>
 
     <div id="outerBox" class="row justify-content-center mx-auto">
-        <div id="menuBox" class="col-lg-2" style="display: inline-block">
+        <div id="menuBox" style="display: inline-block">
             <div th:replace="fragment.html :: notification-list (currentMenu='link-visited')"></div>
             <form id="changAllToLinkVisitedForm" th:action="@{/notification/change-all-to-link-visited}" method="post">
-                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_VISITED}">
+                <input type="hidden" name="currentUrl" th:value="${T(portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification).LINK_VISITED_NOTIFICATION_LIST_URL}">
                 <button type="submit" class="btn btn-warning formButton">모두 읽음으로 전환</button>
             </form>
             <form id="deleteAllLinkVisitedForm" th:action="@{/notification/delete-all-link-visited}" method="post">
-                <input type="hidden" name="viewMenuType" th:value="${T(portfolio2.module.notification.ViewMenuType).LINK_VISITED}">
+                <input type="hidden" name="currentUrl" th:value="${T(portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification).LINK_VISITED_NOTIFICATION_LIST_URL}">
                 <button type="submit" class="btn btn-danger formButton">읽은 알림 모두 삭제</button>
             </form>
         </div>
 
-        <div id="linkVisitedNotificationListOuterDiv" class="col-lg-9">
+        <div id="linkVisitedNotificationListOuterDiv" class="col-lg-8">
 
             <div th:if="${linkVisitedNotification.isEmpty()}" class="card">
                 <div class="card-body text-muted text-center">
