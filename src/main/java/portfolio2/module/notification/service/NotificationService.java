@@ -16,15 +16,11 @@ import java.util.List;
 @Service
 public class NotificationService {
 
-    private final AccountRepository accountRepository;
     private final NotificationRepository notificationRepository;
 
     public List<Notification> ringBellCheck(Account sessionAccount) {
-        Account account = accountRepository.findByUserId(sessionAccount.getUserId());
-        List<Notification> allNotification = notificationRepository.findByAccountOrderByCreatedDateTimeDesc(account);
-        allNotification.forEach(notification -> {
-            notification.setRingBellChecked(true);
-        });
+        List<Notification> allNotification = notificationRepository.findByAccountOrderByCreatedDateTimeDesc(sessionAccount);
+        allNotification.forEach(notification -> notification.setRingBellChecked(true));
         return allNotification;
     }
 
@@ -46,9 +42,7 @@ public class NotificationService {
 
     public void changeAllToLinkVisited(Account sessionAccount) {
         List<Notification> linkUnvisitedNotification = this.getLinkUnvisitedNotification(sessionAccount);
-        linkUnvisitedNotification.forEach(notification -> {
-            notification.setLinkVisited(true);
-        });
+        linkUnvisitedNotification.forEach(notification -> notification.setLinkVisited(true));
     }
 
     public void deleteAllLinkVisited(Account sessionAccount) {
