@@ -7,7 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
+import portfolio2.module.main.service.MainService;
 import portfolio2.module.notification.NotificationRepository;
+import portfolio2.module.post.Post;
+
+import java.util.List;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
 import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
@@ -15,7 +19,9 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 @RequiredArgsConstructor
 @Controller
-public class HomeAndLogInController {
+public class MainController {
+
+    private final MainService mainService;
 
     @GetMapping(HOME_URL)
     public String home(@SessionAccount Account sessionAccount, Model model){
@@ -30,6 +36,16 @@ public class HomeAndLogInController {
             return REDIRECT + HOME_URL;
         }
         return LOGIN_VIEW_NAME;
+    }
+
+    @GetMapping("/search/post")
+    public String searchPost(@SessionAccount Account sessionAccount,
+                             String keyword, Model model){
+        List<Post> searchedPost = mainService.findPostByKeyword(keyword);
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchedPost", searchedPost);
+        return "search";
     }
 }
 

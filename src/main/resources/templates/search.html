@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #searchedPostTableOuterDiv{
+                width: 990px;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #searchedPostTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 33px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #searchedPostTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #searchedPostTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 15px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+        }
+
+        #keyword{
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        a{
+            color: black;
+        }
+        a:hover{
+            color: black;
+        }
+        .firstWrittenTimeTd{
+            padding-left: 0 !important;
+        }
+        #searchResultTitle{
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="fragment.html :: commonNav"></div>
+    <div class="my-5 text-center">
+        <p id="searchResultTitle" class="lead mx-auto" th:if="${searchedPost.isEmpty()}">
+            <span th:text="${keyword}" id="keyword"></span>에 해당하는 글이 없습니다.
+        </p>
+        <p id="searchResultTitle" class="lead mx-auto" th:if="${!searchedPost.isEmpty()}">
+            <span th:text="${keyword}" id="keyword"></span>에 해당하는 글을
+            <span th:text="${searchedPost.size()}"></span>개 찾았습니다.
+        </p>
+    </div>
+
+    <div id="searchedPostTableOuterDiv" class="mx-auto" th:if="${!searchedPost.isEmpty()}">
+        <table class="table" style="table-layout: fixed">
+            <thead>
+            <tr class="text-center">
+                <th id="titleHead" scope="col">제목</th>
+                <th id="authorHead" scope="col">작성자</th>
+                <th id="firstWrittenTimeHead" scope="col">작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${searchedPost}">
+                <td class="titleTd align-middle">
+                    <a th:href="@{'/post-view/' + ${post.getId()}}" th:text="${post.getTitle()}"></a>
+                </td>
+                <td class="authorTd align-middle text-center">
+                    <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname()}"></a>
+                </td>
+                <td id="testDate" class="firstWrittenTimeTd align-middle text-center post-first-written-time" th:text="${post.getFirstWrittenDateTime()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer th:replace="fragment.html :: commonFooter"></footer>
+<script th:replace="fragment.html :: commonJavaScript"></script>
+<script th:replace="fragment.html :: date-time"></script>
+</body>
+</html>

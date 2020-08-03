@@ -17,9 +17,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@NamedEntityGraph(name = "Post.withCurrentTag", attributeNodes = {
-        @NamedAttributeNode("currentTag")
-})
 @Entity
 public class Post {
 
@@ -44,8 +41,9 @@ public class Post {
 
     private LocalDateTime lastModifiedDateTime;
 
-    public void updateTitleAndContent(PostUpdateRequestDto postUpdateRequestDto) {
+    public void updateTitleAndContentAndDate(PostUpdateRequestDto postUpdateRequestDto) {
         this.title = postUpdateRequestDto.getTitle();
         this.content = postUpdateRequestDto.getContent();
+        this.lastModifiedDateTime = LocalDateTime.now();
     }
 }

@@ -21,9 +21,9 @@
     <nav class="navbar navbar-light bg-light align-items-center">
         <a id="mainNavBarBrandTitle" class="navbar-brand order-sm-1 order-1" th:href="@{/}">TH</a>
 
-        <form id="mainSearchForm" class="form-inline my-0 order-sm-2 order-5" method="get" th:action="@{#}">
+        <form id="mainSearchForm" class="form-inline my-0 order-sm-2 order-5" method="get" th:action="@{/search/post}">
             <div class="input-group">
-                <input id="mainSearchInput" type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="mainSearchButton">
+                <input id="mainSearchInput" name="keyword" type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="mainSearchButton">
                 <div class="input-group-append">
                     <button class="btn btn-light" type="submit" id="mainSearchButton">
                         <i id="mainSearchIcon" class="fas fa-search fa-lg"></i>
@@ -119,6 +119,21 @@
             $(".time-before").text(function(index, dateTime) {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
             });
+            $(".post-first-written-time").text(function(index, dateTime) {
+                if(isToday(dateTime)){
+                    return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LT');
+                }else{
+                    return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('L');
+                }
+            });
         })
+
+        function isToday(dateTime){
+            const today = new Date();
+            const dateToCompare = new Date(dateTime);
+            return today.getFullYear() === dateToCompare.getFullYear()
+                && today.getMonth() === dateToCompare.getMonth()
+                && today.getDate() === dateToCompare.getDate();
+        }
     </script>
 </div>

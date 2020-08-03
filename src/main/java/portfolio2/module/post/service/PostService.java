@@ -42,7 +42,7 @@ public class PostService {
 
     public Post updatePost(PostUpdateRequestDto postUpdateRequestDto) {
         Post postInDbToUpdate = postRepository.findById(postUpdateRequestDto.getPostIdToUpdate()).orElseThrow(IllegalArgumentException::new);
-        postInDbToUpdate.updateTitleAndContent(postUpdateRequestDto);
+        postInDbToUpdate.updateTitleAndContentAndDate(postUpdateRequestDto);
         return  postProcess.updateTagOfPost(postInDbToUpdate, postUpdateRequestDto);
     }
 
