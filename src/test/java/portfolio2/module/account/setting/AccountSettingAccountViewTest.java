@@ -1,16 +1,13 @@
 package portfolio2.module.account.setting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.AccountRepository;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +37,7 @@ public class AccountSettingAccountViewTest extends ContainerBaseTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("계정 설정 화면 보여주기")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showAccounSettingAccountPage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_ACCOUNT_URL))

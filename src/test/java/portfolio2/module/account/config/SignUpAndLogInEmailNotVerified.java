@@ -6,6 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-@WithSecurityContext(factory = SignUpAndLoggedInEmailNotVerifiedSecurityContextFactory.class)
-public @interface SignUpAndLoggedInEmailNotVerified {
+@WithSecurityContext(factory = SignUpAndLogInEmailNotVerifiedSecurityContextFactory.class)
+public @interface SignUpAndLogInEmailNotVerified {
 }

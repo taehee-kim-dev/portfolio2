@@ -1,28 +1,20 @@
 package portfolio2.module.account.setting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.BadRequestException;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 import portfolio2.module.account.dto.request.TagUpdateRequestDto;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -58,7 +50,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("계정 관심 태그 설정 화면 보여주기")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showAccountTagSettingView() throws Exception{
 
@@ -71,7 +63,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("태그 추가하기 - 완전히 새로운 태그")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void addNewTag() throws Exception{
 
@@ -97,7 +89,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("태그 추가하기 - 이미 존재하는 태그 - 사용자는 갖고있지 않음.")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void addTagExistingInTagRepository() throws Exception{
 
@@ -122,7 +114,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("태그 추가하기 - 이미 존재하는 태그 - 이미 사용자가 갖고있는 태그")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void addTagExistingInTagRepositoryAndAccount() throws Exception{
 
@@ -151,7 +143,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("태그 추가하기 - 태그 정규식 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void invalidTagFormatAddError() throws Exception{
 
@@ -173,7 +165,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
 
 
     @DisplayName("태그 삭제하기 - 존재하는 태그 정상 삭제")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void removeTag() throws Exception{
 
@@ -208,7 +200,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("존재하지 않는 태그 삭제하기 오류")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void removeNotExistingTag() throws Exception{
 
@@ -240,7 +232,7 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("태그 정규식에 어긋나는 태그 삭제 요청 오륲")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void removeInvalidFormatTagTitleError() throws Exception{
 

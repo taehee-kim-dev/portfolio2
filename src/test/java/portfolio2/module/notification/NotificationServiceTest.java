@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -28,7 +29,7 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
 
 @MockMvcTest
-public class NotificationServiceTest {
+public class NotificationServiceTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

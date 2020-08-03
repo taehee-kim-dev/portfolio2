@@ -13,6 +13,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.*;
+import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
@@ -58,13 +59,13 @@ public class ShowPostUpdateViewTest extends ContainerBaseTest {
     private TagRepository tagRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @Autowired
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
-
-    @Autowired
-    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
 
     @Autowired
     private PostService postService;
@@ -90,6 +91,7 @@ public class ShowPostUpdateViewTest extends ContainerBaseTest {
 
     @AfterEach
     void afterEach(){
+        notificationRepository.deleteAll();
         tagRepository.deleteAll();
         postRepository.deleteAll();
         accountRepository.deleteAll();

@@ -18,7 +18,7 @@ import portfolio2.module.account.service.SignUpService;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 
 @RequiredArgsConstructor
-public class SignUpAndLoggedInEmailVerifiedSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedInEmailVerified> {
+public class SignUpAndLogInEmailVerifiedSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLogInEmailVerified> {
 
     private final AccountRepository accountRepository;
     private final SignUpService signUpService;
@@ -26,7 +26,7 @@ public class SignUpAndLoggedInEmailVerifiedSecurityContextFactory implements Wit
     private final EmailVerificationService emailVerificationService;
 
     @Override
-    public SecurityContext createSecurityContext(SignUpAndLoggedInEmailVerified signUpAndLoggedInEmailVerified) {
+    public SecurityContext createSecurityContext(SignUpAndLogInEmailVerified signUpAndLogInEmailVerified) {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)

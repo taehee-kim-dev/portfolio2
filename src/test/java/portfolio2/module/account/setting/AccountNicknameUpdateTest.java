@@ -10,8 +10,8 @@ import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
@@ -56,7 +56,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("모두 정상 입력 - 이메일 인증 안된 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void successWithEmailNotVerified() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -85,7 +85,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("모두 정상 입력 - 이메일 인증 된 상태1")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void successWithEmailVerified1() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -113,7 +113,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
         assertNotNull(updatedAccount.getShowPasswordUpdatePageToken());
     }
     @DisplayName("모두 정상 입력 - 이메일 인증 된 상태2")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void successWithEmailVerified2() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -144,7 +144,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     // 입력 에러
 
     @DisplayName("입력 에러 - 너무 짧은 닉네임 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void tooShortNicknameError() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -180,7 +180,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 너무 긴 닉네임 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void tooLongNicknameError() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -216,7 +216,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 한글자음 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNicknameError4() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -252,7 +252,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 한글모음 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNicknameError5() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -288,7 +288,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 형식에 맞지않는 닉네임2 - 공백문자 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNicknameError2() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -324,7 +324,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 형식에 맞지않는 닉네임3 - 공백문자 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNicknameError3() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto
@@ -360,7 +360,7 @@ public class AccountNicknameUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력 에러 - 형식에 맞지않는 닉네임1 - 특수문자 - 이메일 인증 된 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNicknameError1() throws Exception{
         AccountNicknameUpdateRequestDto accountNicknameUpdateRequestDto

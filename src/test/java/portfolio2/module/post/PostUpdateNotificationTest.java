@@ -61,9 +61,6 @@ public class PostUpdateNotificationTest extends ContainerBaseTest {
     @Autowired
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
-    @Autowired
-    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
-
     @MockBean
     EmailSendingProcessForPost emailSendingProcessForPost;
 
@@ -96,6 +93,15 @@ public class PostUpdateNotificationTest extends ContainerBaseTest {
             });
         }
     }
+
+    @AfterEach
+    void afterEach(){
+        tagRepository.deleteAll();
+        postRepository.deleteAll();
+        notificationRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
 
     @BeforeEach
     void beforeEach(){
@@ -154,14 +160,6 @@ public class PostUpdateNotificationTest extends ContainerBaseTest {
             assertNotNull(tag);
             assertTrue(account.getInterestTag().contains(tag));
         });
-    }
-
-    @AfterEach
-    void afterEach(){
-        tagRepository.deleteAll();
-        postRepository.deleteAll();
-        notificationRepository.deleteAll();
-        accountRepository.deleteAll();
     }
 
     @DisplayName("본인 계정에는 이메일과 웹 알림이 가지 않음")

@@ -12,6 +12,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.*;
+import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.PostService;
@@ -56,6 +57,9 @@ public class PostUpdateTest extends ContainerBaseTest {
     private TagRepository tagRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @Autowired
@@ -88,6 +92,7 @@ public class PostUpdateTest extends ContainerBaseTest {
 
     @AfterEach
     void afterEach(){
+        notificationRepository.deleteAll();
         tagRepository.deleteAll();
         postRepository.deleteAll();
         accountRepository.deleteAll();

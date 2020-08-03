@@ -60,7 +60,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("비밀번호 찾기 페이지 보여주기 - 로그아웃 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void showFindPasswordPageNotLoggedIn() throws Exception{
         // 로그아웃
@@ -78,7 +78,7 @@ public class SendingFindPasswordEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("비밀번호 찾기 페이지 보여주기 - 로그인 상태")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void showFindPasswordPageLoggedIn() throws Exception{
         // 로그인 확인

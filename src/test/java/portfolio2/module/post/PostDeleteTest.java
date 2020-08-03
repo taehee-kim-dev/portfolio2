@@ -15,6 +15,7 @@ import portfolio2.module.account.config.CustomPrincipal;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
+import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
@@ -62,13 +63,13 @@ public class PostDeleteTest extends ContainerBaseTest {
     private TagRepository tagRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
 
     @Autowired
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
-
-    @Autowired
-    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
 
     @Autowired
     private PostService postService;
@@ -94,6 +95,7 @@ public class PostDeleteTest extends ContainerBaseTest {
 
     @AfterEach
     void afterEach(){
+        notificationRepository.deleteAll();
         tagRepository.deleteAll();
         postRepository.deleteAll();
         accountRepository.deleteAll();

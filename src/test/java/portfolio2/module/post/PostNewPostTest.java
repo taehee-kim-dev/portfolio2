@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.service.process.EmailSendingProcessForPost;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
@@ -48,19 +47,20 @@ public class PostNewPostTest extends ContainerBaseTest {
     @Autowired
     private TagRepository tagRepository;
 
-    @MockBean
-    private EmailSendingProcessForPost emailSendingProcessForPost;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @AfterEach
     void afterEach(){
-        postRepository.deleteAll();
+        notificationRepository.deleteAll();
         tagRepository.deleteAll();
+        postRepository.deleteAll();
         accountRepository.deleteAll();
     }
 
 
     @DisplayName("글 작성 화면 보여주기")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void showPostNewPostView() throws Exception{
         mockMvc.perform(get(POST_NEW_POST_URL))
@@ -73,7 +73,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력(모두 새로운 태그)")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithAllCurrentTag() throws Exception{
 
@@ -119,7 +119,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 특수문자 테스트 - 모두 정상 입력(모두 새로운 태그)")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithSpecialCharacter() throws Exception{
 
@@ -165,7 +165,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 일부 기존 존재하는 태그")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithExistingTag() throws Exception{
         Tag existingTag1 = new Tag();
@@ -208,7 +208,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 모두 정상 입력 - 태그 입력 안했을 때")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithEmptyTag() throws Exception{
 
@@ -236,7 +236,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 정상 입력 - 내용 입력 안했을 때")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithEmptyContent() throws Exception{
 
@@ -281,7 +281,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 제목 입력 안했을 때")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithEmptyTitle() throws Exception{
 
@@ -314,7 +314,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 스페이스 외 공백문자 제목")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithWhiteSpaceTitle() throws Exception{
 
@@ -347,7 +347,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 태그 형식 에러")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithInvalidTagTitleOnPost() throws Exception{
 
@@ -387,7 +387,7 @@ public class PostNewPostTest extends ContainerBaseTest {
     }
 
     @DisplayName("글 작성 POST 요청 - 입력 에러 - 제목과 내용 모두 입력 안했을 때")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void postNewPostWithEmptyTitleAndContent() throws Exception{
 

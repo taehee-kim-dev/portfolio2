@@ -1,16 +1,13 @@
 package portfolio2.module.account.setting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 
@@ -43,7 +40,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("프로필 수정 화면 보여주기")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showProfileUpdatePage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_PROFILE_URL))
@@ -58,7 +55,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     // 모두 정상 입력
 
     @DisplayName("프로필 업데이트 - 모두 정상 입력1")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updateProfileSuccess1() throws Exception{
         String sampleBio = "aB3^ ";
@@ -87,7 +84,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 모두 정상 입력2")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updateProfileSuccess2() throws Exception{
         String sampleBio = "sS %^&$#@#$";
@@ -118,7 +115,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     // 입력 에러
 
     @DisplayName("프로필 업데이트 - 너무 긴 자기소개 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void tooLongBioError() throws Exception{
         String sampleBio = "abcdeabcdeabcdeabcdeabcdeabcdea";
@@ -152,7 +149,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 자기소개 스페이스 외의 공백문자 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void whiteSpaceErrorOfBio() throws Exception{
         String sampleBio = "asdfa\tsdf";
@@ -186,7 +183,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 너무 긴 직업 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void tooLongOccupationError() throws Exception{
         String sampleBio = "sampleBio";
@@ -220,7 +217,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 스페이스 외의 공백문자 직업 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void whiteSpaceErrorOfOccupation() throws Exception{
         String sampleBio = "sampleBio";
@@ -254,7 +251,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 너무 긴 지역 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void tooLongLocationError() throws Exception{
         String sampleBio = "sampleBio";
@@ -288,7 +285,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("프로필 업데이트 - 스페이스 외의 공백문자 지역 에러")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void whiteSpaceErrorOfLocation() throws Exception{
         String sampleBio = "sampleBio";
@@ -322,7 +319,7 @@ public class AccountProfileUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("입력값 에러 각각 모두 출력")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showAllErrorCodes() throws Exception{
         String sampleBio = "sampleBio";

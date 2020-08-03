@@ -65,7 +65,7 @@ public class SignUpTest extends ContainerBaseTest {
     }
 
     @DisplayName("회원가입 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showSignUpPageWithLogIn() throws Exception{
         mockMvc.perform(get(SIGN_UP_URL))
@@ -344,7 +344,7 @@ public class SignUpTest extends ContainerBaseTest {
     }
 
     @DisplayName("회원가입 POST 요청 - 모든 필드 정상 - 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void allValidFieldsSignUpWithLogIn() throws Exception{
 

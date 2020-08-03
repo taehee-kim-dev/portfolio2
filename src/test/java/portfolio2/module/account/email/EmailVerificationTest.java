@@ -13,10 +13,7 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
-import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
 import portfolio2.module.account.dto.request.EmailVerificationRequestDto;
-import portfolio2.module.account.service.AccountSettingService;
-import portfolio2.module.account.service.EmailVerificationService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -75,7 +72,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     // 정상 링크
 
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 안 된 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validLinkNotLoggedInNotFirstVerified() throws Exception{
 
@@ -131,7 +128,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
     }
 
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 상태 - 처음 인증 된 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validLinkNotLoggedInFirstVerified() throws Exception{
 
@@ -199,7 +196,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
 
 
     @DisplayName("이메일 인증 - 정상 링크 - 본인 계정으로 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validLinkLoggedInByOwnAccount() throws Exception{
 
@@ -265,7 +262,7 @@ public class EmailVerificationTest extends ContainerBaseTest {
         assertTrue(accountEmailVerified.isNotificationMyInterestTagAddedToExistingPostByEmail());
     }
 
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
     @Test
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{

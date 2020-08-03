@@ -39,7 +39,7 @@ public class SignUpAnnotationTest extends ContainerBaseTest {
     }
 
     @DisplayName("회원가입 후 이메일 인증 안됨 테스트")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void signUpAndEmailNotVerified(){
         Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -108,7 +108,7 @@ public class SignUpAnnotationTest extends ContainerBaseTest {
     }
 
     @DisplayName("회원가입 후 이메일 인증 됨 테스트")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void signUpAndEmailVerified(){
         Account signedUpAccount = accountRepository.findByUserId(TEST_USER_ID);

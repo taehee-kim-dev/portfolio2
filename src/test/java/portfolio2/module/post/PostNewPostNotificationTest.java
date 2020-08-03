@@ -94,6 +94,15 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
         }
     }
 
+    @AfterEach
+    void afterEach(){
+        tagRepository.deleteAll();
+        postRepository.deleteAll();
+        notificationRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
+
     @BeforeEach
     void beforeEach(){
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
@@ -135,14 +144,6 @@ public class PostNewPostNotificationTest extends ContainerBaseTest {
             assertNotNull(tag);
             assertTrue(account.getInterestTag().contains(tag));
         });
-    }
-
-    @AfterEach
-    void afterEach(){
-        tagRepository.deleteAll();
-        postRepository.deleteAll();
-        notificationRepository.deleteAll();
-        accountRepository.deleteAll();
     }
 
     @DisplayName("본인 계정에는 이메일과 웹 알림이 가지 않음")

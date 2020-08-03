@@ -13,6 +13,7 @@ import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTes
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.tag.TagRepository;
@@ -46,6 +47,12 @@ public class ShowPostTest extends ContainerBaseTest {
     private PostRepository postRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
     private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
 
     @Autowired
@@ -53,6 +60,14 @@ public class ShowPostTest extends ContainerBaseTest {
 
     @Autowired
     private LogInAndOutProcessForTest logInAndOutProcessForTest;
+
+    @AfterEach
+    void afterEach(){
+        notificationRepository.deleteAll();
+        tagRepository.deleteAll();
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
 
     @BeforeEach
     void beforeEach(){
@@ -66,12 +81,6 @@ public class ShowPostTest extends ContainerBaseTest {
         newPost.setFirstWrittenDateTime(firstWrittenTime);
         newPost.setLastModifiedDateTime(firstWrittenTime);
         postRepository.save(newPost);
-    }
-
-    @AfterEach
-    void afterEach(){
-        postRepository.deleteAll();
-        accountRepository.deleteAll();
     }
 
     @DisplayName("글 보여주기 - 로그인 안 한 상태")

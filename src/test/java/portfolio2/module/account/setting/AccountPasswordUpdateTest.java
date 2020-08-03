@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
@@ -52,7 +52,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("비밀번호 변경 화면 보여주기")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showAccountPasswordUpdatePage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_PASSWORD_URL))
@@ -67,7 +67,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     // 모두 정상 입력
 
     @DisplayName("비밀번호 변경 모두 정상 입력 - 인증된 이메일이 없는 경우")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updatePasswordSuccessNotEmailVerified() throws Exception{
         String newPassword = "ChangedPassword";
@@ -93,7 +93,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("비밀번호 변경 모두 정상 입력 - 인증된 이메일이 있는 경우")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updatePasswordSuccessWithEmailVerified() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -128,7 +128,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     // 비밀번호 확인은 모두 맞는 상태
 
     @DisplayName("너무 짧은 비밀번호 - 비밀번호 확인 일치")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void tooShortNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -168,7 +168,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("너무 긴 비밀번호 - 비밀번호 확인 일치")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void tooLongNewPasswordAndCorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -208,7 +208,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치1")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError1() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -248,7 +248,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 일치2")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void invalidWhiteSpaceNewPasswordAndCorrectNewPasswordConfirmError2() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -290,7 +290,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
     // 확인 비밀번호만 불일치
 
     @DisplayName("정상 비밀번호 입력 - 확인 비밀번호 불일치")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validNewPasswordAndIncorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);
@@ -331,7 +331,7 @@ public class AccountPasswordUpdateTest extends ContainerBaseTest {
 
     // 비정상 비밀번호 - 확인 비밀번호 불일치하면 둘다 에러문구 띄움
     @DisplayName("공백 포함 비밀번호 - 비밀번호 확인 불일치")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void invalidFormatNewPasswordAndIncorrectNewPasswordConfirmError() throws Exception{
         Account beforeAccount = accountRepository.findByUserId(TEST_USER_ID);

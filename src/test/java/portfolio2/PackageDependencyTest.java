@@ -12,6 +12,7 @@ public class PackageDependencyTest {
 
     private static final String ACCOUNT = "..module.account..";
     private static final String POST = "..module.post..";
+    private static final String MAIN = "..module.main..";
     private static final String TAG = "..module.tag..";
     private static final String NOTIFICATION = "..module.notification..";
     private static final String JAVA_LANG_OBJECT = "..java.lang..";
@@ -24,7 +25,7 @@ public class PackageDependencyTest {
     @ArchTest
     ArchRule postPackageRuleAccessedRule = classes().that().resideInAPackage(POST)
             .should().onlyBeAccessed().byClassesThat()
-            .resideInAnyPackage(POST);
+            .resideInAnyPackage(POST, MAIN);
 
     @ArchTest
     ArchRule postPackageAccessRule = classes().that().resideInAPackage(POST)

@@ -11,7 +11,7 @@ import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.infra.email.EmailService;
@@ -57,7 +57,7 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
     // 정상 링크
 
     @DisplayName("비밀번호 변경 페이지 보여주기 - 정상 링크 - 로그아웃 상태 - 인증된 이메일")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validLinkNotLoggedIn() throws Exception{
 
@@ -97,7 +97,7 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
 
 
     @DisplayName("비밀번호 변경 페이지 보여주기 - 정상 링크 - 본인 계정으로 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void validLinkLoggedInByOwnAccount() throws Exception{
 
@@ -129,7 +129,7 @@ public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
         assertNull(showedPasswordUpdatePageAccount.getShowPasswordUpdatePageToken());
     }
 
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @DisplayName("이메일 인증 - 정상 링크 - 로그아웃 이후 다른 계정으로 회원가입 후 로그인 상태")
     @Test
     void logOutByOwnAccountAndLogInByNotOwnAccount() throws Exception{

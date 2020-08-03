@@ -65,7 +65,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     // 무조건 로그인 상태에서만 보낼 수 밖에 없다.
 
     @DisplayName("기존에 이메일 인증 안된 상태 - 기존 이메일로 재전송 - 모든 입력 정상 - 1회 성공")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void notVerifiedEmailSendAgainSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -101,7 +101,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("기존에 이메일 인증 안된 상태 - 새로운 이메일로 전송 - 모든 입력 정상 - 1회 성공")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void notVerifiedEmailSendToNewEmailSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -139,7 +139,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("기존에 이메일 인증 된 상태 - 새로운 이메일로 인증 이메일 전송 - 모든 입력 정상 - 1회 성공")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void verifiedEmailSendAgainSuccess() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -238,7 +238,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     // 입력 에러
 
     @DisplayName("형식에 맞지 않는 이메일")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void invalidFormatNewEmail() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -279,7 +279,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("이미 사용중인 이메일 - 본인이 인증한 이메일")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void newEmailAlreadyExistsByOwnAccount() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -401,7 +401,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
 
     // 12시간동안 5회까지 성공
     @DisplayName("12시간동안 5회 전송 성공")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void successFor5TimesIn12Hours() throws Exception{
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);
@@ -443,7 +443,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("12시간동안 6회 전송 실패")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void failFor6TimesIn12Hours() throws Exception{
 
@@ -511,7 +511,7 @@ public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
     }
 
     @DisplayName("12시간 후 10번 째 까지 전송 성공")
-    @SignUpAndLoggedInEmailVerified
+    @SignUpAndLogInEmailVerified
     @Test
     void successFor6TimesAfter12Hours() throws Exception {
         Account beforeTry = accountRepository.findByUserId(TEST_USER_ID);

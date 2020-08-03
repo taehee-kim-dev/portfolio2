@@ -6,12 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
+import portfolio2.module.post.PostRepository;
+import portfolio2.module.tag.TagRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -24,7 +27,7 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
 
 @MockMvcTest
-public class NotificationGetTest {
+public class NotificationGetTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,9 +47,13 @@ public class NotificationGetTest {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
     @AfterEach
     void afterEach(){
         notificationRepository.deleteAll();
+        tagRepository.deleteAll();
         accountRepository.deleteAll();
     }
 

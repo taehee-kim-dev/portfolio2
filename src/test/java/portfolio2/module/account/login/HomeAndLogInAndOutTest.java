@@ -2,8 +2,6 @@ package portfolio2.module.account.login;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -55,7 +53,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     private SignUpAndLogInEmailNotVerifiedProcessForTest signUpAndLogInEmailNotVerifiedProcessForTest;
 
     @Autowired
-    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEMailNotVerifiedProcessForTest;
+    private SignUpAndLogOutEmailNotVerifiedProcessForTest signUpAndLogOutEmailNotVerifiedProcessForTest;
 
     @AfterEach
     void afterEach(){
@@ -72,7 +70,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @DisplayName("홈 화면 보여주기 - 로그아웃 상태")
     @Test
     void showHomeLoggedOut() throws Exception{
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         mockMvc.perform(get(HOME_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
@@ -82,7 +80,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     }
 
     @DisplayName("홈 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showHomeLoggedIn() throws Exception{
         mockMvc.perform(get(HOME_URL))
@@ -96,7 +94,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @DisplayName("로그인 화면 보여주기 - 비로그인 상태")
     @Test
     void showLogInPageWithoutLogIn() throws Exception{
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         mockMvc.perform(get(LOGIN_URL))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LOGIN_VIEW_NAME))
@@ -104,7 +102,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     }
 
     @DisplayName("로그인 화면 보여주기 - 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showLogInPageWithLogIn() throws Exception{
         mockMvc.perform(get(LOGIN_URL))
@@ -114,7 +112,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     }
 
     @DisplayName("올바른 아이디, 비밀번호로 로그인 시도 - 로그인 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void logInWithCorrectIdAndPasswordWithLogIn() throws Exception {
 
@@ -144,7 +142,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInSuccessWithCorrectIdAndPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -159,7 +157,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithCorrectIdAndIncorrectPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_USER_ID)
@@ -174,7 +172,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInSuccessWithCorrectVerifiedEmailAndPassword() throws Exception {
 
-        Account signedUpAccountInDb = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account signedUpAccountInDb = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
         accountRepository.save(signedUpAccountInDb);
@@ -192,7 +190,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithCorrectEmailAndIncorrectPassword() throws Exception {
 
-        Account signedUpAccountInDb = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account signedUpAccountInDb = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -209,7 +207,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithIncorrectUserIdAndCorrectPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", "incorrectUserId")
@@ -224,7 +222,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithIncorrectUserIdAndIncorrectPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", "incorrectUserId")
@@ -239,7 +237,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithIncorrectVerifiedEmailAndCorrectPassword() throws Exception {
 
-        Account signedUpAccountInDb = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account signedUpAccountInDb = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -254,7 +252,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @DisplayName("틀린 인증된 이메일, 틀린 비밀번호로 로그인 실패")
     @Test
     void logInFailureWithIncorrectVerifiedEmailAndIncorrectPassword() throws Exception {
-        Account signedUpAccountInDb = signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        Account signedUpAccountInDb = signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
         signedUpAccountInDb.setVerifiedEmail(signedUpAccountInDb.getEmailWaitingToBeVerified());
 
         mockMvc.perform(post(LOGIN_URL)
@@ -270,7 +268,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithCorrectUnverifiedEmailAndCorrectPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_EMAIL)
@@ -285,7 +283,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     @Test
     void logInFailureWithCorrectUnverifiedEmailAndIncorrectPassword() throws Exception {
 
-        signUpAndLogOutEMailNotVerifiedProcessForTest.signUpAndLogOutDefault();
+        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
 
         mockMvc.perform(post(LOGIN_URL)
                 .param("username", TEST_EMAIL)
@@ -297,7 +295,7 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     }
 
     @DisplayName("로그아웃 테스트")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void logout() throws Exception {
         mockMvc.perform(post("/logout")

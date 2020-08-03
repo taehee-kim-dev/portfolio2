@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLoggedInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 
@@ -39,7 +39,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
     // 모두 무조건 로그인 상태여야 함
 
     @DisplayName("알림설정 화면 보여주기")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void showNotificationUpdatePage() throws Exception{
         mockMvc.perform(get(ACCOUNT_SETTING_NOTIFICATION_URL))
@@ -54,7 +54,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
     // 모두 정상 입력
 
     @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증되지 않은 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updateProfileSuccessEmailNotVerified() throws Exception{
 
@@ -100,7 +100,7 @@ public class AccountNotificationUpdateTest extends ContainerBaseTest {
     }
 
     @DisplayName("알림설정 - 모두 정상 입력 - 이메일이 인증된 상태")
-    @SignUpAndLoggedInEmailNotVerified
+    @SignUpAndLogInEmailNotVerified
     @Test
     void updateProfileSuccessEmailVerified() throws Exception{
 

@@ -14,13 +14,13 @@ import portfolio2.module.account.service.SignUpService;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 
 @RequiredArgsConstructor
-public class SignUpAndLoggedInEmailNotVerifiedSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLoggedInEmailNotVerified> {
+public class SignUpAndLogInEmailNotVerifiedSecurityContextFactory implements WithSecurityContextFactory<SignUpAndLogInEmailNotVerified> {
 
     private final SignUpService signUpService;
     private final AccountService accountService;
 
     @Override
-    public SecurityContext createSecurityContext(SignUpAndLoggedInEmailNotVerified signUpAndLoggedInEmailNotVerified) {
+    public SecurityContext createSecurityContext(SignUpAndLogInEmailNotVerified signUpAndLogInEmailNotVerified) {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)
