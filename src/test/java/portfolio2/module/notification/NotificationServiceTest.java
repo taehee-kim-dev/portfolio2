@@ -1,198 +1,214 @@
-//package portfolio2.module.notification;
-//
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.web.servlet.MockMvc;
-//import portfolio2.infra.ContainerBaseTest;
-//import portfolio2.infra.MockMvcTest;
-//import portfolio2.module.account.Account;
-//import portfolio2.module.account.AccountRepository;
-//import portfolio2.module.account.config.LogInAndOutProcessForTest;
-//import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
-//import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-//import portfolio2.module.notification.service.NotificationService;
-//
-//import java.time.LocalDateTime;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-//import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-//
-//@MockMvcTest
-//public class NotificationServiceTest extends ContainerBaseTest {
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
-//
-//    @Autowired
-//    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
-//
-//    @Autowired
-//    private LogInAndOutProcessForTest logInAndOutProcessForTest;
-//
-//    @Autowired
-//    private AccountRepository accountRepository;
-//
-//    @Autowired
-//    private NotificationRepository notificationRepository;
-//
-//    @Autowired
-//    private NotificationService notificationService;
-//
-//    @AfterEach
-//    void afterEach(){
-//        notificationRepository.deleteAll();
-//        accountRepository.deleteAll();
-//    }
-//
-//    private Long idOfFirstNotificationForAccount = -1L;
-//    private Long idOfSecondNotificationForAccount = -1L;
-//    private Long idOfThirdNotificationForAccount = -1L;
-//    private Long idOfFourthNotificationForAccount = -1L;
-//
-//    private Long idOfFirstNotificationForAccount2 = -1L;
-//    private Long idOfSecondNotificationForAccount2 = -1L;
-//    private Long idOfThirdNotificationForAccount2 = -1L;
-//    private Long idOfFourthNotificationForAccount2 = -1L;
-//
-//
-//    @BeforeEach
-//    void beforeEach(){
-//        Account account = signUpAndLogOutEmailVerifiedProcessForTest.signUpAndLogOutDefault();
-//        Account account2 = signUpAndLogOutEmailVerifiedProcessForTest.signUpAndLogOutNotDefaultWith(TEST_USER_ID_2);
-//
-//        Notification firstNotificationForAccount = new Notification();
-//        firstNotificationForAccount.setAccount(account);
-//        firstNotificationForAccount.setCreatedDateTime(LocalDateTime.now().minusMinutes(100));
-//        idOfFirstNotificationForAccount
-//                = notificationRepository.save(firstNotificationForAccount).getId();
-//
-//        Notification secondNotificationForAccount = new Notification();
-//        secondNotificationForAccount.setAccount(account);
-//        secondNotificationForAccount.setCreatedDateTime(LocalDateTime.now().minusMinutes(90));
-//        idOfSecondNotificationForAccount
-//                = notificationRepository.save(secondNotificationForAccount).getId();
-//
-//        Notification thirdNotificationForAccount = new Notification();
-//        thirdNotificationForAccount.setAccount(account);
-//        thirdNotificationForAccount.setCreatedDateTime(LocalDateTime.now().minusMinutes(80));
-//        idOfThirdNotificationForAccount
-//                = notificationRepository.save(thirdNotificationForAccount).getId();
-//
-//        Notification fourthNotificationForAccount = new Notification();
-//        fourthNotificationForAccount.setAccount(account);
-//        fourthNotificationForAccount.setCreatedDateTime(LocalDateTime.now().minusMinutes(70));
-//        idOfFourthNotificationForAccount
-//                = notificationRepository.save(fourthNotificationForAccount).getId();
-//
-//
-//
-//        Notification firstNotificationForAccount2 = new Notification();
-//        firstNotificationForAccount2.setAccount(account2);
-//        firstNotificationForAccount2.setCreatedDateTime(LocalDateTime.now().minusMinutes(100));
-//        idOfFirstNotificationForAccount2
-//                = notificationRepository.save(firstNotificationForAccount2).getId();
-//
-//        Notification secondNotificationForAccount2 = new Notification();
-//        secondNotificationForAccount2.setAccount(account2);
-//        secondNotificationForAccount2.setCreatedDateTime(LocalDateTime.now().minusMinutes(90));
-//        idOfSecondNotificationForAccount2
-//                = notificationRepository.save(secondNotificationForAccount2).getId();
-//
-//        Notification thirdNotificationForAccount2 = new Notification();
-//        thirdNotificationForAccount2.setAccount(account2);
-//        thirdNotificationForAccount2.setCreatedDateTime(LocalDateTime.now().minusMinutes(80));
-//        idOfThirdNotificationForAccount2
-//                = notificationRepository.save(thirdNotificationForAccount2).getId();
-//
-//        Notification fourthNotificationForAccount2 = new Notification();
-//        fourthNotificationForAccount2.setAccount(account2);
-//        fourthNotificationForAccount2.setCreatedDateTime(LocalDateTime.now().minusMinutes(70));
-//        idOfFourthNotificationForAccount2
-//                = notificationRepository.save(fourthNotificationForAccount2).getId();
-//    }
-//
-//    // TODO : pageable 적용
-//    @DisplayName("모든 알림 - 날짜 순서대로 가져오는지")
-//    @Test
-//    void allNotificationDateTimeDescTest(){
-//        Account account = accountRepository.findByUserId(TEST_USER_ID);
-//        List<Notification> allNotification = notificationService.ringBellCheck(account, pageable);
-//        assertEquals(4, allNotification.size());
-//        Notification fourthNotification = allNotification.get(0);
-//        Notification thirdNotification = allNotification.get(1);
-//        Notification secondNotification = allNotification.get(2);
-//        Notification firstNotification = allNotification.get(3);
-//        assertEquals(idOfFourthNotificationForAccount, fourthNotification.getId());
-//        assertEquals(idOfThirdNotificationForAccount, thirdNotification.getId());
-//        assertEquals(idOfSecondNotificationForAccount, secondNotification.getId());
-//        assertEquals(idOfFirstNotificationForAccount, firstNotification.getId());
-//        assertTrue(thirdNotification.getCreatedDateTime().isBefore(fourthNotification.getCreatedDateTime()));
-//        assertTrue(secondNotification.getCreatedDateTime().isBefore(thirdNotification.getCreatedDateTime()));
-//        assertTrue(firstNotification.getCreatedDateTime().isBefore(secondNotification.getCreatedDateTime()));
-//    }
-//
-//    // TODO : pageable 적용
-//    @DisplayName("링크 방문하지 않은 알림 - 날짜 순서대로 가져오는지")
-//    @Test
-//    void linkUnvisitedNotificationDateTimeDescTest(){
-//        Notification secondNotification = notificationRepository.findById(idOfSecondNotificationForAccount).orElse(null);
-//        assertNotNull(secondNotification);
-//        secondNotification.setLinkVisited(true);
-//        notificationRepository.save(secondNotification);
-//
-//        Account account = accountRepository.findByUserId(TEST_USER_ID);
-//        List<Notification> linkUnvisitedNotification = notificationService.getLinkUnvisitedNotification(account, pageable);
-//        assertEquals(3, linkUnvisitedNotification.size());
-//        Notification fourthNotification = linkUnvisitedNotification.get(0);
-//        Notification thirdNotification = linkUnvisitedNotification.get(1);
-//        Notification firstNotification = linkUnvisitedNotification.get(2);
-//        assertFalse(linkUnvisitedNotification.contains(secondNotification));
-//        assertEquals(idOfFourthNotificationForAccount, fourthNotification.getId());
-//        assertEquals(idOfThirdNotificationForAccount, thirdNotification.getId());
-//        assertEquals(idOfFirstNotificationForAccount, firstNotification.getId());
-//        assertTrue(thirdNotification.getCreatedDateTime().isBefore(fourthNotification.getCreatedDateTime()));
-//        assertTrue(firstNotification.getCreatedDateTime().isBefore(thirdNotification.getCreatedDateTime()));
-//    }
-//
-//    // TODO : pageable 적용
-//    @DisplayName("링크 방문한 알림 - 날짜 순서대로 가져오는지")
-//    @Test
-//    void linkVisitedNotificationDateTimeDescTest(){
-//        Notification fourthNotification = notificationRepository.findById(idOfFourthNotificationForAccount).orElse(null);
-//        Notification thirdNotification = notificationRepository.findById(idOfThirdNotificationForAccount).orElse(null);
-//        Notification secondNotification = notificationRepository.findById(idOfSecondNotificationForAccount).orElse(null);
-//        Notification firstNotification = notificationRepository.findById(idOfFirstNotificationForAccount).orElse(null);
-//        assertNotNull(fourthNotification);
-//        assertNotNull(thirdNotification);
-//        assertNotNull(secondNotification);
-//        fourthNotification.setLinkVisited(true);
-//        thirdNotification.setLinkVisited(true);
-//        secondNotification.setLinkVisited(true);
-//        notificationRepository.save(fourthNotification);
-//        notificationRepository.save(thirdNotification);
-//        notificationRepository.save(secondNotification);
-//
-//        Account account = accountRepository.findByUserId(TEST_USER_ID);
-//        List<Notification> linkVisitedNotification = notificationService.getLinkVisitedNotification(account, pageable);
-//        assertEquals(3, linkVisitedNotification.size());
-//        Notification foundFourthNotification = linkVisitedNotification.get(0);
-//        Notification foundThirdNotification = linkVisitedNotification.get(1);
-//        Notification foundSecondNotification = linkVisitedNotification.get(2);
-//        assertFalse(linkVisitedNotification.contains(firstNotification));
-//        assertEquals(idOfFourthNotificationForAccount, foundFourthNotification.getId());
-//        assertEquals(idOfThirdNotificationForAccount, foundThirdNotification.getId());
-//        assertEquals(idOfSecondNotificationForAccount, foundSecondNotification.getId());
-//        assertTrue(foundThirdNotification.getCreatedDateTime().isBefore(foundFourthNotification.getCreatedDateTime()));
-//        assertTrue(foundSecondNotification.getCreatedDateTime().isBefore(foundThirdNotification.getCreatedDateTime()));
-//    }
-//
-//}
+package portfolio2.module.notification;
+
+import net.bytebuddy.utility.RandomString;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.web.servlet.MockMvc;
+import portfolio2.infra.ContainerBaseTest;
+import portfolio2.infra.MockMvcTest;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
+import portfolio2.module.notification.service.NotificationService;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
+
+@MockMvcTest
+public class NotificationServiceTest extends ContainerBaseTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private SignUpAndLogInEmailVerifiedProcessForTest signUpAndLogInEmailVerifiedProcessForTest;
+
+    @Autowired
+    private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
+
+    @Autowired
+    private LogInAndOutProcessForTest logInAndOutProcessForTest;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @AfterEach
+    void afterEach(){
+        notificationRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
+    List<Long> notificationIdList = new ArrayList<>();
+
+    PageRequest page0 = PageRequest.of(0, 3, Sort.Direction.DESC, "createdDateTime");
+    PageRequest page1 = PageRequest.of(1, 3, Sort.Direction.DESC, "createdDateTime");
+    PageRequest page2 = PageRequest.of(2, 3, Sort.Direction.DESC, "createdDateTime");
+    PageRequest page3 = PageRequest.of(3, 3, Sort.Direction.DESC, "createdDateTime");
+
+    Account account;
+
+    @BeforeEach
+    void beforeEach(){
+        account = signUpAndLogOutEmailVerifiedProcessForTest.signUpAndLogOutDefault();
+        for (long i = 5; i > 0; i--){
+            String randomValue = RandomString.make(5);
+            Notification notification = new Notification();
+            notification.setAccount(account);
+            notification.setTitle(randomValue);
+            notification.setLink("test-link");
+            notification.setLinkVisited(false);
+            notification.setCreatedDateTime(LocalDateTime.now().minusHours(10L + i));
+            notificationIdList.add(notificationRepository.save(notification).getId());
+        }
+        for (long i = 5; i > 0; i--){
+            String randomValue = RandomString.make(5);
+            Notification notification = new Notification();
+            notification.setAccount(account);
+            notification.setTitle(randomValue);
+            notification.setLink("test-link");
+            notification.setLinkVisited(true);
+            notification.setCreatedDateTime(LocalDateTime.now().minusHours(i));
+            notificationIdList.add(notificationRepository.save(notification).getId());
+        }
+    }
+
+    @DisplayName("모든 알림 - 날짜 순서대로 가져오는지")
+    @Test
+    void allNotificationDateTimeDescTest(){
+        Page<Notification> page0Elements = notificationService.ringBellCheck(account, page0);
+        Page<Notification> page1Elements = notificationService.ringBellCheck(account, page1);
+        Page<Notification> page2Elements = notificationService.ringBellCheck(account, page2);
+        Page<Notification> page3Elements = notificationService.ringBellCheck(account, page3);
+        assertEquals(10L, page0Elements.getTotalElements());
+
+        List<Notification> page0List = page0Elements.getContent();
+        assertEquals(3, page0List.size());
+
+        List<Notification> page1List = page1Elements.getContent();
+        assertEquals(3, page1List.size());
+
+        List<Notification> page2List = page2Elements.getContent();
+        assertEquals(3, page2List.size());
+
+        List<Notification> page3List = page3Elements.getContent();
+        assertEquals(1, page3List.size());
+
+        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+
+        for (Notification notification : page0List) {
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+
+        for (Notification notification : page1List) {
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+
+        for (Notification notification : page2List) {
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+
+        for (Notification notification : page3List) {
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+    }
+
+
+    @DisplayName("링크 방문하지 않은 알림 - 날짜 순서대로 가져오는지")
+    @Test
+    void linkUnvisitedNotificationDateTimeDescTest(){
+        Page<Notification> page0Elements = notificationService.getLinkUnvisitedNotification(account, page0);
+        Page<Notification> page1Elements = notificationService.getLinkUnvisitedNotification(account, page1);
+        Page<Notification> page2Elements = notificationService.getLinkUnvisitedNotification(account, page2);
+
+        assertEquals(5L, page0Elements.getTotalElements());
+
+        List<Notification> page0List = page0Elements.getContent();
+        assertEquals(3, page0List.size());
+
+        List<Notification> page1List = page1Elements.getContent();
+        assertEquals(2, page1List.size());
+
+        List<Notification> page2List = page2Elements.getContent();
+        assertTrue(page2List.isEmpty());
+
+        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+
+        for (Notification notification : page0List) {
+            assertFalse(notification.isLinkVisited());
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+
+        for (Notification notification : page1List) {
+            assertFalse(notification.isLinkVisited());
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+    }
+
+
+    @DisplayName("링크 방문한 알림 - 날짜 순서대로 가져오는지")
+    @Test
+    void linkVisitedNotificationDateTimeDescTest(){
+        Page<Notification> page0Elements = notificationService.getLinkVisitedNotification(account, page0);
+        Page<Notification> page1Elements = notificationService.getLinkVisitedNotification(account, page1);
+        Page<Notification> page2Elements = notificationService.getLinkVisitedNotification(account, page2);
+
+        assertEquals(5L, page0Elements.getTotalElements());
+
+        List<Notification> page0List = page0Elements.getContent();
+        assertEquals(3, page0List.size());
+
+        List<Notification> page1List = page1Elements.getContent();
+        assertEquals(2, page1List.size());
+
+        List<Notification> page2List = page2Elements.getContent();
+        assertTrue(page2List.isEmpty());
+
+        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+
+        for (Notification notification : page0List) {
+            assertTrue(notification.isLinkVisited());
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+
+        for (Notification notification : page1List) {
+            assertTrue(notification.isLinkVisited());
+            LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
+            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+        }
+    }
+
+}
