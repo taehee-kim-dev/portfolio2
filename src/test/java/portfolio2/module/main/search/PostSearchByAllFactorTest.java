@@ -1,5 +1,6 @@
 package portfolio2.module.main.search;
 
+import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
@@ -18,8 +18,11 @@ import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.main.service.MainService;
+import portfolio2.module.notification.Notification;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
+import portfolio2.module.post.dto.PostNewPostRequestDto;
+import portfolio2.module.post.service.PostService;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
@@ -42,7 +45,7 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 
 
 @MockMvcTest
-public class PostSearchTest  extends ContainerBaseTest {
+public class PostSearchByAllFactorTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -68,15 +71,14 @@ public class PostSearchTest  extends ContainerBaseTest {
     @Autowired
     private MainService mainService;
 
-    private final String KEY_WORD_TO_SEARCH_3 = "testTest";
+    @Autowired
+    private PostService postService;
 
-    private final LocalDateTime STANDARD_TIME = LocalDateTime.now();
+    private final String KEY_WORD_TO_SEARCH_39 = "testKeyword";
 
-    private Long post1Id;
-    private Long post2Id;
-    private Long post3Id;
-    private Long post4Id;
-    private Long post5Id;
+    PageRequest page0 = PageRequest.of(0, 15, Sort.Direction.DESC, "firstWrittenDateTime");
+    PageRequest page1 = PageRequest.of(1, 15, Sort.Direction.DESC, "firstWrittenDateTime");
+    PageRequest page2 = PageRequest.of(2, 15, Sort.Direction.DESC, "firstWrittenDateTime");
 
     @AfterEach
     void afterEach(){
@@ -89,60 +91,55 @@ public class PostSearchTest  extends ContainerBaseTest {
     void beforeEach(){
         Account account2 = signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
 
-        Post post1 = new Post();
-        post1.setAuthor(account2);
-        post1.setTitle(KEY_WORD_TO_SEARCH_3);
-        post1.setContent("blahBlah1");
-        post1.setFirstWrittenDateTime(STANDARD_TIME.minusMinutes(100));
-        post1.setLastModifiedDateTime(STANDARD_TIME.minusMinutes(100));
-        post1Id = postRepository.save(post1).getId();
+        // 제목에 키워드 포함 13개의 글
+        for(long i = 13; i >= 1; i--){
+            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
 
-        Post post2 = new Post();
-        post2.setAuthor(account2);
-        post2.setTitle("asfewf");
-        post2.setContent("testtEst");
-        post2.setFirstWrittenDateTime(STANDARD_TIME.minusMinutes(80));
-        post2.setLastModifiedDateTime(STANDARD_TIME.minusMinutes(80));
-        post2Id = postRepository.save(post2).getId();
+            String randomValueForTitle = RandomString.make(5);
+            postNewPostRequestDto.setTitle(KEY_WORD_TO_SEARCH_39 + randomValueForTitle);
 
-        Post post3 = new Post();
-        post3.setAuthor(account2);
-        post3.setTitle("zvzsfrvb");
-        post3.setContent("wvSWV");
-        post3.setFirstWrittenDateTime(STANDARD_TIME.minusMinutes(70));
-        post3.setLastModifiedDateTime(STANDARD_TIME.minusMinutes(70));
-        Tag tagForPost3 = new Tag();
-        tagForPost3.setTitle("TestteST");
-        post3.getCurrentTag().add(tagRepository.save(tagForPost3));
-        post3Id = postRepository.save(post3).getId();
+            postNewPostRequestDto.setContent("Test content not contains keyword");
+            postNewPostRequestDto.setTagTitleOnPost("Tag1" + ',' + "Tag2");
 
-        Post post4 = new Post();
-        post4.setAuthor(account2);
-        post4.setTitle("cGMHG");
-        post4.setContent("RHTH");
-        post4.setFirstWrittenDateTime(STANDARD_TIME.minusMinutes(40));
-        post4.setLastModifiedDateTime(STANDARD_TIME.minusMinutes(40));
-        Tag tagForPost4_1 = new Tag();
-        tagForPost4_1.setTitle("Asvfds");
-        Tag tagForPost4_2 = new Tag();
-        tagForPost4_2.setTitle("Assdbf");
-        post4.getCurrentTag().add(tagRepository.save(tagForPost4_1));
-        post4.getCurrentTag().add(tagRepository.save(tagForPost4_2));
-        post4Id = postRepository.save(post4).getId();
+            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+        }
 
-        Post post5 = new Post();
-        post5.setAuthor(account2);
-        post5.setTitle("XVCNM");
-        post5.setContent("ERT");
-        post5.setFirstWrittenDateTime(STANDARD_TIME.minusMinutes(20));
-        post5.setLastModifiedDateTime(STANDARD_TIME.minusMinutes(20));
-        Tag tagForPost5_1 = new Tag();
-        tagForPost5_1.setTitle("abet");
-        Tag tagForPost5_2 = new Tag();
-        tagForPost5_2.setTitle("sergv");
-        post5.getCurrentTag().add(tagRepository.save(tagForPost5_1));
-        post5.getCurrentTag().add(tagRepository.save(tagForPost5_2));
-        post5Id = postRepository.save(post5).getId();
+        // 내용에 키워드 포함 13개의 글
+        for(long i = 13; i >= 1; i--){
+            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
+            postNewPostRequestDto.setTitle("Test title not contains keyword");
+
+            String randomValueForContent = RandomString.make(5);
+            postNewPostRequestDto.setContent(KEY_WORD_TO_SEARCH_39 + randomValueForContent);
+
+            postNewPostRequestDto.setTagTitleOnPost("Tag3" + ',' + "Tag4");
+
+            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+        }
+
+        // 태그에 키워드 포함 13개의 글
+        for(long i = 13; i >= 1; i--){
+            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
+            postNewPostRequestDto.setTitle("Test title not contains keyword");
+            postNewPostRequestDto.setContent("Test content not contains keyword");
+
+            String randomValueForTag1 = RandomString.make(3);
+            String randomValueForTag2 = RandomString.make(3);
+            postNewPostRequestDto.setTagTitleOnPost(KEY_WORD_TO_SEARCH_39 + randomValueForTag1
+                    + ',' + KEY_WORD_TO_SEARCH_39 + randomValueForTag2);
+
+            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+        }
+
+        // 어느 키워드도 포함되지 않는 13개의 글
+        for(long i = 13; i >= 1; i--){
+            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
+            postNewPostRequestDto.setTitle("Test title not contains keyword");
+            postNewPostRequestDto.setContent("Test content not contains keyword");
+            postNewPostRequestDto.setTagTitleOnPost("Tag5" + ',' + "Tag6");
+
+            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+        }
 
         logInAndOutProcessForTest.logOut();
     }
@@ -153,7 +150,7 @@ public class PostSearchTest  extends ContainerBaseTest {
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
         mockMvc.perform(get("/search/post")
-                        .param("keyword", KEY_WORD_TO_SEARCH_3))
+                        .param("keyword", KEY_WORD_TO_SEARCH_39))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
@@ -186,7 +183,7 @@ public class PostSearchTest  extends ContainerBaseTest {
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
         mockMvc.perform(get("/search/post")
-                .param("keyword", KEY_WORD_TO_SEARCH_3))
+                .param("keyword", KEY_WORD_TO_SEARCH_39))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
@@ -213,30 +210,76 @@ public class PostSearchTest  extends ContainerBaseTest {
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
-    @DisplayName("Post검색 - 존재하는 키워드로 검색 - Service단")
+    @DisplayName("Post검색 - 존재하는 키워드로 검색 - 39개의 결과 - Service단")
     @Test
     void searchPostWithKeywordService() throws Exception{
-        assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
-        Pageable pageable = PageRequest.of(0, 15, Sort.Direction.DESC, "firstWrittenDateTime");
-        Page<Post> postPage = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_3, pageable);
-        assertEquals(3, postPage.getTotalElements());
-        Post postPage3 = postPage.getContent().get(0);
-        Post postPage2 = postPage.getContent().get(1);
-        Post postPage1 = postPage.getContent().get(2);
-        assertEquals(post3Id, postPage3.getId());
-        assertEquals(post2Id, postPage2.getId());
-        assertEquals(post1Id, postPage1.getId());
-        assertTrue(postPage2.getFirstWrittenDateTime().isBefore(postPage3.getFirstWrittenDateTime()));
-        assertTrue(postPage1.getFirstWrittenDateTime().isBefore(postPage2.getFirstWrittenDateTime()));
+        Page<Post> page0Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page0);
+        Page<Post> page1Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page1);
+        Page<Post> page2Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page2);
+
+        assertEquals(39L, page0Elements.getTotalElements());
+
+        List<Post> page0List = page0Elements.getContent();
+        assertEquals(15, page0List.size());
+
+        List<Post> page1List = page1Elements.getContent();
+        assertEquals(15, page1List.size());
+
+        List<Post> page2List = page2Elements.getContent();
+        assertEquals(9, page2List.size());
+
+        assertFalse(page2Elements.hasNext());
+
+        LocalDateTime timeOfBeforePost = LocalDateTime.MAX;
+
+        for (Post post : page0List) {
+            assertTrue(isPostHasKeyword(post, KEY_WORD_TO_SEARCH_39));
+            LocalDateTime firstWrittenDateTimeOfCurrentPost = post.getFirstWrittenDateTime();
+            assertTrue(timeOfBeforePost.isAfter(firstWrittenDateTimeOfCurrentPost));
+            timeOfBeforePost = firstWrittenDateTimeOfCurrentPost;
+        }
+
+        for (Post post : page1List) {
+            assertTrue(isPostHasKeyword(post, KEY_WORD_TO_SEARCH_39));
+            LocalDateTime firstWrittenDateTimeOfCurrentPost = post.getFirstWrittenDateTime();
+            assertTrue(timeOfBeforePost.isAfter(firstWrittenDateTimeOfCurrentPost));
+            timeOfBeforePost = firstWrittenDateTimeOfCurrentPost;
+        }
+
+        for (Post post : page2List) {
+            assertTrue(isPostHasKeyword(post, KEY_WORD_TO_SEARCH_39));
+            LocalDateTime firstWrittenDateTimeOfCurrentPost = post.getFirstWrittenDateTime();
+            assertTrue(timeOfBeforePost.isAfter(firstWrittenDateTimeOfCurrentPost));
+            timeOfBeforePost = firstWrittenDateTimeOfCurrentPost;
+        }
+    }
+
+    private boolean isPostHasKeyword(Post post, String keyword) {
+        return post.getTitle().contains(keyword)
+                || post.getContent().contains(keyword)
+                || isCurrentTagTitleOfPostHasKeyword(post, keyword);
+    }
+
+    private boolean isCurrentTagTitleOfPostHasKeyword(Post post, String keyword) {
+        for (Tag tag : post.getCurrentTag()){
+            if(tag.getTitle().contains(keyword))
+                return true;
+        }
+        return false;
     }
 
     @DisplayName("Post검색 - 존재하지 않는 키워드로 검색 - Service단")
     @Test
     void searchPostWithNotKeywordService() throws Exception{
-        signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
-        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
-        Pageable pageable = PageRequest.of(0, 15, Sort.Direction.DESC, "firstWrittenDateTime");
-        Page<Post> postPage = mainService.findPostByKeyword("xfnfhn", pageable);
-        assertTrue(postPage.isEmpty());
+        String notKeyWord = "notKeyword";
+        Page<Post> page0Elements = mainService.findPostByKeyword(notKeyWord, page0);
+
+        assertEquals(0L, page0Elements.getTotalElements());
+
+        List<Post> page0List = page0Elements.getContent();
+        assertEquals(0, page0List.size());
+        assertTrue(page0Elements.isEmpty());
+
+        assertFalse(page0Elements.hasNext());
     }
 }

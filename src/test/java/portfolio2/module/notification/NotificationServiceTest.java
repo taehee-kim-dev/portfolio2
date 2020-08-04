@@ -57,8 +57,6 @@ public class NotificationServiceTest extends ContainerBaseTest {
         accountRepository.deleteAll();
     }
 
-    List<Long> notificationIdList = new ArrayList<>();
-
     PageRequest page0 = PageRequest.of(0, 3, Sort.Direction.DESC, "createdDateTime");
     PageRequest page1 = PageRequest.of(1, 3, Sort.Direction.DESC, "createdDateTime");
     PageRequest page2 = PageRequest.of(2, 3, Sort.Direction.DESC, "createdDateTime");
@@ -77,7 +75,7 @@ public class NotificationServiceTest extends ContainerBaseTest {
             notification.setLink("test-link");
             notification.setLinkVisited(false);
             notification.setCreatedDateTime(LocalDateTime.now().minusHours(10L + i));
-            notificationIdList.add(notificationRepository.save(notification).getId());
+            notificationRepository.save(notification);
         }
         for (long i = 5; i > 0; i--){
             String randomValue = RandomString.make(5);
@@ -87,7 +85,7 @@ public class NotificationServiceTest extends ContainerBaseTest {
             notification.setLink("test-link");
             notification.setLinkVisited(true);
             notification.setCreatedDateTime(LocalDateTime.now().minusHours(i));
-            notificationIdList.add(notificationRepository.save(notification).getId());
+            notificationRepository.save(notification);
         }
     }
 
@@ -112,30 +110,32 @@ public class NotificationServiceTest extends ContainerBaseTest {
         List<Notification> page3List = page3Elements.getContent();
         assertEquals(1, page3List.size());
 
-        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+        assertFalse(page3Elements.hasNext());
+
+        LocalDateTime timeOfBeforeNotification = LocalDateTime.MAX;
 
         for (Notification notification : page0List) {
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
 
         for (Notification notification : page1List) {
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
 
         for (Notification notification : page2List) {
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
 
         for (Notification notification : page3List) {
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
     }
 
@@ -145,7 +145,6 @@ public class NotificationServiceTest extends ContainerBaseTest {
     void linkUnvisitedNotificationDateTimeDescTest(){
         Page<Notification> page0Elements = notificationService.getLinkUnvisitedNotification(account, page0);
         Page<Notification> page1Elements = notificationService.getLinkUnvisitedNotification(account, page1);
-        Page<Notification> page2Elements = notificationService.getLinkUnvisitedNotification(account, page2);
 
         assertEquals(5L, page0Elements.getTotalElements());
 
@@ -155,23 +154,22 @@ public class NotificationServiceTest extends ContainerBaseTest {
         List<Notification> page1List = page1Elements.getContent();
         assertEquals(2, page1List.size());
 
-        List<Notification> page2List = page2Elements.getContent();
-        assertTrue(page2List.isEmpty());
+        assertFalse(page1Elements.hasNext());
 
-        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+        LocalDateTime timeOfBeforeNotification = LocalDateTime.MAX;
 
         for (Notification notification : page0List) {
             assertFalse(notification.isLinkVisited());
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
 
         for (Notification notification : page1List) {
             assertFalse(notification.isLinkVisited());
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
     }
 
@@ -181,7 +179,6 @@ public class NotificationServiceTest extends ContainerBaseTest {
     void linkVisitedNotificationDateTimeDescTest(){
         Page<Notification> page0Elements = notificationService.getLinkVisitedNotification(account, page0);
         Page<Notification> page1Elements = notificationService.getLinkVisitedNotification(account, page1);
-        Page<Notification> page2Elements = notificationService.getLinkVisitedNotification(account, page2);
 
         assertEquals(5L, page0Elements.getTotalElements());
 
@@ -191,23 +188,22 @@ public class NotificationServiceTest extends ContainerBaseTest {
         List<Notification> page1List = page1Elements.getContent();
         assertEquals(2, page1List.size());
 
-        List<Notification> page2List = page2Elements.getContent();
-        assertTrue(page2List.isEmpty());
+        assertFalse(page1Elements.hasNext());
 
-        LocalDateTime timeOfBeforeContent = LocalDateTime.MAX;
+        LocalDateTime timeOfBeforeNotification = LocalDateTime.MAX;
 
         for (Notification notification : page0List) {
             assertTrue(notification.isLinkVisited());
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
 
         for (Notification notification : page1List) {
             assertTrue(notification.isLinkVisited());
             LocalDateTime createdDateTimeOfCurrentNotification = notification.getCreatedDateTime();
-            assertTrue(timeOfBeforeContent.isAfter(createdDateTimeOfCurrentNotification));
-            timeOfBeforeContent = createdDateTimeOfCurrentNotification;
+            assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
+            timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
     }
 

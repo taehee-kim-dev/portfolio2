@@ -108,7 +108,7 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(ALL_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("allNotification"))
+                .andExpect(model().attributeExists("allNotificationPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ALL_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -129,7 +129,7 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(LINK_UNVISITED_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("linkUnvisitedNotification"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -143,7 +143,7 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(LINK_VISITED_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("linkVisitedNotification"))
+                .andExpect(model().attributeExists("linkVisitedNotificationPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
