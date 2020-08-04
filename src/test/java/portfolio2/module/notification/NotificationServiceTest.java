@@ -125,6 +125,7 @@ public class NotificationServiceTest extends ContainerBaseTest {
                 = notificationRepository.save(fourthNotificationForAccount2).getId();
     }
 
+    // TODO : pageable 적용
     @DisplayName("모든 알림 - 날짜 순서대로 가져오는지")
     @Test
     void allNotificationDateTimeDescTest(){
@@ -144,6 +145,7 @@ public class NotificationServiceTest extends ContainerBaseTest {
         assertTrue(firstNotification.getCreatedDateTime().isBefore(secondNotification.getCreatedDateTime()));
     }
 
+    // TODO : pageable 적용
     @DisplayName("링크 방문하지 않은 알림 - 날짜 순서대로 가져오는지")
     @Test
     void linkUnvisitedNotificationDateTimeDescTest(){
@@ -166,6 +168,7 @@ public class NotificationServiceTest extends ContainerBaseTest {
         assertTrue(firstNotification.getCreatedDateTime().isBefore(thirdNotification.getCreatedDateTime()));
     }
 
+    // TODO : pageable 적용
     @DisplayName("링크 방문한 알림 - 날짜 순서대로 가져오는지")
     @Test
     void linkVisitedNotificationDateTimeDescTest(){

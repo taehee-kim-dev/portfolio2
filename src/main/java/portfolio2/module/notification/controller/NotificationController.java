@@ -34,7 +34,7 @@ public class NotificationController {
         webDataBinder.addValidators(notificationDeleteRequestDtoValidator);
     }
 
-    @GetMapping(ALL_NOTIFICATION_LIST_URL)
+    @GetMapping(ALL_NOTIFICATION_LIST_URL) // TODO : pageable 적용
     public String showALLNotificationList(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         List<Notification> allNotification = notificationService.ringBellCheck(sessionAccount);
@@ -42,7 +42,7 @@ public class NotificationController {
         return ALL_NOTIFICATION_LIST_VIEW_NAME;
     }
 
-    @GetMapping(LINK_UNVISITED_NOTIFICATION_LIST_URL)
+    @GetMapping(LINK_UNVISITED_NOTIFICATION_LIST_URL) // TODO : pageable 적용
     public String showLinkUnvisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         List<Notification> linkUnvisitedNotification = notificationService.getLinkUnvisitedNotification(sessionAccount);
@@ -50,7 +50,7 @@ public class NotificationController {
         return LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
 
-    @GetMapping(LINK_VISITED_NOTIFICATION_LIST_URL)
+    @GetMapping(LINK_VISITED_NOTIFICATION_LIST_URL) // TODO : pageable 적용
     public String showLinkVisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         List<Notification> linkVisitedNotification = notificationService.getLinkVisitedNotification(sessionAccount);
