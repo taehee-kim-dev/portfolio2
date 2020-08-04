@@ -1,10 +1,11 @@
 package portfolio2.module.notification.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
-import portfolio2.module.account.AccountRepository;
 import portfolio2.module.notification.Notification;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
@@ -18,26 +19,27 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public List<Notification> ringBellCheck(Account sessionAccount) {
-        List<Notification> allNotification = notificationRepository.findByAccountOrderByCreatedDateTimeDesc(sessionAccount);
-        allNotification.forEach(notification -> notification.setRingBellChecked(true));
-        return allNotification;
+    public Page<Notification> ringBellCheck(Account sessionAccount, Pageable pageable) {
+        Page<Notification> allNotificationPage = notificationRepository.findByAccount(sessionAccount, pageable);
+        allNotificationPage.forEach(notification -> notification.setRingBellChecked(true));
+        return allNotificationPage;
     }
 
     public void linkVisitCheck(Notification notification) {
         notification.setLinkVisited(true);
     }
 
-    public List<Notification> getLinkUnvisitedNotification(Account sessionAccount) {
-        return notificationRepository.findByAccountAndLinkVisitedOrderByCreatedDateTimeDesc(sessionAccount, false);
+    public Page<Notification> getLinkUnvisitedNotification(Account sessionAccount, Pageable pageable) {
+        return notificationRepository.findWithPageableByAccountAndLinkVisited(sessionAccount, false, pageable);
     }
 
-    public List<Notification> getLinkVisitedNotification(Account sessionAccount) {
-        return notificationRepository.findByAccountAndLinkVisitedOrderByCreatedDateTimeDesc(sessionAccount, true);
+    public Page<Notification> getLinkVisitedNotification(Account sessionAccount, Pageable pageable) {
+        return notificationRepository.findWithPageableByAccountAndLinkVisited(sessionAccount, true, pageable);
     }
 
     public void changeAllToLinkVisited(Account sessionAccount) {
-        List<Notification> linkUnvisitedNotification = this.getLinkUnvisitedNotification(sessionAccount);
+        List<Notification> linkUnvisitedNotification
+                = notificationRepository.findNotWithPageableByAccountAndLinkVisited(sessionAccount, false);
         linkUnvisitedNotification.forEach(notification -> notification.setLinkVisited(true));
     }
 

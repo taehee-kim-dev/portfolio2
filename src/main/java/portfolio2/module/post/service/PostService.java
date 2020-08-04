@@ -70,13 +70,14 @@ public class PostService {
     }
 
 //    public void generateTestPostData(Account sessionAccount) {
-//        for (int i = 1; i <= 18; i++){
+//        for (int i = 1; i <= 34; i++){
 //            String randomValue = RandomString.make(5);
 //            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
 //            postNewPostRequestDto.setTitle("테스트 글 " + randomValue);
 //            postNewPostRequestDto.setContent("테스트용 글 입니다.");
 //            postNewPostRequestDto.setTagTitleOnPost("1,2,3");
-//            this.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);
+//            Post newPost = this.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);
+//            this.sendWebAndEmailNotificationOfNewPost(newPost);
 //        }
 //    }
 }

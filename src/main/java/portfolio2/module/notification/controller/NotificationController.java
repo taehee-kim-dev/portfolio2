@@ -1,6 +1,10 @@
 package portfolio2.module.notification.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,27 +38,33 @@ public class NotificationController {
         webDataBinder.addValidators(notificationDeleteRequestDtoValidator);
     }
 
-    @GetMapping(ALL_NOTIFICATION_LIST_URL) // TODO : pageable 적용
-    public String showALLNotificationList(@SessionAccount Account sessionAccount, Model model){
+    @GetMapping(ALL_NOTIFICATION_LIST_URL)
+    public String showALLNotificationList(@SessionAccount Account sessionAccount,
+                                          @PageableDefault(size = 3, page = 0, sort = "createdDateTime", direction = Sort.Direction.DESC)
+                                                  Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        List<Notification> allNotification = notificationService.ringBellCheck(sessionAccount);
-        model.addAttribute("allNotification", allNotification);
+        Page<Notification> allNotificationPage = notificationService.ringBellCheck(sessionAccount, pageable);
+        model.addAttribute("allNotificationPage", allNotificationPage);
         return ALL_NOTIFICATION_LIST_VIEW_NAME;
     }
 
-    @GetMapping(LINK_UNVISITED_NOTIFICATION_LIST_URL) // TODO : pageable 적용
-    public String showLinkUnvisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
+    @GetMapping(LINK_UNVISITED_NOTIFICATION_LIST_URL)
+    public String showLinkUnvisitedNotificationList(@SessionAccount Account sessionAccount,
+                                                    @PageableDefault(size = 3, page = 0, sort = "createdDateTime", direction = Sort.Direction.DESC)
+                                                                Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        List<Notification> linkUnvisitedNotification = notificationService.getLinkUnvisitedNotification(sessionAccount);
-        model.addAttribute("linkUnvisitedNotification", linkUnvisitedNotification);
+        Page<Notification> linkUnvisitedNotificationPage = notificationService.getLinkUnvisitedNotification(sessionAccount, pageable);
+        model.addAttribute("linkUnvisitedNotificationPage", linkUnvisitedNotificationPage);
         return LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
 
-    @GetMapping(LINK_VISITED_NOTIFICATION_LIST_URL) // TODO : pageable 적용
-    public String showLinkVisitedNotificationList(@SessionAccount Account sessionAccount, Model model){
+    @GetMapping(LINK_VISITED_NOTIFICATION_LIST_URL)
+    public String showLinkVisitedNotificationList(@SessionAccount Account sessionAccount,
+                                                  @PageableDefault(size = 3, page = 0, sort = "createdDateTime", direction = Sort.Direction.DESC)
+                                                              Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-        List<Notification> linkVisitedNotification = notificationService.getLinkVisitedNotification(sessionAccount);
-        model.addAttribute("linkVisitedNotification", linkVisitedNotification);
+        Page<Notification> linkVisitedNotificationPage = notificationService.getLinkVisitedNotification(sessionAccount, pageable);
+        model.addAttribute("linkVisitedNotificationPage", linkVisitedNotificationPage);
         return LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
 

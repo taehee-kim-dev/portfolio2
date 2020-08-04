@@ -196,13 +196,13 @@
 
         <div id="linkUnvisitedNotificationListOuterDiv" class="col-lg-8">
 
-            <div th:if="${linkUnvisitedNotification.isEmpty()}" class="card">
+            <div th:if="${linkUnvisitedNotificationPage.getTotalElements() == 0}" class="card">
                 <div class="card-body text-muted text-center">
                     안읽은 알림이 없습니다.
                 </div>
             </div>
 
-            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${linkUnvisitedNotification}"
+            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${linkUnvisitedNotificationPage.getContent()}"
                  class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
                      class="card-header" style="position: relative">
