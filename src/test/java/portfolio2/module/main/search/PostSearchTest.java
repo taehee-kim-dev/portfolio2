@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -153,7 +157,7 @@ public class PostSearchTest  extends ContainerBaseTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
-                .andExpect(model().attributeExists("searchedPost"))
+                .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("search"))
                 .andExpect(unauthenticated());
@@ -169,7 +173,7 @@ public class PostSearchTest  extends ContainerBaseTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
-                .andExpect(model().attributeExists("searchedPost"))
+                .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("search"))
                 .andExpect(unauthenticated());
@@ -186,7 +190,7 @@ public class PostSearchTest  extends ContainerBaseTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
-                .andExpect(model().attributeExists("searchedPost"))
+                .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("search"))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -203,7 +207,7 @@ public class PostSearchTest  extends ContainerBaseTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
-                .andExpect(model().attributeExists("searchedPost"))
+                .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("search"))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -213,17 +217,17 @@ public class PostSearchTest  extends ContainerBaseTest {
     @Test
     void searchPostWithKeywordService() throws Exception{
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
-
-        List<Post> searchedPost = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_3, pageable);
-        assertEquals(3, searchedPost.size());
-        Post searchedPost3 = searchedPost.get(0);
-        Post searchedPost2 = searchedPost.get(1);
-        Post searchedPost1 = searchedPost.get(2);
-        assertEquals(post3Id, searchedPost3.getId());
-        assertEquals(post2Id, searchedPost2.getId());
-        assertEquals(post1Id, searchedPost1.getId());
-        assertTrue(searchedPost2.getFirstWrittenDateTime().isBefore(searchedPost3.getFirstWrittenDateTime()));
-        assertTrue(searchedPost1.getFirstWrittenDateTime().isBefore(searchedPost2.getFirstWrittenDateTime()));
+        Pageable pageable = PageRequest.of(0, 15, Sort.Direction.DESC, "firstWrittenDateTime");
+        Page<Post> postPage = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_3, pageable);
+        assertEquals(3, postPage.getTotalElements());
+        Post postPage3 = postPage.getContent().get(0);
+        Post postPage2 = postPage.getContent().get(1);
+        Post postPage1 = postPage.getContent().get(2);
+        assertEquals(post3Id, postPage3.getId());
+        assertEquals(post2Id, postPage2.getId());
+        assertEquals(post1Id, postPage1.getId());
+        assertTrue(postPage2.getFirstWrittenDateTime().isBefore(postPage3.getFirstWrittenDateTime()));
+        assertTrue(postPage1.getFirstWrittenDateTime().isBefore(postPage2.getFirstWrittenDateTime()));
     }
 
     @DisplayName("Post검색 - 존재하지 않는 키워드로 검색 - Service단")
@@ -231,8 +235,8 @@ public class PostSearchTest  extends ContainerBaseTest {
     void searchPostWithNotKeywordService() throws Exception{
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
-
-        List<Post> searchedPost = mainService.findPostByKeyword("xfnfhn", pageable);
-        assertTrue(searchedPost.isEmpty());
+        Pageable pageable = PageRequest.of(0, 15, Sort.Direction.DESC, "firstWrittenDateTime");
+        Page<Post> postPage = mainService.findPostByKeyword("xfnfhn", pageable);
+        assertTrue(postPage.isEmpty());
     }
 }
