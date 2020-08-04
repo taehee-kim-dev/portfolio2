@@ -1,8 +1,5 @@
 package portfolio2.module.main.search;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,11 +14,8 @@ import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.main.service.MainService;
-import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
-import portfolio2.module.post.dto.PostNewPostRequestDto;
-import portfolio2.module.post.service.PostService;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
@@ -220,7 +214,7 @@ public class PostSearchTest  extends ContainerBaseTest {
     void searchPostWithKeywordService() throws Exception{
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        List<Post> searchedPost = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_3);
+        List<Post> searchedPost = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_3, pageable);
         assertEquals(3, searchedPost.size());
         Post searchedPost3 = searchedPost.get(0);
         Post searchedPost2 = searchedPost.get(1);
@@ -238,7 +232,7 @@ public class PostSearchTest  extends ContainerBaseTest {
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        List<Post> searchedPost = mainService.findPostByKeyword("xfnfhn");
+        List<Post> searchedPost = mainService.findPostByKeyword("xfnfhn", pageable);
         assertTrue(searchedPost.isEmpty());
     }
 }

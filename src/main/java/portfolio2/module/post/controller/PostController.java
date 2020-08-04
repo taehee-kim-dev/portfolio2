@@ -170,4 +170,10 @@ public class PostController {
         postService.deletePost(postDeleteRequestDto);
         return REDIRECT + HOME_URL;
     }
+
+//    @GetMapping("/post/test-data")
+//    public String generateTestData(@SessionAccount Account sessionAccount){
+//        postService.generateTestPostData(sessionAccount);
+//        return REDIRECT + HOME_URL;
+//    }
 }

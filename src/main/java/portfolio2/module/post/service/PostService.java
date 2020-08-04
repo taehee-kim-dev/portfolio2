@@ -1,9 +1,11 @@
 package portfolio2.module.post.service;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.controller.PostErrorType;
@@ -11,6 +13,8 @@ import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.process.PostProcess;
+
+import java.time.LocalDateTime;
 
 @Transactional
 @RequiredArgsConstructor
@@ -64,4 +68,15 @@ public class PostService {
     public void deletePost(PostDeleteRequestDto postDeleteRequestDto) {
         postRepository.deleteById(postDeleteRequestDto.getPostIdToDelete());
     }
+
+//    public void generateTestPostData(Account sessionAccount) {
+//        for (int i = 1; i <= 18; i++){
+//            String randomValue = RandomString.make(5);
+//            PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
+//            postNewPostRequestDto.setTitle("테스트 글 " + randomValue);
+//            postNewPostRequestDto.setContent("테스트용 글 입니다.");
+//            postNewPostRequestDto.setTagTitleOnPost("1,2,3");
+//            this.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);
+//        }
+//    }
 }
