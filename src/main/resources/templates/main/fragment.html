@@ -11,7 +11,7 @@
 
     <!-- Common CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/library/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="/library/bootstrap/bootstrap.min.css"/>
     <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/common-nav-bar.css">
     <title>TH</title>
@@ -21,9 +21,11 @@
     <nav class="navbar navbar-light bg-light align-items-center">
         <a id="mainNavBarBrandTitle" class="navbar-brand order-sm-1 order-1" th:href="@{/}">TH</a>
 
-        <form id="mainSearchForm" class="form-inline my-0 order-sm-2 order-5" method="get" th:action="@{/search/post}" onsubmit="return search()">
+        <form id="mainSearchForm" class="form-inline my-0 order-sm-2 order-5" method="get" th:action="@{/search/post}"
+              onsubmit="return search()">
             <div class="input-group">
-                <input id="mainSearchInput" name="keyword" type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="mainSearchButton">
+                <input id="mainSearchInput" name="keyword" type="search" class="form-control" placeholder="검색"
+                       aria-label="Search" aria-describedby="mainSearchButton">
                 <div class="input-group-append">
                     <button class="btn btn-light" type="submit" id="mainSearchButton">
                         <i id="mainSearchIcon" class="fas fa-search fa-lg"></i>
@@ -32,15 +34,21 @@
             </div>
         </form>
 
-        <a th:href="@{/post-new-post}" sec:authorize="isAuthenticated()" id="postNewPostLink" class="order-sm-3 order-2">
+        <a th:href="@{/post-new-post}" sec:authorize="isAuthenticated()" id="postNewPostLink"
+           class="order-sm-3 order-2">
             <i class="fas fa-pencil-alt fa-lg text-dark" style="margin:0;padding: 0"></i>
         </a>
 
-        <a th:href="@{/notification/list/all}" sec:authorize="isAuthenticated()" id="notificationBellLink" class="order-sm-4 order-3">
-            <i th:if="${ringBellUncheckedCount == 0}" id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark" style="padding:0"></i>
-            <div id="notEmptyNotificationBellIconDiv" th:if="${ringBellUncheckedCount > 0}" style="display: inline-block">
-                <i id="notEmptyNotificationBellIcon" class="fas fa-bell fa-lg text-danger" style="margin:0;padding:0"></i>
-                <span class="badge badge-pill badge-danger" style="z-index: 2;position: relative" th:text="${ringBellUncheckedCount}">30</span>
+        <a th:href="@{/notification/list/all}" sec:authorize="isAuthenticated()" id="notificationBellLink"
+           class="order-sm-4 order-3">
+            <i th:if="${ringBellUncheckedCount == 0}" id="emptyNotificationBellIcon" class="far fa-bell fa-lg text-dark"
+               style="padding:0"></i>
+            <div id="notEmptyNotificationBellIconDiv" th:if="${ringBellUncheckedCount > 0}"
+                 style="display: inline-block">
+                <i id="notEmptyNotificationBellIcon" class="fas fa-bell fa-lg text-danger"
+                   style="margin:0;padding:0"></i>
+                <span class="badge badge-pill badge-danger" style="z-index: 2;position: relative"
+                      th:text="${ringBellUncheckedCount}">30</span>
             </div>
         </a>
 
@@ -50,17 +58,20 @@
            id="mainSignUpLink" class="nav-link mainLogInAndSignUpLink order-sm-4 order-3" th:href="@{/sign-up}">회원가입</a>
 
 
-
         <li id="userIconDropDown" class="nav-item dropdown order-sm-5 order-4" sec:authorize="isAuthenticated()">
-            <a class="nav-link dropdown-toggle p-0" href="#" id="userIconImage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+            <a class="nav-link dropdown-toggle p-0" href="#" id="userIconImage" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <svg th:if="${#strings.isEmpty(sessionAccount?.profileImage)}"
+                     th:data-jdenticon-value="${#authentication.name}"
                      width="100%" height="100%" class="rounded border bg-light"></svg>
                 <img th:if="${!#strings.isEmpty(sessionAccount?.profileImage)}" th:src="${sessionAccount.profileImage}"
                      width="100%" height="100%" class="rounded border"/>
             </a>
-            <div id="userDropdownMenu" class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="userIconImage">
-                <span id="userNicknameOfUserIcon" class="dropdown-item-text" th:text="${sessionAccount.nickname}"></span>
-                <span id="userIdOfUserIcon" class="dropdown-item-text"  sec:authentication="name"></span>
+            <div id="userDropdownMenu" class="dropdown-menu dropdown-menu-right text-center"
+                 aria-labelledby="userIconImage">
+                <span id="userNicknameOfUserIcon" class="dropdown-item-text"
+                      th:text="${sessionAccount.nickname}"></span>
+                <span id="userIdOfUserIcon" class="dropdown-item-text" sec:authentication="name"></span>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" th:href="@{'/account/profile-view/' + ${#authentication.name}}">프로필</a>
                 <a class="dropdown-item" th:href="@{/account/setting/profile}">설정</a>
@@ -71,31 +82,51 @@
             </div>
         </li>
     </nav>
-
     <!-- Modal -->
-    <div id="non-character-search-error-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">검색 에러</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    한 글자 이상으로 검색해야 합니다.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
-                </div>
-            </div>
-        </div>
+    <div id="non-character-search-error-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="errorAlertModalLabel" aria-hidden="true"
+         th:insert="main/fragment.html :: error-alert-modal-dialog(title='검색 에러', content='한 글자 이상으로 검색해야 합니다.')">
     </div>
 </div>
 
 <footer th:fragment="commonFooter" class="text-center text-muted" style="margin-top: 32px;margin-bottom: 67px;">
     © 2020 Copyright : taehee.kim.dev@gmail.com
 </footer>
+
+<!-- Modal -->
+<div th:fragment="error-alert-modal-dialog(title, content)" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="errorAlertModalLabel" th:text="${title}">검색 에러</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" th:utext="${content}">
+            한 글자 이상으로 검색해야 합니다.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="delete-alert-modal-dialog(title, content)" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel" th:text="${title}">게시글 삭제</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" th:utext="${content}">
+            게시글을 삭제하시겠습니까?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="delete_submit_func()">삭제</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        </div>
+    </div>
+</div>
 
 <th:block th:fragment="commonJavaScript">
     <script src="/library/jquery/jquery-3.5.1.min.js"></script>
@@ -104,10 +135,11 @@
     <script type="application/javascript">
         const regexForSearch = /[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]+/g;
         const searchInput = document.getElementById('mainSearchInput');
-        function search(){
-            if (regexForSearch.test(searchInput.value)){
+
+        function search() {
+            if (regexForSearch.test(searchInput.value)) {
                 return true;
-            }else{
+            } else {
                 $('#non-character-search-error-alert-modal').modal("show");
                 return false;
             }
@@ -116,7 +148,7 @@
 </th:block>
 
 <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
-    $(function() {
+    $(function () {
         var csrfToken = /*[[${_csrf.token}]]*/ null;
         var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
         $(document).ajaxSend(function (e, xhr, options) {
@@ -126,50 +158,59 @@
 </script>
 
 
-<div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu" class="col-lg-2 order-1 list-group text-center p-0">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" th:href="@{/account/setting/profile}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" th:href="@{/account/setting/notification}">알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" th:href="@{/account/setting/tag}">관심 태그</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active"th:href="@{/account/setting/password}">패스워드</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
+<div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu"
+     class="col-lg-2 order-1 list-group text-center p-0">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active"
+       th:href="@{/account/setting/profile}">프로필</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active"
+       th:href="@{/account/setting/notification}">알림</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active"
+       th:href="@{/account/setting/tag}">관심 태그</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active"
+       th:href="@{/account/setting/password}">패스워드</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger"
+       th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
 </div>
 
 <div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="list-group text-center p-0">
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
+       th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">
         전체 알림
         <span class="badge badge-primary badge-pill" th:text="${totalNotificationCount}">4</span>
     </a>
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
+       th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">
         안읽은 알림
         <span class="badge badge-primary badge-pill" th:text="${linkUnvisitedNotificationCount}">16</span>
     </a>
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-dark" th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-dark"
+       th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">
         읽은 알림
         <span class="badge badge-pill badge-dark" th:text="${linkVisitedNotificationCount}">32</span>
     </a>
 </div>
 
-<div th:fragment="date-time">
+<th:block th:fragment="momentjs">
     <script src="/library/momentjs/moment-with-locales.min.js"></script>
     <script type="application/javascript">
         $(function () {
             moment.locale('ko');
-            $(".date-weekday-time").text(function(index, dateTime) {
+            $(".date-weekday-time").text(function (index, dateTime) {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
             });
-            $(".time-before").text(function(index, dateTime) {
+            $(".time-before").text(function (index, dateTime) {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
             });
-            $(".post-first-written-time").text(function(index, dateTime) {
-                if(isToday(dateTime)){
+            $(".post-first-written-time").text(function (index, dateTime) {
+                if (isToday(dateTime)) {
                     return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LT');
-                }else{
+                } else {
                     return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('L');
                 }
             });
         })
 
-        function isToday(dateTime){
+        function isToday(dateTime) {
             const today = new Date();
             const dateToCompare = new Date(dateTime);
             return today.getFullYear() === dateToCompare.getFullYear()
@@ -177,4 +218,4 @@
                 && today.getDate() === dateToCompare.getDate();
         }
     </script>
-</div>
+</th:block>
