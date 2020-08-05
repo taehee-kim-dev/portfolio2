@@ -172,23 +172,153 @@
        th:classappend="${currentMenu == 'account'}? active" th:href="@{/account/setting/account}">계정</a>
 </div>
 
-<div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="list-group text-center p-0">
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
-       th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">
-        전체 알림
-        <span class="badge badge-primary badge-pill" th:text="${totalNotificationCount}">4</span>
-    </a>
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
-       th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">
-        안읽은 알림
-        <span class="badge badge-primary badge-pill" th:text="${linkUnvisitedNotificationCount}">16</span>
-    </a>
-    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-dark"
-       th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">
-        읽은 알림
-        <span class="badge badge-pill badge-dark" th:text="${linkVisitedNotificationCount}">32</span>
-    </a>
-</div>
+
+<th:block th:fragment="notification-list(currentMenu, notificationPage, currentLink, sortDirection)">
+    <h2 id="notificationListTitle" class="text-center">알림</h2>
+
+    <div id="outerBox" class="row justify-content-center mx-auto">
+
+        <div id="menuBox" style="display: inline-block">
+            <div class="list-group text-center p-0">
+                <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
+                   th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">
+                    전체 알림
+                    <span class="badge badge-primary badge-pill" th:text="${totalNotificationCount}">4</span>
+                </a>
+                <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
+                   th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">
+                    안읽은 알림
+                    <span class="badge badge-primary badge-pill" th:text="${linkUnvisitedNotificationCount}">16</span>
+                </a>
+                <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-dark"
+                   th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">
+                    읽은 알림
+                    <span class="badge badge-pill badge-dark" th:text="${linkVisitedNotificationCount}">32</span>
+                </a>
+            </div>
+            <form id="changAllToLinkVisitedForm" th:action="@{/notification/change-all-to-link-visited}" method="post">
+                <input type="hidden" name="currentUrl" th:value="${currentLink}">
+                <button type="submit" class="btn btn-warning formButton">모두 읽음으로 전환</button>
+            </form>
+            <form id="deleteAllLinkVisitedForm" th:action="@{/notification/delete-all-link-visited}" method="post">
+                <input type="hidden" name="currentUrl" th:value="${currentLink}">
+                <button type="submit" class="btn btn-danger formButton">읽은 알림 모두 삭제</button>
+            </form>
+        </div>
+
+        <div id="notificationListOuterDiv" class="col-lg-8">
+
+            <div th:if="${notificationPage.getTotalElements() == 0}" class="card">
+                <div class="card-body text-muted text-center" th:if="${currentMenu == 'all'}">
+                    알림이 없습니다.
+                </div>
+                <div class="card-body text-muted text-center" th:if="${currentMenu == 'link-unvisited'}">
+                    안읽은 알림이 없습니다.
+                </div>
+                <div class="card-body text-muted text-center" th:if="${currentMenu == 'link-visited'}">
+                    읽은 알림이 없습니다.
+                </div>
+            </div>
+
+            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${notificationPage.getContent()}"
+                 class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
+                <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
+                     class="card-header notificationCardHeader" style="position: relative">
+                    관심 태그가 포함된 새로운 글 알림
+                    <div class="notificationDeleteButton"
+                         th:onclick="'javascript:deleteNotification(' + ${notification.id} + ');'">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"
+                     class="card-header">
+                    관심 태그가 추가된 글 알림
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED ||
+                                       notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}"
+                              th:each="tag : ${notification.commonTag}">
+                            <span th:text="${tag.getTitle()}"></span>
+                            <span th:if="${#bools.isFalse(tagStat.last)}">,</span>
+                        </span>
+                    </h5>
+                    <p class="card-text" th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}">
+                        위의 관심 태그가 포함된 새로운 글이 게시되었습니다.
+                    </p>
+                    <p class="card-text" th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).MY_INTEREST_TAG_IS_ADDED_TO_UPDATED_POST}">
+                        위의 관심 태그가 추가된 글이 있습니다.
+                    </p>
+                    <p class="card-text">
+                        아래의 링크를 클릭해 확인해 보세요!
+                    </p>
+                    <a th:href="@{'/notification/link-visit/' + ${notification.id}}" type="button" class="btn btn-light" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
+                        "<span th:text="${notification.title}"></span>"
+                    </a>
+                </div>
+                <div class="card-footer time-before" th:text="${notification.getCreatedDateTime()}" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : 'text-primary'}">
+                    2 days ago
+                </div>
+            </div>
+            <nav th:replace="main/fragment.html :: pagination(${notificationPage}, ${currentLink}, ${sortDirection})"></nav>
+        </div>
+    </div>
+    <script type="application/javascript">
+        function deleteNotification(notificationId) {
+            $.ajax({
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "/notification/delete",
+                data: JSON.stringify({'notificationIdToDelete': notificationId})
+            }).done(function () {
+                $("#notificationCard" + notificationId).fadeOut(300,
+                    function () {
+                        $(this).remove();
+                        window.location.href = document.getElementsByName('currentUrl')[0].value;
+                    }
+                );
+            });
+        }
+    </script>
+</th:block>
+
+
+<nav th:fragment="pagination(page, currentLink, sortDirection)" th:if="${page.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${!page.hasPrevious()}? disabled">
+            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() - 1}}"
+               class="page-link" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <!--
+            (0 ~ 4) / 5 = 0 -> 0 ~ 4 but max = 4
+            (5 ~ 9) / 5 = 1 -> 5 ~ 9 but max = 9
+            (10 ~ 14) / 5 = 2 -> 10 ~ 14 but max = 14
+            (15 ~ 19) / 5 = 3 -> 15 ~ 19 but max = 19
+            (20 ~ 24) / 5 = 4 -> 20 ~ 24 but max = 24
+         -->
+        <li class="page-item" th:classappend="${currentPageNumberIndex == page.getNumber()}? active"
+            th:each="currentPageNumberIndex: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
+
+            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${currentPageNumberIndex}}"
+               class="page-link" href="#" th:text="${currentPageNumberIndex + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${!page.hasNext()}? disabled">
+            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() + 1}}"
+               class="page-link" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
 
 <th:block th:fragment="momentjs">
     <script src="/library/momentjs/moment-with-locales.min.js"></script>
