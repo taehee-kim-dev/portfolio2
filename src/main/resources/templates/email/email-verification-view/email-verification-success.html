@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -154,7 +154,7 @@
 <body>
 <div class="container">
 
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
     <div id="outerBox" class="notification text-center" th:if="${invalidLinkError == null}">
         <h3 id="title">TH 이메일 인증 성공</h3>
@@ -171,7 +171,7 @@
     </div>
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 </body>
 </html>

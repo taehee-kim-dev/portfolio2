@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="main/fragment.html :: commonNav"></div>
+    <div class="my-5 text-center">
+        <h1>TH</h1>
+    </div>
+</div>
+
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+</body>
+</html>

@@ -16,13 +16,11 @@ import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
-import portfolio2.module.post.PostRepository;
 import portfolio2.module.tag.TagRepository;
 
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

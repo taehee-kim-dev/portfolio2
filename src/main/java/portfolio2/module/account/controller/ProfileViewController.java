@@ -12,8 +12,8 @@ import portfolio2.module.account.service.ProfileViewService;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.PROFILE_VIEW_URL;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.PROFILE_VIEW_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 @Controller
 @RequiredArgsConstructor

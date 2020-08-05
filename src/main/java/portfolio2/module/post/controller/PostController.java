@@ -1,7 +1,6 @@
 package portfolio2.module.post.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -22,9 +21,8 @@ import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
 @RequiredArgsConstructor
@@ -170,10 +168,4 @@ public class PostController {
         postService.deletePost(postDeleteRequestDto);
         return REDIRECT + HOME_URL;
     }
-
-//    @GetMapping("/post/test-data")
-//    public String generateTestData(@SessionAccount Account sessionAccount){
-//        postService.generateTestPostData(sessionAccount);
-//        return REDIRECT + HOME_URL;
-//    }
 }

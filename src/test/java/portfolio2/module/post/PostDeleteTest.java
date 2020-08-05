@@ -14,16 +14,13 @@ import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.CustomPrincipal;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
-import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.PostService;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
 
 /**

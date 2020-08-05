@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -217,7 +217,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
     <h2 id="profileSettingTitle" class="text-center">프로필 수정</h2>
 
     <div id="profileSettingSuccessMessageOuter" th:if="${message}" class="col-md-9 col-sm-11 alert alert-info alert-dismissible fade show mx-auto text-center" role="alert">
@@ -228,7 +228,7 @@
     </div>
     <div id="outerBox" class="row mx-auto">
 
-        <div th:replace="fragment.html :: setting-menu(currentMenu='profile')"></div>
+        <div th:replace="main/fragment.html :: setting-menu(currentMenu='profile')"></div>
 
         <div class="col-lg-6 order-lg-2 order-3">
             <form id="profileSettingForm" class="mx-auto" th:action="@{/account/setting/profile}" th:object="${profileUpdateRequestDto}" method="post" novalidate>
@@ -349,8 +349,8 @@
 
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 <script src="/library/cropper/cropperjs-master/dist/cropper.min.js"></script>
 <script src="/library/cropper/jquery-cropper-master/dist/jquery-cropper.min.js"></script>
 <script type="application/javascript">

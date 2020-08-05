@@ -20,10 +20,8 @@ import portfolio2.module.notification.validator.NotificationDeleteRequestDtoVali
 
 import javax.validation.Valid;
 
-import java.util.List;
-
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
 
 @RequiredArgsConstructor

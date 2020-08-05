@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
         /* 데스크탑*/
@@ -93,12 +93,12 @@
 
 <div class="container">
 
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
         <h2 id="interestTagSettingTitle" class="text-center">관심 태그 설정</h2>
         <div id="outerBox" class="row justify-content-center mx-auto">
 
-            <div th:replace="fragment.html :: setting-menu(currentMenu='tag')"></div>
+            <div th:replace="main/fragment.html :: setting-menu(currentMenu='tag')"></div>
 
             <div id="tagSettingInput" class="col-lg-6 order-2">
                 <div id="interestTagSettingNotice" class="alert alert-info" role="alert">
@@ -115,9 +115,9 @@
 
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
-<script th:replace="fragment.html :: ajax-csrf-header"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script th:replace="main/fragment.html :: ajax-csrf-header"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript">
     $(function () {

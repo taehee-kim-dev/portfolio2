@@ -19,8 +19,8 @@ import javax.validation.Valid;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.FIND_PASSWORD_URL;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.FIND_PASSWORD_VIEW_NAME;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.REDIRECT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
 
 @Controller
 @RequiredArgsConstructor

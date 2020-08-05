@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 @MockMvcTest
 public class AccountNicknameUpdateTest extends ContainerBaseTest {

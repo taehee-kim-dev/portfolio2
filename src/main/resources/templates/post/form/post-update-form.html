@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/summernote/summernote-bs4.min.css" />
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
@@ -59,7 +59,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
     <div class="postTitle">
         <div>
             <h1 id="postTitle" class="text-center">글 수정</h1>
@@ -97,8 +97,8 @@
         </form>
     </div>
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 <script src="/library/summernote/summernote-bs4.min.js"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript">

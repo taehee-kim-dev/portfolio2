@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -178,13 +178,13 @@
 <body>
 
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
     <h2 id="notificationListTitle" class="text-center">알림</h2>
 
     <div id="outerBox" class="row justify-content-center mx-auto">
         <div id="menuBox" style="display: inline-block">
-            <div th:replace="fragment.html :: notification-list (currentMenu='link-visited')"></div>
+            <div th:replace="main/fragment.html :: notification-list (currentMenu='link-visited')"></div>
             <form id="changAllToLinkVisitedForm" th:action="@{/notification/change-all-to-link-visited}" method="post">
                 <input type="hidden" name="currentUrl" th:value="${T(portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification).LINK_VISITED_NOTIFICATION_LIST_URL}">
                 <button type="submit" class="btn btn-warning formButton">모두 읽음으로 전환</button>
@@ -248,10 +248,10 @@
     </div>
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
-<script th:replace="fragment.html :: date-time"></script>
-<script th:replace="fragment.html :: ajax-csrf-header"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script th:replace="main/fragment.html :: date-time"></script>
+<script th:replace="main/fragment.html :: ajax-csrf-header"></script>
 <script type="application/javascript">
     function deleteNotification(notificationId) {
         $.ajax({

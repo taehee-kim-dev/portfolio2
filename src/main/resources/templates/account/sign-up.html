@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         #signUpTitle{
             margin-bottom: 3px;
@@ -62,7 +62,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
     <div>
         <h2 id="signUpTitle" class="text-center">계정 만들기</h2>
@@ -109,7 +109,7 @@
         </div>
     </form>
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 </body>
 </html>

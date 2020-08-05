@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -120,7 +120,7 @@
 <body>
 
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
     <div class="my-5 text-center">
         <p id="searchResultTitle" class="lead mx-auto" th:if="${postPage.getTotalElements() == 0}">
             <span th:text="${keyword}" id="keyword"></span>에 해당하는 글이 없습니다.
@@ -155,8 +155,8 @@
     </div>
 </div>
 
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
-<script th:replace="fragment.html :: date-time"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script th:replace="main/fragment.html :: date-time"></script>
 </body>
 </html>

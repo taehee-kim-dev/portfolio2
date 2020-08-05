@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -224,7 +224,7 @@
 
 <div class="container">
 
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
     <h2 id="accountSettingTitle" class="text-center">계정 정보 변경</h2>
 
@@ -239,7 +239,7 @@
 
     <div id="outerBox" class="row justify-content-center mx-auto">
 
-        <div class="col-lg-2 order-1" th:replace="fragment.html :: setting-menu(currentMenu='account')"></div>
+        <div class="col-lg-2 order-1" th:replace="main/fragment.html :: setting-menu(currentMenu='account')"></div>
 
         <div id="accountSettingForm" class="col-lg-4 order-2">
             <form id="nicknameSettingForm" th:action="@{/account/setting/account/nickname}" th:object="${accountNicknameUpdateRequestDto}" method="post" novalidate>
@@ -303,7 +303,7 @@
 
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 </body>
 </html>

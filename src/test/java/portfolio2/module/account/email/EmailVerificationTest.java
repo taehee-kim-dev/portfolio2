@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 /*
 로그아웃 상태 -> 유효하지 않은 이메일 인증 링크 -> 로그아웃 상태(인증 안됨) -> 유효하지 않은 링크입니다 뷰

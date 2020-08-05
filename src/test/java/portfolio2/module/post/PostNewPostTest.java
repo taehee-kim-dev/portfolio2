@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -12,7 +11,6 @@ import portfolio2.module.account.config.SignUpAndLogInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.notification.NotificationRepository;
-import portfolio2.module.post.service.process.EmailSendingProcessForPost;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
@@ -27,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
 

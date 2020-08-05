@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
     <style>
         /* 데스크탑*/
@@ -148,7 +148,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
         <table id="postViewTable" class="table table-bordered mx-auto" style="table-layout: auto; word-break: break-all">
             <tbody>
@@ -219,10 +219,10 @@
     </div>
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 <script src="/library/tagify/dist/tagify.min.js"></script>
-<script th:replace="fragment.html :: date-time"></script>
+<script th:replace="main/fragment.html :: date-time"></script>
 <script type="application/javascript">
     const input = document.querySelector('input[name=tag]');
     tagify = new Tagify(input);

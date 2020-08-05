@@ -3,7 +3,6 @@ package portfolio2.module.account.controller;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,9 +19,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.ERROR_VIEW_NAME;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.ERROR_VIEW_NAME;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 @RequiredArgsConstructor
 @Controller

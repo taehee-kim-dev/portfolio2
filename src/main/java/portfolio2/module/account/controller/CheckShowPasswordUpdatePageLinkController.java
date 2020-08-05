@@ -17,9 +17,9 @@ import portfolio2.module.account.validator.ShowUpdatePasswordPageRequestDtoValid
 import javax.validation.Valid;
 
 import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.ERROR_VIEW_NAME;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.ERROR_VIEW_NAME;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 @Controller
 @RequiredArgsConstructor

@@ -2,10 +2,7 @@ package portfolio2.module.account.controller.config;
 
 public class UrlAndViewNameAboutAccount {
 
-    // HomeAndLogInController.java
-    public static final String HOME_URL = "/";
-    public static final String HOME_VIEW_NAME = "index";
-
+    // LogInController.java
     public static final String LOGIN_URL = "/login";
     public static final String LOGIN_VIEW_NAME = "account/login";
 
@@ -43,6 +40,7 @@ public class UrlAndViewNameAboutAccount {
 
     public static final String ACCOUNT_SETTING_ACCOUNT_NICKNAME_URL = "/account/setting/account/nickname";
     public static final String ACCOUNT_SETTING_ACCOUNT_EMAIL_URL = "/account/setting/account/email";
+
     // CheckShowPasswordUpdatePageLinkController.java
     public static final String CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL = "/check-show-password-update-page-link";
 

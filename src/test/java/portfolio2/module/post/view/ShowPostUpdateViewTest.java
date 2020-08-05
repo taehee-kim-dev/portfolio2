@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.thymeleaf.model.IModel;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
@@ -20,7 +19,6 @@ import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.service.PostService;
 import portfolio2.module.tag.TagRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,8 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.UrlAndViewNameAboutBasic.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_FORM_VIEW_NAME;
 import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_URL;
 

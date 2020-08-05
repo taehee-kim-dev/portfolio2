@@ -1,4 +1,4 @@
-package portfolio2.module.main.search;
+package portfolio2.module.search.post;
 
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.AfterEach;
@@ -17,8 +17,7 @@ import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.module.main.service.MainService;
-import portfolio2.module.notification.Notification;
+import portfolio2.module.search.service.SearchService;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
@@ -36,7 +35,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_RESULT_VIEW_NAME;
+import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_URL;
 
 /**
  * 제목, 내용, 태그로 찾아지는지?
@@ -69,7 +70,7 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
     private SignUpAndLogOutEmailVerifiedProcessForTest signUpAndLogOutEmailVerifiedProcessForTest;
 
     @Autowired
-    private MainService mainService;
+    private SearchService searchService;
 
     @Autowired
     private PostService postService;
@@ -149,14 +150,14 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
     void searchPostNotLoggedInWithKeywordController() throws Exception{
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        mockMvc.perform(get("/search/post")
+        mockMvc.perform(get(SEARCH_POST_URL)
                         .param("keyword", KEY_WORD_TO_SEARCH_39))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
                 .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("search"))
+                .andExpect(view().name(SEARCH_POST_RESULT_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -165,14 +166,14 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
     void searchPostNotLoggedInWithNotKeywordController() throws Exception{
         assertFalse(logInAndOutProcessForTest.isSomeoneLoggedIn());
 
-        mockMvc.perform(get("/search/post")
+        mockMvc.perform(get(SEARCH_POST_URL)
                 .param("keyword", "ASgvcb"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
                 .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("search"))
+                .andExpect(view().name(SEARCH_POST_RESULT_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
@@ -182,14 +183,14 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        mockMvc.perform(get("/search/post")
+        mockMvc.perform(get(SEARCH_POST_URL)
                 .param("keyword", KEY_WORD_TO_SEARCH_39))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
                 .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("search"))
+                .andExpect(view().name(SEARCH_POST_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
@@ -199,23 +200,23 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
         signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInDefault();
         assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
 
-        mockMvc.perform(get("/search/post")
+        mockMvc.perform(get(SEARCH_POST_URL)
                 .param("keyword", "XCNhgf"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
                 .andExpect(model().attributeExists("keyword"))
                 .andExpect(model().attributeExists("postPage"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("search"))
+                .andExpect(view().name(SEARCH_POST_RESULT_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
     @DisplayName("Post검색 - 존재하는 키워드로 검색 - 39개의 결과 - Service단")
     @Test
     void searchPostWithKeywordService() throws Exception{
-        Page<Post> page0Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page0);
-        Page<Post> page1Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page1);
-        Page<Post> page2Elements = mainService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page2);
+        Page<Post> page0Elements = searchService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page0);
+        Page<Post> page1Elements = searchService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page1);
+        Page<Post> page2Elements = searchService.findPostByKeyword(KEY_WORD_TO_SEARCH_39, page2);
 
         assertEquals(39L, page0Elements.getTotalElements());
 
@@ -272,7 +273,7 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
     @Test
     void searchPostWithNotKeywordService() throws Exception{
         String notKeyWord = "notKeyword";
-        Page<Post> page0Elements = mainService.findPostByKeyword(notKeyWord, page0);
+        Page<Post> page0Elements = searchService.findPostByKeyword(notKeyWord, page0);
 
         assertEquals(0L, page0Elements.getTotalElements());
 

@@ -19,8 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_URL;
+import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_VIEW_NAME;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
 /*
 * ** 최종 결론 **
@@ -41,7 +43,7 @@ import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
 * */
 
 @MockMvcTest
-public class HomeAndLogInAndOutTest extends ContainerBaseTest {
+public class LogInAndOutTest extends ContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -65,30 +67,6 @@ public class HomeAndLogInAndOutTest extends ContainerBaseTest {
     void test() throws Exception{
         Account account = accountRepository.findById(1L).orElse(null);
         assertNull(account);
-    }
-
-    @DisplayName("홈 화면 보여주기 - 로그아웃 상태")
-    @Test
-    void showHomeLoggedOut() throws Exception{
-        signUpAndLogOutEmailNotVerifiedProcessForTest.signUpAndLogOutDefault();
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
-                .andExpect(view().name(HOME_VIEW_NAME))
-                .andExpect(unauthenticated());
-    }
-
-    @DisplayName("홈 화면 보여주기 - 로그인 상태")
-    @SignUpAndLogInEmailNotVerified
-    @Test
-    void showHomeLoggedIn() throws Exception{
-        mockMvc.perform(get(HOME_URL))
-                .andExpect(status().isOk())
-                .andExpect(model().hasNoErrors())
-                .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(view().name(HOME_VIEW_NAME))
-                .andExpect(authenticated().withUsername(TEST_USER_ID));
     }
 
     @DisplayName("로그인 화면 보여주기 - 비로그인 상태")

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragment.html :: commonHead"></th:block>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
@@ -185,7 +185,7 @@
 
 <div class="container">
 
-    <div th:replace="fragment.html :: commonNav"></div>
+    <div th:replace="main/fragment.html :: commonNav"></div>
 
     <h2 id="notificationSettingTitle" class="text-center">알림 설정</h2>
 
@@ -204,7 +204,7 @@
 
     <div id="outerBox" class="row justify-content-center mx-auto">
 
-        <div th:replace="fragment.html :: setting-menu(currentMenu='notification')"></div>
+        <div th:replace="main/fragment.html :: setting-menu(currentMenu='notification')"></div>
 
         <form id="notificationSettingForm" class="order-2" th:action="@{/account/setting/notification}"
               th:object="${notificationUpdateRequestDto}" method="post" novalidate>
@@ -341,7 +341,7 @@
 
 
 </div>
-<footer th:replace="fragment.html :: commonFooter"></footer>
-<script th:replace="fragment.html :: commonJavaScript"></script>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
 </body>
 </html>

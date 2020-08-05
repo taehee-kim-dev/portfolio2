@@ -1,4 +1,4 @@
-package portfolio2.module.main.service;
+package portfolio2.module.search.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,7 @@ import portfolio2.module.post.PostRepository;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class MainService {
+public class SearchService {
 
     private final PostRepository postRepository;
 

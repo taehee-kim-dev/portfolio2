@@ -1,15 +1,22 @@
-package portfolio2.module.test.view.controller;
+package portfolio2.module.test.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
+import portfolio2.module.test.service.TestService;
 
-import static portfolio2.module.main.config.VariableName.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
+import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
+import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
 
+@RequiredArgsConstructor
 @Controller
 public class TestController {
+    
+    private final TestService testService;
 
     private final String EMAIL_VERIFICATION_SUCCESS_VIEW_NAME = "email/email-verification-view/email-verification-success";
     private final String ERROR_VIEW_NAME = "error/error-view";
@@ -24,7 +31,7 @@ public class TestController {
 
     // email verification
     // 로그아웃 상태
-    @GetMapping("/test-view/email-verification-success/not-logged-in")
+    @GetMapping("/test/email-verification-success/not-logged-in")
     public String viewTestForEmailVerificationSuccessNotLoggedIn(@SessionAccount Account sessionAccount, Model model){
         addEmailVerifiedAccountInformationToModel(sessionAccount, model);
         model.addAttribute("isEmailVerifiedAccountLoggedIn", false);
@@ -33,21 +40,21 @@ public class TestController {
 
     // 로그인 상태
 
-    @GetMapping("/test-view/email-verification-success/owner-logged-in")
+    @GetMapping("/test/email-verification-success/owner-logged-in")
     public String viewTestForEmailVerificationSuccessOwnerLoggedIn(@SessionAccount Account sessionAccount, Model model){
         addEmailVerifiedAccountInformationToModel(sessionAccount, model);
         model.addAttribute("isEmailVerifiedAccountLoggedIn", true);
         return EMAIL_VERIFICATION_SUCCESS_VIEW_NAME;
     }
 
-    @GetMapping("/test-view/email-verification-success/not-owner-logged-in")
+    @GetMapping("/test/email-verification-success/not-owner-logged-in")
     public String viewTestForEmailVerificationSuccessNotOwnerLoggedIn(@SessionAccount Account sessionAccount, Model model){
         addEmailVerifiedAccountInformationToModel(sessionAccount, model);
         model.addAttribute("isEmailVerifiedAccountLoggedIn", false);
         return EMAIL_VERIFICATION_SUCCESS_VIEW_NAME;
     }
 
-    @GetMapping("/test-view/email-verification-request")
+    @GetMapping("/test/email-verification-request")
     public String viewTestForEmailVerificationRequest(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("email", "test@email.com");
@@ -55,7 +62,7 @@ public class TestController {
     }
 
     // error
-    @GetMapping("/test-view/error/cannot-send-email")
+    @GetMapping("/test/error/cannot-send-email")
     public String viewTestForCannotSendEmailError(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("errorTitle", "인증 이메일 전송 에러");
@@ -63,7 +70,7 @@ public class TestController {
         return ERROR_VIEW_NAME;
     }
 
-    @GetMapping("/test-view/error/user-not-found")
+    @GetMapping("/test/error/user-not-found")
     public String viewTestForUserNotFoundError(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("errorTitle", "사용자 조회 에러");
@@ -71,7 +78,7 @@ public class TestController {
         return ERROR_VIEW_NAME;
     }
 
-    @GetMapping("/test-view/error/not-author")
+    @GetMapping("/test/error/not-author")
     public String viewTestForNotAuthorError(@SessionAccount Account sessionAccount, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("errorTitle", "글 수정 권한 없음");
@@ -79,5 +86,9 @@ public class TestController {
         return ERROR_VIEW_NAME;
     }
 
-
+    @GetMapping("/test/generate-post-date")
+    public String generateTestData(@SessionAccount Account sessionAccount){
+        testService.generateTestPostData(sessionAccount);
+        return REDIRECT + HOME_URL;
+    }
 }
