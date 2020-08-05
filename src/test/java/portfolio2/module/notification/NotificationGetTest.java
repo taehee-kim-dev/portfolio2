@@ -107,7 +107,13 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(ALL_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("allNotificationPage"))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ALL_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -128,7 +134,13 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(LINK_UNVISITED_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("linkUnvisitedNotificationPage"))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
@@ -142,7 +154,13 @@ public class NotificationGetTest extends ContainerBaseTest {
 
         mockMvc.perform(get(LINK_VISITED_NOTIFICATION_LIST_URL))
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
-                .andExpect(model().attributeExists("linkVisitedNotificationPage"))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
