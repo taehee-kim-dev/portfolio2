@@ -210,4 +210,64 @@ public class NotificationGetTest extends ContainerBaseTest {
         assertFalse(notification1After.isLinkVisited());
     }
 
+    @DisplayName("전체 알림 - 페이징 리다이렉트 경로 테스트")
+    @Test
+    void allNotificationPagingRedirectUrlTest() throws Exception{
+        logInAndOutProcessForTest.logIn(TEST_USER_ID);
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        mockMvc.perform(get("/notification/list/all?sort=createdDateTime,desc&page=1"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ALL_NOTIFICATION_LIST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+    }
+
+    @DisplayName("안읽은 알림 - 페이징 리다이렉트 경로 테스트")
+    @Test
+    void linkUnvisitedNotificationPagingRedirectUrlTest() throws Exception{
+        logInAndOutProcessForTest.logIn(TEST_USER_ID);
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        mockMvc.perform(get("/notification/list/link-unvisited?sort=createdDateTime,desc&page=1"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+    }
+
+    @DisplayName("읽은 알림 - 페이징 리다이렉트 경로 테스트")
+    @Test
+    void linkVisitedNotificationPagingRedirectUrlTest() throws Exception{
+        logInAndOutProcessForTest.logIn(TEST_USER_ID);
+        assertTrue(logInAndOutProcessForTest.isLoggedInByUserId(TEST_USER_ID));
+
+        mockMvc.perform(get("/notification/list/link-visited?sort=createdDateTime,desc&page=1"))
+                .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("notificationPage"))
+                .andExpect(model().attributeExists("currentPageRangeFirstIndex"))
+                .andExpect(model().attributeExists("currentPageRangeLastIndex"))
+                .andExpect(model().attribute("sortProperty", "createdDateTime"))
+                .andExpect(model().attributeExists("totalNotificationCount"))
+                .andExpect(model().attributeExists("linkUnvisitedNotificationCount"))
+                .andExpect(model().attributeExists("linkVisitedNotificationCount"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME))
+                .andExpect(authenticated().withUsername(TEST_USER_ID));
+    }
+
 }

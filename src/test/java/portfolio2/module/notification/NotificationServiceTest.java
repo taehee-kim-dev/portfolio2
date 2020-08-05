@@ -17,6 +17,7 @@ import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
+import portfolio2.module.notification.dto.response.EachNotificationCountResponseDto;
 import portfolio2.module.notification.service.NotificationService;
 
 import java.time.LocalDateTime;
@@ -137,6 +138,12 @@ public class NotificationServiceTest extends ContainerBaseTest {
             assertTrue(timeOfBeforeNotification.isAfter(createdDateTimeOfCurrentNotification));
             timeOfBeforeNotification = createdDateTimeOfCurrentNotification;
         }
+
+        EachNotificationCountResponseDto eachNotificationCountResponseDto
+                = notificationService.getEachNotificationCount(account);
+        assertEquals(10L, eachNotificationCountResponseDto.getTotalNotificationCount());
+        assertEquals(5L, eachNotificationCountResponseDto.getLinkUnvisitedNotificationCount());
+        assertEquals(5L, eachNotificationCountResponseDto.getLinkVisitedNotificationCount());
     }
 
 
