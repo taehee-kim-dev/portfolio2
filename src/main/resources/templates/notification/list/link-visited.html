@@ -173,6 +173,9 @@
                 right: 21px;
             }
         }
+        #pagination{
+            margin-top: 27px;
+        }
     </style>
 </head>
 <body>
@@ -197,13 +200,13 @@
 
         <div id="linkVisitedNotificationListOuterDiv" class="col-lg-8">
 
-            <div th:if="${linkVisitedNotificationPage.getTotalElements() == 0}" class="card">
+            <div th:if="${notificationPage.getTotalElements() == 0}" class="card">
                 <div class="card-body text-muted text-center">
                     읽은 알림이 없습니다.
                 </div>
             </div>
 
-            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${linkVisitedNotificationPage.getContent()}"
+            <div th:id="'notificationCard' + ${notification.id}" th:each="notification : ${notificationPage.getContent()}"
                  class="card text-center notificationCard" th:classappend="${notification.isLinkVisited() ? 'text-black-50' : ''}">
                 <div th:if="${notification.notificationType == T(portfolio2.module.notification.NotificationType).NEW_POST_WITH_MY_INTEREST_TAG_IS_POSTED}"
                      class="card-header notificationCardHeader" style="position: relative">
@@ -243,6 +246,38 @@
                     2 days ago
                 </div>
             </div>
+
+            <nav th:if="${notificationPage.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${!notificationPage.hasPrevious()}? disabled">
+                        <a th:href="@{'/notification/list/link-visited?sort=' + ${sortProperty} + ',desc&page=' + ${notificationPage.getNumber() - 1}}"
+                           class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <!--
+                        (0 ~ 4) / 5 = 0 -> 0 ~ 4 but max = 4
+                        (5 ~ 9) / 5 = 1 -> 5 ~ 9 but max = 9
+                        (10 ~ 14) / 5 = 2 -> 10 ~ 14 but max = 14
+                        (15 ~ 19) / 5 = 3 -> 15 ~ 19 but max = 19
+                        (20 ~ 24) / 5 = 4 -> 20 ~ 24 but max = 24
+                     -->
+                    <li class="page-item" th:classappend="${currentPageNumberIndex == notificationPage.getNumber()}? active"
+                        th:each="currentPageNumberIndex: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
+
+                        <a th:href="@{'/notification/list/link-visited?sort=' + ${sortProperty} + ',desc&page=' + ${currentPageNumberIndex}}"
+                           class="page-link" href="#" th:text="${currentPageNumberIndex + 1}">1</a>
+
+                    </li>
+
+                    <li class="page-item" th:classappend="${!notificationPage.hasNext()}? disabled">
+                        <a th:href="@{'/notification/list/link-visited?sort=' + ${sortProperty} + ',desc&page=' + ${notificationPage.getNumber() + 1}}"
+                           class="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
         </div>
     </div>

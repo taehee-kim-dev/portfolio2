@@ -9,7 +9,7 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.config.CustomPrincipal;
 import portfolio2.module.notification.Notification;
 import portfolio2.module.notification.NotificationRepository;
-import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
+import portfolio2.module.notification.dto.request.NotificationDeleteRequestDto;
 
 @RequiredArgsConstructor
 @Component

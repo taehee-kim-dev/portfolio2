@@ -135,9 +135,18 @@
 </div>
 
 <div th:fragment="notification-list (currentMenu)" id="notificationListMenu" class="list-group text-center p-0">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">전체 알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">안읽은 알림</a>
-    <a class="list-group-item list-group-item-action list-group-item-dark" th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">읽은 알림</a>
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" th:classappend="${currentMenu == 'all'}? active" th:href="@{/notification/list/all}">
+        전체 알림
+        <span class="badge badge-primary badge-pill" th:text="${totalNotificationCount}">4</span>
+    </a>
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" th:classappend="${currentMenu == 'link-unvisited'}? active" th:href="@{/notification/list/link-unvisited}">
+        안읽은 알림
+        <span class="badge badge-primary badge-pill" th:text="${linkUnvisitedNotificationCount}">16</span>
+    </a>
+    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-dark" th:classappend="${currentMenu == 'link-visited'}? active" th:href="@{/notification/list/link-visited}">
+        읽은 알림
+        <span class="badge badge-pill badge-dark" th:text="${linkVisitedNotificationCount}">32</span>
+    </a>
 </div>
 
 <div th:fragment="date-time">

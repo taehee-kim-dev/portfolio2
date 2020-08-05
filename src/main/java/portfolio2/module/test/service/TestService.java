@@ -1,7 +1,6 @@
 package portfolio2.module.test.service;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
@@ -18,9 +17,8 @@ public class TestService {
 
     public void generateTestPostData(Account sessionAccount) {
         for (int i = 1; i <= 34; i++) {
-            String randomValue = RandomString.make(5);
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
-            postNewPostRequestDto.setTitle("테스트 글 " + randomValue);
+            postNewPostRequestDto.setTitle("테스트 글 " + i);
             postNewPostRequestDto.setContent("테스트용 글 입니다.");
             postNewPostRequestDto.setTagTitleOnPost("1,2,3");
             Post newPost = postService.saveNewPostWithTag(sessionAccount, postNewPostRequestDto);

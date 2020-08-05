@@ -10,18 +10,25 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Long countByAccountAndRingBellChecked(Account sessionAccount, boolean ringBellChecked);
+    Long countByAccountAndRingBellChecked(Account account, boolean ringBellChecked);
+
+    Long countByAccount(Account account);
+
+    Long countByAccountAndLinkVisited(Account account, boolean linkVisited);
 
     @EntityGraph(value = "Notification.withCommonTag", type = EntityGraph.EntityGraphType.LOAD)
-    Page<Notification> findByAccount(Account sessionAccount, Pageable pageable);
+    List<Notification> findByAccount(Account account);
 
     @EntityGraph(value = "Notification.withCommonTag", type = EntityGraph.EntityGraphType.LOAD)
-    Page<Notification> findWithPageableByAccountAndLinkVisited(Account sessionAccount, boolean linkVisited, Pageable pageable);
+    Page<Notification> findWithPageableByAccount(Account account, Pageable pageable);
 
     @EntityGraph(value = "Notification.withCommonTag", type = EntityGraph.EntityGraphType.LOAD)
-    List<Notification> findNotWithPageableByAccountAndLinkVisited(Account sessionAccount, boolean linkVisited);
+    Page<Notification> findWithPageableByAccountAndLinkVisited(Account account, boolean linkVisited, Pageable pageable);
 
-    void deleteAllByAccountAndLinkVisited(Account sessionAccount, boolean linkVisited);
+    @EntityGraph(value = "Notification.withCommonTag", type = EntityGraph.EntityGraphType.LOAD)
+    List<Notification> findNotWithPageableByAccountAndLinkVisited(Account account, boolean linkVisited);
+
+    void deleteAllByAccountAndLinkVisited(Account account, boolean linkVisited);
 
     Notification findByAccount_UserId(String userId);
 }

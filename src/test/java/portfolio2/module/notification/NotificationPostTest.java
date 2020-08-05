@@ -15,7 +15,7 @@ import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.module.notification.dto.NotificationDeleteRequestDto;
+import portfolio2.module.notification.dto.request.NotificationDeleteRequestDto;
 import portfolio2.module.tag.TagRepository;
 
 import java.util.Random;

@@ -1,4 +1,4 @@
-package portfolio2.module.notification.dto;
+package portfolio2.module.notification.dto.request;
 
 import lombok.Data;
 
