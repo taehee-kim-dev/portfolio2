@@ -38,6 +38,9 @@
 
 /* 데스크탑*/
 @media (min-width: 992px) {
+    .modal{
+        margin-top: 79px;
+    }
     #mainNavBarBrandTitle{
         font-weight: 600;
         font-size: 33px;
@@ -84,6 +87,9 @@
 
 /* 태블릿 */
 @media (min-width: 576px) and (max-width: 991.98px) {
+    .modal{
+        margin-top: 83px;
+    }
     #mainNavBarBrandTitle{
         font-weight: 600;
         font-size: 33px;
@@ -131,6 +137,14 @@
 
 /* 핸드폰 일반 */
 @media (min-width: 340px) and (max-width: 575.98px) {
+    .modal{
+        margin-top: 65px;
+    }
+    .modal-dialog{
+        width: 90% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
     #mainNavBarBrandTitle{
         font-weight: 600;
         font-size: 29px;
@@ -180,6 +194,14 @@
 
 /* 초소형 핸드폰 */
 @media (max-width: 339.98px) {
+    .modal{
+        margin-top: 65px;
+    }
+    .modal-dialog{
+        width: 90% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
     #mainNavBarBrandTitle{
         font-weight: 600;
         font-size: 29px;

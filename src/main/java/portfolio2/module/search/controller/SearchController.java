@@ -28,6 +28,7 @@ public class SearchController {
     public String searchPost(@SessionAccount Account sessionAccount, String keyword,
                              @PageableDefault(size = 15, page = 0, sort = "firstWrittenDateTime", direction = Sort.Direction.DESC)
                                      Pageable pageable, Model model){
+        keyword = keyword.trim();
         Page<Post> postPage = searchService.findPostByKeyword(keyword, pageable);
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("keyword", keyword);
