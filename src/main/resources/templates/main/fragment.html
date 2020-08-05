@@ -128,36 +128,6 @@
     </div>
 </div>
 
-<th:block th:fragment="commonJavaScript">
-    <script src="/library/jquery/jquery-3.5.1.min.js"></script>
-    <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
-    <script type="application/javascript">
-        const regexForSearch = /[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]+/g;
-        const searchInput = document.getElementById('mainSearchInput');
-
-        function search() {
-            if (regexForSearch.test(searchInput.value)) {
-                return true;
-            } else {
-                $('#non-character-search-error-alert-modal').modal("show");
-                return false;
-            }
-        }
-    </script>
-</th:block>
-
-<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
-    $(function () {
-        var csrfToken = /*[[${_csrf.token}]]*/ null;
-        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-        });
-    });
-</script>
-
-
 <div th:fragment="setting-menu (currentMenu)" id="accountSettingMenu"
      class="col-lg-2 order-1 list-group text-center p-0">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active"
@@ -260,7 +230,11 @@
                     2 days ago
                 </div>
             </div>
-            <nav th:replace="main/fragment.html :: pagination(${notificationPage}, ${currentLink}, ${sortDirection})"></nav>
+            <nav th:replace="main/fragment.html :: pagination(
+                                                            page = ${notificationPage},
+                                                            currentLink = ${currentLink},
+                                                            sortDirection = ${sortDirection},
+                                                            keywordLinkPartForSearch = '')"></nav>
         </div>
     </div>
     <script type="application/javascript">
@@ -287,10 +261,10 @@
 </th:block>
 
 
-<nav th:fragment="pagination(page, currentLink, sortDirection)" th:if="${page.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
+<nav th:fragment="pagination(page, currentLink, sortDirection, keywordLinkPartForSearch)" th:if="${page.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${!page.hasPrevious()}? disabled">
-            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() - 1}}"
+            <a th:href="@{${currentLink} + '?' + ${keywordLinkPartForSearch} + 'sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() - 1}}"
                class="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
@@ -305,12 +279,12 @@
         <li class="page-item" th:classappend="${currentPageNumberIndex == page.getNumber()}? active"
             th:each="currentPageNumberIndex: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
 
-            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${currentPageNumberIndex}}"
+            <a th:href="@{${currentLink} + '?' + ${keywordLinkPartForSearch} + 'sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${currentPageNumberIndex}}"
                class="page-link" href="#" th:text="${currentPageNumberIndex + 1}">1</a>
         </li>
 
         <li class="page-item" th:classappend="${!page.hasNext()}? disabled">
-            <a th:href="@{${currentLink} + '?sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() + 1}}"
+            <a th:href="@{${currentLink} + '?' + ${keywordLinkPartForSearch} + 'sort=' + ${sortProperty} + ',' + ${sortDirection} + '&page=' + ${page.getNumber() + 1}}"
                class="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
@@ -318,6 +292,35 @@
     </ul>
 </nav>
 
+
+<th:block th:fragment="commonJavaScript">
+    <script src="/library/jquery/jquery-3.5.1.min.js"></script>
+    <script src="/library/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/library/jdenticon/jdenticon-2.2.0.min.js"></script>
+    <script type="application/javascript">
+        const regexForSearch = /[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]+/g;
+        const searchInput = document.getElementById('mainSearchInput');
+
+        function search() {
+            if (regexForSearch.test(searchInput.value)) {
+                return true;
+            } else {
+                $('#non-character-search-error-alert-modal').modal("show");
+                return false;
+            }
+        }
+    </script>
+</th:block>
+
+<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
+    $(function () {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
 
 
 <th:block th:fragment="momentjs">
@@ -347,5 +350,35 @@
                 && today.getMonth() === dateToCompare.getMonth()
                 && today.getDate() === dateToCompare.getDate();
         }
+    </script>
+</th:block>
+
+<th:block th:fragment="markjs">
+    <script src="/library/markjs/dist/jquery.mark.es6.js"></script>
+    <script type="application/javascript">
+        $(function(){
+            const mark = function() {
+                // Read the keyword
+                const keyword = $("#keyword").text();
+
+                // Determine selected options
+                const options = {
+                    "each": function(element) {
+                        setTimeout(function() {
+                            $(element).addClass("animate");
+                        }, 150);
+                    }
+                };
+
+                // Mark the keyword inside the context
+                $(".context").unmark({
+                    done: function() {
+                        $(".context").mark(keyword, options);
+                    }
+                });
+            };
+
+            mark();
+        });
     </script>
 </th:block>

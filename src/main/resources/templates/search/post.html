@@ -181,68 +181,18 @@
         </table>
     </div>
 
-    <nav th:if="${postPage.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!postPage.hasPrevious()}? disabled">
-                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${postPage.getNumber() - 1}}"
-                   class="page-link" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <!--
-                (0 ~ 4) / 5 = 0 -> 0 ~ 4 but max = 4
-                (5 ~ 9) / 5 = 1 -> 5 ~ 9 but max = 9
-                (10 ~ 14) / 5 = 2 -> 10 ~ 14 but max = 14
-                (15 ~ 19) / 5 = 3 -> 15 ~ 19 but max = 19
-                (20 ~ 24) / 5 = 4 -> 20 ~ 24 but max = 24
-             -->
-            <li class="page-item" th:classappend="${currentPageNumberIndex == postPage.getNumber()}? active"
-                th:each="currentPageNumberIndex: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
+    <nav th:replace="main/fragment.html :: pagination(
+                                                    page = ${postPage},
+                                                    currentLink = '/search/post',
+                                                    sortDirection = 'desc',
+                                                    keywordLinkPartForSearch = ${'keyword=' + keyword + '&'}
+                                                    )"></nav>
 
-                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${currentPageNumberIndex}}"
-                   class="page-link" href="#" th:text="${currentPageNumberIndex + 1}">1</a>
-
-            </li>
-
-            <li class="page-item" th:classappend="${!postPage.hasNext()}? disabled">
-                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${postPage.getNumber() + 1}}"
-                   class="page-link" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
 </div>
 
 <footer th:replace="main/fragment.html :: commonFooter"></footer>
 <script th:replace="main/fragment.html :: commonJavaScript"></script>
 <script th:replace="main/fragment.html :: momentjs"></script>
-<script src="/library/markjs/dist/jquery.mark.es6.js"></script>
-<script type="application/javascript">
-    $(function(){
-        const mark = function() {
-            // Read the keyword
-            const keyword = $("#keyword").text();
-
-            // Determine selected options
-            const options = {
-                "each": function(element) {
-                    setTimeout(function() {
-                        $(element).addClass("animate");
-                    }, 150);
-                }
-            };
-
-            // Mark the keyword inside the context
-            $(".context").unmark({
-                done: function() {
-                    $(".context").mark(keyword, options);
-                }
-            });
-        };
-
-        mark();
-    });
-</script>
+<script th:replace="main/fragment.html :: markjs"></script>
 </body>
 </html>
