@@ -23,6 +23,9 @@
                 overflow: hidden;
                 word-break: break-all;
             }
+            #pagination{
+                margin-top: 27px;
+            }
         }
 
         /* 태블릿 */
@@ -44,6 +47,9 @@
             .authorTd{
                 overflow: hidden;
                 word-break: break-all;
+            }
+            #pagination{
+                margin-top: 27px;
             }
         }
 
@@ -71,6 +77,9 @@
             .firstWrittenTimeTd{
                 padding-right: 0 !important;
             }
+            #pagination{
+                margin-top: 22px;
+            }
         }
 
         /* 초소형 핸드폰 */
@@ -97,6 +106,9 @@
             .firstWrittenTimeTd{
                 padding-right: 0 !important;
             }
+            #pagination{
+                margin-top: 22px;
+            }
         }
 
         #keyword{
@@ -114,6 +126,21 @@
         }
         #searchResultTitle{
             width: 90%;
+        }
+
+        mark {
+            padding: 0;
+            background: transparent;
+            background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+            background-position: right bottom;
+            background-size: 200% 100%;
+            transition: all .5s ease;
+            color: #fff;
+        }
+
+        mark.animate {
+            background-position: left bottom;
+            color: #000;
         }
     </style>
 </head>
@@ -143,20 +170,71 @@
             <tbody>
             <tr th:each="post : ${postPage.getContent()}">
                 <td class="titleTd align-middle">
-                    <a th:href="@{'/post-view/' + ${post.getId()}}" th:text="${post.getTitle()}"></a>
+                    <a th:href="@{'/post-view/' + ${post.getId()}}" th:text="${post.getTitle()}" class="context"></a>
                 </td>
                 <td class="authorTd align-middle text-center">
-                    <a th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname()}"></a>
+                    <a class="context" th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname()}"></a>
                 </td>
                 <td id="testDate" class="firstWrittenTimeTd align-middle text-center post-first-written-time" th:text="${post.getFirstWrittenDateTime()}"></td>
             </tr>
             </tbody>
         </table>
     </div>
+
+    <nav id="pagination" aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!postPage.hasPrevious()}? disabled">
+                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${postPage.getNumber() - 1}}"
+                   class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${i == postPage.getNumber()}? active"
+                th:each="i: ${#numbers.sequence(0, postPage.getTotalPages() - 1)}">
+                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${i}}"
+                   class="page-link" href="#" th:text="${i + 1}">1</a>
+            </li>
+
+            <li class="page-item" th:classappend="${!postPage.hasNext()}? disabled">
+                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${postPage.getNumber() + 1}}"
+                   class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <footer th:replace="main/fragment.html :: commonFooter"></footer>
 <script th:replace="main/fragment.html :: commonJavaScript"></script>
 <script th:replace="main/fragment.html :: date-time"></script>
+<script src="/library/markjs/dist/jquery.mark.es6.js"></script>
+<script type="application/javascript">
+    $(function(){
+        const mark = function() {
+            // Read the keyword
+            const keyword = $("#keyword").text();
+
+            // Determine selected options
+            const options = {
+                "each": function(element) {
+                    setTimeout(function() {
+                        $(element).addClass("animate");
+                    }, 150);
+                }
+            };
+
+            // Mark the keyword inside the context
+            $(".context").unmark({
+                done: function() {
+                    $(".context").mark(keyword, options);
+                }
+            });
+        };
+
+        mark();
+    });
+</script>
 </body>
 </html>

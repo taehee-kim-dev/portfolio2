@@ -33,6 +33,7 @@ public class SearchController {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("keyword", keyword);
         model.addAttribute("postPage", postPage);
+        model.addAttribute("sortProperty", "firstWrittenDateTime");
         return SEARCH_POST_RESULT_VIEW_NAME;
     }
 }

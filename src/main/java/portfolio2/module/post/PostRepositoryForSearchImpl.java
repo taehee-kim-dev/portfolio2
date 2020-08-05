@@ -17,7 +17,10 @@ public class PostRepositoryForSearchImpl extends QuerydslRepositorySupport imple
     @Override
     public Page<Post> findByKeyword(String keyword, Pageable pageable) {
         QPost post = QPost.post;
-        final JPQLQuery<Post> query = from(post).where(post.title.containsIgnoreCase(keyword)
+        final JPQLQuery<Post> query = from(post).where(
+                post.author.userId.containsIgnoreCase(keyword)
+                .or(post.author.nickname.containsIgnoreCase(keyword))
+                .or(post.title.containsIgnoreCase(keyword))
                 .or(post.content.containsIgnoreCase(keyword))
                 .or(post.currentTag.any().title.containsIgnoreCase(keyword)))
                 .leftJoin(post.author, QAccount.account).fetchJoin()
