@@ -181,7 +181,7 @@
         </table>
     </div>
 
-    <nav id="pagination" aria-label="Page navigation example">
+    <nav th:if="${postPage.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!postPage.hasPrevious()}? disabled">
                 <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${postPage.getNumber() - 1}}"
@@ -189,11 +189,19 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
+            <!--
+                (0 ~ 4) / 5 = 0 -> 0 ~ 4 but max = 4
+                (5 ~ 9) / 5 = 1 -> 5 ~ 9 but max = 9
+                (10 ~ 14) / 5 = 2 -> 10 ~ 14 but max = 14
+                (15 ~ 19) / 5 = 3 -> 15 ~ 19 but max = 19
+                (20 ~ 24) / 5 = 4 -> 20 ~ 24 but max = 24
+             -->
+            <li class="page-item" th:classappend="${currentPageNumber == postPage.getNumber()}? active"
+                th:each="currentPageNumber: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
 
-            <li class="page-item" th:classappend="${i == postPage.getNumber()}? active"
-                th:each="i: ${#numbers.sequence(0, postPage.getTotalPages() - 1)}">
-                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${i}}"
-                   class="page-link" href="#" th:text="${i + 1}">1</a>
+                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${currentPageNumber}}"
+                   class="page-link" href="#" th:text="${currentPageNumber + 1}">1</a>
+
             </li>
 
             <li class="page-item" th:classappend="${!postPage.hasNext()}? disabled">
