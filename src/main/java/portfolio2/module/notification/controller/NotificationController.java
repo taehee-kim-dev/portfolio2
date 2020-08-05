@@ -13,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
+import portfolio2.module.main.controller.MainController;
 import portfolio2.module.notification.Notification;
 import portfolio2.module.notification.dto.request.NotificationDeleteRequestDto;
 import portfolio2.module.notification.dto.response.EachNotificationCountResponseDto;
@@ -32,6 +33,8 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final NotificationDeleteRequestDtoValidator notificationDeleteRequestDtoValidator;
 
+    private final MainController mainController;
+
     @InitBinder("notificationDeleteRequestDto")
     public void initBinderForNotificationDeleteRequestDtoValidator(WebDataBinder webDataBinder){
         webDataBinder.addValidators(notificationDeleteRequestDtoValidator);
@@ -43,19 +46,9 @@ public class NotificationController {
                                                   Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> allNotificationPage = notificationService.ringBellCheck(sessionAccount, pageable);
-        addPagingAttributes(model, allNotificationPage);
+        mainController.addPagingAttributes(model, allNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return ALL_NOTIFICATION_LIST_VIEW_NAME;
-    }
-
-    private void addPagingAttributes(Model model, Page<Notification> notificationPage) {
-        model.addAttribute("notificationPage", notificationPage);
-        int currentPageRangeFirstIndex = notificationPage.getNumber() / 5 * 5;
-        model.addAttribute("currentPageRangeFirstIndex", currentPageRangeFirstIndex);
-        int currentPageFullRangeLastIndex = currentPageRangeFirstIndex + 4;
-        int currentPageRangeLastIndex = Math.min(notificationPage.getTotalPages() - 1, currentPageFullRangeLastIndex);
-        model.addAttribute("currentPageRangeLastIndex", currentPageRangeLastIndex);
-        model.addAttribute("sortProperty", "createdDateTime");
     }
 
     private void addEachNotificationCountNumber(Model model, Account sessionAccount){
@@ -71,7 +64,7 @@ public class NotificationController {
                                                                 Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> linkUnvisitedNotificationPage = notificationService.getLinkUnvisitedNotification(sessionAccount, pageable);
-        addPagingAttributes(model, linkUnvisitedNotificationPage);
+        mainController.addPagingAttributes(model, linkUnvisitedNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
@@ -82,7 +75,7 @@ public class NotificationController {
                                                               Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> linkVisitedNotificationPage = notificationService.getLinkVisitedNotification(sessionAccount, pageable);
-        addPagingAttributes(model, linkVisitedNotificationPage);
+        mainController.addPagingAttributes(model, linkVisitedNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME;
     }

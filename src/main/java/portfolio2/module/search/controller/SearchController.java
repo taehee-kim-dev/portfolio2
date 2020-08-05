@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
+import portfolio2.module.main.controller.MainController;
 import portfolio2.module.search.service.SearchService;
 import portfolio2.module.post.Post;
 
@@ -24,6 +25,8 @@ public class SearchController {
 
     private final SearchService searchService;
 
+    private final MainController mainController;
+
     @GetMapping(SEARCH_POST_URL)
     public String searchPost(@SessionAccount Account sessionAccount, String keyword,
                              @PageableDefault(size = 15, page = 0, sort = "firstWrittenDateTime", direction = Sort.Direction.DESC)
@@ -32,13 +35,7 @@ public class SearchController {
         Page<Post> postPage = searchService.findPostByKeyword(keyword, pageable);
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("postPage", postPage);
-        int currentPageRangeFirstIndex = postPage.getNumber() / 5 * 5;
-        model.addAttribute("currentPageRangeFirstIndex", currentPageRangeFirstIndex);
-        int currentPageFullRangeLastIndex = currentPageRangeFirstIndex + 4;
-        int currentPageRangeLastIndex = Math.min(postPage.getTotalPages() - 1, currentPageFullRangeLastIndex);
-        model.addAttribute("currentPageRangeLastIndex", currentPageRangeLastIndex);
-        model.addAttribute("sortProperty", "firstWrittenDateTime");
+        mainController.addPagingAttributes(model, postPage, "postPage", "firstWrittenDateTime");
         return SEARCH_POST_RESULT_VIEW_NAME;
     }
 }
