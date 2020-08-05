@@ -476,7 +476,8 @@ public class NotificationPostTest extends ContainerBaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(notExistingNotificationIdToDelete))
                 .with(csrf()))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Notification notification1After = notificationRepository.findById(idOfFirstNotificationForAccount).orElse(null);

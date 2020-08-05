@@ -253,7 +253,8 @@ public class AccountInterestTagUpdateTest extends ContainerBaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"tagTitle\":\"" + existingTagTitle + "\"}")
                 .with(csrf()))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
 
         Account tagNotRemovedAccount = accountRepository.findByUserId(TEST_USER_ID);
