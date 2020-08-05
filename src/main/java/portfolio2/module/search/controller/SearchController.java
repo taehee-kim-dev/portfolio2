@@ -37,10 +37,6 @@ public class SearchController {
         model.addAttribute("currentPageRangeFirstIndex", currentPageRangeFirstIndex);
         int currentPageFullRangeLastIndex = currentPageRangeFirstIndex + 4;
         int currentPageRangeLastIndex = Math.min(postPage.getTotalPages() - 1, currentPageFullRangeLastIndex);
-        System.out.println("***");
-        System.out.println("currentPageRangeFirstIndex : " + currentPageRangeFirstIndex);
-        System.out.println("currentPageFullRangeLastIndex : " + currentPageFullRangeLastIndex);
-        System.out.println("currentPageRangeLastIndex : " + currentPageRangeLastIndex);
         model.addAttribute("currentPageRangeLastIndex", currentPageRangeLastIndex);
         model.addAttribute("sortProperty", "firstWrittenDateTime");
         return SEARCH_POST_RESULT_VIEW_NAME;

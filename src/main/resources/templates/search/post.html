@@ -196,11 +196,11 @@
                 (15 ~ 19) / 5 = 3 -> 15 ~ 19 but max = 19
                 (20 ~ 24) / 5 = 4 -> 20 ~ 24 but max = 24
              -->
-            <li class="page-item" th:classappend="${currentPageNumber == postPage.getNumber()}? active"
-                th:each="currentPageNumber: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
+            <li class="page-item" th:classappend="${currentPageNumberIndex == postPage.getNumber()}? active"
+                th:each="currentPageNumberIndex: ${#numbers.sequence(currentPageRangeFirstIndex, currentPageRangeLastIndex)}">
 
-                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${currentPageNumber}}"
-                   class="page-link" href="#" th:text="${currentPageNumber + 1}">1</a>
+                <a th:href="@{'/search/post?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${currentPageNumberIndex}}"
+                   class="page-link" href="#" th:text="${currentPageNumberIndex + 1}">1</a>
 
             </li>
 
