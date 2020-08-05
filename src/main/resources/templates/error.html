@@ -39,12 +39,13 @@
 <body>
 <div class="container">
 
-    <div th:replace="main/fragment.html :: commonNav"></div>
     <div id="outerBox" class="text-center">
-        <p id="errorTitle" class="lead" th:text="${errorTitle}">에러 제목</p>
-        <div class="alert alert-danger" role="alert" th:text="${errorContent}">
-            에러 내용
+        <p id="errorTitle" class="lead">요청 에러</p>
+        <div class="alert alert-danger" role="alert">
+            잘못된 요청입니다.
         </div>
+
+        <a type="button" th:href="@{/}" class="btn btn-primary mt-4">메인으로 가기</a>
     </div>
 
 </div>
