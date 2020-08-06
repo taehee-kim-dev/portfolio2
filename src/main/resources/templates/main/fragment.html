@@ -82,6 +82,11 @@
             </div>
         </li>
     </nav>
+
+    <div id="emailVerificationRequestAlert" sec:authorize="isAuthenticated()" class="alert alert-warning text-center" role="alert" th:if="${sessionAccount != null && #bools.isFalse(sessionAccount.isEmailVerified())}">
+        <a id="emailVerificationRequestAlertATag" th:href="@{/account/setting/account}" class="alert-link">이메일 인증</a>을 해야 이메일로 비밀번호 찾기, 이메일 알림 등 이메일을 통한 서비스를 받으실 수 있습니다.
+    </div>
+
     <!-- Modal -->
     <div id="non-character-search-error-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="errorAlertModalLabel" aria-hidden="true"
          th:insert="main/fragment.html :: error-alert-modal-dialog(title='검색 에러', content='한 글자 이상으로 검색해야 합니다.')">

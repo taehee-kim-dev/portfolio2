@@ -248,3 +248,11 @@
         padding-top: 11px;
     }
 }
+
+#emailVerificationRequestAlert{
+    margin-bottom: 0;
+}
+
+#emailVerificationRequestAlertATag{
+    text-decoration: underline;
+}
