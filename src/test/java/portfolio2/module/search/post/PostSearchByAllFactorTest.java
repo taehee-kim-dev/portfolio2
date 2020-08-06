@@ -89,6 +89,8 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
     PageRequest page3 = PageRequest.of(3, 15, Sort.Direction.DESC, "firstWrittenDateTime");
     PageRequest page4 = PageRequest.of(4, 15, Sort.Direction.DESC, "firstWrittenDateTime");
 
+    private final LocalDateTime STANDARD_TIME = LocalDateTime.now();
+
     @AfterEach
     void afterEach(){
         postRepository.deleteAll();
@@ -110,7 +112,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
             postNewPostRequestDto.setContent("Test content not contains keyword");
             postNewPostRequestDto.setTagTitleOnPost("Tag1" + ',' + "Tag2");
 
-            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(1).minusMinutes(i));
+            postRepository.save(postInDb);
         }
 
         // 내용에 키워드 포함
@@ -123,7 +127,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
 
             postNewPostRequestDto.setTagTitleOnPost("Tag3" + ',' + "Tag4");
 
-            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(2).minusMinutes(i));
+            postRepository.save(postInDb);
         }
 
         // 태그에 키워드 포함
@@ -137,7 +143,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
             postNewPostRequestDto.setTagTitleOnPost(KEY_WORD_TO_SEARCH_65 + randomValueForTag1
                     + ',' + KEY_WORD_TO_SEARCH_65 + randomValueForTag2);
 
-            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(3).minusMinutes(i));
+            postRepository.save(postInDb);
         }
 
         // 어느 키워드도 포함되지 않는 글
@@ -147,7 +155,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
             postNewPostRequestDto.setContent("Test content not contains keyword");
             postNewPostRequestDto.setTagTitleOnPost("Tag5" + ',' + "Tag6");
 
-            postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(4).minusMinutes(i));
+            postRepository.save(postInDb);
         }
 
         logInAndOutProcessForTest.logOut();
@@ -169,7 +179,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
             postNewPostRequestDto.setContent("Test content not contains keyword");
             postNewPostRequestDto.setTagTitleOnPost("Tag7" + ',' + "Tag8");
 
-            postService.saveNewPostWithTag(accountWithKeywordUserId, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(accountWithKeywordUserId, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(5).minusMinutes(i));
+            postRepository.save(postInDb);
             logInAndOutProcessForTest.logOut();
         }
 
@@ -190,7 +202,9 @@ public class PostSearchByAllFactorTest extends ContainerBaseTest {
             postNewPostRequestDto.setContent("Test content not contains keyword");
             postNewPostRequestDto.setTagTitleOnPost("Tag9" + ',' + "Tag10");
 
-            postService.saveNewPostWithTag(accountWithKeywordNickname, postNewPostRequestDto);
+            Post postInDb = postService.saveNewPostWithTag(accountWithKeywordNickname, postNewPostRequestDto);
+            postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(6).minusMinutes(i));
+            postRepository.save(postInDb);
             logInAndOutProcessForTest.logOut();
         }
     }
