@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html land="en" xmlns:th="http://www.thymeleaf.org">
+<html land="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:replace="main/fragment.html :: commonHead"></th:block>
     <style>
@@ -7,7 +8,7 @@
         @media (min-width: 992px) {
             #jumbotron{
                 padding-top: 37px;
-                padding-bottom: 37px;
+                padding-bottom: 8px;
             }
             #line1{
                 margin-bottom: 18px;
@@ -20,6 +21,7 @@
             }
             #signUpButton{
                 margin-top: 14px;
+                margin-bottom: 29px;
             }
         }
 
@@ -27,7 +29,7 @@
         @media (min-width: 576px) and (max-width: 991.98px) {
             #jumbotron{
                 padding-top: 37px;
-                padding-bottom: 37px;
+                padding-bottom: 8px;
             }
             #line1{
                 margin-bottom: 18px;
@@ -40,6 +42,7 @@
             }
             #signUpButton{
                 margin-top: 14px;
+                margin-bottom: 29px;
             }
         }
 
@@ -47,7 +50,7 @@
         @media (min-width: 340px) and (max-width: 575.98px) {
             #jumbotron{
                 padding-top: 37px;
-                padding-bottom: 37px;
+                padding-bottom: 8px;
             }
             #line1{
                 margin-bottom: 18px;
@@ -60,6 +63,7 @@
             }
             #signUpButton{
                 margin-top: 14px;
+                margin-bottom: 29px;
             }
         }
 
@@ -67,7 +71,7 @@
         @media (max-width: 339.98px) {
             #jumbotron{
                 padding-top: 37px;
-                padding-bottom: 37px;
+                padding-bottom: 8px;
             }
             #line1{
                 margin-bottom: 18px;
@@ -80,6 +84,7 @@
             }
             #signUpButton{
                 margin-top: 14px;
+                margin-bottom: 29px;
             }
         }
     </style>
@@ -94,7 +99,7 @@
             <p id="line2" class="lead">김태희의 포트폴리오2 입니다.</p>
             <hr id="line3" class="my-4">
             <p>SpringBoot와 JPA등을 사용해 제작한 웹 애플리케이션 입니다.</p>
-            <a id="signUpButton" class="btn btn-primary btn-lg" th:href="@{/sign-up}" role="button">회원가입</a>
+            <a sec:authorize="!isAuthenticated()" id="signUpButton" class="btn btn-primary btn-lg" th:href="@{/sign-up}" role="button">회원가입</a>
         </div>
     </div>
 </div>
