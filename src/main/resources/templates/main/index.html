@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #jumbotron {
+                padding-top: 37px;
+                padding-bottom: 8px;
+            }
+
+            #line1 {
+                margin-bottom: 18px;
+            }
+
+            #line2 {
+                margin-top: 28px;
+            }
+
+            #signUpButton {
+                margin-top: 14px;
+                margin-bottom: 29px;
+            }
+
+            #postListTableOuterDiv{
+                width: 990px;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #jumbotron {
+                padding-top: 37px;
+                padding-bottom: 8px;
+            }
+
+            #line1 {
+                margin-bottom: 18px;
+            }
+
+            #line2 {
+                margin-top: 28px;
+            }
+
+            #signUpButton {
+                margin-top: 14px;
+                margin-bottom: 29px;
+            }
+
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 33px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #jumbotron {
+                padding-top: 37px;
+                padding-bottom: 8px;
+            }
+
+            #line1 {
+                margin-bottom: 18px;
+            }
+
+            #line2 {
+                margin-top: 28px;
+            }
+
+            #signUpButton {
+                margin-top: 14px;
+                margin-bottom: 29px;
+            }
+
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #jumbotron {
+                padding-top: 37px;
+                padding-bottom: 8px;
+            }
+
+            #line1 {
+                margin-bottom: 18px;
+            }
+
+            #line2 {
+                margin-top: 28px;
+            }
+
+            #signUpButton {
+                margin-top: 14px;
+                margin-bottom: 29px;
+            }
+
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 15px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+        }
+        a{
+            color: black;
+        }
+        a:hover{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="main/fragment.html :: commonNav"></div>
+    <div id="jumbotron" class="jumbotron text-center">
+        <h1 id="line1" class="display-4">TH</h1>
+        <p id="line2" class="lead">김태희의 포트폴리오2 입니다.</p>
+        <hr id="line3" class="my-4">
+        <p>SpringBoot와 JPA등을 사용해 제작한 웹 애플리케이션 입니다.</p>
+        <a sec:authorize="!isAuthenticated()" id="signUpButton" class="btn btn-primary btn-lg" th:href="@{/sign-up}"
+           role="button">회원가입</a>
+    </div>
+
+    <div id="postListTableOuterDiv" class="mx-auto" th:if="${!postList.isEmpty()}"
+         th:insert="main/fragment.html :: postListTable(postList=${postList})">
+    </div>
+</div>
+
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script th:replace="main/fragment.html :: momentjs"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+.container{
+    max-width: 100%;
+    padding: 0;
+}
+/* 오직 데스크탑만 */
+@media (min-width: 992px) {
+    #userIconImage{
+        margin: auto;
+        width: 57px;
+        height: 57px;
+    }
+    .modal{
+        margin-top: 79px;
+    }
+    #userIconDropDown{
+        margin-right: 42px;
+    }
+    #mainSearchButton{
+        margin-left: 16px !important;
+    }
+    #brandTitle{
+        margin-left: 24px !important;
+    }
+}
+
+/* 태블릿, 핸드폰 */
+@media (max-width: 991.98px){
+    #brandTitle{
+        margin-left: 1px;
+    }
+    #userIconDropDown{
+        text-align: center;
+    }
+    #userIconImage{
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 7px;
+        width: 90px;
+        height: 90px;
+    }
+    #notificationBellOuter{
+        text-align: center;
+        height: 76px;
+    }
+    #emptyNotificationBellIcon{
+        margin: auto;
+    }
+}
+
+/* 오직 태블릿만 */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .modal{
+        margin-top: 83px;
+    }
+    #brandTitle {
+        margin-left: 16px !important;
+    }
+    #mainNavBar{
+        padding-top: 20px;
+    }
+    #navbarSupportedContent{
+        margin-top: 10px !important;
+    }
+    #postNewPostButton{
+        width: 272px;
+        margin: auto;
+    }
+    #mainSearchForm{
+        justify-content: center;
+    }
+    #userDropdownMenu{
+        margin-left: auto;
+        margin-right: auto;
+        width: 191px;
+        font-size: 18px;
+    }
+    #notificationBellOuter{
+        padding-bottom: 13px;
+    }
+    #mainLogInLink{
+        margin-top: 6px;
+        margin-bottom: 1px;
+    }
+    #mainSignUpLink{
+        padding: 0;
+    }
+    #mainSearchForm{
+        margin-top: 17px;
+        margin-bottom: 15px;
+    }
+    #emailVerificationAlertMessage{
+        font-size: 15px;
+    }
+    #mainSearchButton{
+        margin-left: 16px !important;
+    }
+}
+
+/* 오직 핸드폰만 */
+@media (max-width: 575.98px) {
+    .modal{
+        margin-top: 65px;
+    }
+    .modal-dialog{
+        width: 90% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #brandTitle {
+        margin-left: 16px !important;
+    }
+    #mainNavBar{
+        padding-top: 20px;
+    }
+    #navbarSupportedContent{
+        margin-top: 10px !important;
+    }
+    #notificationBellOuter{
+        padding-bottom: 13px;
+    }
+    #postNewPostButton{
+        width: 100%;
+    }
+    #mainSearchButton{
+        width: 100%;
+        margin-top: 17px;
+        margin-bottom: 15px;
+    }
+    #userDropdownMenu{
+        margin-left: auto;
+        margin-right: auto;
+        width: 178px;
+        font-size: 17px;
+    }
+    #mainLogInLink{
+        margin-top: 6px;
+        margin-bottom: 1px;
+    }
+    #mainSignUpLink{
+        padding: 0;
+    }
+    #mainSearchForm{
+        margin-top: 17px;
+        margin-bottom: 15px;
+    }
+}
+
+#userIdOfUserIcon #userNicknameOfUserIcon{
+    overflow:hidden;word-wrap:break-word;
+}
+
+#userDropdownMenu{
+    word-break: break-all;
+}

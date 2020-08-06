@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #postListTableOuterDiv{
+                width: 990px;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            #pagination{
+                margin-top: 27px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 150px;
+            }
+            #firstWrittenTimeHead{
+                width: 110px;
+            }
+            .titleTd{
+                padding-left: 33px !important;
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            #pagination{
+                margin-top: 27px;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 20px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+            #pagination{
+                margin-top: 22px;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #postListTableOuterDiv{
+                width: 100%;
+            }
+            #authorHead{
+                width: 106px;
+            }
+            #firstWrittenTimeHead{
+                width: 107px;
+            }
+            .titleTd{
+                padding-left: 15px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .authorTd{
+                overflow: hidden;
+                word-break: break-all;
+            }
+            .firstWrittenTimeTd{
+                padding-right: 0 !important;
+            }
+            #pagination{
+                margin-top: 22px;
+            }
+        }
+
+        #keyword{
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        a{
+            color: black;
+        }
+        a:hover{
+            color: black;
+        }
+        .firstWrittenTimeTd{
+            padding-left: 0 !important;
+        }
+        #searchResultTitle{
+            width: 90%;
+        }
+
+        mark {
+            padding: 0;
+            background: transparent;
+            background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+            background-position: right bottom;
+            background-size: 200% 100%;
+            transition: all .5s ease;
+            color: #fff;
+        }
+
+        mark.animate {
+            background-position: left bottom;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="main/fragment.html :: commonNav"></div>
+    <div class="my-5 text-center">
+        <p id="searchResultTitle" class="lead mx-auto" th:if="${postPage.getTotalElements() == 0}">
+            <span th:text="${keyword}" id="keyword"></span>에 해당하는 글이 없습니다.
+        </p>
+        <p id="searchResultTitle" class="lead mx-auto" th:if="${postPage.getTotalElements() > 0}">
+            <span th:text="${keyword}" id="keyword"></span>에 해당하는 글을
+            <span th:text="${postPage.getTotalElements()}"></span>개 찾았습니다.
+        </p>
+    </div>
+
+    <div id="postListTableOuterDiv" class="mx-auto" th:if="${postPage.getTotalElements() > 0}"
+         th:insert="main/fragment.html :: postListTable(postList=${postPage.getContent()})">
+    </div>
+
+    <nav th:replace="main/fragment.html :: pagination(
+                                                    page = ${postPage},
+                                                    currentLink = '/search/post',
+                                                    sortDirection = 'desc',
+                                                    keywordLinkPartForSearch = ${'keyword=' + keyword + '&'}
+                                                    )"></nav>
+
+</div>
+
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script th:replace="main/fragment.html :: momentjs"></script>
+<script th:replace="main/fragment.html :: markjs"></script>
+</body>
+</html>

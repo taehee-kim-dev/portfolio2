@@ -1,0 +1,172 @@
+/* 데스크탑*/
+@media (min-width: 992px) {
+    #notificationListTitle {
+        margin-top: 53px;
+        margin-bottom: 29px;
+    }
+
+    #outerBox {
+        width: 990px;
+    }
+
+    #menuBox{
+        width: 182px;
+    }
+
+    #changAllToLinkVisitedForm{
+        margin-top: 15px;
+    }
+    #deleteAllLinkVisitedForm{
+        margin-top: 10px;
+    }
+
+    .formButton{
+        width: 100%;
+    }
+
+    #notificationListOuterDiv {
+        margin-left: 40px;
+    }
+
+    .notificationCard {
+        margin-bottom: 13px;
+    }
+    .notificationDeleteButton{
+        display: inline;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        top: 12px;
+        right: 21px;
+    }
+}
+
+/* 태블릿 */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    #notificationListTitle {
+        margin-top: 37px;
+        margin-bottom: 24px;
+    }
+
+    #outerBox {
+        width: 90%;
+    }
+
+    #menuBox{
+        width: 182px;
+        margin-bottom: 26px;
+    }
+
+    #changAllToLinkVisitedForm{
+        margin-top: 15px;
+    }
+    #deleteAllLinkVisitedForm{
+        margin-top: 10px;
+    }
+
+    .formButton{
+        width: 100%;
+    }
+
+    #notificationListOuterDiv {
+    }
+
+    .notificationCard {
+        margin-bottom: 18px;
+    }
+    .notificationDeleteButton{
+        display: inline;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        top: 12px;
+        right: 21px;
+    }
+}
+
+/* 핸드폰 일반 */
+@media (min-width: 340px) and (max-width: 575.98px) {
+    #notificationListTitle {
+        margin-top: 33px;
+        margin-bottom: 22px;
+    }
+
+    #menuBox{
+        width: 182px;
+        margin-bottom: 26px;
+    }
+
+    #changAllToLinkVisitedForm{
+        margin-top: 15px;
+    }
+    #deleteAllLinkVisitedForm{
+        margin-top: 10px;
+    }
+
+    .formButton{
+        width: 100%;
+    }
+
+    #notificationListOuterDiv {
+        width: 560px;
+    }
+
+    .notificationCard {
+        margin-bottom: 18px;
+    }
+    .notificationDeleteButton{
+        display: inline;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        top: 12px;
+        right: 21px;
+    }
+}
+
+/* 초소형 핸드폰 */
+@media (max-width: 339.98px) {
+    #notificationListTitle {
+        margin-top: 27px;
+        margin-bottom: 22px;
+    }
+
+    #menuBox{
+        width: 182px;
+        margin-bottom: 26px;
+    }
+
+    #changAllToLinkVisitedForm{
+        margin-top: 15px;
+    }
+    #deleteAllLinkVisitedForm{
+        margin-top: 10px;
+    }
+
+    .formButton{
+        width: 100%;
+    }
+
+    #notificationListOuterDiv {
+        width: 560px;
+    }
+
+    .notificationCard {
+        margin-bottom: 18px;
+    }
+
+    .notificationCardHeader{
+        padding-top: 41px;
+    }
+    .notificationDeleteButton{
+        display: inline;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        top: 12px;
+        right: 21px;
+    }
+}
+#pagination{
+    margin-top: 27px;
+}

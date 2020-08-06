@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html land="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="main/fragment.html :: commonHead"></th:block>
+    <link rel="stylesheet" href="/library/summernote/summernote-bs4.min.css" />
+    <link rel="stylesheet" href="/library/tagify/dist/tagify.css">
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #postTitle{
+                margin-top: 66px;
+                margin-bottom: 30px;
+            }
+            #post-form{
+                width: 711px !important;
+            }
+            #titleInput{
+                margin-bottom: 26px;
+            }
+            #postButton{
+                margin-top: 26px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #postTitle{
+                margin-top: 45px;
+                margin-bottom: 27px;
+            }
+            #post-form{
+                width: 517px !important;
+            }
+            #titleInput{
+                margin-bottom: 27px
+            }
+            #postButton{
+                margin-top: 23px;
+            }
+        }
+
+        /* 핸드폰 */
+        @media (max-width: 575.98px){
+            #postTitle{
+                margin-top: 27px;
+                margin-bottom: 21px;
+            }
+            #post-form{
+                width: 90% !important;
+            }
+            #titleInput{
+                margin-bottom: 23px
+            }
+            #postButton{
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:replace="main/fragment.html :: commonNav"></div>
+    <div class="postTitle">
+        <div>
+            <h1 id="postTitle" class="text-center">글 수정</h1>
+        </div>
+        <form id="post-form" class="needs-validation mx-auto"
+              th:action="@{/post-update}" th:object="${postUpdateRequestDto}" method="post" novalidate>
+            <input type="hidden" th:field="*{postIdToUpdate}">
+            <!-- field : name = "nickname", value = *{nickname} (nickname)의 값 -->
+            <div class="form-group">
+                <input id="titleInput" type="text" th:field="*{title}" class="form-control"
+                       placeholder="글 제목 (50자 이내)"
+                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Post title Error</small>
+            </div>
+
+            <div class="form-group">
+            <textarea id="post-content" type="textarea" th:field="*{content}" class="form-control"
+                      th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''"></textarea>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Post content Error</small>
+            </div>
+            <div >
+
+                <div class="alert alert-info" role="alert" >
+                    태그를 입력하고 Enter 또는 콤마(,)를 입력하세요.
+                    <br>해당 태그에 대해 알림 설정을 한 회원들에게 알림이 전송됩니다.
+                </div>
+                <input id="tag" name="tag" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
+                <input type="hidden" id="total-tag-to-submit" name="tagTitleOnPost" th:value="${postUpdateRequestDto.getTagTitleOnPost()}">
+            </div>
+
+            <div class="form-group" >
+                <button id="postButton" class="btn btn-success btn-block" type="button" onclick="submit_func()"
+                        aria-describedby="submitHelp">수정 완료</button>
+            </div>
+        </form>
+    </div>
+</div>
+<footer th:replace="main/fragment.html :: commonFooter"></footer>
+<script th:replace="main/fragment.html :: commonJavaScript"></script>
+<script src="/library/summernote/summernote-bs4.min.js"></script>
+<script src="/library/tagify/dist/tagify.min.js"></script>
+<script type="application/javascript">
+    let total_tag = []
+
+    window.addEventListener('DOMContentLoaded', function () {
+        const existing_tag_str = document.getElementById("total-tag-to-submit").value;
+        if (existing_tag_str !== ""){
+            total_tag = existing_tag_str.split(',');
+        }
+    });
+
+    $(function () {
+        $('#post-content').summernote({
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+            tabsize: 4,
+            height: 300
+        });
+    });
+
+    function onAdd(e) {
+        // 태그 추가 시
+        total_tag.push(e.detail.data.value);
+    }
+
+    function onRemove(e) {
+        // 태그 삭제 시
+        total_tag.splice(total_tag.indexOf(e.detail.data.value), 1);
+    }
+
+    // The DOM element you wish to replace with Tagify
+    const input = document.querySelector('input[name=tag]');
+
+    // initialize Tagify on the above input node reference
+    const new_tag = new Tagify(input, {
+        pattern             : /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9`~!@#$%^&*(\\)_+\-=\[\];',./{}|:"<>? ]{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "20"
+        editTags            : 1
+    })
+
+    new_tag.on("add", onAdd);
+    new_tag.on("remove", onRemove);
+
+    function submit_func(){
+        document.getElementById('total-tag-to-submit').value = total_tag.join();
+        document.getElementById('post-form').submit();
+    }
+</script>
+</body>
+</html>
