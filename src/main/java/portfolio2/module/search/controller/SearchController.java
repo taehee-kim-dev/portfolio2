@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
-import portfolio2.module.main.controller.MainController;
+import portfolio2.module.main.functions.CommonFunctions;
 import portfolio2.module.search.service.SearchService;
 import portfolio2.module.post.Post;
 
@@ -24,8 +24,7 @@ import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSear
 public class SearchController {
 
     private final SearchService searchService;
-
-    private final MainController mainController;
+    private final CommonFunctions commonFunctions;
 
     @GetMapping(SEARCH_POST_URL)
     public String searchPost(@SessionAccount Account sessionAccount, String keyword,
@@ -35,7 +34,7 @@ public class SearchController {
         Page<Post> postPage = searchService.findPostByKeyword(keyword, pageable);
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("keyword", keyword);
-        mainController.addPagingAttributes(model, postPage, "postPage", "firstWrittenDateTime");
+        commonFunctions.addPagingAttributes(model, postPage, "postPage", "firstWrittenDateTime");
         return SEARCH_POST_RESULT_VIEW_NAME;
     }
 }

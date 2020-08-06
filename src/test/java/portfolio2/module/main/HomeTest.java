@@ -75,6 +75,7 @@ public class HomeTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeDoesNotExist(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("postList"))
                 .andExpect(view().name(HOME_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
@@ -87,6 +88,7 @@ public class HomeTest extends ContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists(SESSION_ACCOUNT))
+                .andExpect(model().attributeExists("postList"))
                 .andExpect(view().name(HOME_VIEW_NAME))
                 .andExpect(authenticated().withUsername(TEST_USER_ID));
     }

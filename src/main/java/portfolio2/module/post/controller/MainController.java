@@ -1,4 +1,4 @@
-package portfolio2.module.main.controller;
+package portfolio2.module.post.controller;
 
 
 import lombok.RequiredArgsConstructor;
@@ -25,16 +25,6 @@ public class MainController {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         model.addAttribute("postList", postRepository.findFirst15ByOrderByFirstWrittenDateTimeDesc());
         return HOME_VIEW_NAME;
-    }
-
-    public void addPagingAttributes(Model model, Page<?> page, String pageName, String sortPropertyName) {
-        model.addAttribute(pageName, page);
-        int currentPageRangeFirstIndex = page.getNumber() / 5 * 5;
-        model.addAttribute("currentPageRangeFirstIndex", currentPageRangeFirstIndex);
-        int currentPageFullRangeLastIndex = currentPageRangeFirstIndex + 4;
-        int currentPageRangeLastIndex = Math.min(page.getTotalPages() - 1, currentPageFullRangeLastIndex);
-        model.addAttribute("currentPageRangeLastIndex", currentPageRangeLastIndex);
-        model.addAttribute("sortProperty", sortPropertyName);
     }
 }
 

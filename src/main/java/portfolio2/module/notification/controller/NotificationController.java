@@ -13,7 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
-import portfolio2.module.main.controller.MainController;
+import portfolio2.module.main.functions.CommonFunctions;
 import portfolio2.module.notification.Notification;
 import portfolio2.module.notification.dto.request.NotificationDeleteRequestDto;
 import portfolio2.module.notification.dto.response.EachNotificationCountResponseDto;
@@ -33,7 +33,7 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final NotificationDeleteRequestDtoValidator notificationDeleteRequestDtoValidator;
 
-    private final MainController mainController;
+    private final CommonFunctions commonFunctions;
 
     @InitBinder("notificationDeleteRequestDto")
     public void initBinderForNotificationDeleteRequestDtoValidator(WebDataBinder webDataBinder){
@@ -46,7 +46,7 @@ public class NotificationController {
                                                   Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> allNotificationPage = notificationService.ringBellCheck(sessionAccount, pageable);
-        mainController.addPagingAttributes(model, allNotificationPage, "notificationPage", "createdDateTime");
+        commonFunctions.addPagingAttributes(model, allNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return ALL_NOTIFICATION_LIST_VIEW_NAME;
     }
@@ -64,7 +64,7 @@ public class NotificationController {
                                                                 Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> linkUnvisitedNotificationPage = notificationService.getLinkUnvisitedNotification(sessionAccount, pageable);
-        mainController.addPagingAttributes(model, linkUnvisitedNotificationPage, "notificationPage", "createdDateTime");
+        commonFunctions.addPagingAttributes(model, linkUnvisitedNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return LINK_UNVISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
@@ -75,7 +75,7 @@ public class NotificationController {
                                                               Pageable pageable, Model model){
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         Page<Notification> linkVisitedNotificationPage = notificationService.getLinkVisitedNotification(sessionAccount, pageable);
-        mainController.addPagingAttributes(model, linkVisitedNotificationPage, "notificationPage", "createdDateTime");
+        commonFunctions.addPagingAttributes(model, linkVisitedNotificationPage, "notificationPage", "createdDateTime");
         addEachNotificationCountNumber(model, sessionAccount);
         return LINK_VISITED_NOTIFICATION_LIST_VIEW_NAME;
     }
