@@ -5,7 +5,7 @@
     <style>
         /* 데스크탑*/
         @media (min-width: 992px) {
-            #searchedPostTableOuterDiv{
+            #postListTableOuterDiv{
                 width: 990px;
             }
             #authorHead{
@@ -30,7 +30,7 @@
 
         /* 태블릿 */
         @media (min-width: 576px) and (max-width: 991.98px) {
-            #searchedPostTableOuterDiv{
+            #postListTableOuterDiv{
                 width: 100%;
             }
             #authorHead{
@@ -55,7 +55,7 @@
 
         /* 핸드폰 일반 */
         @media (min-width: 340px) and (max-width: 575.98px) {
-            #searchedPostTableOuterDiv{
+            #postListTableOuterDiv{
                 width: 100%;
             }
             #authorHead{
@@ -84,7 +84,7 @@
 
         /* 초소형 핸드폰 */
         @media (max-width: 339.98px) {
-            #searchedPostTableOuterDiv{
+            #postListTableOuterDiv{
                 width: 100%;
             }
             #authorHead{
@@ -158,27 +158,8 @@
         </p>
     </div>
 
-    <div id="searchedPostTableOuterDiv" class="mx-auto" th:if="${postPage.getTotalElements() > 0}">
-        <table class="table" style="table-layout: fixed">
-            <thead>
-            <tr class="text-center">
-                <th id="titleHead" scope="col">제목</th>
-                <th id="authorHead" scope="col">작성자</th>
-                <th id="firstWrittenTimeHead" scope="col">작성일</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="post : ${postPage.getContent()}">
-                <td class="titleTd align-middle">
-                    <a th:href="@{'/post-view/' + ${post.getId()}}" th:text="${post.getTitle()}" class="context"></a>
-                </td>
-                <td class="authorTd align-middle text-center">
-                    <a class="context" th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname()}"></a>
-                </td>
-                <td id="testDate" class="firstWrittenTimeTd align-middle text-center post-first-written-time" th:text="${post.getFirstWrittenDateTime()}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div id="postListTableOuterDiv" class="mx-auto" th:if="${postPage.getTotalElements() > 0}"
+         th:insert="main/fragment.html :: postListTable(postList=${postPage.getContent()})">
     </div>
 
     <nav th:replace="main/fragment.html :: pagination(

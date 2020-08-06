@@ -260,6 +260,27 @@
     </script>
 </th:block>
 
+<table th:fragment="postListTable(postList)" class="table" style="table-layout: fixed">
+    <thead>
+    <tr class="text-center">
+        <th id="titleHead" scope="col">제목</th>
+        <th id="authorHead" scope="col">작성자</th>
+        <th id="firstWrittenTimeHead" scope="col">작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${postList}">
+        <td class="titleTd align-middle">
+            <a th:href="@{'/post-view/' + ${post.getId()}}" th:text="${post.getTitle()}" class="context"></a>
+        </td>
+        <td class="authorTd align-middle text-center">
+            <a class="context" th:href="@{'/account/profile-view/' + ${post.getAuthor().getUserId()}}" th:text="${post.getAuthor().getNickname()}"></a>
+        </td>
+        <td class="firstWrittenTimeTd align-middle text-center post-first-written-time" th:text="${post.getFirstWrittenDateTime()}"></td>
+    </tr>
+    </tbody>
+</table>
+
 
 <nav th:fragment="pagination(page, currentLink, sortDirection, keywordLinkPartForSearch)" th:if="${page.getTotalPages() >= 1}" id="pagination" aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
