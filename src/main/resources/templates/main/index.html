@@ -2,13 +2,100 @@
 <html land="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="main/fragment.html :: commonHead"></th:block>
+    <style>
+        /* 데스크탑*/
+        @media (min-width: 992px) {
+            #jumbotron{
+                padding-top: 37px;
+                padding-bottom: 37px;
+            }
+            #line1{
+                margin-bottom: 18px;
+            }
+            #line2{
+                margin-top: 28px;
+            }
+            #line3{
+
+            }
+            #signUpButton{
+                margin-top: 14px;
+            }
+        }
+
+        /* 태블릿 */
+        @media (min-width: 576px) and (max-width: 991.98px) {
+            #jumbotron{
+                padding-top: 37px;
+                padding-bottom: 37px;
+            }
+            #line1{
+                margin-bottom: 18px;
+            }
+            #line2{
+                margin-top: 28px;
+            }
+            #line3{
+
+            }
+            #signUpButton{
+                margin-top: 14px;
+            }
+        }
+
+        /* 핸드폰 일반 */
+        @media (min-width: 340px) and (max-width: 575.98px) {
+            #jumbotron{
+                padding-top: 37px;
+                padding-bottom: 37px;
+            }
+            #line1{
+                margin-bottom: 18px;
+            }
+            #line2{
+                margin-top: 28px;
+            }
+            #line3{
+
+            }
+            #signUpButton{
+                margin-top: 14px;
+            }
+        }
+
+        /* 초소형 핸드폰 */
+        @media (max-width: 339.98px) {
+            #jumbotron{
+                padding-top: 37px;
+                padding-bottom: 37px;
+            }
+            #line1{
+                margin-bottom: 18px;
+            }
+            #line2{
+                margin-top: 28px;
+            }
+            #line3{
+
+            }
+            #signUpButton{
+                margin-top: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
     <div th:replace="main/fragment.html :: commonNav"></div>
-    <div class="my-5 text-center">
-        <h1>TH</h1>
+    <div class="text-center">
+        <div id="jumbotron" class="jumbotron">
+            <h1 id="line1" class="display-4">TH</h1>
+            <p id="line2" class="lead">김태희의 포트폴리오2 입니다.</p>
+            <hr id="line3" class="my-4">
+            <p>SpringBoot와 JPA등을 사용해 제작한 웹 애플리케이션 입니다.</p>
+            <a id="signUpButton" class="btn btn-primary btn-lg" th:href="@{/sign-up}" role="button">회원가입</a>
+        </div>
     </div>
 </div>
 
