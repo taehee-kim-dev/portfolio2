@@ -31,4 +31,6 @@ out/
 ### VS Code ###
 .vscode/
 
-application-dev.properties
+application-mail.properties
+application-dev-database.properties
+application-deploy-database.properties
