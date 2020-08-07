@@ -18,12 +18,12 @@ public class TestService {
     private final PostService postService;
     private final AccountRepository accountRepository;
 
-    public void generateTestPostDataWithAuthor(String userIdForTest) {
+    public void generateTestPostDataWithAuthor(String userIdForTest, int numberOfPost) {
         Account accountForTest = accountRepository.findByUserId(userIdForTest);
-        for (int i = 1; i <= 34; i++) {
+        for (int i = 1; i <= numberOfPost; i++) {
             String randomValue = RandomString.make(4);
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
-            postNewPostRequestDto.setTitle("테스트 글 입니다." + randomValue + i);
+            postNewPostRequestDto.setTitle("테스트 글 입니다. " + randomValue);
             postNewPostRequestDto.setContent(
                     "<h1>테스트 내용 입니다.</h1>" +
                     "<h2>Where does it come from?</h2>" +
@@ -49,7 +49,7 @@ public class TestService {
                             "lso reproduced in their exact original form, accompanied by E" +
                             "nglish versions from the 1914 translation by H. Rackham.</p>"
             );
-            postNewPostRequestDto.setTagTitleOnPost("태그1, 태그2, 태그3");
+            postNewPostRequestDto.setTagTitleOnPost("태그1, 태그2, 태그3, 태그4");
             Post newPost = postService.saveNewPostWithTag(accountForTest, postNewPostRequestDto);
             postService.sendWebAndEmailNotificationOfNewPost(newPost);
         }

@@ -88,9 +88,9 @@ public class TestController {
 //        return ERROR_VIEW_NAME;
 //    }
 
-    @GetMapping("/test/generate-post-date/{userIdForTest}")
+    @GetMapping("/test/generate-post-date/{userIdForTest}/{numberOfPost}")
     public String generateTestData(@SessionAccount Account sessionAccount,
-                                   @PathVariable String userIdForTest, Model model){
+                                   @PathVariable String userIdForTest, @PathVariable int numberOfPost, Model model){
 
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
 
@@ -106,7 +106,7 @@ public class TestController {
             return ERROR_VIEW_NAME;
         }
 
-        testService.generateTestPostDataWithAuthor(userIdForTest);
+        testService.generateTestPostDataWithAuthor(userIdForTest, numberOfPost);
         model.addAttribute(ERROR_TITLE, "테스트 완료");
         model.addAttribute(ERROR_CONTENT, "테스트 글 작성 완료");
         return ERROR_VIEW_NAME;
