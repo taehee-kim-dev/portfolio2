@@ -8,7 +8,7 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface AccountRepository extends JpaRepository<Account, Long>, QuerydslPredicateExecutor<Account> {
-    boolean existsByUserId(String email);
+    boolean existsByUserId(String userId);
 
     Account findByUserId(String userId);
 
