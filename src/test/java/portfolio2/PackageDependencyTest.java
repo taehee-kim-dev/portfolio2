@@ -58,7 +58,7 @@ public class PackageDependencyTest {
 
     @ArchTest
     ArchRule testPackageAccessRule = classes().that().resideInAPackage(TEST)
-            .should().accessClassesThat().resideInAnyPackage(TEST, POST);
+            .should().accessClassesThat().resideInAnyPackage(TEST, JAVA_LANG_OBJECT, POST);
 
 
 
