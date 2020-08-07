@@ -16,7 +16,7 @@ import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUN
 @Controller
 public class TestController {
 
-    private final String ADMIN_USER_ID = "shineb523";
+    private final String ADMIN_USER_ID = "taehee.kim.dev";
     
     private final TestService testService;
 
