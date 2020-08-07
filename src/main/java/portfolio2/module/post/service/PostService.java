@@ -1,11 +1,9 @@
 package portfolio2.module.post.service;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio2.module.account.Account;
-import portfolio2.module.account.AccountRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.controller.PostErrorType;
@@ -13,8 +11,6 @@ import portfolio2.module.post.dto.PostDeleteRequestDto;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.process.PostProcess;
-
-import java.time.LocalDateTime;
 
 @Transactional
 @RequiredArgsConstructor

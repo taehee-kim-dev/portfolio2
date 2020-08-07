@@ -17,9 +17,9 @@ import portfolio2.module.account.validator.EmailVerificationRequestDtoValidator;
 
 import javax.validation.Valid;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.CHECK_EMAIL_VERIFICATION_LINK_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.EMAIL_VERIFICATION_SUCCESS_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @Controller
 @RequiredArgsConstructor

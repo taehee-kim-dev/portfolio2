@@ -19,10 +19,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 /*
 * ** 최종 결론 **

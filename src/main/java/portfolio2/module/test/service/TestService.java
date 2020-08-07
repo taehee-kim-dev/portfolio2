@@ -10,6 +10,10 @@ import portfolio2.module.post.Post;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.service.PostService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -20,6 +24,33 @@ public class TestService {
 
     public void generateTestPostDataWithAuthor(String userIdForTest, int numberOfPost) {
         Account accountForTest = accountRepository.findByUserId(userIdForTest);
+        postTestPosts(numberOfPost, accountForTest);
+    }
+
+    public boolean isAccountOfUserIdForTestExists(String userIdForTest) {
+        return accountRepository.existsByUserId(userIdForTest);
+    }
+
+    public void generateTestPostDataRandomly(int totalNumberOfPost) {
+        Account account1 = accountRepository.findByUserId("shineb523");
+        Account account2 = accountRepository.findByUserId("rschbh12");
+        Account account3 = accountRepository.findByUserId("rschbh13");
+
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+        accounts.add(account3);
+
+        Random random = new Random(System.currentTimeMillis());
+
+        for (int time = 1; time <= totalNumberOfPost; time++){
+            int randomIndexOfAccount = random.nextInt(3);
+            Account accountToPost = accounts.get(randomIndexOfAccount);
+            this.postTestPosts(1, accountToPost);
+        }
+    }
+
+    private void postTestPosts(int numberOfPost, Account accountForTest) {
         for (int i = 1; i <= numberOfPost; i++) {
             String randomValue = RandomString.make(4);
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
@@ -53,9 +84,5 @@ public class TestService {
             Post newPost = postService.saveNewPostWithTag(accountForTest, postNewPostRequestDto);
             postService.sendWebAndEmailNotificationOfNewPost(newPost);
         }
-    }
-
-    public boolean isAccountOfUserIdForTestExists(String userIdForTest) {
-        return accountRepository.existsByUserId(userIdForTest);
     }
 }

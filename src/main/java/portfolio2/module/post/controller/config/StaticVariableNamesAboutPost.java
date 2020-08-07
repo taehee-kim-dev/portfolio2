@@ -1,6 +1,6 @@
 package portfolio2.module.post.controller.config;
 
-public class UrlAndViewNameAboutPost {
+public class StaticVariableNamesAboutPost {
 
     // PostController.java
     public static final String POST_NEW_POST_URL = "/post-new-post";

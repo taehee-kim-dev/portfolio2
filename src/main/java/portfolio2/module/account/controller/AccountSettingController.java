@@ -18,10 +18,8 @@ import portfolio2.module.account.validator.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.ERROR_VIEW_NAME;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @RequiredArgsConstructor
 @Controller

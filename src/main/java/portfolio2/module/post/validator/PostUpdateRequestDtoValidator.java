@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 
 @Component

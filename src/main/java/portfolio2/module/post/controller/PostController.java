@@ -20,10 +20,8 @@ import portfolio2.module.tag.Tag;
 import javax.validation.Valid;
 import java.util.stream.Collectors;
 
-
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
 
 @RequiredArgsConstructor
 @Controller

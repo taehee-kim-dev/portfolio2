@@ -21,9 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @MockMvcTest
 public class ProfileShowTest extends ContainerBaseTest {

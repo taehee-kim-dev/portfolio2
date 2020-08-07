@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_VIEW_URL;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_VIEW_URL;
 
 @RequiredArgsConstructor
 @Component

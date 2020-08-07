@@ -1,11 +1,8 @@
 package portfolio2.module.tag;
 
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import portfolio2.module.account.QAccount;
 
 import java.util.List;
-import java.util.Set;
 
 public class TagPredicate {
 

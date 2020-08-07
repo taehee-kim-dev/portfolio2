@@ -1,6 +1,6 @@
 package portfolio2.module.search.controller.config;
 
-public class UrlAndViewNameAboutSearch {
+public class StaticVariableNamesAboutSearch {
 
     // SearchController.java
     public static final String SEARCH_POST_URL = "/search/post";

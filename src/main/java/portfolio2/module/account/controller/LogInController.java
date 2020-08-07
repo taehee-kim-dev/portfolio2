@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.HOME_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.REDIRECT;
 
 @RequiredArgsConstructor
 @Controller

@@ -31,9 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
 
 /**
  * - 게시글 삭제

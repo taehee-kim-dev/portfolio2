@@ -12,7 +12,7 @@ import portfolio2.module.post.Post;
 import portfolio2.module.post.service.PostType;
 import portfolio2.module.tag.Tag;
 
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_VIEW_URL;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_VIEW_URL;
 
 @RequiredArgsConstructor
 @Component

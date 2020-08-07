@@ -9,8 +9,8 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.test.service.TestService;
 
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.test.controller.config.StaticVariableNamesAboutTest.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -88,9 +88,11 @@ public class TestController {
 //        return ERROR_VIEW_NAME;
 //    }
 
-    @GetMapping("/test/generate-post-date/{userIdForTest}/{numberOfPost}")
+    @GetMapping("/test/generate-post-data/{userIdForTest}/{numberOfPost}")
     public String generateTestData(@SessionAccount Account sessionAccount,
-                                   @PathVariable String userIdForTest, @PathVariable int numberOfPost, Model model){
+                                   @PathVariable String userIdForTest,
+                                   @PathVariable int numberOfPost,
+                                   Model model){
 
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
 
@@ -107,8 +109,26 @@ public class TestController {
         }
 
         testService.generateTestPostDataWithAuthor(userIdForTest, numberOfPost);
-        model.addAttribute(ERROR_TITLE, "테스트 완료");
-        model.addAttribute(ERROR_CONTENT, "테스트 글 작성 완료");
-        return ERROR_VIEW_NAME;
+        model.addAttribute(TEST_TITLE, "테스트 완료");
+        model.addAttribute(TEST_CONTENT, "테스트 글 작성 완료");
+        return TEST_SUCCESS_VIEW_NAME;
+    }
+
+    @GetMapping("/test/generate-post-data-random/{totalNumberOfPost}")
+    public String generateTestDataRandom(@SessionAccount Account sessionAccount,
+                                         @PathVariable int totalNumberOfPost, Model model){
+
+        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+
+        if (!sessionAccount.getUserId().equals(ADMIN_USER_ID)){
+            model.addAttribute(ERROR_TITLE, "테스트 에러");
+            model.addAttribute(ERROR_CONTENT, "테스트 권한이 없습니다.");
+            return ERROR_VIEW_NAME;
+        }
+
+        testService.generateTestPostDataRandomly(totalNumberOfPost);
+        model.addAttribute(TEST_TITLE, "테스트 완료");
+        model.addAttribute(TEST_CONTENT, "테스트 글 작성 완료");
+        return TEST_SUCCESS_VIEW_NAME;
     }
 }

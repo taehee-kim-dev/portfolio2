@@ -9,8 +9,8 @@ import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
 import portfolio2.module.account.Account;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.CHECK_EMAIL_VERIFICATION_LINK_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.CHECK_EMAIL_VERIFICATION_LINK_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL;
 
 @RequiredArgsConstructor
 @Component

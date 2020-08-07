@@ -28,10 +28,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_FORM_VIEW_NAME;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_UPDATE_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_UPDATE_FORM_VIEW_NAME;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_UPDATE_URL;
 
 /**
  * - 게시글 수정 화면 보여주기

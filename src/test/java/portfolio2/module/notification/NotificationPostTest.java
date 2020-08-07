@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.notification.controller.config.UrlAndViewNameAboutNotification.*;
+import static portfolio2.module.notification.controller.config.StaticVariableNamesAboutNotification.*;
 
 @MockMvcTest
 public class NotificationPostTest extends ContainerBaseTest {

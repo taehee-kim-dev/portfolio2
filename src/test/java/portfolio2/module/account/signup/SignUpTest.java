@@ -26,9 +26,9 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.HOME_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
 
 @MockMvcTest
 public class SignUpTest extends ContainerBaseTest {

@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import javax.sql.DataSource;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.HOME_URL;
 
 @Configuration
 @EnableWebSecurity

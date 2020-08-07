@@ -13,7 +13,7 @@ import portfolio2.module.account.config.CustomPrincipal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.REDIRECT;
 
 @Component
 @RequiredArgsConstructor

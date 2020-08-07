@@ -25,10 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_URL;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_URL;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
 
 @MockMvcTest
 public class PostNewPostTest extends ContainerBaseTest {

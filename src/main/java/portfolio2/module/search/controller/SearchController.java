@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.main.functions.CommonFunctions;
-import portfolio2.module.search.service.SearchService;
 import portfolio2.module.post.Post;
+import portfolio2.module.search.service.SearchService;
 
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_RESULT_VIEW_NAME;
-import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.search.controller.config.StaticVariableNamesAboutSearch.SEARCH_POST_RESULT_VIEW_NAME;
+import static portfolio2.module.search.controller.config.StaticVariableNamesAboutSearch.SEARCH_POST_URL;
 
 @RequiredArgsConstructor
 @Controller

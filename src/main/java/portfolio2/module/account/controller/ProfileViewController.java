@@ -9,11 +9,9 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.config.SessionAccount;
 import portfolio2.module.account.service.ProfileViewService;
 
-
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.PROFILE_VIEW_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.PROFILE_VIEW_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.PROFILE_VIEW_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.PROFILE_VIEW_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @Controller
 @RequiredArgsConstructor

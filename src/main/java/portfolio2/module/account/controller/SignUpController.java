@@ -17,10 +17,8 @@ import portfolio2.module.account.validator.SignUpRequestDtoValidator;
 
 import javax.validation.Valid;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.*;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @Controller
 @RequiredArgsConstructor

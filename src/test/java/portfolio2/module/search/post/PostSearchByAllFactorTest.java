@@ -2,14 +2,12 @@ package portfolio2.module.search.post;
 
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
@@ -38,9 +36,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_RESULT_VIEW_NAME;
-import static portfolio2.module.search.controller.config.UrlAndViewNameAboutSearch.SEARCH_POST_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.search.controller.config.StaticVariableNamesAboutSearch.SEARCH_POST_RESULT_VIEW_NAME;
+import static portfolio2.module.search.controller.config.StaticVariableNamesAboutSearch.SEARCH_POST_URL;
 
 /**
  * 작성자 아이디, 닉네임, 글의 제목, 내용, 태그로 찾아지는지?

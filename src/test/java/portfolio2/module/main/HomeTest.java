@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
@@ -15,7 +14,6 @@ import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessFo
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,11 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.LOGIN_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_VIEW_NAME;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 /*
 * ** 최종 결론 **

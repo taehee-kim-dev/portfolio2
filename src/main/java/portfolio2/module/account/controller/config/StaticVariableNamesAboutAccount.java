@@ -1,6 +1,6 @@
 package portfolio2.module.account.controller.config;
 
-public class UrlAndViewNameAboutAccount {
+public class StaticVariableNamesAboutAccount {
 
     // LogInController.java
     public static final String LOGIN_URL = "/login";

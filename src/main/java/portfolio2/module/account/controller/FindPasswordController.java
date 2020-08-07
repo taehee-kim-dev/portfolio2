@@ -17,10 +17,10 @@ import portfolio2.module.account.validator.FindPasswordRequestDtoValidator;
 
 import javax.validation.Valid;
 
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.FIND_PASSWORD_URL;
-import static portfolio2.module.account.controller.config.UrlAndViewNameAboutAccount.FIND_PASSWORD_VIEW_NAME;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.HOME_URL;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.REDIRECT;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.FIND_PASSWORD_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.FIND_PASSWORD_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.HOME_URL;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.REDIRECT;
 
 @Controller
 @RequiredArgsConstructor

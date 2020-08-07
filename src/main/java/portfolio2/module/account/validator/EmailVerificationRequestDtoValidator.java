@@ -8,8 +8,6 @@ import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.dto.request.EmailVerificationRequestDto;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class EmailVerificationRequestDtoValidator implements Validator {

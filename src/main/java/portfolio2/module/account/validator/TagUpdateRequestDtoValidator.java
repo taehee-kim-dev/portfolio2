@@ -1,12 +1,9 @@
 package portfolio2.module.account.validator;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
 import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 
 @Component

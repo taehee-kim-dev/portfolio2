@@ -11,7 +11,10 @@ import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.config.*;
+import portfolio2.module.account.config.CustomPrincipal;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
@@ -24,14 +27,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.*;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
 
 /**
  * - 게시글 수정

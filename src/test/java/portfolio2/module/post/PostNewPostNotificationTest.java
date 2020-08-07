@@ -35,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
 
 @MockMvcTest
 public class PostNewPostNotificationTest extends ContainerBaseTest {

@@ -9,7 +9,8 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @NamedEntityGraph(
         name = "Notification.withCommonTag",

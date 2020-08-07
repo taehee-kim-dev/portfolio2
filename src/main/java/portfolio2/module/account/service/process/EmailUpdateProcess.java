@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
-import portfolio2.module.account.service.process.SendingEmailVerificationEmailProcess;
 
 @RequiredArgsConstructor
 @Component

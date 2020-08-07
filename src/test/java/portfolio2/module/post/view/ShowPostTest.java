@@ -29,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
-import static portfolio2.module.main.config.UrlAndViewNameAboutMain.ERROR_VIEW_NAME;
-import static portfolio2.module.main.config.VariableNameAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.UrlAndViewNameAboutPost.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.ERROR_VIEW_NAME;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
 
 @MockMvcTest
 public class ShowPostTest extends ContainerBaseTest {
