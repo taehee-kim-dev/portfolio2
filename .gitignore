@@ -34,3 +34,6 @@ out/
 application-mail.properties
 application-dev-database.properties
 application-deploy-database.properties
+
+application-test-database-logging.properties
+application-test-with-aws-rds-portfolio2_test.properties
