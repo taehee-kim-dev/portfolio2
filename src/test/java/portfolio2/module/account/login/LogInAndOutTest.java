@@ -1,16 +1,19 @@
 package portfolio2.module.account.login;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -21,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_URL;
 import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.LOGIN_VIEW_NAME;
-import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
+import static portfolio2.module.main.config.StaticVariableNamesAboutMain.HOME_URL;
 
 /*
 * ** 최종 결론 **
@@ -42,7 +45,7 @@ import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 * */
 
 @MockMvcTest
-public class LogInAndOutTest extends ContainerBaseTest {
+public class LogInAndOutTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.dto.request.PasswordUpdateRequestDto;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,11 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_PASSWORD;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_PASSWORD_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_PASSWORD_VIEW_NAME;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
 
 @MockMvcTest
-public class AccountPasswordUpdateTest extends ContainerBaseTest {
+public class AccountPasswordUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

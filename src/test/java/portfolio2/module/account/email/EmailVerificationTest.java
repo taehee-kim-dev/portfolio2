@@ -6,13 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.*;
-import portfolio2.module.account.Account;
-import portfolio2.module.account.AccountRepository;
 import portfolio2.infra.email.EmailMessage;
 import portfolio2.infra.email.EmailService;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 import portfolio2.module.account.dto.request.EmailVerificationRequestDto;
 
 import java.time.LocalDateTime;
@@ -25,10 +27,10 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.CHECK_EMAIL_VERIFICATION_LINK_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.EMAIL_VERIFICATION_SUCCESS_VIEW_NAME;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 /*
@@ -43,7 +45,7 @@ import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 * */
 
 @MockMvcTest
-public class EmailVerificationTest extends ContainerBaseTest {
+public class EmailVerificationTest {
 
     @Autowired
     private MockMvc mockMvc;

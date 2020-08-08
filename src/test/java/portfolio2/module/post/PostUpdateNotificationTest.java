@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.config.*;
+import portfolio2.module.account.config.CustomPrincipal;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 import portfolio2.module.account.service.AccountSettingService;
 import portfolio2.module.notification.Notification;
@@ -38,7 +39,7 @@ import static portfolio2.module.account.config.TestAccountInfo.*;
 import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_UPDATE_URL;
 
 @MockMvcTest
-public class PostUpdateNotificationTest extends ContainerBaseTest {
+public class PostUpdateNotificationTest {
 
     @Autowired
     private MockMvc mockMvc;

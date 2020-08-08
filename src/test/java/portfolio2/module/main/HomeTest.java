@@ -5,22 +5,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static portfolio2.module.account.config.TestAccountInfo.*;
+import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 /*
@@ -42,7 +37,7 @@ import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 * */
 
 @MockMvcTest
-public class HomeTest extends ContainerBaseTest {
+public class HomeTest {
 
     @Autowired
     private MockMvc mockMvc;

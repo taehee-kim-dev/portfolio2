@@ -5,24 +5,25 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_NOTIFICATION_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_NOTIFICATION_VIEW_NAME;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
 
 @MockMvcTest
-public class AccountNotificationUpdateTest extends ContainerBaseTest {
+public class AccountNotificationUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

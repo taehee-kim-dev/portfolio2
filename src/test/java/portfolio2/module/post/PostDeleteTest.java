@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -32,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
-import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_DELETE_URL;
 
 /**
  * - 게시글 삭제
@@ -43,7 +42,7 @@ import static portfolio2.module.post.controller.config.StaticVariableNamesAboutP
  */
 
 @MockMvcTest
-public class PostDeleteTest extends ContainerBaseTest {
+public class PostDeleteTest {
 
     @Autowired
     private MockMvc mockMvc;

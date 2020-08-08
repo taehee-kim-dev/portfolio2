@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -21,15 +20,12 @@ import portfolio2.module.notification.dto.response.EachNotificationCountResponse
 import portfolio2.module.notification.service.NotificationService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 
 @MockMvcTest
-public class NotificationServiceTest extends ContainerBaseTest {
+public class NotificationServiceTest {
 
     @Autowired
     private MockMvc mockMvc;

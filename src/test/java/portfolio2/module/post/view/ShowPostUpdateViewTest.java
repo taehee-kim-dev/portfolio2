@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.config.*;
+import portfolio2.module.account.config.CustomPrincipal;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
@@ -21,10 +22,10 @@ import portfolio2.module.tag.TagRepository;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
@@ -41,7 +42,7 @@ import static portfolio2.module.post.controller.config.StaticVariableNamesAboutP
  */
 
 @MockMvcTest
-public class ShowPostUpdateViewTest extends ContainerBaseTest {
+public class ShowPostUpdateViewTest {
 
     @Autowired
     private MockMvc mockMvc;

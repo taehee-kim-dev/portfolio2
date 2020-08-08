@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -23,7 +22,6 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
@@ -31,7 +29,7 @@ import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.module.notification.controller.config.StaticVariableNamesAboutNotification.*;
 
 @MockMvcTest
-public class NotificationPostTest extends ContainerBaseTest {
+public class NotificationPostTest {
 
     @Autowired
     private MockMvc mockMvc;

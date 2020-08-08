@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -17,7 +16,7 @@ import portfolio2.module.tag.TagRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
@@ -25,7 +24,7 @@ import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 import static portfolio2.module.notification.controller.config.StaticVariableNamesAboutNotification.*;
 
 @MockMvcTest
-public class NotificationGetTest extends ContainerBaseTest {
+public class NotificationGetTest {
 
     @Autowired
     private MockMvc mockMvc;

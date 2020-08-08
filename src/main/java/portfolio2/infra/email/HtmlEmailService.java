@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 @Async
 @Slf4j
-@Profile({"dev", "deploy", "deploy1", "deploy2"})
+@Profile({"dev", "deploy1", "deploy2"})
 @RequiredArgsConstructor
 @Component
 public class HtmlEmailService implements EmailService{

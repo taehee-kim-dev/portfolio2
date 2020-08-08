@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -17,11 +16,11 @@ import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpLogInEmailVerificationCustomProcessForTest;
-import portfolio2.module.search.service.SearchService;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.service.PostService;
+import portfolio2.module.search.service.SearchService;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
 
@@ -32,7 +31,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
@@ -47,7 +46,7 @@ import static portfolio2.module.search.controller.config.StaticVariableNamesAbou
 
 
 @MockMvcTest
-public class PostSearchByAllFactorTest extends ContainerBaseTest {
+public class PostSearchByAllFactorTest {
 
     @Autowired
     private MockMvc mockMvc;

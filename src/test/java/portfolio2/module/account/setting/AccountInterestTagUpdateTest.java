@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
-import portfolio2.module.account.dto.request.TagUpdateRequestDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -29,7 +28,7 @@ import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION
 
 
 @MockMvcTest
-public class AccountInterestTagUpdateTest extends ContainerBaseTest {
+public class AccountInterestTagUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

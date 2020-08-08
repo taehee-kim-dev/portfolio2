@@ -6,13 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
+import portfolio2.module.account.Account;
+import portfolio2.module.account.AccountRepository;
 import portfolio2.module.account.config.LogInAndOutProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogInEmailVerifiedProcessForTest;
 import portfolio2.module.account.config.SignUpAndLogOutEmailVerifiedProcessForTest;
-import portfolio2.module.account.Account;
-import portfolio2.module.account.AccountRepository;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.post.Post;
 import portfolio2.module.post.PostRepository;
@@ -20,21 +19,20 @@ import portfolio2.module.tag.TagRepository;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.ERROR_VIEW_NAME;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
-import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_VIEW_NAME;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_VIEW_URL;
 
 @MockMvcTest
-public class ShowPostTest extends ContainerBaseTest {
+public class ShowPostTest {
 
     @Autowired
     private MockMvc mockMvc;

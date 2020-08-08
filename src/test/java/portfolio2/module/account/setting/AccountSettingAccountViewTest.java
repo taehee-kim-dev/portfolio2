@@ -5,23 +5,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
-import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_ACCOUNT_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_ACCOUNT_VIEW_NAME;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.SESSION_ACCOUNT;
 
 @MockMvcTest
-public class AccountSettingAccountViewTest extends ContainerBaseTest {
+public class AccountSettingAccountViewTest {
 
     @Autowired
     private MockMvc mockMvc;

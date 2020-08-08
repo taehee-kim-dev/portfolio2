@@ -10,8 +10,6 @@ import portfolio2.module.account.dto.request.SignUpRequestDto;
 import portfolio2.module.account.service.EmailVerificationService;
 import portfolio2.module.account.service.SignUpService;
 
-import static portfolio2.module.account.config.TestAccountInfo.*;
-
 @Component
 @RequiredArgsConstructor
 public class SignUpLogInEmailVerificationCustomProcessForTest {

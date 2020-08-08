@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -20,7 +19,7 @@ import static portfolio2.module.account.config.TestAccountInfo.*;
 
 
 @MockMvcTest
-public class SignUpProcessForTestTest extends ContainerBaseTest {
+public class SignUpProcessForTestTest {
 
     @Autowired
     private AccountRepository accountRepository;

@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.*;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
+import portfolio2.module.account.config.*;
 import portfolio2.module.account.dto.request.AccountEmailUpdateRequestDto;
+import portfolio2.module.account.service.process.EmailSendingProcessForAccount;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.*;
@@ -30,7 +28,7 @@ import static portfolio2.module.account.controller.config.StaticVariableNamesAbo
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @MockMvcTest
-public class SendingEmailVerificationEmailTest extends ContainerBaseTest {
+public class SendingEmailVerificationEmailTest {
 
     @Autowired
     private MockMvc mockMvc;

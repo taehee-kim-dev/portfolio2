@@ -5,11 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailVerified;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
+import portfolio2.module.account.config.SignUpAndLogInEmailVerified;
 import portfolio2.module.notification.NotificationRepository;
 import portfolio2.module.tag.Tag;
 import portfolio2.module.tag.TagRepository;
@@ -17,8 +16,6 @@ import portfolio2.module.tag.TagRepository;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,11 +23,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
-import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_URL;
 import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_FORM_VIEW_NAME;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_URL;
 
 @MockMvcTest
-public class PostNewPostTest extends ContainerBaseTest {
+public class PostNewPostTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -43,7 +42,7 @@ import static portfolio2.module.post.controller.config.StaticVariableNamesAboutP
  */
 
 @MockMvcTest
-public class PostUpdateTest extends ContainerBaseTest {
+public class PostUpdateTest {
 
     @Autowired
     private MockMvc mockMvc;

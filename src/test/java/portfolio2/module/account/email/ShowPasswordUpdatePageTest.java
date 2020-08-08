@@ -6,29 +6,28 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
-import portfolio2.module.account.config.LogInAndOutProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
-import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.infra.email.EmailService;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
-import portfolio2.infra.email.EmailService;
+import portfolio2.module.account.config.LogInAndOutProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerified;
+import portfolio2.module.account.config.SignUpAndLogInEmailNotVerifiedProcessForTest;
+import portfolio2.module.account.config.SignUpAndLogOutEmailNotVerifiedProcessForTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.*;
+import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID;
+import static portfolio2.module.account.config.TestAccountInfo.TEST_USER_ID_2;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.ACCOUNT_SETTING_PASSWORD_URL;
+import static portfolio2.module.account.controller.config.StaticVariableNamesAboutAccount.CHECK_SHOW_PASSWORD_UPDATE_PAGE_LINK_URL;
 import static portfolio2.module.main.config.StaticVariableNamesAboutMain.*;
 
 @MockMvcTest
-public class ShowPasswordUpdatePageTest extends ContainerBaseTest {
+public class ShowPasswordUpdatePageTest {
 
     @Autowired
     private MockMvc mockMvc;

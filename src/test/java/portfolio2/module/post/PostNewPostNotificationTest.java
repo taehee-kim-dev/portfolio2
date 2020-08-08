@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import portfolio2.infra.ContainerBaseTest;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
 import portfolio2.module.account.AccountRepository;
@@ -35,10 +34,10 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static portfolio2.module.account.config.TestAccountInfo.*;
-import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.*;
+import static portfolio2.module.post.controller.config.StaticVariableNamesAboutPost.POST_NEW_POST_URL;
 
 @MockMvcTest
-public class PostNewPostNotificationTest extends ContainerBaseTest {
+public class PostNewPostNotificationTest {
 
     @Autowired
     private MockMvc mockMvc;
