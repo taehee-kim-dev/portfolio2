@@ -82,7 +82,7 @@ public class SignUpTest {
 
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId(TEST_USER_ID)
-                .nickname(TEST_NICKNAME)
+                .nickname("한글닉네임")
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
                 .build();
