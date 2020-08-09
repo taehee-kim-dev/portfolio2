@@ -52,35 +52,24 @@ public class TestService {
 
     private void postTestPosts(int numberOfPost, Account accountForTest) {
         for (int i = 1; i <= numberOfPost; i++) {
-            String randomValue = RandomString.make(4);
+            String randomValueForTitle = RandomString.make(4);
+            String randomValue1ForContent = RandomString.make(600);
+            String randomValue2ForContent = RandomString.make(300);
+            List<String> randomTagTitles = new ArrayList<>();
+            for(int j = 0; j < 4; j++){
+                randomTagTitles.add(RandomString.make(4));
+            }
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
-            postNewPostRequestDto.setTitle("테스트 글 입니다. " + randomValue);
+            postNewPostRequestDto.setTitle("테스트 글 입니다. " + randomValueForTitle);
             postNewPostRequestDto.setContent(
-                    "<h1>테스트 내용 입니다.</h1>" +
-                    "<h2>Where does it come from?</h2>" +
-                    "<p>Contrary to popular belief, Lorem Ipsum is not" +
-                    " simply random text. It has roots in a piece of c" +
-                    "lassical Latin literature from 45 BC, making it o" +
-                    "ver 2000 years old. Richard McClintock, a Latin p" +
-                    "rofessor at Hampden-Sydney College in Virginia, l" +
-                    "ooked up one of the more obscure Latin words, con" +
-                    "sectetur, from a Lorem Ipsum passage, and going t" +
-                    "hrough the cites of the word in classical literat" +
-                    "ure, discovered the undoubtable source. Lorem Ips" +
-                    "um comes from sections 1.10.32 and 1.10.33 of \"d" +
-                    "e Finibus Bonorum et Malorum\" (The Extremes of G" +
-                    "ood and Evil) by Cicero, written in 45 BC. This b" +
-                    "ook is a treatise on the theory of ethics, very p" +
-                    "opular during the Renaissance. The first line of " +
-                    "Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", co" +
-                    "mes from a line in section 1.10.32.</p>" +
-                            "<p>The standard chunk of Lorem Ipsum used since the 1500s is " +
-                            "reproduced below for those interested. Sections 1.10.32 and 1" +
-                            ".10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are a" +
-                            "lso reproduced in their exact original form, accompanied by E" +
-                            "nglish versions from the 1914 translation by H. Rackham.</p>"
+                    "<h2>테스트 내용 입니다.</h2>" +
+                    "<p>" + randomValue1ForContent + "</p>" +
+                            "<p>" + randomValue2ForContent + "</p>"
             );
-            postNewPostRequestDto.setTagTitleOnPost("태그1, 태그2, 태그3, 태그4");
+            postNewPostRequestDto.setTagTitleOnPost(String.join(",", randomTagTitles) + "," +
+                    "계정1의태그1,계정1의태그2," +
+                    "계정2의태그1,계정2의태그2,계정2의태그3," +
+                    "계정3의태그1,계정3의태그2,계정3의태그3,계정3의태그4");
             Post newPost = postService.saveNewPostWithTag(accountForTest, postNewPostRequestDto);
             postService.sendWebAndEmailNotificationOfNewPost(newPost);
         }
