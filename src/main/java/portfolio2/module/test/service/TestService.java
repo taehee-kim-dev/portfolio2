@@ -52,26 +52,40 @@ public class TestService {
 
     private void postTestPosts(int numberOfPost, Account accountForTest) {
         for (int i = 1; i <= numberOfPost; i++) {
-            String randomValueForTitle = RandomString.make(4);
-            String randomValue1ForContent = RandomString.make(600);
-            String randomValue2ForContent = RandomString.make(300);
-            List<String> randomTagTitles = new ArrayList<>();
-            for(int j = 0; j < 4; j++){
-                randomTagTitles.add(RandomString.make(4));
-            }
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
-            postNewPostRequestDto.setTitle("테스트 글 입니다. " + randomValueForTitle);
+            postNewPostRequestDto.setTitle("테스트 글 입니다. " + RandomString.make(4));
             postNewPostRequestDto.setContent(
                     "<h2>테스트 내용 입니다.</h2>" +
-                    "<p>" + randomValue1ForContent + "</p>" +
-                            "<p>" + randomValue2ForContent + "</p>"
+                    "<p>" + RandomString.make(600) + "</p>" +
+                            "<p>" + RandomString.make(300) + "</p>"
             );
-            postNewPostRequestDto.setTagTitleOnPost(String.join(",", randomTagTitles) + "," +
-                    "계정1의태그1,계정1의태그2," +
-                    "계정2의태그1,계정2의태그2,계정2의태그3," +
-                    "계정3의태그1,계정3의태그2,계정3의태그3,계정3의태그4");
+            postNewPostRequestDto.setTagTitleOnPost(this.getRandomTagTitles());
             Post newPost = postService.saveNewPostWithTag(accountForTest, postNewPostRequestDto);
             postService.sendWebAndEmailNotificationOfNewPost(newPost);
         }
+    }
+
+    private String getRandomTagTitles() {
+        List<String> allTagTitles = new ArrayList<>();
+        for(int accountNumber = 1; accountNumber <= 3; accountNumber++){
+            for(int tagNumber = 1; tagNumber <= 5; tagNumber++){
+                allTagTitles.add("계정" + accountNumber + "의태그" + tagNumber);
+            }
+        }
+
+        for (int i = 0; i < 7; i++){
+            allTagTitles.add(RandomString.make(5));
+        }
+
+        Random random = new Random(System.currentTimeMillis());
+        // 태그타이틀 0개~5개 랜덤 선택
+        int randomTotalSizeOfTags = random.nextInt(6);
+        List<String> tagTitlesList = new ArrayList<>();
+        for(int currentSize = 1; currentSize <= randomTotalSizeOfTags; currentSize++){
+            int randomIndexOfTagTitle = random.nextInt(allTagTitles.size());
+            String tagTitle = allTagTitles.get(randomIndexOfTagTitle);
+            tagTitlesList.add(tagTitle);
+        }
+        return String.join(",", tagTitlesList);
     }
 }
