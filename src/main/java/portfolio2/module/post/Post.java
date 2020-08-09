@@ -10,6 +10,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,10 +35,10 @@ public class Post {
     private String content;
 
     @ManyToMany
-    private List<Tag> currentTag = new LinkedList<>();
+    private List<Tag> currentTag = new ArrayList<>();
 
     @ManyToMany
-    private List<Tag> beforeTag = new LinkedList<>();
+    private List<Tag> beforeTag = new ArrayList<>();
 
     private LocalDateTime firstWrittenDateTime;
 

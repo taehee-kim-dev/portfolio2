@@ -9,6 +9,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class Notification {
     private Account account;
 
     @ManyToMany
-    private List<Tag> commonTag = new LinkedList<>();
+    private List<Tag> commonTag = new ArrayList<>();
 
     private LocalDateTime createdDateTime;
 }

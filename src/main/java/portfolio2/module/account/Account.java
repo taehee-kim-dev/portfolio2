@@ -8,6 +8,7 @@ import portfolio2.module.tag.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -127,7 +128,7 @@ public class Account {
     private boolean notificationMyInterestTagAddedToExistingPostByEmail = false;
 
     @ManyToMany
-    private List<Tag> interestTag = new LinkedList<>();
+    private List<Tag> interestTag = new ArrayList<>();
 
     public boolean canSendEmailVerificationEmail() {
         // 인증 이메일을 이미 5번 보냈는가?
