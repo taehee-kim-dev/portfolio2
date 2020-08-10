@@ -37,7 +37,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
 
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    compile 'org.mariadb.jdbc:mariadb-java-client'
 
 
     implementation 'com.querydsl:querydsl-core'
