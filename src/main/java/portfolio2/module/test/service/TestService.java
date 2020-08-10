@@ -84,7 +84,8 @@ public class TestService {
         for(int currentSize = 1; currentSize <= randomTotalSizeOfTags; currentSize++){
             int randomIndexOfTagTitle = random.nextInt(allTagTitles.size());
             String tagTitle = allTagTitles.get(randomIndexOfTagTitle);
-            tagTitlesList.add(tagTitle);
+            if (!tagTitlesList.contains(tagTitle))
+                tagTitlesList.add(tagTitle);
         }
         return String.join(",", tagTitlesList);
     }
