@@ -178,8 +178,7 @@
             </tr>
             <tr style="text-align: center">
                 <td class="tableTitle align-middle"><span>태그</span></td>
-                <td class="align-middle"><input name="tag" readonly
-                                                          th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
+                <td class="align-middle" style="padding: 2px"><input name="tag" readonly th:value="${#strings.listJoin(tagOnPost, ',')}"></td>
             </tr>
             <tr>
                 <td id="postContent" colspan="2" th:utext="${post.getContent()}">글 내용</td>
