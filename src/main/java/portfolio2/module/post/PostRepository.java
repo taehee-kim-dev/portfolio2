@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostReposito
     Post findPostByAuthor_UserId(String userId);
 
     List<Post> findFirst15ByOrderByFirstWrittenDateTimeDesc();
+
+    List<Post> findAllByAuthor(Account account);
 }

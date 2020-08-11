@@ -88,45 +88,39 @@ public class TestController {
 //        return ERROR_VIEW_NAME;
 //    }
 
-    @GetMapping("/test/generate-post-data/{userIdForTest}/{numberOfPost}")
-    public String generateTestData(@SessionAccount Account sessionAccount,
-                                   @PathVariable String userIdForTest,
-                                   @PathVariable int numberOfPost,
-                                   Model model){
+    @GetMapping("/test/post-randomly/{totalNumberOfPost}")
+    public String postRandomly(@SessionAccount Account sessionAccount,
+                               @PathVariable int totalNumberOfPost, Model model){
 
-        model.addAttribute(SESSION_ACCOUNT, sessionAccount);
+        if (validationForTest(sessionAccount, model)) return ERROR_VIEW_NAME;
 
-        if (!sessionAccount.getUserId().equals(ADMIN_USER_ID)){
-            model.addAttribute(ERROR_TITLE, "테스트 에러");
-            model.addAttribute(ERROR_CONTENT, "테스트 권한이 없습니다.");
-            return ERROR_VIEW_NAME;
-        }
-
-        if(!testService.isAccountOfUserIdForTestExists(userIdForTest)){
-            model.addAttribute(ERROR_TITLE, "테스트 에러");
-            model.addAttribute(ERROR_CONTENT, "글을 작성할 아이디가 존재하지 않습니다.");
-            return ERROR_VIEW_NAME;
-        }
-
-        testService.generateTestPostDataWithAuthor(userIdForTest, numberOfPost);
+        testService.postRandomly(totalNumberOfPost);
         model.addAttribute(TEST_TITLE, "테스트 완료");
         model.addAttribute(TEST_CONTENT, "테스트 글 작성 완료");
         return TEST_SUCCESS_VIEW_NAME;
     }
 
-    @GetMapping("/test/generate-post-data-random/{totalNumberOfPost}")
-    public String generateTestDataRandom(@SessionAccount Account sessionAccount,
-                                         @PathVariable int totalNumberOfPost, Model model){
-
+    private boolean validationForTest(Account sessionAccount, Model model) {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
-
-        if (!sessionAccount.getUserId().equals(ADMIN_USER_ID)){
+        if (!sessionAccount.getUserId().equals(ADMIN_USER_ID)) {
             model.addAttribute(ERROR_TITLE, "테스트 에러");
             model.addAttribute(ERROR_CONTENT, "테스트 권한이 없습니다.");
-            return ERROR_VIEW_NAME;
+            return true;
         }
 
-        testService.generateTestPostDataRandomly(totalNumberOfPost);
+        if (!testService.allAccountsExist()) {
+            model.addAttribute(ERROR_TITLE, "테스트 에러");
+            model.addAttribute(ERROR_CONTENT, "테스트에 필요한 모든 계정이 회원가입되어 있지 않습니다.");
+            return true;
+        }
+        return false;
+    }
+
+    @GetMapping("/test/add-tags-to-posts-randomly")
+    public String addTagsToPostsRandomly(@SessionAccount Account sessionAccount, Model model){
+        if (validationForTest(sessionAccount, model)) return ERROR_VIEW_NAME;
+
+        testService.addTagsToPostsRandomly();
         model.addAttribute(TEST_TITLE, "테스트 완료");
         model.addAttribute(TEST_CONTENT, "테스트 글 작성 완료");
         return TEST_SUCCESS_VIEW_NAME;
