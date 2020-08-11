@@ -11,11 +11,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class ProfileController {
-    private final Environment env;
+
+    private final Environment environment;
 
     @GetMapping("/profile")
     public String profile() {
-        List<String> currentActivatedProfiles = Arrays.asList(env.getActiveProfiles());
+        List<String> currentActivatedProfiles = Arrays.asList(environment.getActiveProfiles());
         List<String> deployProfiles = Arrays.asList("deploy", "deploy1", "deploy2");
 
         return currentActivatedProfiles.stream()
