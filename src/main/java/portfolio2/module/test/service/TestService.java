@@ -11,8 +11,8 @@ import portfolio2.module.post.PostRepository;
 import portfolio2.module.post.dto.PostNewPostRequestDto;
 import portfolio2.module.post.dto.PostUpdateRequestDto;
 import portfolio2.module.post.service.PostService;
-import portfolio2.module.post.service.process.PostProcess;
 import portfolio2.module.tag.Tag;
+import portfolio2.module.tag.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,10 @@ public class TestService {
     private final PostService postService;
     private final AccountRepository accountRepository;
     private final PostRepository postRepository;
-    private final PostProcess postProcess;
-    private final int TOTAL_ACCOUNTS_NUMBER = 4;
+    private final TagRepository tagRepository;
+
+    private final Random random = new Random(System.currentTimeMillis());
+    private final List<Post> alreadyUpdatePosts = new ArrayList<>();
 
     public boolean allAccountsExist() {
         return accountRepository.existsByUserId("shineb523")
@@ -37,7 +39,7 @@ public class TestService {
                 && accountRepository.existsByUserId("test");
     }
 
-    private List<Account> getAccountsForTest() {
+    private List<Account> getAllAccountsForTest() {
         Account account1 = accountRepository.findByUserId("shineb523");
         Account account2 = accountRepository.findByUserId("rschbh12");
         Account account3 = accountRepository.findByUserId("rschbh13");
@@ -51,19 +53,63 @@ public class TestService {
         return accounts;
     }
 
-    public void postRandomly(int totalNumberOfPost) {
-        List<Account> accounts = getAccountsForTest();
+    public void generateTestDataRandomly(int taskCount) {
+        List<Account> allAccounts = this.getAllAccountsForTest();
+        List<Tag> allTags = this.getAllTags(allAccounts);
 
-        Random random = new Random(System.currentTimeMillis());
+        for(int count = 1; count <= taskCount; count++){
+            Account randomAccount = allAccounts.get(random.nextInt(allAccounts.size()));
+            List<Tag> randomTags = this.getRandomTags(allTags);
 
-        for (int time = 1; time <= totalNumberOfPost; time++){
-            int randomIndexOfAccount = random.nextInt(TOTAL_ACCOUNTS_NUMBER);
-            Account accountToPost = accounts.get(randomIndexOfAccount);
-            this.postTestPosts(accountToPost);
+            int randomTaskTypeNumber = random.nextInt(2);
+            switch (randomTaskTypeNumber){
+                case 0:
+                    // 새로운 게시글 작성
+                    this.postNewPostRandomly(randomAccount, randomTags);
+                    break;
+                case 1:
+                    // 기존 게시글에 태그 추가
+                    alreadyUpdatePosts.add(this.addRandomTagsRandomly(randomTags));
+                    break;
+                default:
+                    throw new IllegalStateException("randomTaskTypeNumber의 switch문에서 default에 빠짐.");
+            }
         }
     }
 
-    private void postTestPosts(Account accountForTest) {
+    private List<Tag> getAllTags(List<Account> allAccounts){
+        List<Tag> allTags = new ArrayList<>();
+        for (Account account : allAccounts){
+            for(Tag tag : account.getInterestTag()){
+                if(!allTags.contains(tag))
+                    allTags.add(tag);
+            }
+        }
+
+        for(int i = 0; i < 10; i++){
+            String newRandomTagTitle = "랜덤태그" + RandomString.make(3);
+            Tag randomTag = tagRepository.findByTitle(newRandomTagTitle);
+            if (randomTag == null){
+                Tag newRandomTag = new Tag();
+                newRandomTag.setTitle(newRandomTagTitle);
+                randomTag = tagRepository.save(newRandomTag);
+            }
+            allTags.add(randomTag);
+        }
+        return allTags;
+    }
+
+    private List<Tag> getRandomTags(List<Tag> allTags) {
+        List<Tag> allRandomTags = new ArrayList<>();
+        while(allRandomTags.size() < random.nextInt(6)){
+            Tag randomTag = allTags.get(random.nextInt(allTags.size()));
+            if(!allRandomTags.contains(randomTag))
+                allRandomTags.add(randomTag);
+        }
+        return allRandomTags;
+    }
+
+    private void postNewPostRandomly(Account randomAccount, List<Tag> randomTags) {
         PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
         postNewPostRequestDto.setTitle("테스트 글 입니다. " + RandomString.make(4));
         postNewPostRequestDto.setContent(
@@ -71,73 +117,62 @@ public class TestService {
                         "<p>" + RandomString.make(600) + "</p>" +
                         "<p>" + RandomString.make(300) + "</p>"
         );
-        postNewPostRequestDto.setTagTitleOnPost(this.getRandomTagTitlesInStringForPostingNewPost());
-        Post newPost = postService.saveNewPostWithTag(accountForTest, postNewPostRequestDto);
+        postNewPostRequestDto.setTagTitleOnPost(this.convertTagsListToJoinedString(randomTags));
+        Post newPost = postService.saveNewPostWithTag(randomAccount, postNewPostRequestDto);
         postService.sendWebAndEmailNotificationOfNewPost(newPost);
     }
 
-    private String getRandomTagTitlesInStringForPostingNewPost() {
-        List<String> allTagTitles = getAllBasicTagTitles();
-
-        Random random = new Random(System.currentTimeMillis());
-        // 태그타이틀 0개~5개 랜덤 선택
-        List<String> tagTitlesList = new ArrayList<>();
-        int randomTotalSizeOfTags = random.nextInt(6);
-        while(tagTitlesList.size() < randomTotalSizeOfTags){
-            int randomIndexOfTagTitle = random.nextInt(allTagTitles.size());
-            String tagTitle = allTagTitles.get(randomIndexOfTagTitle);
-            if (!tagTitlesList.contains(tagTitle))
-                tagTitlesList.add(tagTitle);
-        }
-        return String.join(",", tagTitlesList);
+    private String convertTagsListToJoinedString(List<Tag> randomTags) {
+        return randomTags.stream().map(Tag::getTitle).collect(Collectors.joining(","));
     }
 
-    private String getRandomTagTitlesInStringForUpdatingPost(List<String> currentTag) {
-        List<String> allTagTitles = getAllBasicTagTitles();
-
-        Random random = new Random(System.currentTimeMillis());
-        for(int time = 1; time <= 5; time ++){
-            int randomIndexOfTagTitle = random.nextInt(allTagTitles.size());
-            String tagTitle = allTagTitles.get(randomIndexOfTagTitle);
-            if (!currentTag.contains(tagTitle))
-                currentTag.add(tagTitle);
-        }
-        return String.join(",", currentTag);
-    }
-
-    private List<String> getAllBasicTagTitles() {
-        List<String> allTagTitles = new ArrayList<>();
-        for(int accountNumber = 1; accountNumber <= TOTAL_ACCOUNTS_NUMBER - 1; accountNumber++){
-            for(int tagNumber = 1; tagNumber <= 5; tagNumber++){
-                allTagTitles.add("계정" + accountNumber + "의 태그" + tagNumber);
+    private Post addRandomTagsRandomly(List<Tag> randomTags) {
+        Post randomPostInDbToUpdate = null;
+        while(true) {
+            Long randomPostId = (long) random.nextInt(postRepository.findAll().size());
+            Post foundPostFromDb = postRepository.findById(randomPostId).orElse(null);
+            if (foundPostFromDb == null){
+                continue;
+            }else{
+                if (alreadyUpdatePosts.contains(foundPostFromDb)){
+                    if (alreadyUpdatePosts.containsAll(postRepository.findAll()))
+                        throw new IllegalStateException("모든 게시물이 이미 업데이트되어, 더이상 업데이트 할 수 없어 무한루프에 빠짐.");
+                    continue;
+                }else{
+                    alreadyUpdatePosts.add(foundPostFromDb);
+                    randomPostInDbToUpdate = foundPostFromDb;
+                    break;
+                }
             }
         }
 
-        for(int tagNumber = 1; tagNumber <= 5; tagNumber++){
-            allTagTitles.add("테스트용계정의 태그" + tagNumber);
-        }
+        PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
+        postUpdateRequestDto.setPostIdToUpdate(randomPostInDbToUpdate.getId());
+        postUpdateRequestDto.setTitle(randomPostInDbToUpdate.getTitle());
+        postUpdateRequestDto.setContent(randomPostInDbToUpdate.getContent());
 
-
-        for (int i = 0; i < 7; i++){
-            allTagTitles.add(RandomString.make(5));
+        List<Tag> newTags = new ArrayList<>(randomPostInDbToUpdate.getCurrentTag());
+        for(Tag randomTag : randomTags){
+            if (!newTags.contains(randomTag))
+                newTags.add(randomTag);
         }
-        return allTagTitles;
+        postUpdateRequestDto.setTagTitleOnPost(this.convertTagsListToJoinedString(newTags));
+        
+        Post updatedPost = postService.updatePost(postUpdateRequestDto);
+        postService.sendWebAndEmailNotificationOfUpdatedPost(updatedPost);
+        return updatedPost;
     }
 
-    public void addTagsToPostsRandomly() {
-        List<Account> accounts = getAccountsForTest();
 
-        for(Account account : accounts){
-            List<Post> allPosts = postRepository.findAllByAuthor(account);
-            for (Post post : allPosts){
-                PostUpdateRequestDto postUpdateRequestDto = new PostUpdateRequestDto();
-                postUpdateRequestDto.setPostIdToUpdate(post.getId());
-                postUpdateRequestDto.setTagTitleOnPost(
-                        this.getRandomTagTitlesInStringForUpdatingPost(
-                                post.getCurrentTag().stream().map(Tag::getTitle).collect(Collectors.toList())));
-                Post updatedPost = postProcess.updateTagOfPost(post, postUpdateRequestDto);
-                postProcess.sendNotificationAboutUpdatedPost(updatedPost);
-            }
+    public void postRandomly(int totalNumberOfPost) {
+        List<Account> allAccounts = this.getAllAccountsForTest();
+        List<Tag> allTags = this.getAllTags(allAccounts);
+
+        for (int time = 1; time <= totalNumberOfPost; time++){
+            Account randomAccount = allAccounts.get(random.nextInt(allAccounts.size()));
+            List<Tag> randomTags = this.getRandomTags(allTags);
+            this.postNewPostRandomly(randomAccount, randomTags);
         }
     }
+
 }

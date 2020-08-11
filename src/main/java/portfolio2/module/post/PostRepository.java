@@ -10,8 +10,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> , PostRepositoryForSearch{
     Post findByAuthor(Account authorAccount);
 
-    Post findPostByAuthor_UserId(String userId);
-
     List<Post> findFirst15ByOrderByFirstWrittenDateTimeDesc();
 
     List<Post> findAllByAuthor(Account account);

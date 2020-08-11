@@ -100,6 +100,18 @@ public class TestController {
         return TEST_SUCCESS_VIEW_NAME;
     }
 
+    @GetMapping("/test/generate-test-data-randomly/{taskCount}")
+    public String generateTestDataRandomly(@SessionAccount Account sessionAccount,
+                                           @PathVariable int taskCount, Model model){
+
+        if (validationForTest(sessionAccount, model)) return ERROR_VIEW_NAME;
+
+        testService.generateTestDataRandomly(taskCount);
+        model.addAttribute(TEST_TITLE, "테스트 완료");
+        model.addAttribute(TEST_CONTENT, "새로운 글 작성 or 기존 글에 새로운 태그 추가 완료.");
+        return TEST_SUCCESS_VIEW_NAME;
+    }
+
     private boolean validationForTest(Account sessionAccount, Model model) {
         model.addAttribute(SESSION_ACCOUNT, sessionAccount);
         if (!sessionAccount.getUserId().equals(ADMIN_USER_ID)) {
@@ -114,15 +126,5 @@ public class TestController {
             return true;
         }
         return false;
-    }
-
-    @GetMapping("/test/add-tags-to-posts-randomly")
-    public String addTagsToPostsRandomly(@SessionAccount Account sessionAccount, Model model){
-        if (validationForTest(sessionAccount, model)) return ERROR_VIEW_NAME;
-
-        testService.addTagsToPostsRandomly();
-        model.addAttribute(TEST_TITLE, "테스트 완료");
-        model.addAttribute(TEST_CONTENT, "테스트 글 작성 완료");
-        return TEST_SUCCESS_VIEW_NAME;
     }
 }

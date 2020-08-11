@@ -148,7 +148,8 @@ public class PostUpdateNotificationTest {
     @DisplayName("Post 저장 테스트")
     @Test
     void postSaveTest(){
-        Post post = postRepository.findPostByAuthor_UserId(TEST_USER_ID);
+        Account account = accountRepository.findByUserId(TEST_USER_ID);
+        Post post = postRepository.findByAuthor(account);
         assertNotNull(post);
     }
 
