@@ -6,6 +6,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface PostRepositoryForSearch {
-
     Page<Post> findByKeyword(String keyword, Pageable pageable);
 }

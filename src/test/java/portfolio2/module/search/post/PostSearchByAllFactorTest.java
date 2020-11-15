@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import portfolio2.infra.MockMvcTest;
 import portfolio2.module.account.Account;
@@ -98,7 +99,7 @@ public class PostSearchByAllFactorTest {
 
     private void createPosts(int eachPostNumber){
         Account account2 = signUpAndLogInEmailVerifiedProcessForTest.signUpAndLogInNotDefaultWith(TEST_USER_ID_2);
-
+        int count = 0;
         // 제목에 키워드 포함
         for(int i = eachPostNumber; i >= 1; i--){
             PostNewPostRequestDto postNewPostRequestDto = new PostNewPostRequestDto();
@@ -112,6 +113,9 @@ public class PostSearchByAllFactorTest {
             Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(1).minusMinutes(i));
             postRepository.save(postInDb);
+
+            count += 1;
+            // System.out.println("현재까지 생성된 post 개수 : " + count);
         }
 
         // 내용에 키워드 포함
@@ -127,6 +131,9 @@ public class PostSearchByAllFactorTest {
             Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(2).minusMinutes(i));
             postRepository.save(postInDb);
+
+            count += 1;
+            // System.out.println("현재까지 생성된 post 개수 : " + count);
         }
 
         // 태그에 키워드 포함
@@ -143,6 +150,9 @@ public class PostSearchByAllFactorTest {
             Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(3).minusMinutes(i));
             postRepository.save(postInDb);
+
+            count += 1;
+            // System.out.println("현재까지 생성된 post 개수 : " + count);
         }
 
         // 어느 키워드도 포함되지 않는 글
@@ -155,6 +165,9 @@ public class PostSearchByAllFactorTest {
             Post postInDb = postService.saveNewPostWithTag(account2, postNewPostRequestDto);
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(4).minusMinutes(i));
             postRepository.save(postInDb);
+
+            count += 1;
+            System.out.println("현재까지 생성된 post 개수 : " + count);
         }
 
         logInAndOutProcessForTest.logOut();
@@ -180,6 +193,9 @@ public class PostSearchByAllFactorTest {
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(5).minusMinutes(i));
             postRepository.save(postInDb);
             logInAndOutProcessForTest.logOut();
+
+            count += 1;
+            // System.out.println("현재까지 생성된 post 개수 : " + count);
         }
 
         // 닉네임에 키워드 포함
@@ -203,6 +219,9 @@ public class PostSearchByAllFactorTest {
             postInDb.setFirstWrittenDateTime(STANDARD_TIME.minusHours(6).minusMinutes(i));
             postRepository.save(postInDb);
             logInAndOutProcessForTest.logOut();
+
+            count += 1;
+            // System.out.println("현재까지 생성된 post 개수 : " + count);
         }
     }
 
@@ -481,7 +500,7 @@ public class PostSearchByAllFactorTest {
     }
 
 
-
+    @Commit
     @DisplayName("Post검색 - 존재하는 키워드로 검색 - 65개의 결과 - Service단")
     @Test
     void searchPostWithKeywordService() throws Exception{
